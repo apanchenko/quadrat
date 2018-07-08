@@ -11,7 +11,7 @@ function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.width = width or 8
   self.height = height or 8
-  self.scale = display.contentWidth / (8 * 64)
+  self.scale = display.contentWidth / (8 * Cell.width)
   self.group = display.newGroup()
   self.group:scale(self.scale, self.scale)
 
