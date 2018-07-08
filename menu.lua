@@ -39,7 +39,7 @@ function scene:create(event)
 
     local buttonGroup = display.newGroup()
 
-    buttonGroup:insert(new_button("battle.battle", "Play"))
+    buttonGroup:insert(new_button("battle", "Play"))
 
     if (platform ~= "ios" and platform ~= "tvos") then
         buttonGroup:insert(new_button("exit", "Exit"))

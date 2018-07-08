@@ -10,4 +10,4 @@ local composer = require( "composer" )
 --background.y = display.contentCenterY
 
 
-composer.gotoScene("menu.menu")
+composer.gotoScene("menu")
