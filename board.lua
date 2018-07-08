@@ -1,3 +1,5 @@
+local Cell = require("cell")
+
 Board = {}
 Board.__index = Board
 setmetatable(Board, {__call = function(cls, ...) return cls.new(...) end})
@@ -9,39 +11,31 @@ function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.width = width or 8
   self.height = height or 8
+  self.scale = display.contentWidth / (8 * 64)
   self.group = display.newGroup()
+  self.group:scale(self.scale, self.scale)
+
   self.grid = {}
-  self.cell_w = 64
-  self.cell_h = 64
-  local cell_sheet_opt = {width = 64, height = 64, numFrames = 2}
-  self.cell_sheet = graphics.newImageSheet("cell_1_s.png", cell_sheet_opt)
-  
   for i = 1, self.width do
     self.grid[i] = {}
     for j = 1, self.height do
-      local frame = math.random(1, cell_sheet_opt.numFrames);
-      local cell = display.newImageRect(self.group, self.cell_sheet, frame, self.cell_w, self.cell_h)
-      cell.anchorX = 0
-      cell.anchorY = 0
-      cell.x = (i-1) * self.cell_w
-      cell.y = (j-1) * self.cell_h
+      local cell = Cell()
+      cell.group.x = (i-1) * Cell.width
+      cell.group.y = (j-1) * Cell.height
+      self.group:insert(cell.group)
       self.grid[i][j] = cell
     end
   end
 
-  local scale = display.contentWidth / (8 * 64)
-  self.group:scale(scale, scale)
   return self
 end
 
 function Board:put(piece, i, j)
-  print("Board:put "..tostring(piece).." at "..i..","..j)
+  print("Board:put "..piece:tostring().." at "..i..","..j)
   assert(i >= 1 and i <= self.width)
   assert(j >= 1 and j <= self.height)
   self.grid[i][j].piece = piece
   self.group:insert(piece)
-  piece.x = i * self.cell_w
-  piece.y = j * self.cell_h
 end
 
 return Board
