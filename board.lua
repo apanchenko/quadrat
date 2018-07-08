@@ -21,8 +21,7 @@ function Board.new(width, height)
     for j = 1, self.height do
       local frame = math.random(1, cell_sheet_opt.numFrames);
       local cell = {}
-      --cell.img = display.newImageRect(self.group, self.cell_sheet, frame, self.cell_w, self.cell_h)
-      cell.img = display.newImageRect(self.group, "piece_red.png", 64, 64)
+      cell.img = display.newImageRect(self.group, self.cell_sheet, frame, self.cell_w, self.cell_h)
       cell.img.x = i * self.cell_w
       cell.img.y = j * self.cell_h
       self.grid[i][j] = cell
@@ -39,9 +38,9 @@ function Board:put(piece, i, j)
   assert(i >= 1 and i <= self.width)
   assert(j >= 1 and j <= self.height)
   self.grid[i][j].piece = piece
-  self.group:insert(piece.group)
-  piece.group.x = i * self.cell_w
-  piece.group.y = j * self.cell_h
+  self.group:insert(piece)
+  piece.x = i * self.cell_w
+  piece.y = j * self.cell_h
 end
 
 return Board
