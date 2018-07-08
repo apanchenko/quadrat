@@ -10,6 +10,8 @@ function Piece.new(color)
   local self = display.newGroup()
   self.color = color
   self.img = display.newImageRect(self, "piece_red.png", 64, 64)
+  self.img.anchorX = 0
+  self.img.anchorY = 0
 
   setmetatable(self, {__tostring = function() return "Piece "..(self.color==Piece.RED and "RED" or "BLACK") end})
 

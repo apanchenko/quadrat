@@ -20,10 +20,11 @@ function Board.new(width, height)
     self.grid[i] = {}
     for j = 1, self.height do
       local frame = math.random(1, cell_sheet_opt.numFrames);
-      local cell = {}
-      cell.img = display.newImageRect(self.group, self.cell_sheet, frame, self.cell_w, self.cell_h)
-      cell.img.x = i * self.cell_w
-      cell.img.y = j * self.cell_h
+      local cell = display.newImageRect(self.group, self.cell_sheet, frame, self.cell_w, self.cell_h)
+      cell.anchorX = 0
+      cell.anchorY = 0
+      cell.x = (i-1) * self.cell_w
+      cell.y = (j-1) * self.cell_h
       self.grid[i][j] = cell
     end
   end
