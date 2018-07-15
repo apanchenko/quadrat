@@ -18,18 +18,22 @@ function Piece.new(color)
     return "Piece "..(self.color==Piece.RED and "RED" or "BLACK")
   end
 
-  -- touch listener function
+-- touch listener function
   function self:touch(event)
     if event.phase == "began" then
       display.getCurrentStage():setFocus(self, event.id)
       self.isFocus = true
       self.markX = self.x
       self.markY = self.y
-      --self.project = display.newImageRect(self, "piece_red_project.png", 64, 64)
+      
+    -- create project on board
+      self.project_image = display.newImageRect(self.board.group, "piece_red_project.png", 64, 64)
+      self.project_image.anchorX = 0
+      self.project_image.anchorY = 0
+
     elseif self.isFocus then
       if event.phase == "moved" then
-        self.x = (event.x - event.xStart) / self.board.scale + self.markX
-        self.y = (event.y - event.yStart) / self.board.scale + self.markY
+        self.board:project(self.project_image, event, self.markX, self.markY)
       elseif event.phase == "ended" or event.phase == "cancelled" then
         display.getCurrentStage():setFocus(self, nil)
         self.isFocus = false

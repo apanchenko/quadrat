@@ -20,7 +20,7 @@ function Board.new(width, height)
     self.grid[i] = {}
     for j = 1, self.height do
       local cell = Cell()
-      cell:insert(self.group, i-1, j-1)
+      cell:insert_into(self, i-1, j-1)
       self.grid[i][j] = cell
     end
   end
@@ -33,8 +33,15 @@ function Board:put(piece, i, j)
   assert(i >= 1 and i <= self.width)
   assert(j >= 1 and j <= self.height)
   self.grid[i][j].piece = piece
-  --self.group:insert(piece)
   piece:insert_into(self)
+end
+
+function Board:project(project_image, event, markX, markY)
+  local i = ((event.x - event.xStart) / self.scale + markX) / Cell.width
+  local j = ((event.y - event.yStart) / self.scale + markY) / Cell.height
+
+  project_image.x = math.round(i) * Cell.width
+  project_image.y = math.round(j) * Cell.height
 end
 
 return Board
