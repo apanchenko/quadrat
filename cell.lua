@@ -20,4 +20,10 @@ function Cell.new()
   return self
 end
 
+function Cell:insert(group, i, j)
+  self.group.x = i * Cell.width
+  self.group.y = j * Cell.height
+  group:insert(self.group)
+end
+
 return Cell

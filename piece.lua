@@ -12,6 +12,7 @@ function Piece.new(color)
   self.img = display.newImageRect(self, "piece_red.png", 64, 64)
   self.img.anchorX = 0
   self.img.anchorY = 0
+  self.scale = 1
 
   function self:tostring()
     return "Piece "..(self.color==Piece.RED and "RED" or "BLACK")
@@ -24,10 +25,11 @@ function Piece.new(color)
       self.isFocus = true
       self.markX = self.x
       self.markY = self.y
+      --self.project = display.newImageRect(self, "piece_red_project.png", 64, 64)
     elseif self.isFocus then
       if event.phase == "moved" then
-        self.x = event.x - event.xStart + self.markX
-        self.y = event.y - event.yStart + self.markY
+        self.x = (event.x - event.xStart) / self.board.scale + self.markX
+        self.y = (event.y - event.yStart) / self.board.scale + self.markY
       elseif event.phase == "ended" or event.phase == "cancelled" then
         display.getCurrentStage():setFocus(self, nil)
         self.isFocus = false
@@ -36,6 +38,12 @@ function Piece.new(color)
     return true
   end
   self:addEventListener("touch", self)
+
+  -- insert piece into group, with scale for dragging
+  function self:insert_into(board)
+    board.group:insert(self)
+    self.board = board
+  end
 
   return self
 end
