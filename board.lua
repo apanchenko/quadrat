@@ -1,12 +1,15 @@
 local Cell = require("cell")
+local Pos = require("Pos")
 
 Board = {}
 Board.__index = Board
-setmetatable(Board, {__call = function(cls, ...) return cls.new(...) end})
-function Board:__tostring() return "Board "..self.width.."*"..self.height end
 
 -------------------------------------------------------------------------------
--- public
+function Board:__tostring()
+  return "Board "..self.width.."*"..self.height
+end
+
+-------------------------------------------------------------------------------
 function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.width = width or 8
@@ -28,20 +31,46 @@ function Board.new(width, height)
   return self
 end
 
-function Board:put(piece, i, j)
-  print("Board:put "..piece:tostring().." at "..i..","..j)
-  assert(i >= 1 and i <= self.width)
-  assert(j >= 1 and j <= self.height)
-  self.grid[i][j].piece = piece
-  piece:insert_into(self)
+-------------------------------------------------------------------------------
+function Board:put(piece, pos)
+  print("Board:put "..piece:tostring().." at "..tostring(pos))
+  assert(pos.x >= 1 and pos.x <= self.width)
+  assert(pos.y >= 1 and pos.y <= self.height)
+  self.grid[pos.x][pos.y].piece = piece
+  piece:insert_into(self, pos)
 end
 
-function Board:project(project_image, event, markX, markY)
-  local i = ((event.x - event.xStart) / self.scale + markX) / Cell.width
-  local j = ((event.y - event.yStart) / self.scale + markY) / Cell.height
+-------------------------------------------------------------------------------
+function Board:can_move(piece, new_pos)
+  local distance = (piece.pos - new_pos):length2()
+  --print("can_move from "..tostring(piece.pos).." to "..tostring(new_pos).." "..distance)
+  return distance == 1 or distance == 2
+end
 
-  project_image.x = math.round(i) * Cell.width
-  project_image.y = math.round(j) * Cell.height
+-------------------------------------------------------------------------------
+function Board:project_begin(piece, event, image_name, rect_size)
+  display.getCurrentStage():setFocus(piece, event.id)
+  piece.markX = piece.x
+  piece.markY = piece.y
+  piece.project_image = display.newImageRect(self.group, image_name, rect_size, rect_size)
+  piece.project_image.anchorX = 0
+  piece.project_image.anchorY = 0
+end
+
+-------------------------------------------------------------------------------
+function Board:project(piece, event)
+  local i = ((event.x - event.xStart) / self.scale + piece.markX) / Cell.width
+  local j = ((event.y - event.yStart) / self.scale + piece.markY) / Cell.height
+  if self:can_move(piece, Pos.new(i, j):round()) then
+    piece.project_image.x = math.round(i) * Cell.width
+    piece.project_image.y = math.round(j) * Cell.height
+  end
+end
+
+-------------------------------------------------------------------------------
+function Board:project_end(piece)
+  piece.project_image:removeSelf()
+  piece.project_image = nil
 end
 
 return Board

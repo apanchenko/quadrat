@@ -2,6 +2,7 @@
 local composer = require("composer")
 local Board = require("board")
 local Piece = require("piece")
+local Pos = require("Pos")
 
 -- variables
 local battle = composer.newScene()
@@ -21,11 +22,11 @@ end
 
 -- battle scene
 function battle:create(event)
-  local board = Board(8, 8)
+  local board = Board.new(8, 8)
   print("Create battle "..tostring(board))
-  local piece = Piece(Piece.RED)
+  local piece = Piece.new(Piece.RED)
   self.view:insert(board.group)
-  board:put(piece, 1, 1)
+  board:put(piece, Pos.new(2, 3))
 end
 
 function battle:show(event)
