@@ -1,7 +1,7 @@
 -- imports
 local composer = require("composer")
-local Board = require("board")
-local Piece = require("piece")
+local Board = require("Board")
+local Piece = require("Piece")
 local Pos = require("Pos")
 
 -- variables

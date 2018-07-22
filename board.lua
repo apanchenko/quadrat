@@ -1,4 +1,4 @@
-local Cell = require("cell")
+local Cell = require("Cell")
 local Pos = require("Pos")
 
 Board = {}
@@ -14,9 +14,11 @@ function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.width = width or 8
   self.height = height or 8
-  self.scale = display.contentWidth / (8 * Cell.width)
+
+  local scale = display.contentWidth / (8 * Cell.size.x);
+  self.scale = Pos(scale, scale)
   self.group = display.newGroup()
-  self.group:scale(self.scale, self.scale)
+  self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
   for i = 1, self.width do
@@ -33,7 +35,7 @@ end
 
 -------------------------------------------------------------------------------
 function Board:put(piece, pos)
-  print("Board:put "..piece:tostring().." at "..tostring(pos))
+  print("Board:put "..tostring(piece).." at "..tostring(pos))
   assert(pos.x >= 1 and pos.x <= self.width)
   assert(pos.y >= 1 and pos.y <= self.height)
   self.grid[pos.x][pos.y].piece = piece
@@ -48,29 +50,14 @@ function Board:can_move(piece, new_pos)
 end
 
 -------------------------------------------------------------------------------
-function Board:project_begin(piece, event, image_name, rect_size)
-  display.getCurrentStage():setFocus(piece, event.id)
-  piece.markX = piece.x
-  piece.markY = piece.y
-  piece.project_image = display.newImageRect(self.group, image_name, rect_size, rect_size)
-  piece.project_image.anchorX = 0
-  piece.project_image.anchorY = 0
-end
+function Board:move(fr, to)
+  local piece = self.grid[fr.x][fr.y].piece
+  assert(piece)
 
--------------------------------------------------------------------------------
-function Board:project(piece, event)
-  local i = ((event.x - event.xStart) / self.scale + piece.markX) / Cell.width
-  local j = ((event.y - event.yStart) / self.scale + piece.markY) / Cell.height
-  if self:can_move(piece, Pos.new(i, j):round()) then
-    piece.project_image.x = math.round(i) * Cell.width
-    piece.project_image.y = math.round(j) * Cell.height
-  end
-end
+  self.grid[fr.x][fr.y].piece = nil
+  self.grid[to.x][to.y].piece = piece
 
--------------------------------------------------------------------------------
-function Board:project_end(piece)
-  piece.project_image:removeSelf()
-  piece.project_image = nil
+  piece:move(to)
 end
 
 return Board

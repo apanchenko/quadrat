@@ -2,6 +2,8 @@ local Pos = require("Pos")
 
 -------------------------------------------------------------------------------
 local Piece = {}
+Piece.__index = Piece
+setmetatable(Piece, {__call = function(cls, ...) return cls.new(...) end})
 
 Piece.RED = true
 Piece.BLACK = false
@@ -13,52 +15,69 @@ Piece.BLACK = false
 -- scale - number
 -- i, j  - int number, position on board
 function Piece.new(color)
-  local self = display.newGroup()
+  local self = setmetatable({}, Piece)
+  self.group = display.newGroup()
   self.color = color
-  self.img = display.newImageRect(self, "piece_red.png", 64, 64)
-  self.img.anchorX = 0
-  self.img.anchorY = 0
+  self.img = Piece.new_image(self.group, "piece_red.png")
   self.scale = 1
-  self.pos = Pos.new()
-  self:addEventListener("touch", self)
+  self.group:addEventListener("touch", self)
+  return self
+end
 
 -------------------------------------------------------------------------------
-  function self:tostring()
-    return "piece["..tostring(self.pos)..","..(self.color==Piece.RED and "RED" or "BLACK").."]"
-  end
+function Piece.new_image(group, name)
+  local img = display.newImageRect(group, name, 64, 64)
+  img.anchorX = 0
+  img.anchorY = 0
+  return img
+end
+
+-------------------------------------------------------------------------------
+function Piece:__tostring() 
+  return "piece["..tostring(self.pos)..","..(self.color==Piece.RED and "RED" or "BLACK").."]"
+end
 
 -------------------------------------------------------------------------------
 -- touch listener function
-  function self:touch(event)
-    if event.phase == "began" then
-      self.board:project_begin(self, event, "piece_red_project.png", 64, 64)
-      self.isFocus = true
-    elseif self.isFocus then
-      if event.phase == "moved" then
-        self.board:project(self, event)
-      elseif event.phase == "ended" or event.phase == "cancelled" then
-        self.board:project_end(self)
-        --self.project_image:removeSelf()
-        --self.project_image = nil
-        display.getCurrentStage():setFocus(self, nil)
-        self.isFocus = false
+function Piece:touch(event)
+  if event.phase == "began" then
+    display.getCurrentStage():setFocus(self.group, event.id)
+    self.mark = Pos.from(self.group)
+    self.project_image = Piece.new_image(self.board.group, "piece_red_project.png")
+    Pos.copy(self.group, self.project_image)
+    self.isFocus = true
+  elseif self.isFocus then
+    if event.phase == "moved" then
+      local start = Pos(event.xStart, event.yStart)
+      local proj = (((Pos.from(event) - start) / self.board.scale + self.mark) / Cell.size):round()
+      if self.board:can_move(self, proj) then
+        self.proj = proj
+        Pos.copy(proj * Cell.size, self.project_image)
       end
+    elseif event.phase == "ended" or event.phase == "cancelled" then
+      self.project_image:removeSelf()
+      self.project_image = nil
+      display.getCurrentStage():setFocus(self.group, nil)
+      self.isFocus = false
+      self.board:move(self.pos, self.proj)
+      self.proj = nil
     end
-    return true
   end
+  return true
+end
 
 -------------------------------------------------------------------------------
 -- insert piece into group, with scale for dragging
-  function self:insert_into(board, pos)
-    board.group:insert(self)
-    self.board = board
-    self.pos = pos
-    self.x = pos.x * Cell.width
-    self.y = pos.y * Cell.height    
-  end
+function Piece:insert_into(board, pos)
+  board.group:insert(self.group)
+  self.board = board
+  self:move(pos)
+end
 
-  --print(self:tostring())
-  return self
+-------------------------------------------------------------------------------
+function Piece:move(to)
+  self.pos = to
+  Pos.copy(to * Cell.size, self.group)
 end
 
 return Piece
