@@ -9,7 +9,7 @@ Piece.RED = true
 Piece.BLACK = false
 
 -------------------------------------------------------------------------------
--- self  - display group
+-- group - display group
 -- color - bool, RED or BLACK
 -- img   - image, piece view
 -- scale - number

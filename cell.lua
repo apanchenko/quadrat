@@ -7,7 +7,7 @@ function Cell:__tostring() return "cell" end
 
 -------------------------------------------------------------------------------
 -- public
-Cell.size = Pos.new(64, 64)
+Cell.size = Pos(64, 64)
 Cell.sheet_opt = {width = Cell.size.x, height = Cell.size.y, numFrames = 2}
 Cell.sheet = graphics.newImageSheet("cell_1_s.png", Cell.sheet_opt)
 

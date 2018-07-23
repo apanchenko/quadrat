@@ -26,6 +26,8 @@ function Pos.__add(l, r) return Pos.new(l.x + r.x, l.y + r.y) end
 function Pos.__sub(l, r) return Pos.new(l.x - r.x, l.y - r.y) end
 function Pos.__div(l, r) return Pos.new(l.x / r.x, l.y / r.y) end
 function Pos.__mul(l, r) return Pos.new(l.x * r.x, l.y * r.y) end
+function Pos.__lt (l, r) return (l.x < r.x) and (l.y < r.y) end
+function Pos.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
 -------------------------------------------------------------------------------
 function Pos:__tostring()
@@ -51,12 +53,10 @@ end
 -------------------------------------------------------------------------------
 function Pos.test()
   local a = Pos.new(3, 4)
-  assert(a.x == 3 and a.y == 4)
-
-  -- minus
   local b = Pos.new(2, 3)
-  local c = a - b
-  assert(c.x == 1 and c.y == 1)
+
+  assert(a.x == 3 and a.y == 4)
+  assert((a-b).x == 1 and (a-b).y == 1)
 
   assert(b:length2() == 13)
   assert(Pos.new(2.3, 4.5):round().x == 2)

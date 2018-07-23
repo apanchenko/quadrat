@@ -1,19 +1,20 @@
-local Cell = require("Cell")
+local Cell = require("cell")
+local Piece = require("piece")
 local Pos = require("Pos")
 
 Board = {}
 Board.__index = Board
+setmetatable(Board, {__call = function(cls, ...) return cls.new(...) end})
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
-  return "Board "..self.width.."*"..self.height
+  return "board "..tostring(self.size)
 end
 
 -------------------------------------------------------------------------------
 function Board.new(width, height)
   local self = setmetatable({}, Board)
-  self.width = width or 8
-  self.height = height or 8
+  self.size = Pos(width or 8, height or 8)
 
   local scale = display.contentWidth / (8 * Cell.size.x);
   self.scale = Pos(scale, scale)
@@ -21,11 +22,11 @@ function Board.new(width, height)
   self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
-  for i = 1, self.width do
+  for i = 0, self.size.x-1 do
     self.grid[i] = {}
-    for j = 1, self.height do
+    for j = 0, self.size.y-1 do
       local cell = Cell()
-      cell:insert_into(self, i-1, j-1)
+      cell:insert_into(self, i, j)
       self.grid[i][j] = cell
     end
   end
@@ -34,10 +35,19 @@ function Board.new(width, height)
 end
 
 -------------------------------------------------------------------------------
+function Board:position_default()
+  for x = 0, self.size.x-1 do
+    self:put(Piece(Piece.RED), Pos(x, 0))
+    self:put(Piece(Piece.RED), Pos(x, 1))
+    self:put(Piece(Piece.BLACK), Pos(x, self.size.y - 1))
+    self:put(Piece(Piece.BLACK), Pos(x, self.size.y - 2))
+  end
+end
+
+-------------------------------------------------------------------------------
 function Board:put(piece, pos)
   print("Board:put "..tostring(piece).." at "..tostring(pos))
-  assert(pos.x >= 1 and pos.x <= self.width)
-  assert(pos.y >= 1 and pos.y <= self.height)
+  assert(Pos(0, 0) <= pos and pos < self.size)
   self.grid[pos.x][pos.y].piece = piece
   piece:insert_into(self, pos)
 end
