@@ -53,15 +53,26 @@ function Board:put(piece, pos)
 end
 
 -------------------------------------------------------------------------------
-function Board:can_move(piece, new_pos)
-  local distance = (piece.pos - new_pos):length2()
-  --print("can_move from "..tostring(piece.pos).." to "..tostring(new_pos).." "..distance)
+function Board:at(pos)
+  return self.grid[pos.x][pos.y].piece
+end
+
+-------------------------------------------------------------------------------
+function Board:can_move(fr, to)
+  local piece = self:at(fr)
+  if piece == nil then
+    return false
+  end
+  if (self:at(to)) then
+    return false
+  end
+  local distance = (piece.pos - to):length2()
   return distance == 1 or distance == 2
 end
 
 -------------------------------------------------------------------------------
 function Board:move(fr, to)
-  local piece = self.grid[fr.x][fr.y].piece
+  local piece = self:at(fr)
   assert(piece)
 
   self.grid[fr.x][fr.y].piece = nil

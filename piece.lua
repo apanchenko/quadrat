@@ -18,7 +18,7 @@ function Piece.new(color)
   local self = setmetatable({}, Piece)
   self.group = display.newGroup()
   self.color = color
-  self.img = Piece.new_image(self.group, "piece_red.png")
+  self.img = Piece.new_image(self.group, "piece_"..self:color_to_string()..".png")
   self.scale = 1
   self.group:addEventListener("touch", self)
   return self
@@ -33,8 +33,16 @@ function Piece.new_image(group, name)
 end
 
 -------------------------------------------------------------------------------
+function Piece:color_to_string()
+  if self.color == Piece.BLACK then
+    return "black"
+  end
+  return "red"
+end
+
+-------------------------------------------------------------------------------
 function Piece:__tostring() 
-  return "piece["..tostring(self.pos)..","..(self.color==Piece.RED and "RED" or "BLACK").."]"
+  return "piece["..tostring(self.pos)..","..self:color_to_string().."]"
 end
 
 -------------------------------------------------------------------------------
@@ -43,14 +51,14 @@ function Piece:touch(event)
   if event.phase == "began" then
     display.getCurrentStage():setFocus(self.group, event.id)
     self.mark = Pos.from(self.group)
-    self.project_image = Piece.new_image(self.board.group, "piece_red_project.png")
+    self.project_image = Piece.new_image(self.board.group, "piece_"..self:color_to_string().."_project.png")
     Pos.copy(self.group, self.project_image)
     self.isFocus = true
   elseif self.isFocus then
     if event.phase == "moved" then
       local start = Pos(event.xStart, event.yStart)
       local proj = (((Pos.from(event) - start) / self.board.scale + self.mark) / Cell.size):round()
-      if self.board:can_move(self, proj) then
+      if self.board:can_move(self.pos, proj) then
         self.proj = proj
         Pos.copy(proj * Cell.size, self.project_image)
       end
@@ -59,8 +67,10 @@ function Piece:touch(event)
       self.project_image = nil
       display.getCurrentStage():setFocus(self.group, nil)
       self.isFocus = false
-      self.board:move(self.pos, self.proj)
-      self.proj = nil
+      if self.proj then
+        self.board:move(self.pos, self.proj)
+        self.proj = nil
+      end
     end
   end
   return true
