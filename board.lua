@@ -12,6 +12,11 @@ function Board:__tostring()
 end
 
 -------------------------------------------------------------------------------
+-- size of the board
+-- scale to device
+-- group to render
+-- grid with cells and pieces
+-- color who moves now
 function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.size = Pos(width or 8, height or 8)
@@ -31,6 +36,7 @@ function Board.new(width, height)
     end
   end
 
+  self.color = Piece.RED
   return self
 end
 
@@ -54,31 +60,58 @@ end
 
 -------------------------------------------------------------------------------
 function Board:at(pos)
-  return self.grid[pos.x][pos.y].piece
+  return self.grid[pos.x][pos.y].piece  -- peek piece from cell by position
 end
 
 -------------------------------------------------------------------------------
+-- Check if piece can move from one position to another
 function Board:can_move(fr, to)
-  local piece = self:at(fr)
-  if piece == nil then
-    return false
+  -- check move rights
+  local actor = self:at(fr)             -- peek piece at from position
+  if actor == nil then                  -- check if it exists
+    return false                        -- can not move
   end
-  if (self:at(to)) then
-    return false
+  if actor.color ~= self.color then     -- check color who moves now
+    return false                        -- can not move
   end
-  local distance = (piece.pos - to):length2()
-  return distance == 1 or distance == 2
+
+  -- check move ability
+  local vec = actor.pos - to            -- movement vector
+  local dist = vec:length2()            -- calculate square distance
+  if dist < 1 or dist > 2 then          -- it cannot be too long
+    return false                        -- can not move
+  end
+
+  -- check kill ability
+  local victim = self:at(to)            -- peek piece at to position
+  if victim then
+    if victim.color == actor.color then -- can not kill piece of the same breed
+      return false
+    end
+  end
+
+  return true
 end
 
 -------------------------------------------------------------------------------
 function Board:move(fr, to)
-  local piece = self:at(fr)
-  assert(piece)
+  -- take actor piece
+  local actor = self:at(fr)             -- get piece at from position
+  self.grid[fr.x][fr.y].piece = nil     -- erase piece from previous cell
 
-  self.grid[fr.x][fr.y].piece = nil
-  self.grid[to.x][to.y].piece = piece
+  -- kill victim
+  local victim = self:at(to)            -- peek possible victim at to position
+  if victim then
+    victim:die()
+    victim = nil
+  end
 
-  piece:move(to)
+  -- assign actor piece to new position
+  self.grid[to.x][to.y].piece = actor   -- set piece to new cell
+  actor:move(to)                        -- move piece to new position
+
+  -- next player move
+  self.color = not self.color           -- switch to another player
 end
 
 return Board

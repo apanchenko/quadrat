@@ -25,6 +25,14 @@ function Piece.new(color)
 end
 
 -------------------------------------------------------------------------------
+function Piece:die()
+  self.group:removeSelf()
+  self.group = nil
+  self.img:removeSelf()
+  self.img = nil
+end
+
+-------------------------------------------------------------------------------
 function Piece.new_image(group, name)
   local img = display.newImageRect(group, name, 64, 64)
   img.anchorX = 0
@@ -48,6 +56,10 @@ end
 -------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
+  if self.board.color ~= self.color then
+    return true
+  end
+  
   if event.phase == "began" then
     display.getCurrentStage():setFocus(self.group, event.id)
     self.mark = Pos.from(self.group)
