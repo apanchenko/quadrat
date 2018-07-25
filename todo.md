@@ -1,3 +1,7 @@
-1. Crete stone logic
-2. Basic move and attack rules
-3. Create battle flow
+todo:
+- battle flow
+- win/lose screen
+
+done:
+- basic stone logic
+- basic move and attack rules
