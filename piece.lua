@@ -5,19 +5,16 @@ local Piece = {}
 Piece.__index = Piece
 setmetatable(Piece, {__call = function(cls, ...) return cls.new(...) end})
 
-Piece.RED = true
-Piece.BLACK = false
-
 -------------------------------------------------------------------------------
 -- group - display group
--- color - bool, RED or BLACK
+-- red   - is red or black
 -- img   - image, piece view
 -- scale - number
 -- i, j  - int number, position on board
-function Piece.new(color)
+function Piece.new(red)
   local self = setmetatable({}, Piece)
   self.group = display.newGroup()
-  self.color = color
+  self.red = red
   self.img = Piece.new_image(self.group, "piece_"..self:color_to_string()..".png")
   self.scale = 1
   self.group:addEventListener("touch", self)
@@ -42,10 +39,10 @@ end
 
 -------------------------------------------------------------------------------
 function Piece:color_to_string()
-  if self.color == Piece.BLACK then
-    return "black"
+  if self.red then
+    return "red"
   end
-  return "red"
+  return "black"
 end
 
 -------------------------------------------------------------------------------
@@ -56,7 +53,7 @@ end
 -------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
-  if self.board.color ~= self.color then
+  if self.board.red ~= self.red then
     return true
   end
   
@@ -90,7 +87,7 @@ end
 
 -------------------------------------------------------------------------------
 -- insert piece into group, with scale for dragging
-function Piece:insert_into(board, pos)
+function Piece:puton(board, pos)
   board.group:insert(self.group)
   self.board = board
   self:move(pos)

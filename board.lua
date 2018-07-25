@@ -16,7 +16,7 @@ end
 -- scale to device
 -- group to render
 -- grid with cells and pieces
--- color who moves now
+-- red color who moves now
 function Board.new(width, height)
   local self = setmetatable({}, Board)
   self.size = Pos(width or 8, height or 8)
@@ -27,35 +27,37 @@ function Board.new(width, height)
   self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
-  for i = 0, self.size.x-1 do
+  for i = 0, self.size.x - 1 do
     self.grid[i] = {}
-    for j = 0, self.size.y-1 do
+    for j = 0, self.size.y - 1 do
       local cell = Cell()
       cell:insert_into(self, i, j)
       self.grid[i][j] = cell
     end
   end
 
-  self.color = Piece.RED
+  self.red = true
   return self
 end
 
 -------------------------------------------------------------------------------
 function Board:position_default()
-  for x = 0, self.size.x-1 do
-    self:put(Piece(Piece.RED), Pos(x, 0))
-    self:put(Piece(Piece.RED), Pos(x, 1))
-    self:put(Piece(Piece.BLACK), Pos(x, self.size.y - 1))
-    self:put(Piece(Piece.BLACK), Pos(x, self.size.y - 2))
+  local lastrow = self.size.y - 1
+  for x = 0, self.size.x - 1 do
+    self:put(true, Pos(x, 0))
+    self:put(true, Pos(x, 1))
+    self:put(false, Pos(x, lastrow))
+    self:put(false, Pos(x, lastrow - 1))
   end
 end
 
 -------------------------------------------------------------------------------
-function Board:put(piece, pos)
-  print("Board:put "..tostring(piece).." at "..tostring(pos))
-  assert(Pos(0, 0) <= pos and pos < self.size)
-  self.grid[pos.x][pos.y].piece = piece
-  piece:insert_into(self, pos)
+function Board:put(red, to)
+  assert(Pos(0, 0) <= to)               -- check to position is on board
+  assert(to < self.size)
+  local piece = Piece(red)              -- create a new piece
+  self.grid[to.x][to.y].piece = piece   -- assign to cell
+  piece:puton(self, to)                 -- put piece on board
 end
 
 -------------------------------------------------------------------------------
@@ -71,21 +73,23 @@ function Board:can_move(fr, to)
   if actor == nil then                  -- check if it exists
     return false                        -- can not move
   end
-  if actor.color ~= self.color then     -- check color who moves now
+  if actor.red ~= self.red then         -- check color who moves now
     return false                        -- can not move
   end
 
   -- check move ability
   local vec = actor.pos - to            -- movement vector
-  local dist = vec:length2()            -- calculate square distance
-  if dist < 1 or dist > 2 then          -- it cannot be too long
+  if vec.x ~= 0 and vec.y ~= 0 then     -- allow orthogonal move only
+    return false
+  end
+  if vec:length2() ~= 1 then            -- allow move one cell at a time
     return false                        -- can not move
   end
 
   -- check kill ability
   local victim = self:at(to)            -- peek piece at to position
   if victim then
-    if victim.color == actor.color then -- can not kill piece of the same breed
+    if victim.red == actor.red then     -- can not kill piece of the same breed
       return false
     end
   end
@@ -111,7 +115,7 @@ function Board:move(fr, to)
   actor:move(to)                        -- move piece to new position
 
   -- next player move
-  self.color = not self.color           -- switch to another player
+  self.red = not self.red               -- switch to another player
 end
 
 return Board
