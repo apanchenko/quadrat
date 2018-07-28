@@ -1,4 +1,4 @@
-local Pos = require("Pos")
+local Pos = require("src.Pos")
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -15,7 +15,7 @@ function Piece.new(red)
   local self = setmetatable({}, Piece)
   self.group = display.newGroup()
   self.red = red
-  self.img = Piece.new_image(self.group, "piece_"..self:color_to_string()..".png")
+  self.img = Piece.new_image(self.group, "src/piece_"..self:color_to_string()..".png")
   self.scale = 1
   self.group:addEventListener("touch", self)
   return self
@@ -60,7 +60,7 @@ function Piece:touch(event)
   if event.phase == "began" then
     display.getCurrentStage():setFocus(self.group, event.id)
     self.mark = Pos.from(self.group)
-    self.project_image = Piece.new_image(self.board.group, "piece_"..self:color_to_string().."_project.png")
+    self.project_image = Piece.new_image(self.board.group, "src/piece_"..self:color_to_string().."_project.png")
     Pos.copy(self.group, self.project_image)
     self.isFocus = true
   elseif self.isFocus then

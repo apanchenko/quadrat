@@ -1,4 +1,4 @@
-local Pos = require("Pos")
+local Pos = require("src.Pos")
 
 Cell = {}
 Cell.__index = Cell
@@ -9,7 +9,7 @@ function Cell:__tostring() return "cell" end
 -- public
 Cell.size = Pos(64, 64)
 Cell.sheet_opt = {width = Cell.size.x, height = Cell.size.y, numFrames = 2}
-Cell.sheet = graphics.newImageSheet("cell_1_s.png", Cell.sheet_opt)
+Cell.sheet = graphics.newImageSheet("src/cell_1_s.png", Cell.sheet_opt)
 
 function Cell.new()
   local self = setmetatable({}, Cell)

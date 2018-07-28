@@ -3,13 +3,8 @@
 -- main.lua
 --
 -----------------------------------------------------------------------------------------
-local composer = require( "composer" )
-local Pos = require("Pos")
+local composer = require("composer")
 
---local background = display.newImageRect("background.png", 360, 570)
---background.x = display.contentCenterX
---background.y = display.contentCenterY
+require("src.Pos").test()
 
-Pos.test()
-
-composer.gotoScene("menu")
+composer.gotoScene("src.Menu")

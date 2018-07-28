@@ -1,6 +1,6 @@
-local Cell = require("cell")
-local Piece = require("piece")
-local Pos = require("Pos")
+local Cell = require("src.Cell")
+local Piece = require("src.Piece")
+local Pos = require("src.Pos")
 
 Board = {}
 Board.__index = Board

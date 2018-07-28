@@ -1,8 +1,8 @@
 -- imports
 local composer = require("composer")
-local Board = require("board")
-local Piece = require("piece")
-local Pos = require("Pos")
+local Board = require("src.Board")
+local Piece = require("src.Piece")
+local Pos = require("src.Pos")
 
 -- variables
 local battle = composer.newScene()

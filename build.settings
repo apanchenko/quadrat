@@ -10,12 +10,9 @@ settings =
 		-- Supported values for orientation:
 		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 		default = "portrait",
-		supported = { "portrait", },
+		supported = { "portrait", "portraitUpsideDown" },
 	},
 
-	--
-	-- Android section
-	--
 	android =
 	{
 		usesPermissions =
@@ -24,9 +21,6 @@ settings =
 		},
 	},
 
-	--
-	-- iOS section
-	--
 	iphone =
 	{
 		xcassets = "Images.xcassets",
@@ -37,17 +31,11 @@ settings =
 		},
 	},
 
-	--
-	-- Plugins section
-	--
 	plugins =
 	{
 
 	},
 
-	--
-	-- Project section
-	--
 	excludeFiles =
 	{
 		-- Exclude unnecessary files for each platform
