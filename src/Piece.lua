@@ -1,4 +1,5 @@
 local Pos = require("src.Pos")
+local Player = require("src.Player")
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -7,15 +8,15 @@ setmetatable(Piece, {__call = function(cls, ...) return cls.new(...) end})
 
 -------------------------------------------------------------------------------
 -- group - display group
--- red   - is red or black
+-- color - is red or black
 -- img   - image, piece view
 -- scale - number
 -- i, j  - int number, position on board
-function Piece.new(red)
+function Piece.new(color)
   local self = setmetatable({}, Piece)
   self.group = display.newGroup()
-  self.red = red
-  self.img = Piece.new_image(self.group, "src/piece_"..self:color_to_string()..".png")
+  self.color = color
+  self.img = Piece._new_image(self.group, "src/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
   self.group:addEventListener("touch", self)
   return self
@@ -30,58 +31,50 @@ function Piece:die()
 end
 
 -------------------------------------------------------------------------------
-function Piece.new_image(group, name)
-  local img = display.newImageRect(group, name, 64, 64)
-  img.anchorX = 0
-  img.anchorY = 0
-  return img
-end
-
--------------------------------------------------------------------------------
-function Piece:color_to_string()
-  if self.red then
-    return "red"
-  end
-  return "black"
-end
-
--------------------------------------------------------------------------------
 function Piece:__tostring() 
-  return "piece["..tostring(self.pos)..","..self:color_to_string().."]"
+  return "piece["..tostring(self.pos)..","..Player.tostring(self.color).."]"
 end
 
 -------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
-  if self.board.red ~= self.red then
+  if self.board.color ~= self.color then
     return true
   end
   
   if event.phase == "began" then
-    display.getCurrentStage():setFocus(self.group, event.id)
+    self:_set_focus(event.id)
     self.mark = Pos.from(self.group)
-    self.project_image = Piece.new_image(self.board.group, "src/piece_"..self:color_to_string().."_project.png")
-    Pos.copy(self.group, self.project_image)
-    self.isFocus = true
+
   elseif self.isFocus then
+    
     if event.phase == "moved" then
       local start = Pos(event.xStart, event.yStart)
-      local proj = (((Pos.from(event) - start) / self.board.scale + self.mark) / Cell.size):round()
+      local shift = (Pos.from(event) - start) / self.board.scale + self.mark
+      local proj = (shift / Cell.size):round()
+      Pos.copy(shift, self.group)
+
       if self.board:can_move(self.pos, proj) then
+        self:_create_project()
         self.proj = proj
-        Pos.copy(proj * Cell.size, self.project_image)
+        Pos.copy(proj * Cell.size, self.project)
+      else
+        self:_remove_project()
+        self.proj = nil
       end
+    
     elseif event.phase == "ended" or event.phase == "cancelled" then
-      self.project_image:removeSelf()
-      self.project_image = nil
-      display.getCurrentStage():setFocus(self.group, nil)
-      self.isFocus = false
+      self:_set_focus(nil)
+      self:_remove_project()
       if self.proj then
         self.board:move(self.pos, self.proj)
         self.proj = nil
+      else
+        Pos.copy(self.pos * Cell.size, self.group) -- return to original position
       end
     end
   end
+
   return true
 end
 
@@ -97,6 +90,36 @@ end
 function Piece:move(to)
   self.pos = to
   Pos.copy(to * Cell.size, self.group)
+end
+
+-------------------------------------------------------------------------------
+function Piece:_create_project()
+  if not self.project then
+    self.project = Piece._new_image(self.board.group, "src/piece_"..Player.tostring(self.color).."_project.png")
+    Pos.copy(self.group, self.project)
+  end
+end
+
+-------------------------------------------------------------------------------
+function Piece:_remove_project()
+  if self.project then
+    self.project:removeSelf()
+    self.project = nil
+  end
+end
+
+-------------------------------------------------------------------------------
+function Piece._new_image(group, name)
+  local img = display.newImageRect(group, name, 64, 64)
+  img.anchorX = 0
+  img.anchorY = 0
+  return img
+end
+
+-------------------------------------------------------------------------------
+function Piece:_set_focus(eventId)
+  display.getCurrentStage():setFocus(self.group, eventId)
+  self.isFocus = (eventId ~= nil)
 end
 
 return Piece

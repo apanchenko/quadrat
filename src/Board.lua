@@ -1,6 +1,7 @@
 local Cell = require("src.Cell")
 local Piece = require("src.Piece")
 local Pos = require("src.Pos")
+local Player = require("src.Player")
 
 Board = {}
 Board.__index = Board
@@ -16,14 +17,15 @@ end
 -- scale to device
 -- group to render
 -- grid with cells and pieces
--- red color who moves now
-function Board.new(width, height)
+-- player color who moves now
+function Board.new(width, height, battle)
   local self = setmetatable({}, Board)
   self.size = Pos(width or 8, height or 8)
+  self.battle = battle
 
   local scale = display.contentWidth / (8 * Cell.size.x);
-  self.scale = Pos(scale, scale)
-  self.group = display.newGroup()
+  self.scale = Pos(scale, scale)        -- 2D scale
+  self.group = display.newGroup()       -- disply group
   self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
@@ -36,26 +38,27 @@ function Board.new(width, height)
     end
   end
 
-  self.red = true
+  self.color = Player.Red
   return self
 end
 
 -------------------------------------------------------------------------------
+-- two rows initial position
 function Board:position_default()
   local lastrow = self.size.y - 1
   for x = 0, self.size.x - 1 do
-    self:put(true, Pos(x, 0))
-    self:put(true, Pos(x, 1))
-    self:put(false, Pos(x, lastrow))
-    self:put(false, Pos(x, lastrow - 1))
+    self:put(Player.Red, Pos(x, 0))
+    self:put(Player.Red, Pos(x, 1))
+    self:put(Player.Black, Pos(x, lastrow))
+    self:put(Player.Black, Pos(x, lastrow - 1))
   end
 end
 
 -------------------------------------------------------------------------------
-function Board:put(red, to)
+function Board:put(color, to)
   assert(Pos(0, 0) <= to)               -- check to position is on board
   assert(to < self.size)
-  local piece = Piece(red)              -- create a new piece
+  local piece = Piece(color)            -- create a new piece
   self.grid[to.x][to.y].piece = piece   -- assign to cell
   piece:puton(self, to)                 -- put piece on board
 end
@@ -73,7 +76,7 @@ function Board:can_move(fr, to)
   if actor == nil then                  -- check if it exists
     return false                        -- can not move
   end
-  if actor.red ~= self.red then         -- check color who moves now
+  if actor.color ~= self.color then     -- check color who moves now
     return false                        -- can not move
   end
 
@@ -89,7 +92,7 @@ function Board:can_move(fr, to)
   -- check kill ability
   local victim = self:at(to)            -- peek piece at to position
   if victim then
-    if victim.red == actor.red then     -- can not kill piece of the same breed
+    if victim.color == actor.color then -- can not kill piece of the same breed
       return false
     end
   end
@@ -115,7 +118,30 @@ function Board:move(fr, to)
   actor:move(to)                        -- move piece to new position
 
   -- next player move
-  self.red = not self.red               -- switch to another player
+  self.color = not self.color           -- switch to another player
+
+  -- notify battle about player moved
+  self.battle:onMoved(self.color)
+end
+
+-------------------------------------------------------------------------------
+function Board:count_pieces()
+  --assert(type(color) == type(Player.Red), "Wrong color type")
+  local red = 0
+  local bla = 0
+  for i = 0, self.size.x - 1 do
+    for j = 0, self.size.y - 1 do
+      local piece = self:at(Pos(i, j))
+      if piece then
+        if piece.color == Player.Red then
+          red = red + 1
+        else
+          bla = bla + 1
+        end
+      end
+    end
+  end
+  return red, bla
 end
 
 return Board

@@ -14,28 +14,32 @@ local function handle_button(next_scene)
     return true
 end
 
--- button event handler
-local function handle_widget_button(event)
-    return handle_button(event.target.id)
-end
-
 -- create new button
-local function new_button(button_id, button_label)
+local function new_button(id, label)
     return widget.newButton {
-        x = display.contentCenterX, y = 0,
-        id = button_id, label = button_label, onPress = handle_widget_button,
-        emboss = false, font = native.systemFont, fontSize = 17,
-        shape = "rectangle", width = 250, height = 32,
-        fillColor = {
-            default={(55/255)+(0.3), (68/255)+(0.3), (77/255)+(0.3), 1},
-            over   ={(55/255)+(0.3), (68/255)+(0.3), (77/255)+(0.3), 0.8}
-        },
-        labelColor = {default={1,1,1,1}, over={1,1,1,1}}
+        x = display.contentCenterX,
+        y = 0,
+        id = id,
+        label = label,
+        onPress = function(event) return handle_button(event.target.id) end,
+        emboss = false,
+        font = native.systemFont,
+        fontSize = 17,
+        shape = "roundedRect",
+        width = 250,
+        height = 32,
+        cornerRadius = 9,
+        fillColor   = { default = {0.6, 0.7, 0.8, 1}, over = {0.6, 0.7, 0.8, 0.8} },
+        labelColor  = { default = {1.0, 1.0, 1.0, 1}, over = {1.0, 1.0, 1.0, 1.0} },
+        strokeColor = { default = {1.0, 0.4, 0.0, 1}, over = {0.8, 0.8, 1.0, 1.0} },
+        strokeWidth = 0
     }
 end
 
 function scene:create(event)
-    local sceneGroup = self.view
+    local back = display.newImageRect(self.view, "src/background.png", display.contentWidth, display.contentHeight)
+    back.anchorX = 0
+    back.anchorY = 0
 
     local buttonGroup = display.newGroup()
 
@@ -46,7 +50,7 @@ function scene:create(event)
     end
     
     buttonGroup.y = buttonGroup.contentHeight / 2 + 45
-    sceneGroup:insert(buttonGroup)
+    self.view:insert(buttonGroup)
 end
 
 function scene:show( event )
