@@ -1,4 +1,5 @@
 local Pos = require("src.Pos")
+local Jade = require("src.Jade")
 
 Cell = {}
 Cell.__index = Cell
@@ -27,6 +28,24 @@ function Cell:insert_into(board, i, j)
   self.group.x = i * Cell.size.x
   self.group.y = j * Cell.size.y
   board.group:insert(self.group)
+end
+
+-------------------------------------------------------------------------------
+-- may spawn jade
+function Cell:drop_jade(jade_probability)
+  assert(type(jade_probability) == "number")
+  assert(jade_probability >= 0)
+  assert(jade_probability <= 1)
+
+  if self.piece or self.jade then
+    return
+  end
+
+  if math.random() > jade_probability then
+    return
+  end
+
+  self.jade = Jade(self.group)
 end
 
 return Cell

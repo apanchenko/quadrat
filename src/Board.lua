@@ -18,9 +18,9 @@ end
 -- group to render
 -- grid with cells and pieces
 -- player color who moves now
-function Board.new(width, height, battle)
+function Board.new(size, battle)
   local self = setmetatable({}, Board)
-  self.size = Pos(width or 8, height or 8)
+  self.size = size
   self.battle = battle
 
   local scale = display.contentWidth / (8 * Cell.size.x);
@@ -77,35 +77,35 @@ function Board:put(color, to)
 end
 
 -------------------------------------------------------------------------------
-function Board:at(pos)
-  return self.grid[pos.x][pos.y].piece  -- peek piece from cell by position
+function Board:get_cell(pos)
+  return self.grid[pos.x][pos.y]            -- peek piece from cell by position
 end
 
 -------------------------------------------------------------------------------
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
   -- check move rights
-  local actor = self:at(fr)             -- peek piece at from position
-  if actor == nil then                  -- check if it exists
-    return false                        -- can not move
+  local actor = self:get_cell(fr).piece     -- peek piece at from position
+  if actor == nil then                      -- check if it exists
+    return false                            -- can not move
   end
-  if actor.color ~= self.color then     -- check color who moves now
-    return false                        -- can not move
+  if actor.color ~= self.color then         -- check color who moves now
+    return false                            -- can not move
   end
 
   -- check move ability
-  local vec = actor.pos - to            -- movement vector
-  if vec.x ~= 0 and vec.y ~= 0 then     -- allow orthogonal move only
+  local vec = actor.pos - to                -- movement vector
+  if vec.x ~= 0 and vec.y ~= 0 then         -- allow orthogonal move only
     return false
   end
-  if vec:length2() ~= 1 then            -- allow move one cell at a time
-    return false                        -- can not move
+  if vec:length2() ~= 1 then                -- allow move one cell at a time
+    return false                            -- can not move
   end
 
   -- check kill ability
-  local victim = self:at(to)            -- peek piece at to position
+  local victim = self:get_cell(to).piece    -- peek piece at to position
   if victim then
-    if victim.color == actor.color then -- can not kill piece of the same breed
+    if victim.color == actor.color then     -- can not kill piece of the same breed
       return false
     end
   end
@@ -116,11 +116,11 @@ end
 -------------------------------------------------------------------------------
 function Board:move(fr, to)
   -- take actor piece
-  local actor = self:at(fr)             -- get piece at from position
-  self.grid[fr.x][fr.y].piece = nil     -- erase piece from previous cell
+  local actor = self:get_cell(fr).piece     -- get piece at from position
+  self.grid[fr.x][fr.y].piece = nil         -- erase piece from previous cell
 
   -- kill victim
-  local victim = self:at(to)            -- peek possible victim at to position
+  local victim = self:get_cell(to).piece    -- peek possible victim at to position
   if victim then
     victim:die()
     victim = nil
@@ -144,7 +144,7 @@ function Board:count_pieces()
   local bla = 0
   for i = 0, self.size.x - 1 do
     for j = 0, self.size.y - 1 do
-      local piece = self:at(Pos(i, j))
+      local piece = self:get_cell(Pos(i, j)).piece
       if piece then
         if piece.color == Player.Red then
           red = red + 1
@@ -155,6 +155,17 @@ function Board:count_pieces()
     end
   end
   return red, bla
+end
+
+-------------------------------------------------------------------------------
+-- randomly spawn jades in cells
+function Board:drop_jades(jade_probability)
+  for i = 0, self.size.x - 1 do
+    for j = 0, self.size.y - 1 do
+      local cell = self:get_cell(Pos(i, j))
+      cell:drop_jade(jade_probability)
+    end
+  end
 end
 
 return Board
