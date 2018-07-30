@@ -39,6 +39,10 @@ function Board.new(width, height, battle)
   end
 
   self.color = Player.Red
+
+  self.group.anchorChildren = true      -- center on screen
+  Pos.center(self.group)
+
   return self
 end
 
@@ -51,6 +55,15 @@ function Board:position_default()
     self:put(Player.Red, Pos(x, 1))
     self:put(Player.Black, Pos(x, lastrow))
     self:put(Player.Black, Pos(x, lastrow - 1))
+  end
+end
+
+-------------------------------------------------------------------------------
+-- one row initial position
+function Board:position_minimal()
+  for x = 0, self.size.x - 1 do
+    self:put(Player.Red, Pos(x, 0))
+    self:put(Player.Black, Pos(x, self.size.y - 1))
   end
 end
 

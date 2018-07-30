@@ -3,6 +3,7 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local platform = system.getInfo( "platform" )
 
+-------------------------------------------------------------------------------
 -- button handler
 local function handle_button(next_scene)
     print("menu:handle_button "..next_scene)
@@ -14,6 +15,7 @@ local function handle_button(next_scene)
     return true
 end
 
+-------------------------------------------------------------------------------
 -- create new button
 local function new_button(id, label)
     return widget.newButton {
@@ -36,6 +38,7 @@ local function new_button(id, label)
     }
 end
 
+-------------------------------------------------------------------------------
 function scene:create(event)
     local back = display.newImageRect(self.view, "src/background.png", display.contentWidth, display.contentHeight)
     back.anchorX = 0
@@ -53,6 +56,7 @@ function scene:create(event)
     self.view:insert(buttonGroup)
 end
 
+-------------------------------------------------------------------------------
 function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
@@ -65,6 +69,7 @@ function scene:show( event )
     end
 end
 
+-------------------------------------------------------------------------------
 function scene:hide( event )
     local sceneGroup = self.view
     local phase = event.phase
@@ -78,6 +83,7 @@ function scene:hide( event )
 end
  
  
+-------------------------------------------------------------------------------
 -- destroy()
 function scene:destroy( event )
     print("scene:destroy")

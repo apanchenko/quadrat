@@ -11,12 +11,11 @@ local battle = composer.newScene()
 -------------------------------------------------------------------------------
 -- battle scene
 function battle:create(event)
-  self.board = Board(4, 4, self)
+  self.board = Board(3, 3, self)
   self.view:insert(self.board.group)
   print("Create " .. tostring(self.board))
 
-
-  self.board:position_default()
+  self.board:position_minimal()
 end
 
 -------------------------------------------------------------------------------
@@ -38,16 +37,23 @@ function battle:onMoved(color)
   print(Player.tostring(color).." moved. Red: "..red..". Black: "..bla)
 
   if red == 0 then
-    print("Black wins!!!")
-  end
-
-  if bla == 0 then
-    print "Red wins!!!"
+    self:win "Black wins!!!"
+  elseif bla == 0 then
+    self:win "Red wins!!!"
   end
 end
 
 -------------------------------------------------------------------------------
-function battle:onWin(player)
+function battle:win(message)
+  local options = {
+    text = message,
+    width = display.contentWidth,
+    font = native.systemFont,
+    fontSize = 38,
+    align = "center"
+  }
+  local text = display.newText(options)
+  Pos.center(text)
 end
 
 battle:addEventListener("create", battle)

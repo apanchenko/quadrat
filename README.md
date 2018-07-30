@@ -5,10 +5,10 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 - who moves?
-- win/lose screen
 - orbs
 - abilities
 
 ## done:
+- win/lose screen
 - basic stone logic
 - basic move and attack rules

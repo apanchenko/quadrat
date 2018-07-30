@@ -22,10 +22,17 @@ function Pos.copy(from, to)
 end
 
 -------------------------------------------------------------------------------
+function Pos.center(obj)
+  obj.x = display.contentWidth / 2
+  obj.y = display.contentHeight / 2
+end
+
+-------------------------------------------------------------------------------
 function Pos.__add(l, r) return Pos.new(l.x + r.x, l.y + r.y) end
 function Pos.__sub(l, r) return Pos.new(l.x - r.x, l.y - r.y) end
 function Pos.__div(l, r) return Pos.new(l.x / r.x, l.y / r.y) end
 function Pos.__mul(l, r) return Pos.new(l.x * r.x, l.y * r.y) end
+function Pos.__eq (l, r) return (l.x == r.x) and (l.y == r.y) end
 function Pos.__lt (l, r) return (l.x < r.x) and (l.y < r.y) end
 function Pos.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
