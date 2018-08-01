@@ -3,13 +3,13 @@ local Pos = require("src.Pos")
 local Config =
 {
   -- width and height of the board in cells
-  board_size = Pos(5, 5),
+  board_size = Pos(8, 8),
 
-  -- size of the cell in pixel
+  -- width and height of cell in pixels
   cell_size = Pos(64, 64),
 
   -- drop jades every Nth move
-  jade_moves = 2,
+  jade_moves = 3,
 
   -- probability that a jade will spawn on a cell
   jade_probability = 0.1,

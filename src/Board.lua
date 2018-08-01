@@ -2,6 +2,7 @@ local Cell = require("src.Cell")
 local Piece = require("src.Piece")
 local Pos = require("src.Pos")
 local Player = require("src.Player")
+local Config = require("src.Config")
 
 Board = {}
 Board.__index = Board
@@ -12,20 +13,22 @@ function Board:__tostring()
   return "board "..tostring(self.size)
 end
 
--------------------------------------------------------------------------------
--- size of the board
--- scale to device
--- group to render
--- grid with cells and pieces
--- player color who moves now
+--[[
+size of the board
+scale to device
+group to render
+grid with cells and pieces
+player color who moves now
+selected piece
+--]]
 function Board.new(size, battle)
   local self = setmetatable({}, Board)
   self.size = size
   self.battle = battle
 
-  local scale = display.contentWidth / (8 * Cell.size.x);
-  self.scale = Pos(scale, scale)        -- 2D scale
-  self.group = display.newGroup()       -- disply group
+  local scale = display.contentWidth / (8 * Config.cell_size.x);
+  self.scale = Pos(scale, scale)            -- 2D scale
+  self.group = display.newGroup()           -- disply group
   self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
@@ -40,7 +43,8 @@ function Board.new(size, battle)
 
   self.color = Player.Red
 
-  self.group.anchorChildren = true      -- center on screen
+  self.group.anchorChildren = true          -- center on screen
+  self.selected_piece = nil                 -- one piece may be selected
   Pos.center(self.group)
 
   return self
@@ -69,15 +73,15 @@ end
 
 -------------------------------------------------------------------------------
 function Board:put(color, to)
-  assert(Pos(0, 0) <= to)               -- check to position is on board
+  assert(Pos(0, 0) <= to)                   -- check to position is on board
   assert(to < self.size)
-  local piece = Piece(color)            -- create a new piece
-  self.grid[to.x][to.y].piece = piece   -- assign to cell
-  piece:puton(self, to)                 -- put piece on board
+  local piece = Piece(color)                -- create a new piece
+  self.grid[to.x][to.y].piece = piece       -- assign to cell
+  piece:puton(self, to)                     -- put piece on board
 end
 
 -------------------------------------------------------------------------------
-function Board:get_cell(pos)
+function Board:cell(pos)
   return self.grid[pos.x][pos.y]            -- peek piece from cell by position
 end
 
@@ -85,7 +89,7 @@ end
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
   -- check move rights
-  local actor = self:get_cell(fr).piece     -- peek piece at from position
+  local actor = self:cell(fr).piece     -- peek piece at from position
   if actor == nil then                      -- check if it exists
     return false                            -- can not move
   end
@@ -103,11 +107,10 @@ function Board:can_move(fr, to)
   end
 
   -- check kill ability
-  local victim = self:get_cell(to).piece    -- peek piece at to position
-  if victim then
-    if victim.color == actor.color then     -- can not kill piece of the same breed
-      return false
-    end
+  local tocell = self:cell(to)
+  local victim = tocell.piece               -- peek piece at to position
+  if victim and victim.color == actor.color then
+    return false                            -- can not kill piece of the same breed
   end
 
   return true
@@ -116,22 +119,30 @@ end
 -------------------------------------------------------------------------------
 function Board:move(fr, to)
   -- take actor piece
-  local actor = self:get_cell(fr).piece     -- get piece at from position
+  local actor = self:cell(fr).piece         -- get piece at from position
   self.grid[fr.x][fr.y].piece = nil         -- erase piece from previous cell
 
+  local tocell = self:cell(to)              -- cell that actor is going to move to
+
   -- kill victim
-  local victim = self:get_cell(to).piece    -- peek possible victim at to position
-  if victim then
-    victim:die()
-    victim = nil
+  if tocell.piece then                      -- peek possible victim at to position
+    tocell.piece:die()
+    tocell.piece = nil
+  end
+
+  -- consume jade to get ability
+  if tocell.jade then
+    tocell.jade:die()
+    tocell.jade = nil
+    actor:add_ability()
   end
 
   -- assign actor piece to new position
-  self.grid[to.x][to.y].piece = actor   -- set piece to new cell
-  actor:move(to)                        -- move piece to new position
+  self.grid[to.x][to.y].piece = actor       -- set piece to new cell
+  actor:move(to)                            -- move piece to new position
 
   -- next player move
-  self.color = not self.color           -- switch to another player
+  self.color = not self.color               -- switch to another player
 
   -- notify battle about player moved
   self.battle:onMoved(self.color)
@@ -144,7 +155,7 @@ function Board:count_pieces()
   local bla = 0
   for i = 0, self.size.x - 1 do
     for j = 0, self.size.y - 1 do
-      local piece = self:get_cell(Pos(i, j)).piece
+      local piece = self:cell(Pos(i, j)).piece
       if piece then
         if piece.color == Player.Red then
           red = red + 1
@@ -162,10 +173,29 @@ end
 function Board:drop_jades(jade_probability)
   for i = 0, self.size.x - 1 do
     for j = 0, self.size.y - 1 do
-      local cell = self:get_cell(Pos(i, j))
+      local cell = self:cell(Pos(i, j))
       cell:drop_jade(jade_probability)
     end
   end
+end
+
+-------------------------------------------------------------------------------
+-- select piece
+function Board:select(piece)
+  if self.selected_piece then
+    self.selected_piece:deselect()
+  end
+
+  self.selected_piece = piece
+  if self.selected_piece then
+    self.selected_piece:select()
+  end
+end
+
+-------------------------------------------------------------------------------
+-- select piece
+function Board:is_color(color)
+  return self.color == color
 end
 
 return Board
