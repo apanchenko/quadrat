@@ -6,7 +6,7 @@ local Config = require("src.Config")
 
 Board = {}
 Board.__index = Board
-setmetatable(Board, {__call = function(cls, ...) return cls.new(...) end})
+setmetatable(Board, {__call = function(cls, ...) return cls._new(...) end})
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
@@ -14,17 +14,16 @@ function Board:__tostring()
 end
 
 --[[
-size of the board
-scale to device
-group to render
-grid with cells and pieces
-player color who moves now
-selected piece
+  size of the board
+  scale to device
+  group to render
+  grid with cells and pieces
+  player color who moves now
+  selected piece
 --]]
-function Board.new(size, battle)
+function Board._new(size)
   local self = setmetatable({}, Board)
   self.size = size
-  self.battle = battle
 
   local scale = display.contentWidth / (8 * Config.cell_size.x);
   self.scale = Pos(scale, scale)            -- 2D scale
@@ -48,6 +47,15 @@ function Board.new(size, battle)
   Pos.center(self.group)
 
   return self
+end
+
+-------------------------------------------------------------------------------
+-- set move listener as object:function(color)
+function Board:set_move_listener(move_listener)
+  assert(move_listener)
+  assert(move_listener.moved)
+  assert(type(move_listener.moved) == "function")
+  self.move_listener = move_listener        -- move listener
 end
 
 -------------------------------------------------------------------------------
@@ -89,7 +97,7 @@ end
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
   -- check move rights
-  local actor = self:cell(fr).piece     -- peek piece at from position
+  local actor = self:cell(fr).piece         -- peek piece at from position
   if actor == nil then                      -- check if it exists
     return false                            -- can not move
   end
@@ -141,11 +149,11 @@ function Board:move(fr, to)
   self.grid[to.x][to.y].piece = actor       -- set piece to new cell
   actor:move(to)                            -- move piece to new position
 
-  -- next player move
+  local moved_color = self.color
+
   self.color = not self.color               -- switch to another player
 
-  -- notify battle about player moved
-  self.battle:onMoved(self.color)
+  self.move_listener:moved(moved_color)     -- notify listener about player moved
 end
 
 -------------------------------------------------------------------------------

@@ -3,7 +3,7 @@ local Pos = require("src.Pos")
 local Config =
 {
   -- width and height of the board in cells
-  board_size = Pos(8, 8),
+  board_size = Pos(4, 4),
 
   -- width and height of cell in pixels
   cell_size = Pos(64, 64),

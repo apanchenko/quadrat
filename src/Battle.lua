@@ -12,7 +12,9 @@ local battle = composer.newScene()
 -------------------------------------------------------------------------------
 -- battle scene
 function battle:create(event)
-  self.board = Board(Config.board_size, self)
+  self.board = Board(Config.board_size)
+  self.board:set_move_listener(self)
+
   self.view:insert(self.board.group)
   print("Create " .. tostring(self.board))
 
@@ -33,27 +35,27 @@ function battle:destroy(event)
 end
 
 -------------------------------------------------------------------------------
-function battle:onMoved(color)
+function battle:moved(color)
   local red, bla = self.board:count_pieces()
 
   print(Player.tostring(color).." moved. Red: "..red..". Black: "..bla)
 
   if red == 0 then
-    self:win "Black wins!!!"
+    self:_win "Black wins!!!"
   elseif bla == 0 then
-    self:win "Red wins!!!"
+    self:_win "Red wins!!!"
   end
 
   self.jade_moves = self.jade_moves - 1
   if self.jade_moves == 0 then
-    self.jade_moves = Config.jade_moves -- restart jade_moves counter
+    self.jade_moves = Config.jade_moves     -- restart jade_moves counter
     self.board:drop_jades(Config.jade_probability)
   end
 
 end
 
 -------------------------------------------------------------------------------
-function battle:win(message)
+function battle:_win(message)
   local options = {
     text = message,
     width = display.contentWidth,
