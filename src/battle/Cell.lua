@@ -1,5 +1,5 @@
-local Pos = require("src.Pos")
-local Jade = require("src.Jade")
+local Pos = require("src.core.Pos")
+local Jade = require("src.battle.Jade")
 local Config = require("src.Config")
 
 Cell = {}
@@ -10,7 +10,7 @@ function Cell:__tostring() return "cell" end
 -------------------------------------------------------------------------------
 -- public
 Cell.sheet_opt = {width = Config.cell_size.x, height = Config.cell_size.y, numFrames = 2}
-Cell.sheet = graphics.newImageSheet("src/cell_1_s.png", Cell.sheet_opt)
+Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 -------------------------------------------------------------------------------
 function Cell.new()

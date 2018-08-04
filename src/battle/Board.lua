@@ -1,6 +1,6 @@
-local Cell = require("src.Cell")
-local Piece = require("src.Piece")
-local Pos = require("src.Pos")
+local Cell = require("src.battle.Cell")
+local Piece = require("src.battle.Piece")
+local Pos = require("src.core.Pos")
 local Player = require("src.Player")
 local Config = require("src.Config")
 

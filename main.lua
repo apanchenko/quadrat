@@ -5,6 +5,6 @@
 -----------------------------------------------------------------------------------------
 local composer = require("composer")
 
-require("src.Pos").test()
+require("src.core.Pos").test()
 
 composer.gotoScene("src.Menu")

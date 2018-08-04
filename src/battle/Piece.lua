@@ -1,7 +1,7 @@
-local Pos = require("src.Pos")
+local Pos = require("src.core.Pos")
 local Player = require("src.Player")
 local Config = require("src.Config")
-local AbilityDiagonal = require("src.AbilityDiagonal")
+local AbilityDiagonal = require("src.battle.AbilityDiagonal")
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -21,7 +21,7 @@ function Piece.new(color)
   self.group = display.newGroup()
   self.group:addEventListener("touch", self)
   self.color = color
-  self.img = Piece._new_image(self.group, "src/piece_"..Player.tostring(self.color)..".png")
+  self.img = Piece._new_image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
   self.abilities = {}
   self.selected = false
@@ -137,7 +137,7 @@ end
 -------------------------------------------------------------------------------
 function Piece:_create_project()
   if not self.project then
-    self.project = Piece._new_image(self.board.group, "src/piece_"..Player.tostring(self.color).."_project.png")
+    self.project = Piece._new_image(self.board.group, "src/battle/piece_"..Player.tostring(self.color).."_project.png")
     Pos.copy(self.group, self.project)
   end
 end

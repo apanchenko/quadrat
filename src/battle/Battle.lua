@@ -1,8 +1,8 @@
 -- imports
 local composer = require("composer")
-local Board = require("src.Board")
-local Piece = require("src.Piece")
-local Pos = require("src.Pos")
+local Board = require("src.battle.Board")
+local Piece = require("src.battle.Piece")
+local Pos = require("src.core.Pos")
 local Player = require("src.Player")
 local Config = require("src.Config")
 

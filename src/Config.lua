@@ -1,4 +1,4 @@
-local Pos = require("src.Pos")
+local Pos = require("src.core.Pos")
 
 local Config =
 {
