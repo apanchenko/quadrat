@@ -10,7 +10,7 @@ local Config =
   font = native.systemFont,
 
   -- width and height of the board in cells
-  board_size = Pos(4, 4),
+  board_size = Pos(3, 3),
 
   -- width and height of cell in pixels
   cell_size = Pos(64, 64),

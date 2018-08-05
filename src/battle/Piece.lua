@@ -1,7 +1,8 @@
-local Pos = require("src.core.Pos")
-local Player = require("src.Player")
-local Config = require("src.Config")
-local AbilityDiagonal = require("src.battle.AbilityDiagonal")
+local Pos     = require "src.core.Pos"
+local Player  = require "src.Player"
+local AbilityDiagonal = require "src.battle.AbilityDiagonal"
+local lib     = require "src.core.lib"
+local cfg     = require "src.Config"
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -21,7 +22,7 @@ function Piece.new(color)
   self.group = display.newGroup()
   self.group:addEventListener("touch", self)
   self.color = color
-  self.img = Piece._new_image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png")
+  self.img = lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {w=cfg.cell_size.x})
   self.scale = 1
   self.abilities = {}
   self.selected = false
@@ -61,13 +62,13 @@ function Piece:touch(event)
     if event.phase == "moved" then
       local start = Pos(event.xStart, event.yStart)
       local shift = (Pos.from(event) - start) / self.board.scale + self.mark
-      local proj = (shift / Config.cell_size):round()
+      local proj = (shift / cfg.cell_size):round()
       Pos.copy(shift, self.group)
 
       if self.board:can_move(self.pos, proj) then
         self:_create_project()
         self.proj = proj
-        Pos.copy(proj * Config.cell_size, self.project)
+        Pos.copy(proj * cfg.cell_size, self.project)
       else
         self:_remove_project()
         self.proj = nil
@@ -81,7 +82,7 @@ function Piece:touch(event)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
-        Pos.copy(self.pos * Config.cell_size, self.group) -- return to original position
+        Pos.copy(self.pos * cfg.cell_size, self.group) -- return to original position
         if self.selected then
           self.board:select(nil)            -- remove selection if was selected
         else
@@ -137,7 +138,8 @@ end
 -------------------------------------------------------------------------------
 function Piece:_create_project()
   if not self.project then
-    self.project = Piece._new_image(self.board.group, "src/battle/piece_"..Player.tostring(self.color).."_project.png")
+    local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
+    self.project = lib.image(self.board.group, path, {w=cfg.cell_size.x})
     Pos.copy(self.group, self.project)
   end
 end
@@ -149,20 +151,13 @@ function Piece:_remove_project()
   end
 end
 -------------------------------------------------------------------------------
-function Piece._new_image(group, name)
-  local img = display.newImageRect(group, name, Config.cell_size.x, Config.cell_size.y)
-  img.anchorX = 0
-  img.anchorY = 0
-  return img
-end
--------------------------------------------------------------------------------
 function Piece:_set_focus(eventId)
   display.getCurrentStage():setFocus(self.group, eventId)
   self.isFocus = (eventId ~= nil)
 end
 -------------------------------------------------------------------------------
 function Piece:_update_group_pos()
-  local pos = self.pos * Config.cell_size
+  local pos = self.pos * cfg.cell_size
   if self.selected then
     pos.y = pos.y - 10
   end

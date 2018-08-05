@@ -14,9 +14,7 @@ local battle = composer.newScene()
 -- battle scene
 function battle:create(event)
   -- background
-  local back = display.newImageRect(self.view, "src/background.png", display.contentWidth, display.contentHeight)
-  back.anchorX = 0
-  back.anchorY = 0
+  lib.image(self.view, "src/background.png", {vw=100, vh=100})
 
   -- move pointer
   self.move_pointer = lib.image(self.view, "src/battle/arrow.png", {vx=4, vy=4, vw=12, ratio=2})
@@ -83,15 +81,7 @@ end
 
 -------------------------------------------------------------------------------
 function battle:_win(message)
-  local options = {
-    text = message,
-    width = display.contentWidth,
-    font = native.systemFont,
-    fontSize = 38,
-    align = "center"
-  }
-  local text = display.newText(options)
-  Pos.center(text)
+  lib.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
 end
 
 battle:addEventListener("create", battle)
