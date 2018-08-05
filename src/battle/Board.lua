@@ -1,8 +1,8 @@
-local Cell = require("src.battle.Cell")
-local Piece = require("src.battle.Piece")
-local Pos = require("src.core.Pos")
-local Player = require("src.Player")
-local Config = require("src.Config")
+local Cell    = require "src.battle.Cell"
+local Piece   = require "src.battle.Piece"
+local Pos     = require "src.core.Pos"
+local Player  = require "src.Player"
+local cfg     = require "src.Config"
 
 Board = {}
 Board.__index = Board
@@ -25,7 +25,7 @@ function Board._new(size)
   local self = setmetatable({}, Board)
   self.size = size
 
-  local scale = display.contentWidth / (8 * Config.cell_size.x);
+  local scale = display.contentWidth / (8 * cfg.cell_size.x);
   self.scale = Pos(scale, scale)            -- 2D scale
   self.group = display.newGroup()           -- disply group
   self.group:scale(self.scale.x, self.scale.y)
@@ -40,7 +40,7 @@ function Board._new(size)
     end
   end
 
-  self.color = Player.Red
+  self.color = Player.R
 
   self.group.anchorChildren = true          -- center on screen
   self.selected_piece = nil                 -- one piece may be selected
@@ -51,11 +51,11 @@ end
 
 -------------------------------------------------------------------------------
 -- set move listener as object:function(color)
-function Board:set_move_listener(move_listener)
-  assert(move_listener)
-  assert(move_listener.moved)
-  assert(type(move_listener.moved) == "function")
-  self.move_listener = move_listener        -- move listener
+function Board:set_tomove_listener(tomove_listener)
+  assert(tomove_listener)
+  assert(tomove_listener.tomove)
+  assert(type(tomove_listener.tomove) == "function")
+  self.tomove_listener = tomove_listener    -- move listener
 end
 
 -------------------------------------------------------------------------------
@@ -63,10 +63,10 @@ end
 function Board:position_default()
   local lastrow = self.size.y - 1
   for x = 0, self.size.x - 1 do
-    self:put(Player.Red, Pos(x, 0))
-    self:put(Player.Red, Pos(x, 1))
-    self:put(Player.Black, Pos(x, lastrow))
-    self:put(Player.Black, Pos(x, lastrow - 1))
+    self:put(Player.R, Pos(x, 0))
+    self:put(Player.R, Pos(x, 1))
+    self:put(Player.B, Pos(x, lastrow))
+    self:put(Player.B, Pos(x, lastrow - 1))
   end
 end
 
@@ -74,8 +74,8 @@ end
 -- one row initial position
 function Board:position_minimal()
   for x = 0, self.size.x - 1 do
-    self:put(Player.Red, Pos(x, 0))
-    self:put(Player.Black, Pos(x, self.size.y - 1))
+    self:put(Player.R, Pos(x, 0))
+    self:put(Player.B, Pos(x, self.size.y - 1))
   end
 end
 
@@ -149,23 +149,19 @@ function Board:move(fr, to)
   self.grid[to.x][to.y].piece = actor       -- set piece to new cell
   actor:move(to)                            -- move piece to new position
 
-  local moved_color = self.color
-
   self.color = not self.color               -- switch to another player
-
-  self.move_listener:moved(moved_color)     -- notify listener about player moved
+  self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
 
 -------------------------------------------------------------------------------
 function Board:count_pieces()
-  --assert(type(color) == type(Player.Red), "Wrong color type")
   local red = 0
   local bla = 0
   for i = 0, self.size.x - 1 do
     for j = 0, self.size.y - 1 do
       local piece = self:cell(Pos(i, j)).piece
       if piece then
-        if piece.color == Player.Red then
+        if piece.color == Player.R then
           red = red + 1
         else
           bla = bla + 1

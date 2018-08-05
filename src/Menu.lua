@@ -10,7 +10,7 @@ local function handle_button(next_scene)
     if next_scene == "exit" then
         native.requestExit()
     else
-        composer.gotoScene(next_scene, {effect="slideDown", time=600})
+        composer.gotoScene(next_scene, {effect="fade", time=600})
     end
     return true
 end

@@ -2,6 +2,13 @@ local Pos = require("src.core.Pos")
 
 local Config =
 {
+  -- screen dimensions
+  vw = display.contentWidth / 100,
+  vh = display.contentHeight / 100,
+
+  -- default font
+  font = native.systemFont,
+
   -- width and height of the board in cells
   board_size = Pos(4, 4),
 
