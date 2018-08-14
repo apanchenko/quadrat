@@ -9,7 +9,7 @@ function Cell:__tostring() return "cell" end
 
 -------------------------------------------------------------------------------
 -- public
-Cell.sheet_opt = {width = cfg.cell_size.x, height = cfg.cell_size.y, numFrames = 2}
+Cell.sheet_opt = {width = cfg.cell.size.x, height = cfg.cell.size.y, numFrames = 2}
 Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 -------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ function Cell.new()
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.group = display.newGroup()
-  self.img = display.newImageRect(self.group, Cell.sheet, frame, cfg.cell_size.x, cfg.cell_size.y)
+  self.img = display.newImageRect(self.group, Cell.sheet, frame, cfg.cell.size.x, cfg.cell.size.y)
   self.img.anchorX = 0
   self.img.anchorY = 0
   return self
@@ -25,8 +25,8 @@ end
 
 -------------------------------------------------------------------------------
 function Cell:insert_into(board, i, j)
-  self.group.x = i * cfg.cell_size.x
-  self.group.y = j * cfg.cell_size.y
+  self.group.x = i * cfg.cell.size.x
+  self.group.y = j * cfg.cell.size.y
   board.group:insert(self.group)
 end
 

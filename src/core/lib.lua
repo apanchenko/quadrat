@@ -12,12 +12,22 @@ opts:
 function lib.render(group, obj, opts)
   assert(group, "group is nil")
   assert(obj, "object is nil")
-  assert(opts)
+  assert(opts, "opts is nil")
 
-  obj.anchorX = 0
-  obj.anchorY = 0
+  obj.anchorX = opts.anchorX or 0
+  obj.anchorY = opts.anchorY or 0
   obj.x = cfg.vw * (opts.vx or 0);
-  obj.y = cfg.vh * (opts.vy or 0);
+
+  if opts.y then
+    obj.y = opts.y
+  else
+    obj.y = cfg.vh * (opts.vy or 0);
+  end
+
+  if opts.vw then
+    local scale = cfg.vw * opts.vw / obj.width
+    obj:scale(scale, scale)
+  end
 
   group:insert(obj)
 end

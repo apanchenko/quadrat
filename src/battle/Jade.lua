@@ -1,5 +1,5 @@
-local Jade = require("src.core.Pos")
-local Config = require("src.Config")
+local cfg = require "src.Config"
+local lib = require "src.core.lib"
 
 Jade = {}
 Jade.__index = Jade
@@ -9,9 +9,7 @@ function Jade:__tostring() return "jade" end
 -------------------------------------------------------------------------------
 function Jade.new(group)
   local self = setmetatable({}, Jade)
-  self.img = display.newImageRect(group, "src/battle/jade.png", Config.cell_size.x, Config.cell_size.y)
-  self.img.anchorX = 0
-  self.img.anchorY = 0
+  self.img = lib.image(group, "src/battle/jade.png", {w=cfg.cell.size.x, h=cfg.cell.size.y})
   return self
 end
 

@@ -21,14 +21,11 @@ end
   player color who moves now
   selected piece
 --]]
-function Board._new(size)
+function Board._new()
   local self = setmetatable({}, Board)
-  self.size = size
+  self.size = cfg.board_size
 
-  local scale = display.contentWidth / (8 * cfg.cell_size.x);
-  self.scale = Pos(scale, scale)            -- 2D scale
   self.group = display.newGroup()           -- disply group
-  self.group:scale(self.scale.x, self.scale.y)
 
   self.grid = {}
   for i = 0, self.size.x - 1 do
@@ -125,12 +122,12 @@ function Board:can_move(fr, to)
 end
 
 -------------------------------------------------------------------------------
-function Board:move(fr, to)
+function Board:move(fr, topos)
   -- take actor piece
   local actor = self:cell(fr).piece         -- get piece at from position
   self.grid[fr.x][fr.y].piece = nil         -- erase piece from previous cell
 
-  local tocell = self:cell(to)              -- cell that actor is going to move to
+  local tocell = self:cell(topos)           -- cell that actor is going to move to
 
   -- kill victim
   if tocell.piece then                      -- peek possible victim at to position
@@ -146,8 +143,8 @@ function Board:move(fr, to)
   end
 
   -- assign actor piece to new position
-  self.grid[to.x][to.y].piece = actor       -- set piece to new cell
-  actor:move(to)                            -- move piece to new position
+  self.grid[topos.x][topos.y].piece = actor -- set piece to new cell
+  actor:move_to(topos)                      -- move piece to new position
 
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
@@ -174,11 +171,11 @@ end
 
 -------------------------------------------------------------------------------
 -- randomly spawn jades in cells
-function Board:drop_jades(jade_probability)
+function Board:drop_jades()
   for i = 0, self.size.x - 1 do
     for j = 0, self.size.y - 1 do
       local cell = self:cell(Pos(i, j))
-      cell:drop_jade(jade_probability)
+      cell:drop_jade(cfg.jade.probability)
     end
   end
 end
@@ -187,12 +184,12 @@ end
 -- select piece
 function Board:select(piece)
   if self.selected_piece then
-    self.selected_piece:deselect()
+    self.selected_piece:deselect()          -- deselect currently selected piece
   end
 
   self.selected_piece = piece
   if self.selected_piece then
-    self.selected_piece:select()
+    self.selected_piece:select()            -- then select a new one
   end
 end
 

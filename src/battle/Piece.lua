@@ -1,33 +1,52 @@
-local Pos     = require "src.core.Pos"
-local Player  = require "src.Player"
-local AbilityDiagonal = require "src.battle.AbilityDiagonal"
-local lib     = require "src.core.lib"
-local cfg     = require "src.Config"
+local Pos       = require "src.core.Pos"
+local Player    = require "src.Player"
+local Abilities = require "src.battle.Abilities"
+local lib       = require "src.core.lib"
+local cfg       = require "src.Config"
 
 -------------------------------------------------------------------------------
 local Piece = {}
 Piece.__index = Piece
 setmetatable(Piece, {__call = function(cls, ...) return cls.new(...) end})
 
---[[
-group     - display group for all piece content
-color     - is red or black
-img       - image, piece view
-i, j      - int number, position on board
-abilities - array of abilities gathered
-selected  - one piece may be selected only
---]]
+--[[-----------------------------------------------------------------------------
+Arguments:
+  color      - color for the piece
+
+Variables:
+  group      - display group for all piece content
+  color      - is red or black
+  img        - image, piece view
+  i, j       - int number, position on board
+  abilities  - abilities gathered
+  powers     - array of activated abilities
+  isSelected - one piece may be selected only
+  isFocus    - is event drag started
+
+Methods:
+  puton(board, pos)
+  move_to(pos)
+  add_ability()
+  select()
+  deselect()
+-----------------------------------------------------------------------------]]--
 function Piece.new(color)
   local self = setmetatable({}, Piece)
   self.group = display.newGroup()
   self.group:addEventListener("touch", self)
   self.color = color
-  self.img = lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {w=cfg.cell_size.x})
+  self.img = lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {w=cfg.cell.size.x})
   self.scale = 1
-  self.abilities = {}
-  self.selected = false
+  self.abilities = Abilities()
+  self.powers = {}
+  self.isSelected = false
   self.isFocus = false
   return self
+end
+
+-------------------------------------------------------------------------------
+function Piece:get_abilities()
+  return self.abilities
 end
 
 -------------------------------------------------------------------------------
@@ -36,6 +55,9 @@ function Piece:die()
   self.group = nil
   self.img:removeSelf()
   self.img = nil
+  self.abilities = nil
+  self.powers = nil
+  self.board = nil
 end
 
 -------------------------------------------------------------------------------
@@ -44,6 +66,47 @@ function Piece:__tostring()
 end
 
 -------------------------------------------------------------------------------
+-- insert piece into group, with scale for dragging
+function Piece:puton(board, pos)
+  assert(board, "board is nil")
+  assert(board.move, "board.move is nil")
+  assert(board.select, "board.select is nil")
+  board.group:insert(self.group)
+  self.board = board
+  self:move_to(pos)
+end
+
+-------------------------------------------------------------------------------
+function Piece:move_to(pos)
+  self.pos = pos
+  self:_update_group_pos()
+end
+
+-------------------------------------------------------------------------------
+function Piece:add_ability()
+  self.abilities:add()
+end
+
+-------------------------------------------------------------------------------
+-- SELECTION-------------------------------------------------------------------
+-------------------------------------------------------------------------------
+function Piece:select()
+  assert(self.isSelected == false)
+  self.isSelected = true                    -- set selected
+  self:_update_group_pos()                  -- adjust group position
+  self.abilities:show(self.board.group.parent)           -- show abilities list
+end
+-------------------------------------------------------------------------------
+function Piece:deselect()
+  assert(self.isSelected == true)
+  self.isSelected = false                   -- set not selected
+  self:_update_group_pos()                  -- adgjust group position
+  self.abilities:hide()
+end
+
+-------------------------------------------------------------------------------
+-- PRIVATE---------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
   if self.board:is_color(self.color) == false then
@@ -51,7 +114,7 @@ function Piece:touch(event)
   end
   
   if event.phase == "began" then
-    if self.selected == false then
+    if self.isSelected == false then
       self.board:select(nil)                -- deselect another piece
     end
     self:_set_focus(event.id)
@@ -61,14 +124,14 @@ function Piece:touch(event)
 
     if event.phase == "moved" then
       local start = Pos(event.xStart, event.yStart)
-      local shift = (Pos.from(event) - start) / self.board.scale + self.mark
-      local proj = (shift / cfg.cell_size):round()
+      local shift = (Pos.from(event) - start) + self.mark
+      local proj = (shift / cfg.cell.size):round()
       Pos.copy(shift, self.group)
 
       if self.board:can_move(self.pos, proj) then
         self:_create_project()
         self.proj = proj
-        Pos.copy(proj * cfg.cell_size, self.project)
+        Pos.copy(proj * cfg.cell.size, self.project)
       else
         self:_remove_project()
         self.proj = nil
@@ -82,8 +145,8 @@ function Piece:touch(event)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
-        Pos.copy(self.pos * cfg.cell_size, self.group) -- return to original position
-        if self.selected then
+        Pos.copy(self.pos * cfg.cell.size, self.group) -- return to original position
+        if self.isSelected then
           self.board:select(nil)            -- remove selection if was selected
         else
           self.board:select(self)           -- select this piece
@@ -94,52 +157,11 @@ function Piece:touch(event)
 
   return true
 end
-
--------------------------------------------------------------------------------
--- insert piece into group, with scale for dragging
-function Piece:puton(board, pos)
-  assert(board, "board is nil")
-  assert(board.move, "board.move is nil")
-  assert(board.select, "board.select is nil")
-  board.group:insert(self.group)
-  self.board = board
-  self:move(pos)
-end
-
--------------------------------------------------------------------------------
-function Piece:move(to)
-  self.pos = to
-  self:_update_group_pos()
-end
-
--------------------------------------------------------------------------------
-function Piece:add_ability()
-  local ability = AbilityDiagonal(self.group)
-  table.insert(self.abilities, ability)
-end
-
--------------------------------------------------------------------------------
--- SELECTION-------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Piece:select()
-  assert(self.selected == false)
-  self.selected = true                      -- set selected
-  self:_update_group_pos()                  -- adjust group position
-end
--------------------------------------------------------------------------------
-function Piece:deselect()
-  assert(self.selected == true)
-  self.selected = false                     -- set not selected
-  self:_update_group_pos()                  -- adgjust group position
-end
-
--------------------------------------------------------------------------------
--- PRIVATE---------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function Piece:_create_project()
   if not self.project then
     local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
-    self.project = lib.image(self.board.group, path, {w=cfg.cell_size.x})
+    self.project = lib.image(self.board.group, path, {w=cfg.cell.size.x})
     Pos.copy(self.group, self.project)
   end
 end
@@ -157,8 +179,8 @@ function Piece:_set_focus(eventId)
 end
 -------------------------------------------------------------------------------
 function Piece:_update_group_pos()
-  local pos = self.pos * cfg.cell_size
-  if self.selected then
+  local pos = self.pos * cfg.cell.size
+  if self.isSelected then
     pos.y = pos.y - 10
   end
   Pos.copy(pos, self.group)

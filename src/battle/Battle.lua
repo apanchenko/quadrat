@@ -27,14 +27,13 @@ function battle:create(event)
   lib.render(self.view, self.players[Player.B].group, {vx=18, vy=9})
 
   -- board
-  self.board = Board(cfg.board_size)
+  self.board = Board()
   self.board:set_tomove_listener(self)
-
-  self.view:insert(self.board.group)
+  lib.render(self.view, self.board.group, cfg.board)
   print("Create " .. tostring(self.board))
 
   self.board:position_minimal()
-  self.jade_moves = cfg.jade_moves
+  self.jade_moves = cfg.jade.moves
 end
 
 -------------------------------------------------------------------------------
@@ -73,8 +72,8 @@ function battle:tomove(color)
   -- drop jades
   self.jade_moves = self.jade_moves - 1
   if self.jade_moves == 0 then
-    self.jade_moves = cfg.jade_moves     -- restart jade_moves counter
-    self.board:drop_jades(cfg.jade_probability)
+    self.jade_moves = cfg.jade.moves     -- restart jade_moves counter
+    self.board:drop_jades()
   end
 
 end

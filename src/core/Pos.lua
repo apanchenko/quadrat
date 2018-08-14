@@ -5,9 +5,7 @@ setmetatable(Pos, {__call = function(cls, ...) return cls.new(...) end})
 -- x, y  - position
 -------------------------------------------------------------------------------
 function Pos.new(x, y)
-  return setmetatable({
-    x = x or 0,
-    y = y or 0}, Pos)
+  return setmetatable({x = x or 0, y = (y or x) or 0}, Pos)
 end
 
 -------------------------------------------------------------------------------

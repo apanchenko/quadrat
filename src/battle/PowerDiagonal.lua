@@ -1,5 +1,6 @@
 local Pos = require("src.core.Pos")
-local Config = require("src.Config")
+local cfg = require("src.Config")
+local lib = require("src.lib")
 
 AbilityDiagonal =
 {
@@ -10,10 +11,8 @@ function AbilityDiagonal:__tostring() return "ability_diagonal" end
 
 -------------------------------------------------------------------------------
 function AbilityDiagonal.new(group)
-  local self = setmetatable({}, Cell)
-  self.img = display.newImageRect(group, "src/battle/ability_diagonal.png", Config.cell_size.x, Config.cell_size.y)
-  self.img.anchorX = 0
-  self.img.anchorY = 0
+  local self = setmetatable({}, AbilityDiagonal)
+  self.img = lib.image(group, "src/battle/ability_diagonal.png", {w=cfg.cell_size.x})
   return self
 end
 
