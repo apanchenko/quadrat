@@ -3,6 +3,7 @@ local Player    = require "src.Player"
 local Abilities = require "src.battle.Abilities"
 local lib       = require "src.core.lib"
 local cfg       = require "src.Config"
+local PowerDiagonal = require "src.battle.PowerDiagonal"
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -37,7 +38,7 @@ function Piece.new(color)
   self.color = color
   self.img = lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {w=cfg.cell.size.x})
   self.scale = 1
-  self.abilities = Abilities()
+  self.abilities = Abilities(self)
   self.powers = {}
   self.isSelected = false
   self.isFocus = false
@@ -83,13 +84,9 @@ function Piece:move_to(pos)
 end
 
 -------------------------------------------------------------------------------
-function Piece:add_ability()
-  self.abilities:add()
-end
-
--------------------------------------------------------------------------------
 -- SELECTION-------------------------------------------------------------------
 -------------------------------------------------------------------------------
+-- to be called from Board. Use self.board:select instead
 function Piece:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
@@ -97,11 +94,26 @@ function Piece:select()
   self.abilities:show(self.board.group.parent)           -- show abilities list
 end
 -------------------------------------------------------------------------------
+-- to be called from Board. Use self.board:select instead
 function Piece:deselect()
   assert(self.isSelected == true)
   self.isSelected = false                   -- set not selected
   self:_update_group_pos()                  -- adgjust group position
   self.abilities:hide()
+end
+
+-------------------------------------------------------------------------------
+-- ABILITY --------------------------------------------------------------------
+-------------------------------------------------------------------------------
+function Piece:add_ability()
+  self.abilities:add()
+end
+-------------------------------------------------------------------------------
+function Piece:use_ability(name)
+  if name == Abilities.Diagonal then
+    self.powers[name] = PowerDiagonal(self.group)
+    self.board:select(nil)                  -- remove selection if was selected
+  end
 end
 
 -------------------------------------------------------------------------------

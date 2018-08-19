@@ -1,5 +1,6 @@
-local Pos = require("src.core.Pos")
-local cfg = require("src.Config")
+local widget = require "widget"
+local Pos    = require "src.core.Pos"
+local cfg    = require "src.Config"
 
 Abilities =
 {
@@ -18,9 +19,14 @@ Variables:
 Methods:
   add() - adds new random ability
 ---------------------------------------------------------------------------]]--
-function Abilities.new()
+function Abilities.new(ability_listener)
   local self = setmetatable({}, Abilities)
   self.list = {}
+
+  assert(ability_listener)
+  assert(ability_listener.use_ability)
+  self.ability_listener = ability_listener      -- set ability listener
+
   return self
 end
 
@@ -30,7 +36,7 @@ function Abilities:add()
   local name = Abilities.Diagonal           -- select new ability name
   local item = self:_find(name)
   if item == nil then
-    table.insert(self.list, {name=name, count = 1})
+    table.insert(self.list, {name=name, count=1})
   else
     item.count = item.count + 1
   end
@@ -42,10 +48,15 @@ function Abilities:show(battle_group)
   assert(self.group == nil)                 -- check hidden
   self.group = display.newGroup()
 
-  for name, item in ipairs(self.list) do    -- generate new texts
-    local opts = {text=(item.name .. " x" .. item.count), fontSize=20}
-    local text = lib.text(self.group, opts)
-    text:addEventListener("touch", self)
+  for id, item in ipairs(self.list) do    -- generate new texts
+    local opts = cfg.abilities.button
+    opts.id = id
+    opts.label = item.name .. " x" .. item.count
+    opts.onRelease = function(event)
+      self:_use(event)
+      return true
+    end
+    lib.render(self.group, widget.newButton(opts), {})
   end
 
   lib.render(battle_group, self.group, cfg.abilities)
@@ -53,6 +64,7 @@ end
 
 -------------------------------------------------------------------------------
 -- hide from board
+-- called from piece on deselect
 function Abilities:hide()
   assert(self.group)                        -- check shown
   self.group:removeSelf()
@@ -60,22 +72,17 @@ function Abilities:hide()
 end
 
 -------------------------------------------------------------------------------
--- touch listener function
-function Abilities:touch(event)
-  if event.phase == "began" then
-    self.isFocus = true                     -- focus this ability
-
-  elseif self.isFocus then
-
-    if event.phase == "moved" then
-    elseif event.phase == "ended" then
-      self.isFocus = false                  -- focus lost
-    elseif event.phase == "cancelled" then
-      self.isFocus = false                  -- focus lost
-    end
+function Abilities:_use(event)
+  local id = event.target.id
+  local name = self.list[id].name
+  print("Use ability " .. name)
+  local count = self.list[id].count - 1
+  if count == 0 then
+    self.list[id] = nil                     -- delete last ability of a kind
+  else
+    self.list[id].count = count             -- decrease count
   end
-
-  return true
+  self.ability_listener:use_ability(name)
 end
 
 -------------------------------------------------------------------------------

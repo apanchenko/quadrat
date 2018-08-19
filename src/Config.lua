@@ -35,6 +35,20 @@ cfg.cell =
 cfg.abilities =
 {
   vx = 5,
+  button =
+  {
+    emboss = false,
+    font = cfg.font,
+    fontSize = 17,
+    width = 250,
+    height = 32,
+    shape = "roundedRect",
+    cornerRadius = 9,
+    fillColor   = { default = {0.6, 0.7, 0.8, 1}, over = {0.6, 0.7, 0.8, 0.8} },
+    labelColor  = { default = {1.0, 1.0, 1.0, 1}, over = {1.0, 1.0, 1.0, 1.0} },
+    strokeColor = { default = {1.0, 0.4, 0.0, 1}, over = {0.8, 0.8, 1.0, 1.0} },
+    strokeWidth = 1
+  }
 }
 cfg.abilities.y = (cfg.vh * cfg.board.vy) + (cfg.vw * cfg.board.vw) + cfg.vh
 

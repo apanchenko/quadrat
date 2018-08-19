@@ -1,5 +1,6 @@
-local widget = require( "widget" )
-local composer = require( "composer" )
+local widget   = require "widget"
+local composer = require "composer"
+
 local scene = composer.newScene()
 local platform = system.getInfo( "platform" )
 

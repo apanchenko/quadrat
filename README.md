@@ -10,7 +10,6 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 ### core game
-- activate ability from the list
 - diagonal move ability
 - duplicate ability
 - doble move ability
@@ -26,6 +25,7 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 ### market
 
 ## done:
+- activate ability from the list
 - taken abilities list for selected piece
 - who moves?
 - market - acquire domain quadrat.fun
