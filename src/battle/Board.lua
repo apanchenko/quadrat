@@ -10,7 +10,7 @@ setmetatable(Board, {__call = function(cls, ...) return cls._new(...) end})
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
-  return "board "..tostring(self.size)
+  return "board "..self.cols.."x"..self.rows
 end
 
 --[[
@@ -23,14 +23,15 @@ end
 --]]
 function Board._new()
   local self = setmetatable({}, Board)
-  self.size = cfg.board_size
+  self.cols = cfg.board.cols
+  self.rows = cfg.board.rows
 
   self.group = display.newGroup()           -- disply group
 
   self.grid = {}
-  for i = 0, self.size.x - 1 do
+  for i = 0, self.cols - 1 do
     self.grid[i] = {}
-    for j = 0, self.size.y - 1 do
+    for j = 0, self.rows - 1 do
       local cell = Cell()
       lib.render(self.group, cell.group, Pos(i, j) * cfg.cell.size)
       self.grid[i][j] = cell
@@ -58,8 +59,8 @@ end
 -------------------------------------------------------------------------------
 -- two rows initial position
 function Board:position_default()
-  local lastrow = self.size.y - 1
-  for x = 0, self.size.x - 1 do
+  local lastrow = self.rows - 1
+  for x = 0, self.cols - 1 do
     self:put(Player.R, Pos(x, 0))
     self:put(Player.R, Pos(x, 1))
     self:put(Player.B, Pos(x, lastrow))
@@ -70,16 +71,17 @@ end
 -------------------------------------------------------------------------------
 -- one row initial position
 function Board:position_minimal()
-  for x = 0, self.size.x - 1 do
+  for x = 0, self.cols - 1 do
     self:put(Player.R, Pos(x, 0))
-    self:put(Player.B, Pos(x, self.size.y - 1))
+    self:put(Player.B, Pos(x, self.rows - 1))
   end
 end
 
 -------------------------------------------------------------------------------
 function Board:put(color, to)
   assert(Pos(0, 0) <= to)                   -- check to position is on board
-  assert(to < self.size)
+  assert(to.x < self.cols)
+  assert(to.y < self.rows)
   local piece = Piece(color)                -- create a new piece
   self.grid[to.x][to.y].piece = piece       -- assign to cell
   piece:puton(self, to)                     -- put piece on board
@@ -154,8 +156,8 @@ end
 function Board:count_pieces()
   local red = 0
   local bla = 0
-  for i = 0, self.size.x - 1 do
-    for j = 0, self.size.y - 1 do
+  for i = 0, self.cols - 1 do
+    for j = 0, self.rows - 1 do
       local piece = self:cell(Pos(i, j)).piece
       if piece then
         if piece.color == Player.R then
@@ -172,8 +174,8 @@ end
 -------------------------------------------------------------------------------
 -- randomly spawn jades in cells
 function Board:drop_jades()
-  for i = 0, self.size.x - 1 do
-    for j = 0, self.size.y - 1 do
+  for i = 0, self.cols - 1 do
+    for j = 0, self.rows - 1 do
       local cell = self:cell(Pos(i, j))
       cell:drop_jade(cfg.jade.probability)
     end

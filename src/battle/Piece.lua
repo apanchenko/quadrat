@@ -36,7 +36,7 @@ function Piece.new(color)
   self.group = display.newGroup()
   self.group:addEventListener("touch", self)
   self.color = color
-  self.img = lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {w=cfg.cell.size.x})
+  self.img = lib.image(self.group, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
   self.abilities = Abilities(self)
   self.powers = {}
@@ -173,7 +173,7 @@ end
 function Piece:_create_project()
   if not self.project then
     local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
-    self.project = lib.image(self.board.group, path, {w=cfg.cell.size.x})
+    self.project = lib.image(self.board.group, cfg.cell, path)
     Pos.copy(self.group, self.project)
   end
 end

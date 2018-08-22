@@ -9,7 +9,7 @@ function Jade:__tostring() return "jade" end
 -------------------------------------------------------------------------------
 function Jade.new(group)
   local self = setmetatable({}, Jade)
-  self.img = lib.image(group, "src/battle/jade.png", {w=cfg.cell.size.x, h=cfg.cell.size.y})
+  self.img = lib.image(group, cfg.jade)
   return self
 end
 

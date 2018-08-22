@@ -40,9 +40,10 @@ opts:
   vx    defaults to 0
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
-function lib.image(group, path, opts)
-  assert(path)
+function lib.image(group, opts, path)
   assert(opts)
+
+  path = path or opts.path
 
   local w = opts.w or (cfg.vw * opts.vw)
 
@@ -62,11 +63,13 @@ function lib.image(group, path, opts)
   return img
 end
 
--------------------------------------------------------------------------------
--- @param group      - display group insert in
--- @param opts.text  - text to render
--- @param opts.vx    - optional, defaults to 0
--- @param opts.vy    - optional, defaults to 0
+--[[-----------------------------------------------------------------------------
+group   display group insert in
+opts:
+  text  text to render
+  vx    optional, defaults to 0
+  vy    optional, defaults to 0
+-----------------------------------------------------------------------------]]--
 function lib.text(group, opts)
   assert(opts)
 

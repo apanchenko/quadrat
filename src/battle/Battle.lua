@@ -14,10 +14,10 @@ local battle = composer.newScene()
 -- battle scene
 function battle:create(event)
   -- background
-  lib.image(self.view, "src/background.png", {vw=100, vh=100})
+  lib.image(self.view, cfg.battle.bg)
 
   -- move pointer
-  self.move_pointer = lib.image(self.view, "src/battle/arrow.png", {vx=4, vy=4, vw=12, ratio=2})
+  self.move_pointer = lib.image(self.view, cfg.battle.arrow)
 
   -- players
   self.players = {}

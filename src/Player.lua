@@ -26,7 +26,7 @@ function Player.new(color, name, group)
   self.group = display.newGroup()
 
   -- piece image
-  lib.image(self.group, "src/battle/piece_"..Player.tostring(self.color)..".png", {vw=6, ratio=1})
+  lib.image(self.group, cfg.player, "src/battle/piece_"..Player.tostring(self.color)..".png")
 
   -- player name
   lib.text(self.group, {text=self.name, vx=8})

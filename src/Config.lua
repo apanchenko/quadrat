@@ -5,34 +5,23 @@ local cfg = {}
 -- screen dimensions
 cfg.vw = display.contentWidth / 100
 cfg.vh = display.contentHeight / 100
-
--- default font
 cfg.font = native.systemFont
 
--- width and height of the board in cells
-cfg.board_size = Pos(5, 5)
+cfg.battle        = {}
+cfg.battle.bg     = {vw=100, vh=100, path="src/background.png"}
+cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/battle/arrow.png"}
+cfg.cell          = {w=64, h=64, size=Pos(64, 64)}
+cfg.board         = {vx=5, vw=90, vy=15, cols=5, rows=5}
+cfg.player        = {vw=6, ratio=1}
 
 -- jade options
 cfg.jade =
 {
+  path="src/battle/jade.png", w=cfg.cell.w, h=cfg.cell.h,
   moves = 1,          -- drop jades every Nth move
   probability = 0.2   -- probability that a jade will spawn on a cell
 }
 
--- board options
-cfg.board =
-{
-  vx = 5,
-  vw = 90,
-  vy = 15
-}
-
-cfg.cell =
-{
-  w = 64,
-  h = 64,
-  size = Pos(64, 64)
-}
 
 cfg.abilities =
 {

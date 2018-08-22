@@ -10,7 +10,7 @@ function PowerDiagonal:__tostring() return "power_diagonal" end
 -------------------------------------------------------------------------------
 function PowerDiagonal.new(group)
   local self = setmetatable({}, PowerDiagonal)
-  self.img = lib.image(group, "src/battle/power_diagonal.png", {w=cfg.cell.size.x})
+  self.img = lib.image(group, cfg.cell, "src/battle/power_diagonal.png")
   return self
 end
 
