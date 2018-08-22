@@ -1,5 +1,4 @@
 local Pos   = require "src.core.Pos"
-local Jade  = require "src.battle.Jade"
 local cfg   = require "src.Config"
 local lib   = require "src.core.lib"
 
@@ -37,7 +36,7 @@ function Cell:drop_jade(jade_probability)
     return
   end
 
-  self.jade = Jade(self.group)
+  self.jade = lib.image(self.group, cfg.jade)
 end
 
 -------------------------------------------------------------------------------
@@ -61,7 +60,7 @@ function Cell:receive(piece)
 
   -- consume jade to get ability
   if self.jade then
-    self.jade:die()
+    self.jade:removeSelf()
     self.jade = nil
     piece:add_ability()
   end

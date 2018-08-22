@@ -23,8 +23,8 @@ function battle:create(event)
   self.players = {}
   self.players[Player.R] = Player(Player.R, "Salvador")
   self.players[Player.B] = Player(Player.B, "Gala")
-  lib.render(self.view, self.players[Player.R].group, {vx=18, vy=4})
-  lib.render(self.view, self.players[Player.B].group, {vx=18, vy=9})
+  lib.render(self.view, self.players[Player.R].group, cfg.player.red)
+  lib.render(self.view, self.players[Player.B].group, cfg.player.black)
 
   -- board
   self.board = Board()

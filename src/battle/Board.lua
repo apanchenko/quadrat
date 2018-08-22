@@ -124,10 +124,9 @@ function Board:can_move(fr, to)
 end
 
 -------------------------------------------------------------------------------
-function Board:move(fr, topos)
-  -- take actor piece
-  local actor = self:cell(fr):leave()       -- get piece at from position
-  self:cell(topos):receive(actor)           -- cell that actor is going to move to
+function Board:move(from, to)
+  local actor = self:cell(from):leave()     -- get piece at from position
+  self:cell(to):receive(actor)              -- cell that actor is going to move to
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
