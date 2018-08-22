@@ -9,10 +9,13 @@ opts:
   vx    defaults to 0
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
-function lib.render(group, obj, opts)
-  assert(group, "group is nil")
+function lib.render(target, obj, opts)
+  assert(target, "group is nil")
   assert(obj, "object is nil")
   assert(opts, "opts is nil")
+
+  target = target.group or (target.view or target)
+  obj = obj.group or obj
 
   obj.anchorX = opts.anchorX or 0
   obj.anchorY = opts.anchorY or 0
@@ -25,7 +28,7 @@ function lib.render(group, obj, opts)
     obj:scale(scale, scale)
   end
 
-  group:insert(obj)
+  target:insert(obj)
 end
 
 --[[-----------------------------------------------------------------------------

@@ -33,7 +33,7 @@ function Board._new()
     self.grid[i] = {}
     for j = 0, self.rows - 1 do
       local cell = Cell(Pos(i, j))
-      lib.render(self.group, cell.group, cell * cfg.cell.size)
+      lib.render(self, cell, cell * cfg.cell.size)
       self.grid[i][j] = cell
     end
   end
