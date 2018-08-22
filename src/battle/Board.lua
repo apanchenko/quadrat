@@ -30,12 +30,11 @@ function Board._new()
 
   self.grid = {}
   for i = 0, self.cols - 1 do
-    self.grid[i] = {}
-    for j = 0, self.rows - 1 do
-      local cell = Cell(Pos(i, j))
-      lib.render(self, cell, cell * cfg.cell.size)
-      self.grid[i][j] = cell
-    end
+  for j = 0, self.rows - 1 do
+    local cell = Cell(Pos(i, j))
+    lib.render(self, cell, cell * cfg.cell.size)
+    self.grid[i * self.cols + j] = cell
+  end
   end
 
   self.color = Player.R
@@ -61,10 +60,10 @@ end
 function Board:position_default()
   local lastrow = self.rows - 1
   for x = 0, self.cols - 1 do
-    self:put(Player.R, Pos(x, 0))
-    self:put(Player.R, Pos(x, 1))
-    self:put(Player.B, Pos(x, lastrow))
-    self:put(Player.B, Pos(x, lastrow - 1))
+    self:_put(Player.R, x, 0)
+    self:_put(Player.R, x, 1)
+    self:_put(Player.B, x, lastrow)
+    self:_put(Player.B, x, lastrow - 1)
   end
 end
 
@@ -72,24 +71,23 @@ end
 -- one row initial position
 function Board:position_minimal()
   for x = 0, self.cols - 1 do
-    self:put(Player.R, Pos(x, 0))
-    self:put(Player.B, Pos(x, self.rows - 1))
+    self:_put(Player.R, x, 0)
+    self:_put(Player.B, x, self.rows - 1)
   end
 end
 
 -------------------------------------------------------------------------------
-function Board:put(color, to)
-  assert(Pos(0, 0) <= to)                   -- check to position is on board
-  assert(to.x < self.cols)
-  assert(to.y < self.rows)
+function Board:_put(color, x, y)
+  assert(0 <= x and x < self.cols)
+  assert(0 <= y and y < self.rows)
   local piece = Piece(color)                -- create a new piece
-  self.grid[to.x][to.y].piece = piece       -- assign to cell
-  piece:puton(self, to)                     -- put piece on board
+  self.grid[x * self.cols + y].piece = piece       -- assign to cell
+  piece:puton(self, Pos(x, y))                     -- put piece on board
 end
 
 -------------------------------------------------------------------------------
 function Board:cell(pos)
-  return self.grid[pos.x][pos.y]            -- peek piece from cell by position
+  return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
 end
 
 -------------------------------------------------------------------------------
