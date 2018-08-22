@@ -14,8 +14,8 @@ Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 2}
 Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 -------------------------------------------------------------------------------
-function Cell.new()
-  local self = setmetatable({}, Cell)
+function Cell.new(pos)
+  local self = setmetatable(pos, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.group = display.newGroup()
   self.img = lib.sheet(self.group, Cell.sheet, frame, cfg.cell)
@@ -38,6 +38,36 @@ function Cell:drop_jade(jade_probability)
   end
 
   self.jade = Jade(self.group)
+end
+
+-------------------------------------------------------------------------------
+function Cell:leave()
+  assert(self.piece)
+  local piece = self.piece;
+  self.piece = nil
+  return piece
+end
+
+-------------------------------------------------------------------------------
+function Cell:receive(piece)
+  assert(piece)
+
+  -- kill victim
+  if self.piece then                      -- peek possible victim at to position
+    assert(piece.color ~= self.piece.color) -- cannibalism deprecated
+    self.piece:die()
+    self.piece = nil
+  end
+
+  -- consume jade to get ability
+  if self.jade then
+    self.jade:die()
+    self.jade = nil
+    piece:add_ability()
+  end
+
+  self.piece = piece
+  piece:move_to(self)                      -- move piece to new position
 end
 
 

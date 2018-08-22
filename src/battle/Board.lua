@@ -32,8 +32,8 @@ function Board._new()
   for i = 0, self.cols - 1 do
     self.grid[i] = {}
     for j = 0, self.rows - 1 do
-      local cell = Cell()
-      lib.render(self.group, cell.group, Pos(i, j) * cfg.cell.size)
+      local cell = Cell(Pos(i, j))
+      lib.render(self.group, cell.group, cell * cfg.cell.size)
       self.grid[i][j] = cell
     end
   end
@@ -126,28 +126,8 @@ end
 -------------------------------------------------------------------------------
 function Board:move(fr, topos)
   -- take actor piece
-  local actor = self:cell(fr).piece         -- get piece at from position
-  self.grid[fr.x][fr.y].piece = nil         -- erase piece from previous cell
-
-  local tocell = self:cell(topos)           -- cell that actor is going to move to
-
-  -- kill victim
-  if tocell.piece then                      -- peek possible victim at to position
-    tocell.piece:die()
-    tocell.piece = nil
-  end
-
-  -- consume jade to get ability
-  if tocell.jade then
-    tocell.jade:die()
-    tocell.jade = nil
-    actor:add_ability()
-  end
-
-  -- assign actor piece to new position
-  self.grid[topos.x][topos.y].piece = actor -- set piece to new cell
-  actor:move_to(topos)                      -- move piece to new position
-
+  local actor = self:cell(fr):leave()       -- get piece at from position
+  self:cell(topos):receive(actor)           -- cell that actor is going to move to
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
@@ -176,8 +156,7 @@ end
 function Board:drop_jades()
   for i = 0, self.cols - 1 do
     for j = 0, self.rows - 1 do
-      local cell = self:cell(Pos(i, j))
-      cell:drop_jade(cfg.jade.probability)
+      self:cell(Pos(i, j)):drop_jade(cfg.jade.probability)
     end
   end
 end
