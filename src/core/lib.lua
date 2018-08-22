@@ -16,13 +16,9 @@ function lib.render(group, obj, opts)
 
   obj.anchorX = opts.anchorX or 0
   obj.anchorY = opts.anchorY or 0
-  obj.x = cfg.vw * (opts.vx or 0);
 
-  if opts.y then
-    obj.y = opts.y
-  else
-    obj.y = cfg.vh * (opts.vy or 0);
-  end
+  obj.x = opts.x or (cfg.vw * (opts.vx or 0))
+  obj.y = opts.y or (cfg.vh * (opts.vy or 0))
 
   if opts.vw then
     local scale = cfg.vw * opts.vw / obj.width

@@ -10,7 +10,7 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 ### core game
-- diagonal move ability
+- diagonal move power
 - duplicate ability
 - doble move ability
 - make upper ability

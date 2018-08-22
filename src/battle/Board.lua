@@ -32,7 +32,7 @@ function Board._new()
     self.grid[i] = {}
     for j = 0, self.size.y - 1 do
       local cell = Cell()
-      cell:insert_into(self, i, j)
+      lib.render(self.group, cell.group, Pos(i, j) * cfg.cell.size)
       self.grid[i][j] = cell
     end
   end

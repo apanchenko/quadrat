@@ -29,6 +29,8 @@ cfg.board =
 
 cfg.cell =
 {
+  w = 64,
+  h = 64,
   size = Pos(64, 64)
 }
 
