@@ -87,5 +87,15 @@ function lib.text(group, opts)
   return text
 end
 
+-------------------------------------------------------------------------------
+function lib.sheet(group, sheet, frame, opts)
+  assert(sheet)
+  assert(frame)
+  assert(opts.w and opts.h)
+  local img = display.newImageRect(sheet, frame, opts.w, opts.h)
+  lib.render(group, img, opts)
+  return img
+end
+
 
 return lib

@@ -10,7 +10,7 @@ function Cell:__tostring() return "cell" end
 
 -------------------------------------------------------------------------------
 -- public
-Cell.sheet_opt = {width = cfg.cell.size.x, height = cfg.cell.size.y, numFrames = 2}
+Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 2}
 Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 -------------------------------------------------------------------------------
@@ -18,9 +18,7 @@ function Cell.new()
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.group = display.newGroup()
-  self.img = display.newImageRect(self.group, Cell.sheet, frame, cfg.cell.w, cfg.cell.h)
-  self.img.anchorX = 0
-  self.img.anchorY = 0
+  self.img = lib.sheet(self.group, Cell.sheet, frame, cfg.cell)
   return self
 end
 
