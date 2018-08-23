@@ -4,7 +4,8 @@ local cfg    = require "src.Config"
 
 Abilities =
 {
-  MoveDiagonal = "MD"
+  MoveDiagonal = "Md",
+  Duplicate    = "Du"
 }
 Abilities.__index = Abilities
 setmetatable(Abilities, {__call = function(cls, ...) return cls.new(...) end})
@@ -33,7 +34,7 @@ end
 -------------------------------------------------------------------------------
 -- add random ability
 function Abilities:add()
-  local name = Abilities.Diagonal           -- select new ability name
+  local name = Abilities.MoveDiagonal       -- select new ability name
   local item = self:_find(name)
   if item == nil then
     table.insert(self.list, {name=name, count=1})

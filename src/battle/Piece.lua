@@ -45,6 +45,21 @@ function Piece.new(color)
   return self
 end
 
+
+-------------------------------------------------------------------------------
+-- TYPE------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+function Piece:__tostring() 
+  return "piece["
+    ..Player.tostring(self.color)
+    .." "..tostring(self.pos)
+    --.." "..table.concat(self.powers, " ")
+  .."]"
+end
+function Piece:typename() return "Piece" end
+
+
+
 -------------------------------------------------------------------------------
 function Piece:get_abilities()
   return self.abilities
@@ -59,15 +74,6 @@ function Piece:die()
   self.abilities = nil
   self.powers = nil
   self.board = nil
-end
-
--------------------------------------------------------------------------------
-function Piece:__tostring() 
-  return "piece["
-    ..Player.tostring(self.color)
-    .." "..tostring(self.pos)
-    ..", powers "..#self.powers
-  .."]"
 end
 
 
