@@ -32,7 +32,7 @@ function Board._new()
   for i = 0, self.cols - 1 do
   for j = 0, self.rows - 1 do
     local cell = Cell(Pos(i, j))
-    lib.render(self, cell, cell * cfg.cell.size)
+    lib.render(self, cell, cell.pos * cfg.cell.size)
     self.grid[i * self.cols + j] = cell
   end
   end
@@ -85,7 +85,7 @@ function Board:_put(color, x, y)
 end
 
 -------------------------------------------------------------------------------
-function Board:cell(pos)
+function Board:_cell(pos)
   return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
 end
 
@@ -93,7 +93,7 @@ end
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
   -- check move rights
-  local actor = self:cell(fr).piece         -- peek piece at from position
+  local actor = self:_cell(fr).piece        -- peek piece at from position
   if actor == nil then                      -- check if it exists
     return false                            -- can not move
   end
@@ -102,16 +102,12 @@ function Board:can_move(fr, to)
   end
 
   -- check move ability
-  local vec = actor.pos - to                -- movement vector
-  if vec.x ~= 0 and vec.y ~= 0 then         -- allow orthogonal move only
+  if not actor:can_move(to) then
     return false
-  end
-  if vec:length2() ~= 1 then                -- allow move one cell at a time
-    return false                            -- can not move
   end
 
   -- check kill ability
-  local tocell = self:cell(to)
+  local tocell = self:_cell(to)
   local victim = tocell.piece               -- peek piece at to position
   if victim and victim.color == actor.color then
     return false                            -- can not kill piece of the same breed
@@ -122,8 +118,8 @@ end
 
 -------------------------------------------------------------------------------
 function Board:move(from, to)
-  local actor = self:cell(from):leave()     -- get piece at from position
-  self:cell(to):receive(actor)              -- cell that actor is going to move to
+  local actor = self:_cell(from):leave()     -- get piece at from position
+  self:_cell(to):receive(actor)              -- cell that actor is going to move to
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
@@ -132,15 +128,13 @@ end
 function Board:count_pieces()
   local red = 0
   local bla = 0
-  for i = 0, self.cols - 1 do
-    for j = 0, self.rows - 1 do
-      local piece = self:cell(Pos(i, j)).piece
-      if piece then
-        if piece.color == Player.R then
-          red = red + 1
-        else
-          bla = bla + 1
-        end
+  for _, cell in ipairs(self.grid) do
+    local piece = cell.piece
+    if piece then
+      if piece.color == Player.R then
+        red = red + 1
+      else
+        bla = bla + 1
       end
     end
   end
@@ -150,10 +144,8 @@ end
 -------------------------------------------------------------------------------
 -- randomly spawn jades in cells
 function Board:drop_jades()
-  for i = 0, self.cols - 1 do
-    for j = 0, self.rows - 1 do
-      self:cell(Pos(i, j)):drop_jade(cfg.jade.probability)
-    end
+  for _, cell in ipairs(self.grid) do
+    cell:drop_jade(cfg.jade.probability)
   end
 end
 

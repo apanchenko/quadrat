@@ -10,12 +10,11 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 ### core game
-- diagonal move power
-- duplicate ability
-- doble move ability
-- make upper ability
-- make lower ability
-- jump ability
+- power duplicate
+- power doble move
+- power make upper
+- power make lower
+- power jump
 - overall style
 ### metagame
 ### build/deploy
@@ -25,6 +24,7 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 ### market
 
 ## done:
+- diagonal move power
 - activate ability from the list
 - taken abilities list for selected piece
 - who moves?

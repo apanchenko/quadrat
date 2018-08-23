@@ -63,7 +63,11 @@ end
 
 -------------------------------------------------------------------------------
 function Piece:__tostring() 
-  return "piece["..tostring(self.pos)..","..Player.tostring(self.color).."]"
+  return "piece["
+    ..Player.tostring(self.color)
+    .." "..tostring(self.pos)
+    ..", powers "..#self.powers
+  .."]"
 end
 
 
@@ -82,8 +86,23 @@ function Piece:puton(board, pos)
 end
 -------------------------------------------------------------------------------
 function Piece:move_to(pos)
+  assert(pos)
+  assert(pos:typename() == "Pos")
   self.pos = pos
   self:_update_group_pos()
+end
+-------------------------------------------------------------------------------
+function Piece:can_move(to)
+  print(tostring(self)..":can_move to "..tostring(to))
+  local vec = self.pos - to                 -- movement vector
+
+  for _, power in ipairs(self.powers) do
+    if power:can_move(vec) then
+      return true
+    end
+  end
+
+  return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
 
 
@@ -119,9 +138,11 @@ end
 -------------------------------------------------------------------------------
 function Piece:use_ability(name)
   if name == Abilities.Diagonal then
-    self.powers[name] = PowerDiagonal(self.group)
+    table.insert(self.powers, PowerDiagonal(self.group))
     self.board:select(nil)                  -- remove selection if was selected
   end
+
+  print(tostring(self)..":use_ability " .. name .. " -> " .. " powers " .. #self.powers)
 end
 
 

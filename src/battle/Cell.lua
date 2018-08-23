@@ -14,8 +14,9 @@ Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 -------------------------------------------------------------------------------
 function Cell.new(pos)
-  local self = setmetatable(pos, Cell)
+  local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
+  self.pos = pos
   self.group = display.newGroup()
   self.img = lib.sheet(self.group, Cell.sheet, frame, cfg.cell)
   return self
@@ -66,7 +67,7 @@ function Cell:receive(piece)
   end
 
   self.piece = piece
-  piece:move_to(self)                      -- move piece to new position
+  piece:move_to(self.pos)                   -- move piece to new position
 end
 
 

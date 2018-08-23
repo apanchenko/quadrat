@@ -75,7 +75,6 @@ end
 function Abilities:_use(event)
   local id = event.target.id
   local name = self.list[id].name
-  print("Use ability " .. name)
   local count = self.list[id].count - 1
   if count == 0 then
     self.list[id] = nil                     -- delete last ability of a kind

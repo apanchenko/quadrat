@@ -15,4 +15,13 @@ function PowerDiagonal.new(group)
 end
 
 
+-------------------------------------------------------------------------------
+-- POSITION--------------------------------------------------------------------
+-------------------------------------------------------------------------------
+function PowerDiagonal:can_move(vec)
+  print("PowerDiagonal:can_move vec "..tostring(vec))
+  return (vec.x==1 or vec.x==-1) and (vec.y==1 or vec.y==-1)
+end
+
+
 return PowerDiagonal
