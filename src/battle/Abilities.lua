@@ -4,7 +4,7 @@ local cfg    = require "src.Config"
 
 Abilities =
 {
-  Diagonal = "Diagonal"
+  MoveDiagonal = "MD"
 }
 Abilities.__index = Abilities
 setmetatable(Abilities, {__call = function(cls, ...) return cls.new(...) end})

@@ -3,7 +3,7 @@ local Player    = require "src.Player"
 local Abilities = require "src.battle.Abilities"
 local lib       = require "src.core.lib"
 local cfg       = require "src.Config"
-local PowerDiagonal = require "src.battle.PowerDiagonal"
+local PowerMoveDiagonal = require "src.battle.PowerMoveDiagonal"
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -137,8 +137,8 @@ function Piece:add_ability()
 end
 -------------------------------------------------------------------------------
 function Piece:use_ability(name)
-  if name == Abilities.Diagonal then
-    table.insert(self.powers, PowerDiagonal(self.group))
+  if name == Abilities.MoveDiagonal then
+    table.insert(self.powers, PowerMoveDiagonal(self.group))
     self.board:select(nil)                  -- remove selection if was selected
   end
 
