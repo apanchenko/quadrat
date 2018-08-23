@@ -101,10 +101,11 @@ end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
 function Piece:deselect()
-  assert(self.isSelected == true)
-  self.isSelected = false                   -- set not selected
-  self:_update_group_pos()                  -- adgjust group position
-  self.abilities:hide()
+  if self.isSelected then
+    self.isSelected = false                   -- set not selected
+    self:_update_group_pos()                  -- adgjust group position
+    self.abilities:hide()
+  end
 end
 
 

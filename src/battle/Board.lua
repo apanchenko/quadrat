@@ -13,14 +13,14 @@ function Board:__tostring()
   return "board "..self.cols.."x"..self.rows
 end
 
---[[
+--[[-----------------------------------------------------------------------------
   size of the board
   scale to device
   group to render
   grid with cells and pieces
   player color who moves now
   selected piece
---]]
+-----------------------------------------------------------------------------]]--
 function Board._new()
   local self = setmetatable({}, Board)
   self.cols = cfg.board.cols
@@ -40,7 +40,6 @@ function Board._new()
   self.color = Player.R
 
   self.group.anchorChildren = true          -- center on screen
-  self.selected_piece = nil                 -- one piece may be selected
   Pos.center(self.group)
 
   return self
@@ -161,13 +160,14 @@ end
 -------------------------------------------------------------------------------
 -- select piece
 function Board:select(piece)
-  if self.selected_piece then
-    self.selected_piece:deselect()          -- deselect currently selected piece
+  for _, cell in ipairs(self.grid) do
+    if cell.piece then
+      cell.piece:deselect()                 -- deselect all
+    end
   end
 
-  self.selected_piece = piece
-  if self.selected_piece then
-    self.selected_piece:select()            -- then select a new one
+  if piece then
+    piece:select()                          -- then select a new one
   end
 end
 
