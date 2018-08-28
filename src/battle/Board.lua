@@ -10,7 +10,7 @@ setmetatable(Board, {__call = function(cls, ...) return cls._new(...) end})
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
-  return "board "..self.cols.."x"..self.rows
+  return "board"
 end
 
 --[[-----------------------------------------------------------------------------
@@ -25,8 +25,7 @@ function Board._new()
   local self = setmetatable({}, Board)
   self.cols = cfg.board.cols
   self.rows = cfg.board.rows
-
-  self.group = display.newGroup()           -- disply group
+  self.view = display.newGroup()           -- disply group
 
   self.grid = {}
   for i = 0, self.cols - 1 do
@@ -39,12 +38,16 @@ function Board._new()
 
   self.color = Player.R
 
-  self.group.anchorChildren = true          -- center on screen
-  Pos.center(self.group)
+  self.view.anchorChildren = true          -- center on screen
+  Pos.center(self.view)
 
   return self
 end
 
+
+
+-------------------------------------------------------------------------------
+-- POSITION--------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- set move listener as object:function(color)
 function Board:set_tomove_listener(tomove_listener)
@@ -53,42 +56,42 @@ function Board:set_tomove_listener(tomove_listener)
   assert(type(tomove_listener.tomove) == "function")
   self.tomove_listener = tomove_listener    -- move listener
 end
-
 -------------------------------------------------------------------------------
 -- two rows initial position
 function Board:position_default()
   local lastrow = self.rows - 1
   for x = 0, self.cols - 1 do
-    self:_put(Player.R, x, 0)
-    self:_put(Player.R, x, 1)
-    self:_put(Player.B, x, lastrow)
-    self:_put(Player.B, x, lastrow - 1)
+    self:put(Player.R, x, 0)
+    self:put(Player.R, x, 1)
+    self:put(Player.B, x, lastrow)
+    self:put(Player.B, x, lastrow - 1)
   end
 end
-
 -------------------------------------------------------------------------------
 -- one row initial position
 function Board:position_minimal()
   for x = 0, self.cols - 1 do
-    self:_put(Player.R, x, 0)
-    self:_put(Player.B, x, self.rows - 1)
+    self:put(Player.R, x, 0)
+    self:put(Player.B, x, self.rows - 1)
   end
 end
-
 -------------------------------------------------------------------------------
-function Board:_put(color, x, y)
+function Board:put(color, x, y)
   assert(0 <= x and x < self.cols)
   assert(0 <= y and y < self.rows)
   local piece = Piece(color)                -- create a new piece
   self.grid[x * self.cols + y].piece = piece       -- assign to cell
   piece:puton(self, Pos(x, y))                     -- put piece on board
 end
-
 -------------------------------------------------------------------------------
 function Board:_cell(pos)
   return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
 end
 
+
+
+-------------------------------------------------------------------------------
+-- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
@@ -115,20 +118,39 @@ function Board:can_move(fr, to)
 
   return true
 end
-
 -------------------------------------------------------------------------------
-function Board:move(from, to)
-  local actor = self:_cell(from):leave()     -- get piece at from position
-  self:_cell(to):receive(actor)              -- cell that actor is going to move to
+function Board:will_move(from, to)
+  local cell_from = self:_cell(from)     -- get piece at from position
+  local cell_to   = self:_cell(to)       -- cell that actor is going to move to
+  local piece     = cell_from.piece
+
+  self:move_before(piece, cell_from, cell_to)
+  self:move       (piece, cell_from, cell_to)
+  self:move_after (piece, cell_from, cell_to)
+end
+-------------------------------------------------------------------------------
+function Board:move_before(piece, cell_from, cell_to)
+end
+-------------------------------------------------------------------------------
+function Board:move(piece, cell_from, cell_to)
+  print(tostring(self)..":move "..tostring(piece).." "..tostring(cell_from).."->"..tostring(cell_to))
+  local actor = cell_from:leave()     -- get piece at from position
+  cell_to:receive(actor)              -- cell that actor is going to move to
+end
+-------------------------------------------------------------------------------
+function Board:move_after(piece, cell_from, cell_to)
+  piece:move_after(cell_from, cell_to)
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
+
+
 
 -------------------------------------------------------------------------------
 function Board:count_pieces()
   local red = 0
   local bla = 0
-  for _, cell in ipairs(self.grid) do
+  for k, cell in ipairs(self.grid) do
     local piece = cell.piece
     if piece then
       if piece.color == Player.R then

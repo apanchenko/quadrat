@@ -5,7 +5,7 @@ local lib   = require "src.core.lib"
 Cell = {}
 Cell.__index = Cell
 setmetatable(Cell, {__call = function(cls, ...) return cls.new(...) end})
-function Cell:__tostring() return "cell" end
+function Cell:__tostring() return "cell["..tostring(self.pos).."]" end
 
 -------------------------------------------------------------------------------
 -- public
@@ -17,8 +17,8 @@ function Cell.new(pos)
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.pos = pos
-  self.group = display.newGroup()
-  self.img = lib.sheet(self.group, Cell.sheet, frame, cfg.cell)
+  self.view = display.newGroup()
+  self.img = lib.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self
 end
 
@@ -37,7 +37,7 @@ function Cell:drop_jade(jade_probability)
     return
   end
 
-  self.jade = lib.image(self.group, cfg.jade)
+  self.jade = lib.image(self.view, cfg.jade)
 end
 
 -------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ function Cell:receive(piece)
   end
 
   self.piece = piece
-  piece:move_to(self.pos)                   -- move piece to new position
+  piece:move(self.pos)                   -- move piece to new position
 end
 
 

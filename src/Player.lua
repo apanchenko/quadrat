@@ -14,7 +14,7 @@ setmetatable(Player, {__call = function(cls, ...) return cls.new(...) end})
 -- @param color of the pieces to play
 -- @param name
 -- @param (optional) display group to render
-function Player.new(color, name, group)
+function Player.new(color, name, view)
   assert(color == Player.R or color == Player.B)
   assert(type(name) == "string")
 
@@ -23,13 +23,13 @@ function Player.new(color, name, group)
   self.color = color
   self.name = name
 
-  self.group = display.newGroup()
+  self.view = display.newGroup()
 
   -- piece image
-  lib.image(self.group, cfg.player, "src/battle/piece_"..Player.tostring(self.color)..".png")
+  lib.image(self, cfg.player, "src/battle/piece_"..Player.tostring(self.color)..".png")
 
   -- player name
-  lib.text(self.group, {text=self.name, vx=8})
+  lib.text(self, {text=self.name, vx=8})
 
   print(tostring(self))
   return self

@@ -3,7 +3,6 @@ local Player    = require "src.Player"
 local Abilities = require "src.battle.Abilities"
 local lib       = require "src.core.lib"
 local cfg       = require "src.Config"
-local PowerMoveDiagonal = require "src.battle.PowerMoveDiagonal"
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -33,10 +32,10 @@ Methods:
 -----------------------------------------------------------------------------]]--
 function Piece.new(color)
   local self = setmetatable({}, Piece)
-  self.group = display.newGroup()
-  self.group:addEventListener("touch", self)
+  self.view = display.newGroup()
+  self.view:addEventListener("touch", self)
   self.color = color
-  self.img = lib.image(self.group, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
+  self.img = lib.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
   self.abilities = Abilities(self)
   self.powers = {}
@@ -67,8 +66,8 @@ end
 
 -------------------------------------------------------------------------------
 function Piece:die()
-  self.group:removeSelf()
-  self.group = nil
+  self.view:removeSelf()
+  self.view = nil
   self.img:removeSelf()
   self.img = nil
   self.abilities = nil
@@ -86,20 +85,13 @@ function Piece:puton(board, pos)
   assert(board, "board is nil")
   assert(board.move, "board.move is nil")
   assert(board.select, "board.select is nil")
-  board.group:insert(self.group)
+  board.view:insert(self.view)
   self.board = board
-  self:move_to(pos)
-end
--------------------------------------------------------------------------------
-function Piece:move_to(pos)
-  assert(pos)
-  assert(pos:typename() == "Pos")
-  self.pos = pos
-  self:_update_group_pos()
+  self:move(pos)
 end
 -------------------------------------------------------------------------------
 function Piece:can_move(to)
-  print(tostring(self)..":can_move to "..tostring(to))
+  --print(tostring(self)..":can_move to "..tostring(to))
   local vec = self.pos - to                 -- movement vector
 
   for _, power in ipairs(self.powers) do
@@ -109,6 +101,26 @@ function Piece:can_move(to)
   end
 
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
+end
+-------------------------------------------------------------------------------
+function Piece:move(pos)
+  assert(pos)
+  assert(pos:typename() == "Pos")
+  self.pos = pos
+
+  for _, power in ipairs(self.powers) do
+    if power:move(vec) then
+      return true
+    end
+  end
+
+  self:_update_group_pos()
+end
+-------------------------------------------------------------------------------
+function Piece:move_after(cell_from, cell_to)
+  for _, power in ipairs(self.powers) do
+    power:move_after(self, self.board, cell_from, cell_to)
+  end  
 end
 
 
@@ -121,7 +133,7 @@ function Piece:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
   self:_update_group_pos()                  -- adjust group position
-  self.abilities:show(self.board.group.parent)           -- show abilities list
+  self.abilities:show(self.board.view.parent)           -- show abilities list
 end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
@@ -142,13 +154,10 @@ function Piece:add_ability()
   self.abilities:add()
 end
 -------------------------------------------------------------------------------
-function Piece:use_ability(name)
-  if name == Abilities.MoveDiagonal then
-    table.insert(self.powers, PowerMoveDiagonal(self.group))
-    self.board:select(nil)                  -- remove selection if was selected
-  end
-
-  print(tostring(self)..":use_ability " .. name .. " -> " .. " powers " .. #self.powers)
+function Piece:use_ability(Power)
+  table.insert(self.powers, Power(self.view))
+  self.board:select(nil)                  -- remove selection if was selected
+  print(tostring(self)..":use_ability " .. Power.name() .. " -> " .. " powers " .. #self.powers)
 end
 
 
@@ -167,15 +176,15 @@ function Piece:touch(event)
       self.board:select(nil)                -- deselect another piece
     end
     self:_set_focus(event.id)
-    self.mark = Pos.from(self.group)
+    self.mark = Pos.from(self.view)
 
   elseif self.isFocus then
 
     if event.phase == "moved" then
       local start = Pos(event.xStart, event.yStart)
-      local shift = (Pos.from(event) - start) + self.mark
+      local shift = (Pos.from(event) - start) / Pos(self.board.view.xScale) + self.mark
       local proj = (shift / cfg.cell.size):round()
-      Pos.copy(shift, self.group)
+      Pos.copy(shift, self.view)
 
       if self.board:can_move(self.pos, proj) then
         self:_create_project()
@@ -190,11 +199,11 @@ function Piece:touch(event)
       self:_set_focus(nil)
       self:_remove_project()
       if self.proj then
-        self.board:move(self.pos, self.proj)
+        self.board:will_move(self.pos, self.proj)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
-        Pos.copy(self.pos * cfg.cell.size, self.group) -- return to original position
+        Pos.copy(self.pos * cfg.cell.size, self.view) -- return to original position
         if self.isSelected then
           self.board:select(nil)            -- remove selection if was selected
         else
@@ -210,8 +219,8 @@ end
 function Piece:_create_project()
   if not self.project then
     local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
-    self.project = lib.image(self.board.group, cfg.cell, path)
-    Pos.copy(self.group, self.project)
+    self.project = lib.image(self.board, cfg.cell, path)
+    Pos.copy(self.view, self.project)
   end
 end
 -------------------------------------------------------------------------------
@@ -223,7 +232,7 @@ function Piece:_remove_project()
 end
 -------------------------------------------------------------------------------
 function Piece:_set_focus(eventId)
-  display.getCurrentStage():setFocus(self.group, eventId)
+  display.getCurrentStage():setFocus(self.view, eventId)
   self.isFocus = (eventId ~= nil)
 end
 -------------------------------------------------------------------------------
@@ -232,7 +241,7 @@ function Piece:_update_group_pos()
   if self.isSelected then
     pos.y = pos.y - 10
   end
-  Pos.copy(pos, self.group)
+  Pos.copy(pos, self.view)
 end
 
 return Piece

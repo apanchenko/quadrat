@@ -13,6 +13,8 @@ local battle = composer.newScene()
 -------------------------------------------------------------------------------
 -- battle scene
 function battle:create(event)
+  print("cfg vw:"..cfg.vw..", wh:"..cfg.vh)
+
   -- background
   lib.image(self.view, cfg.battle.bg)
 
@@ -23,14 +25,16 @@ function battle:create(event)
   self.players = {}
   self.players[Player.R] = Player(Player.R, "Salvador")
   self.players[Player.B] = Player(Player.B, "Gala")
-  lib.render(self.view, self.players[Player.R].group, cfg.player.red)
-  lib.render(self.view, self.players[Player.B].group, cfg.player.black)
+  lib.render(self.view, self.players[Player.R].view, cfg.player.red)
+  lib.render(self.view, self.players[Player.B].view, cfg.player.black)
 
   -- board
   self.board = Board()
   self.board:set_tomove_listener(self)
-  lib.render(self.view, self.board.group, cfg.board)
-  print("Create " .. tostring(self.board))
+  lib.render(self.view, self.board.view, cfg.board)
+
+
+  print("Create " .. tostring(self.board)..", w:"..self.board.view.width.." sx:"..self.board.view.xScale)
 
   self.board:position_minimal()
   self.jade_moves = cfg.jade.moves
@@ -67,7 +71,7 @@ function battle:tomove(color)
   print(self.players[color].name.." is going to move. Red: "..red..". Black: "..bla)
 
   -- move pointer
-  transition.moveTo(self.move_pointer, {y=self.players[color].group.y, time=500})
+  transition.moveTo(self.move_pointer, {y=self.players[color].view.y, time=500})
 
   -- drop jades
   self.jade_moves = self.jade_moves - 1

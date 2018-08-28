@@ -10,7 +10,7 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 ### core game
-- power duplicate
+- power multiply
 - power doble move
 - power make upper
 - power make lower

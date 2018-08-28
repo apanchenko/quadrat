@@ -41,6 +41,7 @@ end
 
 -------------------------------------------------------------------------------
 function scene:create(event)
+
     local back = display.newImageRect(self.view, "src/background.png", display.contentWidth, display.contentHeight)
     back.anchorX = 0
     back.anchorY = 0

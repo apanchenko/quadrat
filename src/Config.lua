@@ -11,7 +11,7 @@ cfg.battle        = {}
 cfg.battle.bg     = {vw=100, vh=100, path="src/background.png"}
 cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/battle/arrow.png"}
 cfg.cell          = {w=64, h=64, size=Pos(64, 64)}
-cfg.board         = {vx=5, vw=90, vy=15, cols=5, rows=5}
+cfg.board         = {vx=5, vw=90, vy=15, cols=8, rows=8}
 cfg.player        = {vw=6, ratio=1,
   red             = {vx=18, vy=4},
   black           = {vx=18, vy=9}
@@ -38,6 +38,5 @@ cfg.abilities     = {vx = 5,
   }
 }
 cfg.abilities.y = (cfg.vh * cfg.board.vy) + (cfg.vw * cfg.board.vw) + cfg.vh
-
 
 return cfg

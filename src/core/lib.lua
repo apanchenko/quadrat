@@ -9,13 +9,13 @@ opts:
   vx    defaults to 0
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
-function lib.render(target, obj, opts)
+local function render(target, obj, opts)
   assert(target, "group is nil")
   assert(obj, "object is nil")
   assert(opts, "opts is nil")
 
-  target = target.group or (target.view or target)
-  obj = obj.group or obj
+  target = target.view or target
+  obj = obj.view or obj
 
   obj.anchorX = opts.anchorX or 0
   obj.anchorY = opts.anchorY or 0
@@ -30,6 +30,20 @@ function lib.render(target, obj, opts)
 
   target:insert(obj)
 end
+lib.render = render
+
+--[[-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------]]--
+local function column(obj)
+  view = obj.view or obj
+  local y = 0
+  for i = 1, view.numChildren do
+    local child = view[i]
+    child.y = y
+    y = y + child.height
+  end
+end 
+lib.column = column
 
 --[[-----------------------------------------------------------------------------
 group   display group insert in
@@ -61,8 +75,7 @@ function lib.image(group, opts, path)
 
   local img = display.newImageRect(path, w, h)
   
-  lib.render(group, img, opts)
-
+  render(group, img, opts)
   return img
 end
 
@@ -88,8 +101,7 @@ function lib.text(group, opts)
 
   local text = display.newText(opts)
   
-  lib.render(group, text, opts)
-
+  render(group, text, opts)
   return text
 end
 
@@ -99,7 +111,7 @@ function lib.sheet(group, sheet, frame, opts)
   assert(frame)
   assert(opts.w and opts.h)
   local img = display.newImageRect(sheet, frame, opts.w, opts.h)
-  lib.render(group, img, opts)
+  render(group, img, opts)
   return img
 end
 

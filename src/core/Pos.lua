@@ -36,7 +36,7 @@ function Pos.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
 -------------------------------------------------------------------------------
 function Pos:__tostring()
-  return self.x.."x"..self.y
+  return self.x..","..self.y
 end
 -------------------------------------------------------------------------------
 function Pos:typename()
