@@ -1,5 +1,5 @@
-local Pos = require "src.core.Pos"
-local lib = require "src.core.lib"
+local vec = require "src.core.vec"
+local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
 PowerMultiply = {}
@@ -9,7 +9,7 @@ setmetatable(PowerMultiply, {__call = function(cls, ...) return cls.new(...) end
 -------------------------------------------------------------------------------
 function PowerMultiply.new(view)
   local self = setmetatable({}, PowerMoveDiagonal)
-  self.img = lib.image(view, cfg.cell, "src/battle/power_diagonal.png")
+  self.img = lay.image(view, cfg.cell, "src/battle/power_diagonal.png")
   return self
 end
 

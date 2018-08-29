@@ -1,7 +1,7 @@
-local Pos       = require "src.core.Pos"
+local vec       = require "src.core.vec"
 local Player    = require "src.Player"
 local Abilities = require "src.battle.Abilities"
-local lib       = require "src.core.lib"
+local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
 
 -------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ function Piece.new(color)
   self.view = display.newGroup()
   self.view:addEventListener("touch", self)
   self.color = color
-  self.img = lib.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
+  self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
   self.abilities = Abilities(self)
   self.powers = {}
@@ -78,7 +78,7 @@ end
 
 
 -------------------------------------------------------------------------------
--- POSITION--------------------------------------------------------------------
+-- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- insert piece into group, with scale for dragging
 function Piece:puton(board, pos)
@@ -105,7 +105,7 @@ end
 -------------------------------------------------------------------------------
 function Piece:move(pos)
   assert(pos)
-  assert(pos:typename() == "Pos")
+  assert(pos:typename() == "vec")
   self.pos = pos
 
   for _, power in ipairs(self.powers) do
@@ -176,20 +176,20 @@ function Piece:touch(event)
       self.board:select(nil)                -- deselect another piece
     end
     self:_set_focus(event.id)
-    self.mark = Pos.from(self.view)
+    self.mark = vec.from(self.view)
 
   elseif self.isFocus then
 
     if event.phase == "moved" then
-      local start = Pos(event.xStart, event.yStart)
-      local shift = (Pos.from(event) - start) / Pos(self.board.view.xScale) + self.mark
+      local start = vec(event.xStart, event.yStart)
+      local shift = (vec.from(event) - start) / vec(self.board.view.xScale) + self.mark
       local proj = (shift / cfg.cell.size):round()
-      Pos.copy(shift, self.view)
+      vec.copy(shift, self.view)
 
       if self.board:can_move(self.pos, proj) then
         self:_create_project()
         self.proj = proj
-        Pos.copy(proj * cfg.cell.size, self.project)
+        vec.copy(proj * cfg.cell.size, self.project)
       else
         self:_remove_project()
         self.proj = nil
@@ -203,7 +203,7 @@ function Piece:touch(event)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
-        Pos.copy(self.pos * cfg.cell.size, self.view) -- return to original position
+        vec.copy(self.pos * cfg.cell.size, self.view) -- return to original position
         if self.isSelected then
           self.board:select(nil)            -- remove selection if was selected
         else
@@ -219,8 +219,8 @@ end
 function Piece:_create_project()
   if not self.project then
     local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
-    self.project = lib.image(self.board, cfg.cell, path)
-    Pos.copy(self.view, self.project)
+    self.project = lay.image(self.board, cfg.cell, path)
+    vec.copy(self.view, self.project)
   end
 end
 -------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ function Piece:_update_group_pos()
   if self.isSelected then
     pos.y = pos.y - 10
   end
-  Pos.copy(pos, self.view)
+  vec.copy(pos, self.view)
 end
 
 return Piece

@@ -2,10 +2,10 @@
 local composer = require "composer"
 local Board    = require "src.battle.Board"
 local Piece    = require "src.battle.Piece"
-local Pos      = require "src.core.Pos"
+local vec      = require "src.core.vec"
 local Player   = require "src.Player"
 local cfg      = require "src.Config"
-local lib      = require "src.core.lib"
+local lay      = require "src.core.lay"
 
 -- variables
 local battle = composer.newScene()
@@ -16,22 +16,22 @@ function battle:create(event)
   print("cfg vw:"..cfg.vw..", wh:"..cfg.vh)
 
   -- background
-  lib.image(self.view, cfg.battle.bg)
+  lay.image(self.view, cfg.battle.bg)
 
   -- move pointer
-  self.move_pointer = lib.image(self.view, cfg.battle.arrow)
+  self.move_pointer = lay.image(self.view, cfg.battle.arrow)
 
   -- players
   self.players = {}
   self.players[Player.R] = Player(Player.R, "Salvador")
   self.players[Player.B] = Player(Player.B, "Gala")
-  lib.render(self.view, self.players[Player.R].view, cfg.player.red)
-  lib.render(self.view, self.players[Player.B].view, cfg.player.black)
+  lay.render(self.view, self.players[Player.R].view, cfg.player.red)
+  lay.render(self.view, self.players[Player.B].view, cfg.player.black)
 
   -- board
   self.board = Board()
   self.board:set_tomove_listener(self)
-  lib.render(self.view, self.board.view, cfg.board)
+  lay.render(self.view, self.board.view, cfg.board)
 
 
   print("Create " .. tostring(self.board)..", w:"..self.board.view.width.." sx:"..self.board.view.xScale)
@@ -84,7 +84,7 @@ end
 
 -------------------------------------------------------------------------------
 function battle:_win(message)
-  lib.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
+  lay.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
 end
 
 battle:addEventListener("create", battle)

@@ -1,6 +1,6 @@
 local Cell    = require "src.battle.Cell"
 local Piece   = require "src.battle.Piece"
-local Pos     = require "src.core.Pos"
+local vec     = require "src.core.vec"
 local Player  = require "src.Player"
 local cfg     = require "src.Config"
 
@@ -30,8 +30,8 @@ function Board._new()
   self.grid = {}
   for i = 0, self.cols - 1 do
   for j = 0, self.rows - 1 do
-    local cell = Cell(Pos(i, j))
-    lib.render(self, cell, cell.pos * cfg.cell.size)
+    local cell = Cell(vec(i, j))
+    lay.render(self, cell, cell.pos * cfg.cell.size)
     self.grid[i * self.cols + j] = cell
   end
   end
@@ -39,7 +39,7 @@ function Board._new()
   self.color = Player.R
 
   self.view.anchorChildren = true          -- center on screen
-  Pos.center(self.view)
+  vec.center(self.view)
 
   return self
 end
@@ -81,7 +81,7 @@ function Board:put(color, x, y)
   assert(0 <= y and y < self.rows)
   local piece = Piece(color)                -- create a new piece
   self.grid[x * self.cols + y].piece = piece       -- assign to cell
-  piece:puton(self, Pos(x, y))                     -- put piece on board
+  piece:puton(self, vec(x, y))                     -- put piece on board
 end
 -------------------------------------------------------------------------------
 function Board:_cell(pos)

@@ -1,6 +1,6 @@
 local cfg = require "src.Config"
 
-lib = {}
+lay = {}
 
 --[[-----------------------------------------------------------------------------
 group   display group insert in
@@ -30,7 +30,7 @@ local function render(target, obj, opts)
 
   target:insert(obj)
 end
-lib.render = render
+lay.render = render
 
 --[[-----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]--
@@ -43,7 +43,7 @@ local function column(obj)
     y = y + child.height
   end
 end 
-lib.column = column
+lay.column = column
 
 --[[-----------------------------------------------------------------------------
 group   display group insert in
@@ -57,7 +57,7 @@ opts:
   vx    defaults to 0
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
-function lib.image(group, opts, path)
+function lay.image(group, opts, path)
   assert(opts)
 
   path = path or opts.path
@@ -86,7 +86,7 @@ opts:
   vx    optional, defaults to 0
   vy    optional, defaults to 0
 -----------------------------------------------------------------------------]]--
-function lib.text(group, opts)
+function lay.text(group, opts)
   assert(opts)
 
   if opts.font == nil then
@@ -106,7 +106,7 @@ function lib.text(group, opts)
 end
 
 -------------------------------------------------------------------------------
-function lib.sheet(group, sheet, frame, opts)
+function lay.sheet(group, sheet, frame, opts)
   assert(sheet)
   assert(frame)
   assert(opts.w and opts.h)
@@ -116,4 +116,4 @@ function lib.sheet(group, sheet, frame, opts)
 end
 
 
-return lib
+return lay

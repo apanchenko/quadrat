@@ -1,6 +1,6 @@
-local Pos   = require "src.core.Pos"
+local vec   = require "src.core.vec"
 local cfg   = require "src.Config"
-local lib   = require "src.core.lib"
+local lay   = require "src.core.lay"
 
 Cell = {}
 Cell.__index = Cell
@@ -18,7 +18,7 @@ function Cell.new(pos)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.pos = pos
   self.view = display.newGroup()
-  self.img = lib.sheet(self.view, Cell.sheet, frame, cfg.cell)
+  self.img = lay.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self
 end
 
@@ -37,7 +37,7 @@ function Cell:drop_jade(jade_probability)
     return
   end
 
-  self.jade = lib.image(self.view, cfg.jade)
+  self.jade = lay.image(self.view, cfg.jade)
 end
 
 -------------------------------------------------------------------------------

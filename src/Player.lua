@@ -1,6 +1,6 @@
-local Pos = require "src.core.Pos"
+local vec = require "src.core.vec"
 local cfg = require "src.Config"
-local lib = require "src.core.lib"
+local lay = require "src.core.lay"
 
 -------------------------------------------------------------------------------
 local Player = {
@@ -26,10 +26,10 @@ function Player.new(color, name, view)
   self.view = display.newGroup()
 
   -- piece image
-  lib.image(self, cfg.player, "src/battle/piece_"..Player.tostring(self.color)..".png")
+  lay.image(self, cfg.player, "src/battle/piece_"..Player.tostring(self.color)..".png")
 
   -- player name
-  lib.text(self, {text=self.name, vx=8})
+  lay.text(self, {text=self.name, vx=8})
 
   print(tostring(self))
   return self

@@ -1,5 +1,5 @@
 local widget = require "widget"
-local Pos    = require "src.core.Pos"
+local vec    = require "src.core.vec"
 local cfg    = require "src.Config"
 local ass    = require "src.core.ass"
 local PowerMoveDiagonal = require "src.battle.PowerMoveDiagonal"
@@ -52,11 +52,11 @@ function Abilities:show(battle_group)
         return true
       end
       print("  " .. opts.label)
-      lib.render(self, widget.newButton(opts), {})
+      lay.render(self, widget.newButton(opts), {})
     end
   end
-  lib.column(self)
-  lib.render(battle_group, self, cfg.abilities)
+  lay.column(self)
+  lay.render(battle_group, self, cfg.abilities)
 end
 
 -------------------------------------------------------------------------------
