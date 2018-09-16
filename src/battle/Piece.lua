@@ -1,8 +1,10 @@
+local _         = require 'src.core.underscore'
 local vec       = require "src.core.vec"
 local Player    = require "src.Player"
 local Abilities = require "src.battle.Abilities"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
+local str       = tostring
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -49,20 +51,18 @@ end
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function Piece:__tostring() 
-  return "piece["
-    ..Player.tostring(self.color)
-    .." "..tostring(self.pos)
-    --.." "..table.concat(self.powers, " ")
-  .."]"
+  local s = "piece[" .. Player.tostring(self.color)
+  if self.pos then
+    s = s.." "..tostring(self.pos)
+  end
+  return s.."]"
 end
-function Piece:typename() return "Piece" end
 
-
-
--------------------------------------------------------------------------------
-function Piece:get_abilities()
-  return self.abilities
+function Piece:typename()
+  return "Piece"
 end
+
+
 
 -------------------------------------------------------------------------------
 function Piece:die()
@@ -87,7 +87,7 @@ function Piece:puton(board, pos)
   assert(board.select, "board.select is nil")
   board.view:insert(self.view)
   self.board = board
-  self:move(pos)
+  self:move(nil, pos)
 end
 -------------------------------------------------------------------------------
 function Piece:can_move(to)
@@ -103,10 +103,17 @@ function Piece:can_move(to)
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
 -------------------------------------------------------------------------------
-function Piece:move(pos)
-  assert(pos)
-  assert(pos:typename() == "vec")
-  self.pos = pos
+function Piece:move(cell_from, cell_to)
+  print(str(self) .. ":move to " .. str(cell_to))
+
+  if cell_from then
+    assert(cell_from.piece == self)
+    cell_from:leave()           -- get piece at from position
+  end
+
+  cell_to:receive(self)                    -- cell that actor is going to move to
+
+  self.pos = cell_to.pos
 
   for _, power in ipairs(self.powers) do
     if power:move(vec) then
@@ -150,14 +157,27 @@ end
 -------------------------------------------------------------------------------
 -- ABILITY --------------------------------------------------------------------
 -------------------------------------------------------------------------------
+--function Piece:get_abilities()
+--  return self.abilities
+--end
+-------------------------------------------------------------------------------
 function Piece:add_ability()
   self.abilities:add()
+
+  if self.able == nil then
+    self.able = lay.image(self, cfg.cell, "src/battle/ability.png")
+  end
 end
 -------------------------------------------------------------------------------
 function Piece:use_ability(Power)
   table.insert(self.powers, Power(self.view))
   self.board:select(nil)                  -- remove selection if was selected
   print(tostring(self)..":use_ability " .. Power.name() .. " -> " .. " powers " .. #self.powers)
+
+  if self.abilities:is_empty() then
+    self.able:removeSelf()
+    self.able = nil
+  end
 end
 
 

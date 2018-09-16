@@ -1,3 +1,4 @@
+local _      = require 'src.core.underscore'
 local widget = require "widget"
 local vec    = require "src.core.vec"
 local cfg    = require "src.Config"
@@ -35,6 +36,11 @@ function Abilities:add()
   print(tostring(self)..":add " .. Powers[i].name())
 end
 
+-------------------------------------------------------------------------------
+-- add random ability
+function Abilities:is_empty()
+  return _.reduce(self.list, 0, function(memo, i) return memo+i end) == 0
+end
 -------------------------------------------------------------------------------
 -- show on board
 function Abilities:show(battle_group)

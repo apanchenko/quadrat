@@ -3,6 +3,7 @@ local Piece   = require "src.battle.Piece"
 local vec     = require "src.core.vec"
 local Player  = require "src.Player"
 local cfg     = require "src.Config"
+local str     = tostring
 
 Board = {}
 Board.__index = Board
@@ -80,8 +81,7 @@ function Board:put(color, x, y)
   assert(0 <= x and x < self.cols)
   assert(0 <= y and y < self.rows)
   local piece = Piece(color)                -- create a new piece
-  self.grid[x * self.cols + y].piece = piece       -- assign to cell
-  piece:puton(self, vec(x, y))                     -- put piece on board
+  piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
 end
 -------------------------------------------------------------------------------
 function Board:_cell(pos)
@@ -120,8 +120,8 @@ function Board:can_move(fr, to)
 end
 -------------------------------------------------------------------------------
 function Board:will_move(from, to)
-  local cell_from = self:_cell(from)     -- get piece at from position
-  local cell_to   = self:_cell(to)       -- cell that actor is going to move to
+  local cell_from = self:_cell(from)        -- get piece at from position
+  local cell_to   = self:_cell(to)          -- cell that actor is going to move to
   local piece     = cell_from.piece
 
   self:move_before(piece, cell_from, cell_to)
@@ -133,13 +133,12 @@ function Board:move_before(piece, cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Board:move(piece, cell_from, cell_to)
-  print(tostring(self)..":move "..tostring(piece).." "..tostring(cell_from).."->"..tostring(cell_to))
-  local actor = cell_from:leave()     -- get piece at from position
-  cell_to:receive(actor)              -- cell that actor is going to move to
+  piece:move(cell_from, cell_to)            -- move piece to new position
 end
 -------------------------------------------------------------------------------
 function Board:move_after(piece, cell_from, cell_to)
   piece:move_after(cell_from, cell_to)
+
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end

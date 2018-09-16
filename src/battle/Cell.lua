@@ -67,7 +67,6 @@ function Cell:receive(piece)
   end
 
   self.piece = piece
-  piece:move(self.pos)                   -- move piece to new position
 end
 
 
