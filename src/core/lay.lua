@@ -85,6 +85,7 @@ opts:
   text  text to render
   vx    optional, defaults to 0
   vy    optional, defaults to 0
+  fontSize
 -----------------------------------------------------------------------------]]--
 function lay.text(group, opts)
   assert(opts)

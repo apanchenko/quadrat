@@ -32,17 +32,21 @@ Methods:
   select()
   deselect()
 -----------------------------------------------------------------------------]]--
-function Piece.new(color)
-  local self = setmetatable({}, Piece)
+function Piece.new(log, color)
+  assert(log)
+  assert(log.name() == "log")
+
+  local self = setmetatable({log = log}, Piece)
   self.view = display.newGroup()
   self.view:addEventListener("touch", self)
   self.color = color
   self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
-  self.abilities = Abilities(self)
+  self.abilities = Abilities.new(log, self)
   self.powers = {}
   self.isSelected = false
   self.isFocus = false
+
   return self
 end
 
@@ -103,31 +107,33 @@ function Piece:can_move(to)
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
 -------------------------------------------------------------------------------
+function Piece:move_before(cell_from, cell_to)
+  _.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
+end
+-------------------------------------------------------------------------------
 function Piece:move(cell_from, cell_to)
-  print(str(self) .. ":move to " .. str(cell_to))
-
-  if cell_from then
-    assert(cell_from.piece == self)
-    cell_from:leave()           -- get piece at from position
-  end
-
-  cell_to:receive(self)                    -- cell that actor is going to move to
-
-  self.pos = cell_to.pos
-
-  for _, power in ipairs(self.powers) do
-    if power:move(vec) then
-      return true
+  self.log:enter():trace(self, ":move to ", cell_to)
+    if cell_from then
+      assert(cell_from.piece == self)
+      cell_from:leave()           -- get piece at from position
     end
-  end
 
-  self:_update_group_pos()
+    cell_to:receive(self)                    -- cell that actor is going to move to
+
+    self.pos = cell_to.pos
+
+    for _, power in ipairs(self.powers) do
+      if power:move(vec) then
+        return true
+      end
+    end
+
+    self:_update_group_pos()
+  self.log:exit()
 end
 -------------------------------------------------------------------------------
 function Piece:move_after(cell_from, cell_to)
-  for _, power in ipairs(self.powers) do
-    power:move_after(self, self.board, cell_from, cell_to)
-  end  
+  _.each(self.powers, function(p) p:move_after(self, self.board, cell_from, cell_to) end)
 end
 
 
@@ -157,29 +163,39 @@ end
 -------------------------------------------------------------------------------
 -- ABILITY --------------------------------------------------------------------
 -------------------------------------------------------------------------------
---function Piece:get_abilities()
---  return self.abilities
---end
--------------------------------------------------------------------------------
 function Piece:add_ability()
   self.abilities:add()
 
+  -- add ability mark
   if self.able == nil then
     self.able = lay.image(self, cfg.cell, "src/battle/ability.png")
   end
 end
 -------------------------------------------------------------------------------
 function Piece:use_ability(Power)
-  table.insert(self.powers, Power(self.view))
-  self.board:select(nil)                  -- remove selection if was selected
-  print(tostring(self)..":use_ability " .. Power.name() .. " -> " .. " powers " .. #self.powers)
+  self.log:enter():trace(self, ":use_ability ", Power.name())
+    self:add_power(Power)                   -- increase power
+    self.board:select(nil)                  -- remove selection if was selected
 
-  if self.abilities:is_empty() then
-    self.able:removeSelf()
-    self.able = nil
-  end
+    -- remove ability mark
+    if self.abilities:is_empty() then
+      self.able:removeSelf()
+      self.able = nil
+    end
+  self.log:exit()
 end
-
+-------------------------------------------------------------------------------
+function Piece:add_power(Power)
+  self.log:enter():trace(self, ":add_power ", Power.name())
+    local name = Power.name()
+    local p = self.powers[name]
+    if p then
+      p:increase()
+    else
+      self.powers[name] = Power.new(self.log, self.view)
+    end
+  self.log:exit()
+end
 
 
 -------------------------------------------------------------------------------

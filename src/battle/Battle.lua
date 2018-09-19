@@ -1,4 +1,5 @@
 -- imports
+local log      = require 'src.core.log'
 local composer = require "composer"
 local Board    = require "src.battle.Board"
 local Piece    = require "src.battle.Piece"
@@ -13,7 +14,8 @@ local battle = composer.newScene()
 -------------------------------------------------------------------------------
 -- battle scene
 function battle:create(event)
-  print("cfg vw:"..cfg.vw..", wh:"..cfg.vh)
+  self.log = log.new()
+  self.log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
 
   -- background
   lay.image(self.view, cfg.battle.bg)
@@ -29,12 +31,12 @@ function battle:create(event)
   lay.render(self.view, self.players[Player.B].view, cfg.player.black)
 
   -- board
-  self.board = Board()
+  self.board = Board(self.log)
   self.board:set_tomove_listener(self)
   lay.render(self.view, self.board.view, cfg.board)
 
 
-  print("Create " .. tostring(self.board)..", w:"..self.board.view.width.." sx:"..self.board.view.xScale)
+  self.log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
 
   self.board:position_minimal()
   self.jade_moves = cfg.jade.moves
@@ -68,7 +70,7 @@ function battle:tomove(color)
     return
   end
 
-  print(self.players[color].name.." is going to move. Red: "..red..". Black: "..bla)
+  self.log:trace(self.players[color].name, " is going to move. Red: ", red, ". Black: ", bla)
 
   -- move pointer
   transition.moveTo(self.move_pointer, {y=self.players[color].view.y, time=500})

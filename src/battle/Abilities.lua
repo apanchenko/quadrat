@@ -11,14 +11,13 @@ local Powers = {PowerMoveDiagonal, PowerMultiply}
 
 Abilities = {}
 Abilities.__index = Abilities
-setmetatable(Abilities, {__call = function(cls, ...) return cls.new(...) end})
 function Abilities:__tostring() return "abilities" end
 
 --[[---------------------------------------------------------------------------
 A set of abilities a piece have. To be shown for selected piece.
 ---------------------------------------------------------------------------]]--
-function Abilities.new(ability_listener)
-  local self = setmetatable({}, Abilities)
+function Abilities.new(log, ability_listener)
+  local self = setmetatable({log=log}, Abilities)
   self.list = {0, 0}
 
   assert(ability_listener)
@@ -33,7 +32,7 @@ end
 function Abilities:add()
   local i = math.random(#Powers)              -- select new power
   self.list[i] = self.list[i] + 1
-  print(tostring(self)..":add " .. Powers[i].name())
+  self.log:trace(self, ":add ", Powers[i].name())
 end
 
 -------------------------------------------------------------------------------
@@ -44,7 +43,7 @@ end
 -------------------------------------------------------------------------------
 -- show on board
 function Abilities:show(battle_group)
-  print(tostring(self) .. ":show")
+  self.log:trace(self, ":show")
   assert(self.view == nil)                 -- check is hidden now
   self.view = display.newGroup()
 

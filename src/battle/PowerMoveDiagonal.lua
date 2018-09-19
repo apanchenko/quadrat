@@ -2,23 +2,32 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
-PowerMoveDiagonal = {}
+local PowerMoveDiagonal = {}
 PowerMoveDiagonal.__index = PowerMoveDiagonal
-setmetatable(PowerMoveDiagonal, {__call = function(cls, ...) return cls.new(...) end})
-
--------------------------------------------------------------------------------
-function PowerMoveDiagonal.new(view)
-  local self = setmetatable({}, PowerMoveDiagonal)
-  self.img = lay.image(view, cfg.cell, "src/battle/power_diagonal.png")
-  return self
-end
 
 -------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal:__tostring() return PowerMoveDiagonal.name() end
-function PowerMoveDiagonal.typename() return "PowerMoveDiagonal" end
-function PowerMoveDiagonal.name() return "MoveDiagonal" end
+function PowerMoveDiagonal.new(log, view)
+  local self = setmetatable({log=log}, PowerMoveDiagonal)
+  self.img = lay.image(view, cfg.cell, "src/battle/power_diagonal.png")
+  self.log:trace(self, ".new")
+  return self
+end
+-------------------------------------------------------------------------------
+function PowerMoveDiagonal:__tostring()
+  return PowerMoveDiagonal.name()
+end
+-------------------------------------------------------------------------------
+function PowerMoveDiagonal.name()
+  return "MoveDiagonal"
+end
+
+-------------------------------------------------------------------------------
+function PowerMoveDiagonal:increase()
+  self.log:trace(self, ":increase diag")
+  -- do nothing here
+end
 
 -------------------------------------------------------------------------------
 -- MOVE------------------------------------------------------------------------
@@ -26,6 +35,9 @@ function PowerMoveDiagonal.name() return "MoveDiagonal" end
 function PowerMoveDiagonal:can_move(vec)
   --print("PowerMoveDiagonal:can_move vec "..tostring(vec))
   return (vec.x==1 or vec.x==-1) and (vec.y==1 or vec.y==-1)
+end
+-------------------------------------------------------------------------------
+function PowerMoveDiagonal:move_before(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:move(vec)

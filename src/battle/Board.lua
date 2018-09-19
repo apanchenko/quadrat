@@ -22,8 +22,8 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board._new()
-  local self = setmetatable({}, Board)
+function Board._new(log)
+  local self = setmetatable({log = log}, Board)
   self.cols = cfg.board.cols
   self.rows = cfg.board.rows
   self.view = display.newGroup()           -- disply group
@@ -80,7 +80,7 @@ end
 function Board:put(color, x, y)
   assert(0 <= x and x < self.cols)
   assert(0 <= y and y < self.rows)
-  local piece = Piece(color)                -- create a new piece
+  local piece = Piece(self.log, color)                -- create a new piece
   piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
 end
 -------------------------------------------------------------------------------
@@ -130,6 +130,7 @@ function Board:will_move(from, to)
 end
 -------------------------------------------------------------------------------
 function Board:move_before(piece, cell_from, cell_to)
+  piece:move_before(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Board:move(piece, cell_from, cell_to)
