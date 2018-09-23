@@ -26,11 +26,27 @@ end
 
 -------------------------------------------------------------------------------
 function PowerMultiply:increase()
-  self.log:enter():trace(self, ":increase mult")
+  self.log:enter():trace(self, ":increase")
     self.count = self.count + 1
     self.text.text = tostring(self.count + 1)
   self.log:exit()
 end
+-------------------------------------------------------------------------------
+-- return true if decrease succeeded, else delete
+function PowerMultiply:decrease()
+  self.log:enter():trace(self, ":decrease")
+    local result = self
+    if self.count <= 1 then
+      result = nil
+      self.text:removeSelf()
+    else
+      self.count = self.count - 1
+      self.text.text = tostring(self.count + 1)
+    end
+  self.log:exit()
+  return result
+end
+
 
 -------------------------------------------------------------------------------
 -- POSITION--------------------------------------------------------------------
@@ -46,8 +62,10 @@ function PowerMultiply:move(vec)
 end
 -------------------------------------------------------------------------------
 function PowerMultiply:move_after(piece, board, cell_from, cell_to)
-  print("PowerMultiply:move_after put to "..tostring(cell_from.pos))
-  board:put(piece.color, cell_from.pos.x, cell_from.pos.y)
+  self.log:enter():trace(self, ":move_after from ", cell_from, " to ", cell_from)
+    board:put(piece.color, cell_from.pos.x, cell_from.pos.y)
+    piece:remove_power(self:name())
+  self.log:exit()
 end
 
 return PowerMultiply

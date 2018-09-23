@@ -59,6 +59,9 @@ function Piece:__tostring()
   if self.pos then
     s = s.." "..tostring(self.pos)
   end
+  for k in pairs(self.powers) do
+		s = s.. " ".. k
+	end
   return s.."]"
 end
 
@@ -133,7 +136,11 @@ function Piece:move(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Piece:move_after(cell_from, cell_to)
-  _.each(self.powers, function(p) p:move_after(self, self.board, cell_from, cell_to) end)
+  self.log:enter():trace(self, ":move_after")
+    for name, power in pairs(self.powers) do
+      power:move_after(self, self.board, cell_from, cell_to)
+    end
+  self.log:exit()
 end
 
 
@@ -196,7 +203,17 @@ function Piece:add_power(Power)
     end
   self.log:exit()
 end
-
+-------------------------------------------------------------------------------
+function Piece:remove_power(name)
+  self.log:enter():trace(self, ":remove_power ", name)
+    local p = self.powers[name]
+    if p then
+      if not p:decrease() then
+        self.powers[name] = nil
+      end
+    end
+  self.log:exit()
+end
 
 -------------------------------------------------------------------------------
 -- PRIVATE---------------------------------------------------------------------
