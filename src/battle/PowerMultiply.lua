@@ -32,7 +32,7 @@ function PowerMultiply:increase()
   self.log:exit()
 end
 -------------------------------------------------------------------------------
--- return true if decrease succeeded, else delete
+-- return self to persist or nil to cease
 function PowerMultiply:decrease()
   self.log:enter():trace(self, ":decrease")
     local result = self

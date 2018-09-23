@@ -101,7 +101,7 @@ function Piece:can_move(to)
   --print(tostring(self)..":can_move to "..tostring(to))
   local vec = self.pos - to                 -- movement vector
 
-  for _, power in ipairs(self.powers) do
+  for _, power in pairs(self.powers) do
     if power:can_move(vec) then
       return true
     end

@@ -25,8 +25,11 @@ end
 
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:increase()
-  self.log:trace(self, ":increase diag")
   -- do nothing here
+end
+-------------------------------------------------------------------------------
+function PowerMoveDiagonal:decrease()
+  return self
 end
 
 -------------------------------------------------------------------------------
