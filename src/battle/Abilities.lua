@@ -3,11 +3,11 @@ local widget = require "widget"
 local vec    = require "src.core.vec"
 local cfg    = require "src.Config"
 local ass    = require "src.core.ass"
-local PowerMoveDiagonal = require "src.battle.PowerMoveDiagonal"
-local PowerMultiply     = require "src.battle.PowerMultiply"
+local MoveDiagonal = require "src.battle.powers.MoveDiagonal"
+local Multiply     = require "src.battle.powers.Multiply"
 
 
-local Powers = {PowerMoveDiagonal, PowerMultiply}
+local Powers = {MoveDiagonal, Multiply}
 
 Abilities = {}
 Abilities.__index = Abilities
