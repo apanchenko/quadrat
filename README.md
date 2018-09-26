@@ -6,7 +6,6 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 ## codestyle
 - use kebab_notation
 - members are private
-- functions starting with underscore are private
 
 ## todo:
 ### core game

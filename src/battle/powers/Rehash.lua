@@ -26,9 +26,14 @@ function Rehash.new(board, log, view)
       cells[#cells + 1] = cell
     end
   end
+  assert(count <= #cells)
 
   -- select 'count' rendom empty cells
-  for i = 0, count do
+  for i = 1, count do
+    local j = math.random(#cells)
+    cells[j]:set_jade()
+    cells[j] = cells[#cells]
+    cells[#cells] = nil
   end
 
   return nil
@@ -41,7 +46,7 @@ end
 function Rehash:__tostring()
   return Rehash.name()
 end
-
+--[[
 -------------------------------------------------------------------------------
 function Rehash:increase()
 end
@@ -66,5 +71,5 @@ end
 -------------------------------------------------------------------------------
 function Rehash:move_after(piece, board, cell_from, cell_to)
 end
-
+]]--
 return Rehash

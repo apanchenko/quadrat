@@ -5,9 +5,10 @@ local cfg    = require "src.Config"
 local ass    = require "src.core.ass"
 local MoveDiagonal = require "src.battle.powers.MoveDiagonal"
 local Multiply     = require "src.battle.powers.Multiply"
+local Rehash       = require "src.battle.powers.Rehash"
 
 
-local Powers = {MoveDiagonal, Multiply}
+local Powers = {MoveDiagonal, Multiply, Rehash}
 
 Abilities = {}
 Abilities.__index = Abilities
@@ -18,7 +19,7 @@ A set of abilities a piece have. To be shown for selected piece.
 ---------------------------------------------------------------------------]]--
 function Abilities.new(log, ability_listener)
   local self = setmetatable({log=log}, Abilities)
-  self.list = {0, 0}
+  self.list = {0, 0, 0}
 
   assert(ability_listener)
   assert(ability_listener.use_ability)
@@ -53,7 +54,7 @@ function Abilities:show(battle_group)
       opts.id = i
       opts.label = Powers[i].name() .. " " .. self.list[i]
       opts.onRelease = function(event)
-        self:_use(event)
+        self:use(event)
         return true
       end
       print("  " .. opts.label)
@@ -74,7 +75,7 @@ function Abilities:hide()
 end
 
 -------------------------------------------------------------------------------
-function Abilities:_use(event)
+function Abilities:use(event)
   local i = event.target.id
   self.list[i] = self.list[i] - 1
   self.ability_listener:use_ability(Powers[i])
