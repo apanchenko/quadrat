@@ -8,7 +8,7 @@ PowerMultiply.__index = PowerMultiply
 -------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function PowerMultiply.new(log, view)
+function PowerMultiply.new(board, log, view)
   local self = setmetatable({log = log}, PowerMultiply)
   self.count = 1
   self.text = lay.text(view, {text=tostring(self.count + 1), fontSize=22})

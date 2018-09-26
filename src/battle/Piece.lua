@@ -199,7 +199,7 @@ function Piece:add_power(Power)
     if p then
       p:increase()
     else
-      self.powers[name] = Power.new(self.log, self.view)
+      self.powers[name] = Power.new(self.board, self.log, self.view)
     end
   self.log:exit()
 end

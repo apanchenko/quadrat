@@ -2,52 +2,69 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
-local PowerMoveDiagonal = {}
-PowerMoveDiagonal.__index = PowerMoveDiagonal
+local Rehash = {}
+Rehash.__index = Rehash
 
 -------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal.new(board, log, view)
-  local self = setmetatable({log=log}, PowerMoveDiagonal)
-  self.img = lay.image(view, cfg.cell, "src/battle/power_diagonal.png")
-  self.log:trace(self, ".new")
-  return self
+function Rehash.new(board, log, view)
+  -- get board cells
+  local grid = board:get_cells()
+
+  -- empty cells to rehash
+  local cells = {}
+
+  -- count and remove jades, collect empty cells
+  local count = 0
+  for i, cell in ipairs(grid) do
+    if cell.jade then
+      count = count + 1
+      cell:remove_jade()
+    end
+    if cell.piece == nil then
+      cells[#cells + 1] = cell
+    end
+  end
+
+  -- select 'count' rendom empty cells
+  for i = 0, count do
+  end
+
+  return nil
 end
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal:__tostring()
-  return PowerMoveDiagonal.name()
+function Rehash.name()
+  return "Rehash"
 end
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal.name()
-  return "MoveDiagonal"
+function Rehash:__tostring()
+  return Rehash.name()
 end
 
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal:increase()
-  -- do nothing here
+function Rehash:increase()
 end
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal:decrease()
-  return self
-end
-
--------------------------------------------------------------------------------
--- MOVE------------------------------------------------------------------------
--------------------------------------------------------------------------------
-function PowerMoveDiagonal:can_move(vec)
-  --print("PowerMoveDiagonal:can_move vec "..tostring(vec))
-  return (vec.x==1 or vec.x==-1) and (vec.y==1 or vec.y==-1)
-end
--------------------------------------------------------------------------------
-function PowerMoveDiagonal:move_before(cell_from, cell_to)
-end
--------------------------------------------------------------------------------
-function PowerMoveDiagonal:move(vec)
-end
--------------------------------------------------------------------------------
-function PowerMoveDiagonal:move_after(piece, board, cell_from, cell_to)
+-- return self to persist or nil to cease
+function Rehash:decrease()
+  return nil
 end
 
+-------------------------------------------------------------------------------
+-- POSITION--------------------------------------------------------------------
+-------------------------------------------------------------------------------
+function Rehash:can_move(vec)
+  return false
+end
+-------------------------------------------------------------------------------
+function Rehash:move_before(cell_from, cell_to)
+end
+-------------------------------------------------------------------------------
+function Rehash:move(vec)
+end
+-------------------------------------------------------------------------------
+function Rehash:move_after(piece, board, cell_from, cell_to)
+end
 
-return PowerMoveDiagonal
+return Rehash

@@ -4,7 +4,6 @@ local lay   = require "src.core.lay"
 
 Cell = {}
 Cell.__index = Cell
-setmetatable(Cell, {__call = function(cls, ...) return cls.new(...) end})
 function Cell:__tostring() return "cell["..tostring(self.pos).."]" end
 
 -------------------------------------------------------------------------------
@@ -22,6 +21,10 @@ function Cell.new(pos)
   return self
 end
 
+
+
+-------------------------------------------------------------------------------
+-- JADE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- may spawn jade
 function Cell:drop_jade(jade_probability)
@@ -37,9 +40,23 @@ function Cell:drop_jade(jade_probability)
     return
   end
 
+  self:set_jade()
+end
+-------------------------------------------------------------------------------
+function Cell:set_jade()
+  assert(self.jade == nil)
   self.jade = lay.image(self.view, cfg.jade)
 end
+-------------------------------------------------------------------------------
+function Cell:remove_jade()
+  assert(self.jade)
+  self.jade:removeSelf()
+  self.jade = nil
+end
 
+
+-------------------------------------------------------------------------------
+-- PIECE-----------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function Cell:leave()
   assert(self.piece)
@@ -47,7 +64,6 @@ function Cell:leave()
   self.piece = nil
   return piece
 end
-
 -------------------------------------------------------------------------------
 function Cell:receive(piece)
   assert(piece)
@@ -61,8 +77,7 @@ function Cell:receive(piece)
 
   -- consume jade to get ability
   if self.jade then
-    self.jade:removeSelf()
-    self.jade = nil
+    self:remove_jade()
     piece:add_ability()
   end
 

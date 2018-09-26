@@ -31,7 +31,7 @@ function Board._new(log)
   self.grid = {}
   for i = 0, self.cols - 1 do
   for j = 0, self.rows - 1 do
-    local cell = Cell(vec(i, j))
+    local cell = Cell.new(vec(i, j))
     lay.render(self, cell, cell.pos * cfg.cell.size)
     self.grid[i * self.cols + j] = cell
   end
@@ -86,6 +86,10 @@ end
 -------------------------------------------------------------------------------
 function Board:_cell(pos)
   return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
+end
+-------------------------------------------------------------------------------
+function Board:get_cells()
+  return self.grid 
 end
 
 
