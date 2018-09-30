@@ -199,7 +199,7 @@ function Piece:add_power(Power)
     if p then
       p:increase()
     else
-      self.powers[name] = Power.new(self.board, self.log, self.view)
+      self.powers[name] = Power.new(self)
     end
   self.log:exit()
 end
@@ -252,7 +252,7 @@ function Piece:touch(event)
       self:_set_focus(nil)
       self:_remove_project()
       if self.proj then
-        self.board:will_move(self.pos, self.proj)
+        self.board:player_move(self.pos, self.proj)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else

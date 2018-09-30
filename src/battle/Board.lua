@@ -7,7 +7,6 @@ local str     = tostring
 
 Board = {}
 Board.__index = Board
-setmetatable(Board, {__call = function(cls, ...) return cls._new(...) end})
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
@@ -22,7 +21,7 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board._new(log)
+function Board.new(log)
   local self = setmetatable({log = log}, Board)
   self.cols = cfg.board.cols
   self.rows = cfg.board.rows
@@ -84,8 +83,18 @@ function Board:put(color, x, y)
   piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
 end
 -------------------------------------------------------------------------------
-function Board:_cell(pos)
+function Board:cell(pos)
   return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
+end
+-------------------------------------------------------------------------------
+function Board:select_cells(filter)
+  local selected = {}
+  for k, v in ipairs(self.grid) do
+    if filter(v) then
+      selected[#selected + 1] = v
+    end
+	end
+  return selected
 end
 -------------------------------------------------------------------------------
 function Board:get_cells()
@@ -100,7 +109,7 @@ end
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
   -- check move rights
-  local actor = self:_cell(fr).piece        -- peek piece at from position
+  local actor = self:cell(fr).piece        -- peek piece at from position
   if actor == nil then                      -- check if it exists
     return false                            -- can not move
   end
@@ -114,7 +123,7 @@ function Board:can_move(fr, to)
   end
 
   -- check kill ability
-  local tocell = self:_cell(to)
+  local tocell = self:cell(to)
   local victim = tocell.piece               -- peek piece at to position
   if victim and victim.color == actor.color then
     return false                            -- can not kill piece of the same breed
@@ -123,29 +132,32 @@ function Board:can_move(fr, to)
   return true
 end
 -------------------------------------------------------------------------------
-function Board:will_move(from, to)
-  local cell_from = self:_cell(from)        -- get piece at from position
-  local cell_to   = self:_cell(to)          -- cell that actor is going to move to
+function Board:move(from_pos, to_pos)
+  local cell_from = self:cell(from_pos)    -- get piece at from position
+  local cell_to   = self:cell(to_pos)      -- cell that actor is going to move to
   local piece     = cell_from.piece
 
   self:move_before(piece, cell_from, cell_to)
-  self:move       (piece, cell_from, cell_to)
+  self:move_middle(piece, cell_from, cell_to)
   self:move_after (piece, cell_from, cell_to)
+end
+-------------------------------------------------------------------------------
+function Board:player_move(from_pos, to_pos)
+  self:move(from_pos, to_pos)
+  self.color = not self.color               -- switch to another player
+  self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
 -------------------------------------------------------------------------------
 function Board:move_before(piece, cell_from, cell_to)
   piece:move_before(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
-function Board:move(piece, cell_from, cell_to)
+function Board:move_middle(piece, cell_from, cell_to)
   piece:move(cell_from, cell_to)            -- move piece to new position
 end
 -------------------------------------------------------------------------------
 function Board:move_after(piece, cell_from, cell_to)
   piece:move_after(cell_from, cell_to)
-
-  self.color = not self.color               -- switch to another player
-  self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
 
 

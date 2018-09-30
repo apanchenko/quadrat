@@ -8,9 +8,9 @@ PowerMoveDiagonal.__index = PowerMoveDiagonal
 -------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal.new(board, log, view)
-  local self = setmetatable({log=log}, PowerMoveDiagonal)
-  self.img = lay.image(view, cfg.cell, "src/battle/power_diagonal.png")
+function PowerMoveDiagonal.new(piece)
+  local self = setmetatable({log=piece.log}, PowerMoveDiagonal)
+  self.img = lay.image(piece, cfg.cell, "src/battle/power_diagonal.png")
   self.log:trace(self, ".new")
   return self
 end

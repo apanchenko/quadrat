@@ -6,9 +6,10 @@ local ass    = require "src.core.ass"
 local MoveDiagonal = require "src.battle.powers.MoveDiagonal"
 local Multiply     = require "src.battle.powers.Multiply"
 local Rehash       = require "src.battle.powers.Rehash"
+local Relocate     = require "src.battle.powers.Relocate"
 
 
-local Powers = {MoveDiagonal, Multiply, Rehash}
+local Powers = {MoveDiagonal, Multiply, Rehash, Relocate}
 
 Abilities = {}
 Abilities.__index = Abilities
@@ -19,8 +20,13 @@ A set of abilities a piece have. To be shown for selected piece.
 ---------------------------------------------------------------------------]]--
 function Abilities.new(log, ability_listener)
   local self = setmetatable({log=log}, Abilities)
-  self.list = {0, 0, 0}
 
+  -- init empty list of abilities
+  self.list = {}
+	for i = 1, #Powers do
+		self.list[i] = 0
+  end	
+  
   assert(ability_listener)
   assert(ability_listener.use_ability)
   self.ability_listener = ability_listener      -- set ability listener

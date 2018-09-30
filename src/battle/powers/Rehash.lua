@@ -8,22 +8,20 @@ Rehash.__index = Rehash
 -------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function Rehash.new(board, log, view)
+function Rehash.new(piece)
   -- get board cells
+  local board = piece.board
   local grid = board:get_cells()
 
   -- empty cells to rehash
-  local cells = {}
+  local cells = board:select_cells(function(c) return c.piece == nil end)
 
-  -- count and remove jades, collect empty cells
+  -- count and remove jades
   local count = 0
-  for i, cell in ipairs(grid) do
-    if cell.jade then
+  for i = 1, #cells do
+    if cells[i].jade then
       count = count + 1
-      cell:remove_jade()
-    end
-    if cell.piece == nil then
-      cells[#cells + 1] = cell
+      cells[i]:remove_jade()
     end
   end
   assert(count <= #cells)
@@ -46,30 +44,5 @@ end
 function Rehash:__tostring()
   return Rehash.name()
 end
---[[
--------------------------------------------------------------------------------
-function Rehash:increase()
-end
--------------------------------------------------------------------------------
--- return self to persist or nil to cease
-function Rehash:decrease()
-  return nil
-end
 
--------------------------------------------------------------------------------
--- POSITION--------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Rehash:can_move(vec)
-  return false
-end
--------------------------------------------------------------------------------
-function Rehash:move_before(cell_from, cell_to)
-end
--------------------------------------------------------------------------------
-function Rehash:move(vec)
-end
--------------------------------------------------------------------------------
-function Rehash:move_after(piece, board, cell_from, cell_to)
-end
-]]--
 return Rehash

@@ -31,7 +31,7 @@ function battle:create(event)
   lay.render(self.view, self.players[Player.B].view, cfg.player.black)
 
   -- board
-  self.board = Board(self.log)
+  self.board = Board.new(self.log)
   self.board:set_tomove_listener(self)
   lay.render(self.view, self.board.view, cfg.board)
 
