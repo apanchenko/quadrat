@@ -5,15 +5,17 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## codestyle
 - use kebab_notation
-- members are private
 
 ## todo:
 ### core game
-- power multiply
-- power doble move
-- power make upper
-- power make lower
-- power jump
+- ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
+- ground mods:       refurb, power plant, 
+- piece mods:        bankrupt, network, spyware, invis, jump proof, rat tail, purify, inhibit
+- move powers:       sphere, hotspot, switcheroo, centerpult, tripwire, scrable
+- ownership powers:  swap
+- ability powers:    teach, learn, pilfer, parasite, 2x, benefactor, scavenger
+- attack powers:     bombs, kamikadze, destroy, acidic
+- orb mods:          orbspy
 - overall style
 ### metagame
 ### build/deploy
@@ -23,7 +25,15 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 ### market
 
 ## done:
-- diagonal move power
+- ground level mods: 
+- ground mods:       
+- piece mods:        
+- move powers:       relocate, diagonal
+- ownership powers:  recruit
+- ability powers:    
+- attack powers:     
+- orb mods:          rehash
+- add zones to powers
 - activate ability from the list
 - taken abilities list for selected piece
 - who moves?

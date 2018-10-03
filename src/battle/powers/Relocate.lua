@@ -2,13 +2,21 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
-local Relocate = {}
+local Relocate =
+{
+  typename = "Relocate",
+  is_areal = false
+}
 Relocate.__index = Relocate
 
 -------------------------------------------------------------------------------
--- TYPE------------------------------------------------------------------------
+function Relocate.new(Zone)
+  assert(Zone == nil)
+  local self = setmetatable({}, Relocate)
+  return self
+end
 -------------------------------------------------------------------------------
-function Relocate.new(piece)
+function Relocate:apply(piece)
   local board = piece.board
 
   -- select all empty cells
@@ -21,12 +29,8 @@ function Relocate.new(piece)
   return nil
 end
 -------------------------------------------------------------------------------
-function Relocate.name()
-  return "Relocate"
-end
--------------------------------------------------------------------------------
 function Relocate:__tostring()
-  return Relocate.name()
+  return Relocate.typename
 end
 
 return Relocate

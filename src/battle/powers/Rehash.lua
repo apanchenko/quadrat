@@ -2,13 +2,21 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
-local Rehash = {}
+local Rehash =
+{
+  typename = "Rehash",
+  is_areal = false
+}
 Rehash.__index = Rehash
 
 -------------------------------------------------------------------------------
--- TYPE------------------------------------------------------------------------
+function Rehash.new(Zone)
+  assert(Zone == nil)
+  local self = setmetatable({}, Rehash)
+  return self
+end
 -------------------------------------------------------------------------------
-function Rehash.new(piece)
+function Rehash:apply(piece)
   -- get board cells
   local board = piece.board
   local grid = board:get_cells()
@@ -37,12 +45,8 @@ function Rehash.new(piece)
   return nil
 end
 -------------------------------------------------------------------------------
-function Rehash.name()
-  return "Rehash"
-end
--------------------------------------------------------------------------------
 function Rehash:__tostring()
-  return Rehash.name()
+  return Rehash.typename
 end
 
 return Rehash

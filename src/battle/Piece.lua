@@ -1,10 +1,9 @@
 local _         = require 'src.core.underscore'
 local vec       = require "src.core.vec"
 local Player    = require "src.Player"
-local Abilities = require "src.battle.Abilities"
+local Abilities = require "src.battle.PieceAbilities"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
-local str       = tostring
 
 -------------------------------------------------------------------------------
 local Piece = {}
@@ -42,7 +41,7 @@ function Piece.new(log, color)
   self.color = color
   self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
   self.scale = 1
-  self.abilities = Abilities.new(log, self)
+  self.abilities = Abilities.new(self)
   self.powers = {}
   self.isSelected = false
   self.isFocus = false
@@ -115,7 +114,7 @@ function Piece:move_before(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Piece:move(cell_from, cell_to)
-  self.log:enter():trace(self, ":move to ", cell_to)
+  self.log:trace(self, ":move to ", cell_to):enter()
     if cell_from then
       assert(cell_from.piece == self)
       cell_from:leave()           -- get piece at from position
@@ -136,7 +135,7 @@ function Piece:move(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Piece:move_after(cell_from, cell_to)
-  self.log:enter():trace(self, ":move_after")
+  self.log:trace(self, ":move_after"):enter()
     for name, power in pairs(self.powers) do
       power:move_after(self, self.board, cell_from, cell_to)
     end
@@ -150,10 +149,12 @@ end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
 function Piece:select()
-  assert(self.isSelected == false)
-  self.isSelected = true                    -- set selected
-  self:_update_group_pos()                  -- adjust group position
-  self.abilities:show(self.board.view.parent)           -- show abilities list
+  self.log:trace(self, ":select"):enter()
+    assert(self.isSelected == false)
+    self.isSelected = true                    -- set selected
+    self:_update_group_pos()                  -- adjust group position
+    self.abilities:show(self.board.view.parent)           -- show abilities list
+  self.log:exit()
 end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
@@ -179,33 +180,34 @@ function Piece:add_ability()
   end
 end
 -------------------------------------------------------------------------------
-function Piece:use_ability(Power)
-  self.log:enter():trace(self, ":use_ability ", Power.name())
-    self:add_power(Power)                   -- increase power
+function Piece:use_ability(ability)
+  self.log:trace(self, ":use_ability ", ability):enter()
+    self:add_power(ability)                   -- increase power
     self.board:select(nil)                  -- remove selection if was selected
 
     -- remove ability mark
     if self.abilities:is_empty() then
+      self.log:trace("remove able")
       self.able:removeSelf()
       self.able = nil
     end
   self.log:exit()
 end
 -------------------------------------------------------------------------------
-function Piece:add_power(Power)
-  self.log:enter():trace(self, ":add_power ", Power.name())
-    local name = Power.name()
+function Piece:add_power(ability)
+  local name = tostring(ability)
+  self.log:trace(self, ":add_power ", name):enter()
     local p = self.powers[name]
     if p then
       p:increase()
     else
-      self.powers[name] = Power.new(self)
+      self.powers[name] = ability:create_power():apply(self)
     end
   self.log:exit()
 end
 -------------------------------------------------------------------------------
 function Piece:remove_power(name)
-  self.log:enter():trace(self, ":remove_power ", name)
+  self.log:trace(self, ":remove_power ", name):enter()
     local p = self.powers[name]
     if p then
       if not p:decrease() then

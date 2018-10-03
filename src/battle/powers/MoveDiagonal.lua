@@ -2,27 +2,28 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 
-local PowerMoveDiagonal = {}
+local PowerMoveDiagonal =
+{
+  typename = "MoveDiagonal",
+  is_areal = false
+}
 PowerMoveDiagonal.__index = PowerMoveDiagonal
 
 -------------------------------------------------------------------------------
--- TYPE------------------------------------------------------------------------
+function PowerMoveDiagonal.new(Zone)
+  assert(Zone == nil)
+  local self = setmetatable({}, PowerMoveDiagonal)
+  return self
+end
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal.new(piece)
-  local self = setmetatable({log=piece.log}, PowerMoveDiagonal)
-  self.img = lay.image(piece, cfg.cell, "src/battle/power_diagonal.png")
-  self.log:trace(self, ".new")
+function PowerMoveDiagonal:apply(piece)
+  self.img = lay.image(piece, cfg.cell, "src/battle/powers/move_diagonal.png")
   return self
 end
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:__tostring()
-  return PowerMoveDiagonal.name()
+  return PowerMoveDiagonal.typename
 end
--------------------------------------------------------------------------------
-function PowerMoveDiagonal.name()
-  return "MoveDiagonal"
-end
-
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:increase()
   -- do nothing here

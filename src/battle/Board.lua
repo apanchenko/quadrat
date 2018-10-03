@@ -89,9 +89,9 @@ end
 -------------------------------------------------------------------------------
 function Board:select_cells(filter)
   local selected = {}
-  for k, v in ipairs(self.grid) do
-    if filter(v) then
-      selected[#selected + 1] = v
+  for k, cell in ipairs(self.grid) do
+    if filter(cell) then
+      selected[#selected + 1] = cell
     end
 	end
   return selected
