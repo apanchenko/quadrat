@@ -27,7 +27,7 @@ function Recruit:apply(piece)
     for i = 1, #cells do
       local p = cells[i].piece
       if p then
-        p.color = piece.color
+        p:set_color(piece.color)
       end
     end
   log:exit()

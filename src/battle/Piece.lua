@@ -2,13 +2,17 @@ local _         = require 'src.core.underscore'
 local vec       = require "src.core.vec"
 local Player    = require "src.Player"
 local Abilities = require "src.battle.PieceAbilities"
-local lay       = require "src.core.lay"
-local cfg       = require "src.Config"
+local Color     = require 'src.battle.Color'
+local lay       = require 'src.core.lay'
+local cfg       = require 'src.Config'
+local ass       = require 'src.core.ass'
 
 -------------------------------------------------------------------------------
-local Piece = {}
+local Piece = 
+{
+  typename = "Piece"
+}
 Piece.__index = Piece
-setmetatable(Piece, {__call = function(cls, ...) return cls.new(...) end})
 
 --[[-----------------------------------------------------------------------------
 Arguments:
@@ -32,44 +36,55 @@ Methods:
   deselect()
 -----------------------------------------------------------------------------]]--
 function Piece.new(log, color)
-  assert(log)
-  assert(log.name() == "log")
-
-  local self = setmetatable({log = log}, Piece)
-  self.view = display.newGroup()
-  self.view:addEventListener("touch", self)
-  self.color = color
-  self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
-  self.scale = 1
-  self.abilities = Abilities.new(self)
-  self.powers = {}
-  self.isSelected = false
-  self.isFocus = false
-
+  ass.is(log, "log")
+  local depth = log:trace("Piece.new"):enter()
+    local self = setmetatable({log = log}, Piece)
+    self.view = display.newGroup()
+    self.view:addEventListener("touch", self)
+    self:set_color(color)
+    self.scale = 1
+    self.abilities = Abilities.new(self)
+    self.powers = {}
+    self.isSelected = false
+    self.isFocus = false
+  log:exit(depth)
   return self
 end
-
-
--------------------------------------------------------------------------------
--- TYPE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function Piece:__tostring() 
-  local s = "piece[" .. Player.tostring(self.color)
-  if self.pos then
-    s = s.." "..tostring(self.pos)
+  local s = "piece["
+  if self.color ~= nil then
+    s = s.. Player.tostring(self.color)
   end
-  for k in pairs(self.powers) do
-		s = s.. " ".. k
-	end
-  return s.."]"
+  if self.pos then
+    s = s.. " ".. tostring(self.pos)
+  end
+  if self.powers then
+    for k in pairs(self.powers) do
+      s = s.. " ".. k
+    end
+  end
+  return s.. "]"
 end
+-------------------------------------------------------------------------------
+function Piece:set_color(color)
+  self.log:trace(self, ":set_color ", color):enter()
+    Color.ass(color)
 
-function Piece:typename()
-  return "Piece"
+    -- nothing to change
+    if color ~= self.clolor then
+      -- save color
+      self.color = color
+
+      -- change image
+      if self.img then
+        self.img:removeSelf()
+      end
+      self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
+    end
+
+  self.log:exit()
 end
-
-
-
 -------------------------------------------------------------------------------
 function Piece:die()
   self.view:removeSelf()
@@ -114,7 +129,7 @@ function Piece:move_before(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Piece:move(cell_from, cell_to)
-  self.log:trace(self, ":move to ", cell_to):enter()
+  local depth = self.log:trace(self, ":move to ", cell_to):enter()
     if cell_from then
       assert(cell_from.piece == self)
       cell_from:leave()           -- get piece at from position
@@ -126,12 +141,13 @@ function Piece:move(cell_from, cell_to)
 
     for _, power in ipairs(self.powers) do
       if power:move(vec) then
+        self.log:exit()
         return true
       end
     end
 
     self:_update_group_pos()
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 function Piece:move_after(cell_from, cell_to)
@@ -216,6 +232,7 @@ function Piece:remove_power(name)
     end
   self.log:exit()
 end
+
 
 -------------------------------------------------------------------------------
 -- PRIVATE---------------------------------------------------------------------

@@ -2,7 +2,10 @@ local vec   = require "src.core.vec"
 local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 
-Cell = {}
+Cell =
+{
+  typename = "Cell"
+}
 Cell.__index = Cell
 function Cell:__tostring() return "cell["..tostring(self.pos).."]" end
 

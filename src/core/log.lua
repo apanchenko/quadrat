@@ -1,34 +1,39 @@
-local _ = require 'src.core.underscore'
+local _   = require 'src.core.underscore'
+local ass = require 'src.core.ass'
 
-local log = {}
-log.__index = log
+local Log =
+{
+  typename = "log"
+}
+Log.__index = Log
 
-function log.new()
-  local self = setmetatable({}, log)
+function Log.new()
+  local self = setmetatable({}, Log)
   self.depth = 0
   return self
 end
 
-function log.name()
-  return "log"
-end
-
-function log:enter()
+-- increase stack depth
+function Log:enter()
   self.depth = self.depth + 1
-  return self
+  return self.depth
 end
 
-function log:exit()
-  self.depth = self.depth - 1
-  return self
-end
-
-function log:trace(...)
+-- chained to instantly call :enter()
+function Log:trace(...)
   local str = string.rep("  ", self.depth)
-  str = _.reduce(arg, str, function(mem, a) return mem .. tostring(a) end)
+  str = _.reduce(arg, str, function(mem, a) return mem.. tostring(a) end)
   print(str)
   return self
 end
 
+-- decrease stack depth
+function Log:exit(check_depth)
+  if check_depth ~= nil then
+    assert(self.depth == check_depth)
+  end
 
-return log
+  self.depth = self.depth - 1
+end
+
+return Log

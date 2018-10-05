@@ -77,10 +77,12 @@ function Board:position_minimal()
 end
 -------------------------------------------------------------------------------
 function Board:put(color, x, y)
-  assert(0 <= x and x < self.cols)
-  assert(0 <= y and y < self.rows)
-  local piece = Piece(self.log, color)                -- create a new piece
-  piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
+  local log_depth = self.log:trace(self, ":put"):enter()
+    assert(0 <= x and x < self.cols)
+    assert(0 <= y and y < self.rows)
+    local piece = Piece.new(self.log, color)                -- create a new piece
+    piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
+  self.log:exit(log_depth)
 end
 -------------------------------------------------------------------------------
 function Board:cell(pos)
