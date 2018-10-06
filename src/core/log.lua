@@ -7,6 +7,7 @@ local Log =
 }
 Log.__index = Log
 
+-- create new Log object
 function Log.new()
   local self = setmetatable({}, Log)
   self.depth = 0
@@ -28,12 +29,9 @@ function Log:trace(...)
 end
 
 -- decrease stack depth
-function Log:exit(check_depth)
-  if check_depth ~= nil then
-    assert(self.depth == check_depth)
-  end
-
-  self.depth = self.depth - 1
+function Log:exit(depth)
+  assert(self.depth == depth)
+  self.depth = depth - 1
 end
 
 return Log

@@ -7,6 +7,7 @@ local vec      = require "src.core.vec"
 local Player   = require "src.Player"
 local cfg      = require "src.Config"
 local lay      = require "src.core.lay"
+local Color    = require 'src.battle.Color'
 
 -- variables
 local battle = composer.newScene()
@@ -25,10 +26,10 @@ function battle:create(event)
 
   -- players
   self.players = {}
-  self.players[Player.R] = Player(Player.R, "Salvador")
-  self.players[Player.B] = Player(Player.B, "Gala")
-  lay.render(self.view, self.players[Player.R].view, cfg.player.red)
-  lay.render(self.view, self.players[Player.B].view, cfg.player.black)
+  self.players[Color.R] = Player(Color.R, "Salvador")
+  self.players[Color.B] = Player(Color.B, "Gala")
+  lay.render(self.view, self.players[Color.R].view, cfg.player.red)
+  lay.render(self.view, self.players[Color.B].view, cfg.player.black)
 
   -- board
   self.board = Board.new(self.log)

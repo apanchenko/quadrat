@@ -18,7 +18,7 @@ end
 -------------------------------------------------------------------------------
 -- add random ability
 function PieceAbilities:add()
-  self.log:trace(self, ":add"):enter()
+  local depth = self.log:trace(self, ":add"):enter()
     local ability = Ability.new()
     local name = tostring(ability)
     if self.list[name] then
@@ -26,7 +26,7 @@ function PieceAbilities:add()
     else
       self.list[name] = ability
     end
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 -- return true if empty
@@ -36,7 +36,7 @@ end
 -------------------------------------------------------------------------------
 -- show on board
 function PieceAbilities:show(battle_group)
-  self.log:trace(self, ":show"):enter()
+  local depth = self.log:trace(self, ":show"):enter()
     assert(self.view == nil)                 -- check is hidden now
     self.view = display.newGroup()
 
@@ -53,7 +53,7 @@ function PieceAbilities:show(battle_group)
     end
     lay.column(self)
     lay.render(battle_group, self, cfg.abilities)
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 -- hide from board when piece deselected

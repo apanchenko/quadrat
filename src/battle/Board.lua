@@ -3,7 +3,7 @@ local Piece   = require "src.battle.Piece"
 local vec     = require "src.core.vec"
 local Player  = require "src.Player"
 local cfg     = require "src.Config"
-local str     = tostring
+local Color   = require 'src.battle.Color'
 
 Board = {}
 Board.__index = Board
@@ -36,7 +36,7 @@ function Board.new(log)
   end
   end
 
-  self.color = Player.R
+  self.color = Color.R
 
   self.view.anchorChildren = true          -- center on screen
   vec.center(self.view)
@@ -61,18 +61,18 @@ end
 function Board:position_default()
   local lastrow = self.rows - 1
   for x = 0, self.cols - 1 do
-    self:put(Player.R, x, 0)
-    self:put(Player.R, x, 1)
-    self:put(Player.B, x, lastrow)
-    self:put(Player.B, x, lastrow - 1)
+    self:put(Color.R, x, 0)
+    self:put(Color.R, x, 1)
+    self:put(Color.B, x, lastrow)
+    self:put(Color.B, x, lastrow - 1)
   end
 end
 -------------------------------------------------------------------------------
 -- one row initial position
 function Board:position_minimal()
   for x = 0, self.cols - 1 do
-    self:put(Player.R, x, 0)
-    self:put(Player.B, x, self.rows - 1)
+    self:put(Color.R, x, 0)
+    self:put(Color.B, x, self.rows - 1)
   end
 end
 -------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ function Board:count_pieces()
   for k, cell in ipairs(self.grid) do
     local piece = cell.piece
     if piece then
-      if piece.color == Player.R then
+      if piece.color == Color.R then
         red = red + 1
       else
         bla = bla + 1

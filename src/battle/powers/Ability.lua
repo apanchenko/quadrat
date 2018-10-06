@@ -3,9 +3,10 @@ local Multiply     = require 'src.battle.powers.Multiply'
 local Rehash       = require 'src.battle.powers.Rehash'
 local Relocate     = require 'src.battle.powers.Relocate'
 local Recruit      = require 'src.battle.powers.Recruit'
+local Swap         = require 'src.battle.powers.Swap'
 local Zones        = require 'src.battle.zones.Zones'
 
-local Powers = {MoveDiagonal, Multiply, Rehash, Relocate, Recruit}
+local Powers = {MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap}
 
 -- Ability has a potential to become certain power.
 local Ability = {typename="Ability"}

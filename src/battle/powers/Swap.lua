@@ -2,23 +2,24 @@ local vec = require "src.core.vec"
 local lay = require "src.core.lay"
 local cfg = require "src.Config"
 local Zones = require 'src.battle.zones.Zones'
+local Color = require 'src.battle.Color'
 
-local Recruit =
+local Swap =
 {
-  typename = "Recruit",
+  typename = "Swap",
   is_areal = true
 }
-Recruit.__index = Recruit
+Swap.__index = Swap
 
 -------------------------------------------------------------------------------
-function Recruit.new(Zone)
+function Swap.new(Zone)
   assert(Zone)
-  local self = setmetatable({}, Recruit)
+  local self = setmetatable({}, Swap)
   self.Zone = Zone
   return self
 end
 -------------------------------------------------------------------------------
-function Recruit:apply(piece)
+function Swap:apply(piece)
   local log = piece.log
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
@@ -27,15 +28,15 @@ function Recruit:apply(piece)
     for i = 1, #cells do
       local p = cells[i].piece
       if p then
-        p:set_color(piece.color)
+        p:set_color(Color.swap(piece.color))
       end
     end
   log:exit(depth)
   return nil
 end
 -------------------------------------------------------------------------------
-function Recruit:__tostring()
-  return "Recruit ".. self.Zone.typename
+function Swap:__tostring()
+  return Swap.typename.. self.Zone.typename
 end
 
-return Recruit
+return Swap

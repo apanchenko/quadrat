@@ -37,6 +37,7 @@ Methods:
 -----------------------------------------------------------------------------]]--
 function Piece.new(log, color)
   ass.is(log, "log")
+  Color.ass(color)
   local depth = log:trace("Piece.new"):enter()
     local self = setmetatable({log = log}, Piece)
     self.view = display.newGroup()
@@ -54,7 +55,7 @@ end
 function Piece:__tostring() 
   local s = "piece["
   if self.color ~= nil then
-    s = s.. Player.tostring(self.color)
+    s = s.. Color.string(self.color)
   end
   if self.pos then
     s = s.. " ".. tostring(self.pos)
@@ -68,7 +69,7 @@ function Piece:__tostring()
 end
 -------------------------------------------------------------------------------
 function Piece:set_color(color)
-  self.log:trace(self, ":set_color ", color):enter()
+  local depth = self.log:trace(self, ":set_color ", Color.string(color)):enter()
     Color.ass(color)
 
     -- nothing to change
@@ -81,11 +82,11 @@ function Piece:set_color(color)
         self.img:removeSelf()
       end
       cfg.cell.order = 1
-      self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
+      self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Color.string(self.color)..".png")
       cfg.cell.order = nil
     end
 
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 function Piece:die()
@@ -143,7 +144,7 @@ function Piece:move(cell_from, cell_to)
 
     for _, power in ipairs(self.powers) do
       if power:move(vec) then
-        self.log:exit()
+        self.log:exit(depth)
         return true
       end
     end
@@ -153,11 +154,11 @@ function Piece:move(cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
 function Piece:move_after(cell_from, cell_to)
-  self.log:trace(self, ":move_after"):enter()
+  local depth = self.log:trace(self, ":move_after"):enter()
     for name, power in pairs(self.powers) do
       power:move_after(self, self.board, cell_from, cell_to)
     end
-  self.log:exit()
+  self.log:exit(depth)
 end
 
 
@@ -167,12 +168,12 @@ end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
 function Piece:select()
-  self.log:trace(self, ":select"):enter()
+  local depth = self.log:trace(self, ":select"):enter()
     assert(self.isSelected == false)
     self.isSelected = true                    -- set selected
     self:_update_group_pos()                  -- adjust group position
     self.abilities:show(self.board.view.parent)           -- show abilities list
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
@@ -199,7 +200,7 @@ function Piece:add_ability()
 end
 -------------------------------------------------------------------------------
 function Piece:use_ability(ability)
-  self.log:trace(self, ":use_ability ", ability):enter()
+  local depth = self.log:trace(self, ":use_ability ", ability):enter()
     self:add_power(ability)                   -- increase power
     self.board:select(nil)                  -- remove selection if was selected
 
@@ -209,30 +210,30 @@ function Piece:use_ability(ability)
       self.able:removeSelf()
       self.able = nil
     end
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 function Piece:add_power(ability)
   local name = tostring(ability)
-  self.log:trace(self, ":add_power ", name):enter()
+  local depth = self.log:trace(self, ":add_power ", name):enter()
     local p = self.powers[name]
     if p then
       p:increase()
     else
       self.powers[name] = ability:create_power():apply(self)
     end
-  self.log:exit()
+  self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
 function Piece:remove_power(name)
-  self.log:trace(self, ":remove_power ", name):enter()
+  local depth = self.log:trace(self, ":remove_power ", name):enter()
     local p = self.powers[name]
     if p then
       if not p:decrease() then
         self.powers[name] = nil
       end
     end
-  self.log:exit()
+  self.log:exit(depth)
 end
 
 
@@ -241,6 +242,7 @@ end
 -------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
+  --self.log:trace(self, ":touch phase ", event.phase)
   if self.board:is_color(self.color) == false then
     return true
   end
@@ -249,7 +251,7 @@ function Piece:touch(event)
     if self.isSelected == false then
       self.board:select(nil)                -- deselect another piece
     end
-    self:_set_focus(event.id)
+    self:set_focus(event.id)
     self.mark = vec.from(self.view)
 
   elseif self.isFocus then
@@ -270,7 +272,7 @@ function Piece:touch(event)
       end
 
     elseif event.phase == "ended" or event.phase == "cancelled" then
-      self:_set_focus(nil)
+      self:set_focus(nil)
       self:_remove_project()
       if self.proj then
         self.board:player_move(self.pos, self.proj)
@@ -292,7 +294,7 @@ end
 -------------------------------------------------------------------------------
 function Piece:_create_project()
   if not self.project then
-    local path = "src/battle/piece_"..Player.tostring(self.color).."_project.png"
+    local path = "src/battle/piece_"..Color.string(self.color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
     vec.copy(self.view, self.project)
   end
@@ -305,7 +307,8 @@ function Piece:_remove_project()
   end
 end
 -------------------------------------------------------------------------------
-function Piece:_set_focus(eventId)
+function Piece:set_focus(eventId)
+  self.log:trace(self, ":set_focus")
   display.getCurrentStage():setFocus(self.view, eventId)
   self.isFocus = (eventId ~= nil)
 end

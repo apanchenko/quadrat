@@ -9,6 +9,11 @@ function ass.natural(num)
   assert(num >= 0)
 end
 
+-- check 'value' is a string
+function ass.string(value, name)
+  ass.type(value, "string", name)
+end
+
 -- check 'value' is a basic type
 function ass.type(value, typename, name)
   name = name or "value"
