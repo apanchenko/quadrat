@@ -28,7 +28,11 @@ local function render(target, obj, opts)
     obj:scale(scale, scale)
   end
 
-  target:insert(obj)
+  if opts.order == nil then
+    target:insert(obj)
+  else
+    target:insert(opts.order, obj)
+  end
 end
 lay.render = render
 

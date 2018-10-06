@@ -80,7 +80,9 @@ function Piece:set_color(color)
       if self.img then
         self.img:removeSelf()
       end
+      cfg.cell.order = 1
       self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Player.tostring(self.color)..".png")
+      cfg.cell.order = nil
     end
 
   self.log:exit()
