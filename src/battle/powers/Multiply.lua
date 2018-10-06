@@ -7,7 +7,7 @@ local Multiply =
   typename = "Multiply",
   is_areal = false
 }
-Multiply.__index = PowerMultiply
+Multiply.__index = Multiply
 
 -------------------------------------------------------------------------------
 function Multiply.new(Zone)
@@ -26,7 +26,7 @@ function Multiply:apply(piece)
 end
 -------------------------------------------------------------------------------
 function Multiply:__tostring()
-  return PowerMultiply.typename.. "[".. self.count.. "]"
+  return Multiply.typename.. "[".. self.count.. "]"
 end
 -------------------------------------------------------------------------------
 function Multiply:increase()

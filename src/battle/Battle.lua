@@ -19,7 +19,7 @@ function battle:create(event)
   self.log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
 
   -- background
-  lay.image(self.view, cfg.battle.bg)
+  lay.image(self, cfg.battle.bg)
 
   -- move pointer
   self.move_pointer = lay.image(self.view, cfg.battle.arrow)
@@ -28,18 +28,15 @@ function battle:create(event)
   self.players = {}
   self.players[Color.R] = Player(Color.R, "Salvador")
   self.players[Color.B] = Player(Color.B, "Gala")
-  lay.render(self.view, self.players[Color.R].view, cfg.player.red)
-  lay.render(self.view, self.players[Color.B].view, cfg.player.black)
+  lay.render(self, self.players[Color.R].view, cfg.player.red)
+  lay.render(self, self.players[Color.B].view, cfg.player.black)
 
   -- board
-  self.board = Board.new(self.log)
+  self.board = Board.new(self)
   self.board:set_tomove_listener(self)
-  lay.render(self.view, self.board.view, cfg.board)
-
-
+  self.board:position_minimal()
   self.log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
 
-  self.board:position_minimal()
   self.jade_moves = cfg.jade.moves
 end
 

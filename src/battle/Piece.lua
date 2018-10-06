@@ -149,7 +149,7 @@ function Piece:move(cell_from, cell_to)
       end
     end
 
-    self:_update_group_pos()
+    self:update_group_pos()
   self.log:exit(depth)
 end
 -------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ function Piece:select()
   local depth = self.log:trace(self, ":select"):enter()
     assert(self.isSelected == false)
     self.isSelected = true                    -- set selected
-    self:_update_group_pos()                  -- adjust group position
+    self:update_group_pos()                  -- adjust group position
     self.abilities:show(self.board.view.parent)           -- show abilities list
   self.log:exit(depth)
 end
@@ -179,9 +179,11 @@ end
 -- to be called from Board. Use self.board:select instead
 function Piece:deselect()
   if self.isSelected then
-    self.isSelected = false                   -- set not selected
-    self:_update_group_pos()                  -- adgjust group position
-    self.abilities:hide()
+    local depth = self.log:trace(self, ":deselect"):enter()
+      self.isSelected = false                   -- set not selected
+      self:update_group_pos()                  -- adgjust group position
+      self.abilities:hide()
+    self.log:exit(depth)
   end
 end
 
@@ -263,17 +265,17 @@ function Piece:touch(event)
       vec.copy(shift, self.view)
 
       if self.board:can_move(self.pos, proj) then
-        self:_create_project()
+        self:create_project()
         self.proj = proj
         vec.copy(proj * cfg.cell.size, self.project)
       else
-        self:_remove_project()
+        self:remove_project()
         self.proj = nil
       end
 
     elseif event.phase == "ended" or event.phase == "cancelled" then
       self:set_focus(nil)
-      self:_remove_project()
+      self:remove_project()
       if self.proj then
         self.board:player_move(self.pos, self.proj)
         self.board:select(nil)              -- deselect any
@@ -292,7 +294,7 @@ function Piece:touch(event)
   return true
 end
 -------------------------------------------------------------------------------
-function Piece:_create_project()
+function Piece:create_project()
   if not self.project then
     local path = "src/battle/piece_"..Color.string(self.color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
@@ -300,7 +302,7 @@ function Piece:_create_project()
   end
 end
 -------------------------------------------------------------------------------
-function Piece:_remove_project()
+function Piece:remove_project()
   if self.project then
     self.project:removeSelf()
     self.project = nil
@@ -311,9 +313,16 @@ function Piece:set_focus(eventId)
   self.log:trace(self, ":set_focus")
   display.getCurrentStage():setFocus(self.view, eventId)
   self.isFocus = (eventId ~= nil)
+
+  if self.isFocus then
+    self.board.hover:insert(self.view)
+  else
+    self.board.view:insert(self.view)
+  end
+
 end
 -------------------------------------------------------------------------------
-function Piece:_update_group_pos()
+function Piece:update_group_pos()
   local pos = self.pos * cfg.cell.size
   if self.isSelected then
     pos.y = pos.y - 10

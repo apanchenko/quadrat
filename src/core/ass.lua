@@ -9,6 +9,11 @@ function ass.natural(num)
   assert(num >= 0)
 end
 
+-- check 'value' is a table
+function ass.table(value, name)
+  ass.type(value, "table", name)
+end
+
 -- check 'value' is a string
 function ass.string(value, name)
   ass.type(value, "string", name)

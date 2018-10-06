@@ -4,6 +4,8 @@ local vec     = require "src.core.vec"
 local Player  = require "src.Player"
 local cfg     = require "src.Config"
 local Color   = require 'src.battle.Color'
+local lay     = require 'src.core.lay'
+local ass     = require 'src.core.ass'
 
 Board = {}
 Board.__index = Board
@@ -21,11 +23,14 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board.new(log)
-  local self = setmetatable({log = log}, Board)
+function Board.new(env)
+  ass.table(env, "env")
+
+  local self = setmetatable({log = env.log}, Board)
   self.cols = cfg.board.cols
   self.rows = cfg.board.rows
-  self.view = display.newGroup()           -- disply group
+  self.view = display.newGroup()
+  self.hover = display.newGroup()
 
   self.grid = {}
   for i = 0, self.cols - 1 do
@@ -40,7 +45,8 @@ function Board.new(log)
 
   self.view.anchorChildren = true          -- center on screen
   vec.center(self.view)
-
+  lay.render(env, self.view, cfg.board)
+  lay.render(env, self.hover, cfg.board)
   return self
 end
 

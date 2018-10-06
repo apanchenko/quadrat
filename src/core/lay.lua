@@ -1,4 +1,5 @@
-local cfg = require "src.Config"
+local cfg = require 'src.Config'
+local ass = require 'src.core.ass'
 
 lay = {}
 
@@ -10,29 +11,29 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 local function render(target, obj, opts)
-  assert(target, "group is nil")
-  assert(obj, "object is nil")
-  assert(opts, "opts is nil")
+  ass.table(target, "target")
+  ass.table(obj, "object")
+  ass.table(opts, "opts")
 
   target = target.view or target
-  obj = obj.view or obj
-
-  obj.anchorX = opts.anchorX or 0
-  obj.anchorY = opts.anchorY or 0
-
-  obj.x = opts.x or (cfg.vw * (opts.vx or 0))
-  obj.y = opts.y or (cfg.vh * (opts.vy or 0))
+  child = obj.view or obj
+  child.anchorX = opts.anchorX or 0
+  child.anchorY = opts.anchorY or 0
+  child.x = opts.x or (cfg.vw * (opts.vx or 0))
+  child.y = opts.y or (cfg.vh * (opts.vy or 0))
 
   if opts.vw then
     local scale = cfg.vw * opts.vw / obj.width
-    obj:scale(scale, scale)
+    child:scale(scale, scale)
   end
 
   if opts.order == nil then
-    target:insert(obj)
+    target:insert(child)
   else
-    target:insert(opts.order, obj)
+    target:insert(opts.order, child)
   end
+
+  return obj
 end
 lay.render = render
 
@@ -62,7 +63,7 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 function lay.image(group, opts, path)
-  assert(opts)
+  ass.table(opts, "opts")
 
   path = path or opts.path
 
@@ -92,7 +93,7 @@ opts:
   fontSize
 -----------------------------------------------------------------------------]]--
 function lay.text(group, opts)
-  assert(opts)
+  ass.table(opts, "opts")
 
   if opts.font == nil then
     opts.font = cfg.font                    -- select default font

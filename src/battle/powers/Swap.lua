@@ -28,7 +28,7 @@ function Swap:apply(piece)
     for i = 1, #cells do
       local p = cells[i].piece
       if p then
-        p:set_color(Color.swap(piece.color))
+        p:set_color(Color.swap(p.color))
       end
     end
   log:exit(depth)
