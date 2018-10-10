@@ -36,8 +36,8 @@ end
 -------------------------------------------------------------------------------
 -- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function PowerMoveDiagonal:can_move(vec)
-  --print("PowerMoveDiagonal:can_move vec "..tostring(vec))
+function PowerMoveDiagonal:can_move(from, to)
+  local vec = from - to
   return (vec.x==1 or vec.x==-1) and (vec.y==1 or vec.y==-1)
 end
 -------------------------------------------------------------------------------

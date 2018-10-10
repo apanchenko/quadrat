@@ -8,7 +8,7 @@ Radial.__index = Radial
 
 -------------------------------------------------------------------------------
 function Radial.new(pos)
-  ass.is(pos, "vec")
+  ass.is(pos, "Vec")
 
   local self = setmetatable({}, Radial)
   self.pos = pos
@@ -23,7 +23,7 @@ function Radial:filter(cell)
   ass.is(cell, "Cell")
 
   local distance = (cell.pos - self.pos):length2()
-  return distance == 1 or distance == 2
+  return distance < 3
 end
 
 return Radial

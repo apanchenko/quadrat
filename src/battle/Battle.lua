@@ -1,13 +1,13 @@
--- imports
-local log      = require 'src.core.log'
 local composer = require "composer"
 local Board    = require "src.battle.Board"
 local Piece    = require "src.battle.Piece"
 local vec      = require "src.core.vec"
 local Player   = require "src.Player"
-local cfg      = require "src.Config"
-local lay      = require "src.core.lay"
 local Color    = require 'src.battle.Color'
+local cfg      = require 'src.Config'
+local lay      = require 'src.core.lay'
+local ass      = require 'src.core.ass'
+local log      = require 'src.core.log'
 
 -- variables
 local battle = composer.newScene()
@@ -15,8 +15,7 @@ local battle = composer.newScene()
 -------------------------------------------------------------------------------
 -- battle scene
 function battle:create(event)
-  self.log = log.new()
-  self.log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
+  log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
 
   -- background
   lay.image(self, cfg.battle.bg)
@@ -28,14 +27,14 @@ function battle:create(event)
   self.players = {}
   self.players[Color.R] = Player(Color.R, "Salvador")
   self.players[Color.B] = Player(Color.B, "Gala")
-  lay.render(self, self.players[Color.R].view, cfg.player.red)
-  lay.render(self, self.players[Color.B].view, cfg.player.black)
+  lay.render(self, self.players[Color.R], cfg.player.red)
+  lay.render(self, self.players[Color.B], cfg.player.black)
 
   -- board
   self.board = Board.new(self)
   self.board:set_tomove_listener(self)
   self.board:position_minimal()
-  self.log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
+  log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
 
   self.jade_moves = cfg.jade.moves
 end
@@ -58,17 +57,17 @@ function battle:tomove(color)
 
   -- check if black wins
   if red == 0 then                          
-    self:_win "Black wins!!!"
+    self:win "Black wins!!!"
     return
   end
 
   -- check if red wins
   if bla == 0 then
-    self:_win "Red wins!!!"
+    self:win "Red wins!!!"
     return
   end
 
-  self.log:trace(self.players[color].name, " is going to move. Red: ", red, ". Black: ", bla)
+  log:trace(self.players[color].name, " is going to move. Red: ", red, ". Black: ", bla)
 
   -- move pointer
   transition.moveTo(self.move_pointer, {y=self.players[color].view.y, time=500})
@@ -83,7 +82,7 @@ function battle:tomove(color)
 end
 
 -------------------------------------------------------------------------------
-function battle:_win(message)
+function battle:win(message)
   lay.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
 end
 

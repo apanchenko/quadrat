@@ -1,24 +1,26 @@
 local _         = require 'src.core.underscore'
 local widget    = require "widget"
 local vec       = require "src.core.vec"
-local cfg       = require "src.Config"
-local ass       = require "src.core.ass"
 local Ability   = require "src.battle.powers.Ability"
+local cfg       = require 'src.Config'
+local lay       = require 'src.core.lay'
+local ass       = require 'src.core.ass'
+local log       = require 'src.core.log'
 
 PieceAbilities = {}
 PieceAbilities.__index = PieceAbilities
 function PieceAbilities:__tostring() return "PieceAbilities" end
 
--------------------------------------------------------------------------------
 -- A set of abilities a piece have.
 function PieceAbilities.new(piece)
-  local self = setmetatable({log=piece.log, list={}, piece=piece}, PieceAbilities)
+  ass.is(piece, "Piece")
+  local self = setmetatable({list={}, piece=piece}, PieceAbilities)
   return self
 end
--------------------------------------------------------------------------------
+
 -- add random ability
-function PieceAbilities:add()
-  local depth = self.log:trace(self, ":add"):enter()
+function PieceAbilities:add(env)
+  local depth = log:trace(self, ":add"):enter()
     local ability = Ability.new()
     local name = tostring(ability)
     if self.list[name] then
@@ -26,17 +28,17 @@ function PieceAbilities:add()
     else
       self.list[name] = ability
     end
-  self.log:exit(depth)
+  log:exit(depth)
 end
--------------------------------------------------------------------------------
+
 -- return true if empty
 function PieceAbilities:is_empty()
   return _.is_empty(self.list)
 end
--------------------------------------------------------------------------------
+
 -- show on board
-function PieceAbilities:show(battle_group)
-  local depth = self.log:trace(self, ":show"):enter()
+function PieceAbilities:show(env)
+  local depth = log:trace(self, ":show"):enter()
     assert(self.view == nil)                 -- check is hidden now
     self.view = display.newGroup()
 
@@ -45,27 +47,26 @@ function PieceAbilities:show(battle_group)
       opts.id = name
       opts.label = name.. " ".. ability:get_count()
       opts.onRelease = function(event)
-        self:use(event)
+        self:use(event.target.id)
         return true
       end
-      self.log:trace(opts.label)
+      log:trace(opts.label)
       lay.render(self, widget.newButton(opts), {})
     end
     lay.column(self)
-    lay.render(battle_group, self, cfg.abilities)
-  self.log:exit(depth)
+    lay.render(self.piece.board.battle, self, cfg.abilities)
+  log:exit(depth)
 end
--------------------------------------------------------------------------------
+
 -- hide from board when piece deselected
 function PieceAbilities:hide()
   assert(self.view)                        -- check shown
   self.view:removeSelf()
   self.view = nil
 end
--------------------------------------------------------------------------------
+
 -- use instant ability or create power
-function PieceAbilities:use(event)
-  local name = event.target.id
+function PieceAbilities:use(name)
   local ability = self.list[name]
   self.list[name] = ability:decrease()
   self.piece:use_ability(ability)

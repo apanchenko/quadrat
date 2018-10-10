@@ -1,8 +1,9 @@
-local vec = require "src.core.vec"
-local lay = require "src.core.lay"
-local cfg = require "src.Config"
-local Zones = require 'src.battle.zones.Zones'
-local Color = require 'src.battle.Color'
+local vec       = require "src.core.vec"
+local lay       = require "src.core.lay"
+local cfg       = require "src.Config"
+local Zones     = require 'src.battle.zones.Zones'
+local Color     = require 'src.battle.Color'
+local log       = require 'src.core.log'
 
 local Swap =
 {
@@ -20,7 +21,6 @@ function Swap.new(Zone)
 end
 -------------------------------------------------------------------------------
 function Swap:apply(piece)
-  local log = piece.log
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
     local zone = self.Zone.new(piece.pos)

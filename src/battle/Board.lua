@@ -1,11 +1,12 @@
-local Cell    = require "src.battle.Cell"
-local Piece   = require "src.battle.Piece"
-local vec     = require "src.core.vec"
-local Player  = require "src.Player"
-local cfg     = require "src.Config"
-local Color   = require 'src.battle.Color'
-local lay     = require 'src.core.lay'
-local ass     = require 'src.core.ass'
+local Cell     = require 'src.battle.Cell'
+local Piece    = require 'src.battle.Piece'
+local vec      = require 'src.core.vec'
+local Player   = require 'src.Player'
+local Color    = require 'src.battle.Color'
+local cfg      = require 'src.Config'
+local lay      = require 'src.core.lay'
+local ass      = require 'src.core.ass'
+local log      = require 'src.core.log'
 
 Board = {}
 Board.__index = Board
@@ -23,10 +24,9 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board.new(env)
-  ass.table(env, "env")
-
-  local self = setmetatable({log = env.log}, Board)
+function Board.new(battle)
+  local self = setmetatable({}, Board)
+  self.battle = battle
   self.cols = cfg.board.cols
   self.rows = cfg.board.rows
   self.view = display.newGroup()
@@ -45,8 +45,8 @@ function Board.new(env)
 
   self.view.anchorChildren = true          -- center on screen
   vec.center(self.view)
-  lay.render(env, self.view, cfg.board)
-  lay.render(env, self.hover, cfg.board)
+  lay.render(self.battle, self.view, cfg.board)
+  lay.render(self.battle, self.hover, cfg.board)
   return self
 end
 
@@ -83,12 +83,12 @@ function Board:position_minimal()
 end
 -------------------------------------------------------------------------------
 function Board:put(color, x, y)
-  local log_depth = self.log:trace(self, ":put"):enter()
+  local log_depth = log:trace(self, ":put"):enter()
     assert(0 <= x and x < self.cols)
     assert(0 <= y and y < self.rows)
-    local piece = Piece.new(self.log, color)                -- create a new piece
+    local piece = Piece.new(color)                -- create a new piece
     piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
-  self.log:exit(log_depth)
+  log:exit(log_depth)
 end
 -------------------------------------------------------------------------------
 function Board:cell(pos)

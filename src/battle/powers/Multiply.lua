@@ -1,6 +1,7 @@
-local vec = require "src.core.vec"
-local lay = require "src.core.lay"
-local cfg = require "src.Config"
+local vec       = require "src.core.vec"
+local lay       = require "src.core.lay"
+local cfg       = require "src.Config"
+local log       = require 'src.core.log'
 
 local Multiply =
 {
@@ -19,7 +20,6 @@ end
 -------------------------------------------------------------------------------
 function Multiply:apply(piece)
   assert(self.count == 0)
-  self.log = piece.log
   self.count = 1
   self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
   return self
@@ -30,15 +30,15 @@ function Multiply:__tostring()
 end
 -------------------------------------------------------------------------------
 function Multiply:increase()
-  local depth = self.log:trace(self, ":increase"):enter()
+  local depth = log:trace(self, ":increase"):enter()
     self.count = self.count + 1
     self.text.text = tostring(self.count + 1)
-  self.log:exit(depth)
+  log:exit(depth)
 end
 -------------------------------------------------------------------------------
 -- return self to persist or nil to cease
 function Multiply:decrease()
-  local depth = self.log:trace(self, ":decrease"):enter()
+  local depth = log:trace(self, ":decrease"):enter()
     local result = self
     if self.count <= 1 then
       result = nil
@@ -47,7 +47,7 @@ function Multiply:decrease()
       self.count = self.count - 1
       self.text.text = tostring(self.count + 1)
     end
-  self.log:exit(depth)
+  log:exit(depth)
   return result
 end
 
@@ -66,10 +66,10 @@ function Multiply:move(vec)
 end
 -------------------------------------------------------------------------------
 function Multiply:move_after(piece, board, cell_from, cell_to)
-  local depth = self.log:trace(self, ":move_after from ", cell_from, " to ", cell_to):enter()
+  local depth = log:trace(self, ":move_after from ", cell_from, " to ", cell_to):enter()
     board:put(piece.color, cell_from.pos.x, cell_from.pos.y)
     piece:remove_power(Multiply.typename)
-  self.log:exit(depth)
+  log:exit(depth)
 end
 
 return Multiply

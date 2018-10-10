@@ -3,6 +3,12 @@ local ass =
   typename = "ass"
 }
 
+-- check 'value' is nil
+function ass.nul(value, name)
+  name = name or "value"
+  assert(value == nil, name.. " is not nil")
+end
+
 -- check 'num' is natural number
 function ass.natural(num)
   ass.type(num, "number")
