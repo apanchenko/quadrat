@@ -116,6 +116,8 @@ end
 -------------------------------------------------------------------------------
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
+--(  local logdepth = log:enter()
+
   -- check move rights
   local actor = self:cell(fr).piece        -- peek piece at from position
   if actor == nil then                      -- check if it exists
@@ -133,8 +135,13 @@ function Board:can_move(fr, to)
   -- check kill ability
   local tocell = self:cell(to)
   local victim = tocell.piece               -- peek piece at to position
-  if victim and victim.color == actor.color then
-    return false                            -- can not kill piece of the same breed
+  if victim then
+    if victim.color == actor.color then
+      return false                            -- can not kill piece of the same breed
+    end
+    if victim:is_jump_protected() then
+      return false
+    end
   end
 
   return true

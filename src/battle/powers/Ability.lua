@@ -5,11 +5,14 @@ local Relocate     = require 'src.battle.powers.Relocate'
 local Recruit      = require 'src.battle.powers.Recruit'
 local Swap         = require 'src.battle.powers.Swap'
 local Sphere       = require 'src.battle.powers.Sphere'
+local Impeccable   = require 'src.battle.powers.Impeccable'
 local Zones        = require 'src.battle.zones.Zones'
 
-local Powers = {
-  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap,
-   Sphere}
+local Powers =
+{
+  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
+  Impeccable
+}
 
 -- Ability has a potential to become certain power.
 local Ability = {typename="Ability"}

@@ -11,7 +11,7 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
 - ground mods:       refurb, power plant, 
 - piece mods:        bankrupt, network, spyware, invis, jump proof, rat tail, purify, inhibit
-- move powers:       sphere, hotspot, switcheroo, centerpult, tripwire, scrable
+- move powers:       hotspot, switcheroo, centerpult, tripwire, scrable
 - ability powers:    teach, learn, pilfer, parasite, 2x, benefactor, scavenger
 - attack powers:     bombs, kamikadze, destroy, acidic
 - orb mods:          orbspy
@@ -23,11 +23,14 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 - build for web
 ### market
 
+## ideas
+- power Ethereal - cannot pass through other pieces, not killing them. Cannot be killed eighter. But still can cast abilities.
+
 ## done:
 - ground level mods: 
 - ground mods:       
 - piece mods:        
-- move powers:       relocate, diagonal
+- move powers:       relocate, diagonal, sphere
 - ownership powers:  recruit, swap
 - ability powers:    
 - attack powers:     

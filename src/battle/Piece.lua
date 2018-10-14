@@ -122,6 +122,20 @@ function Piece:can_move(to)
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
 -------------------------------------------------------------------------------
+-- if can be jumed by opponent piece
+function Piece:is_jump_protected()
+  for _, p in pairs(self.powers) do
+    log:trace("  ", p.typename, " ", p.is_jump_protected)
+    if p.is_jump_protected then
+      log:trace(p.typename, ":jp true")
+      return true
+    end
+  end
+  log:trace(self, ":jp false")
+  return false
+
+end
+-------------------------------------------------------------------------------
 function Piece:move_before(cell_from, cell_to)
   _.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
 end
