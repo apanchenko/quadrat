@@ -31,6 +31,24 @@ settings =
 		},
 	},
 
+	win32 =
+	{
+			-- Settings for Win32 apps go here
+	},
+	window =
+	{
+			defaultViewWidth = 640,
+			defaultViewHeight = 960,
+			titleText = {
+				default = "Window Title Test",
+				["en‐us"] = "Window Title Test (English‐USA)",
+				["en‐gb"] = "Window Title Test (English‐UK)",
+				["en"] = "Window Title Test (English)",
+				["fr"] = "Window Title Test (French)",
+				["es"] = "Window Title Test (Spanish)",
+		},
+	},  
+
 	plugins =
 	{
 

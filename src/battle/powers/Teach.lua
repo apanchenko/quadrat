@@ -26,7 +26,7 @@ function Teach:apply(piece)
     local zone = self.Zone.new(piece.pos)
 
     -- select cells in zone
-    local cells = board:select_cells(function(cell) return zone:filter(cell) and not zone.pos:equals(cell.pos) end)
+    local cells = board:select_cells(function(c) return zone:filter(c) and not zone.pos:equals(c.pos) end)
     for i = 1, #cells do
       -- friend piece
       local p = cells[i].piece
