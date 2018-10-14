@@ -10,9 +10,9 @@ function ass.nul(value, name)
 end
 
 -- check 'num' is natural number
-function ass.natural(num)
+function ass.natural(num, message)
   ass.type(num, "number")
-  assert(num >= 0)
+  assert(num >= 0, message)
 end
 
 -- check 'value' is a table

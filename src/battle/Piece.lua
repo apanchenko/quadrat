@@ -137,7 +137,9 @@ function Piece:is_jump_protected()
 end
 -------------------------------------------------------------------------------
 function Piece:move_before(cell_from, cell_to)
-  _.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
+  for _, power in pairs(self.powers) do
+    power:move_before(cell_from, cell_to)
+  end
 end
 -------------------------------------------------------------------------------
 function Piece:move(cell_from, cell_to)
@@ -151,7 +153,7 @@ function Piece:move(cell_from, cell_to)
 
     self.pos = cell_to.pos
 
-    for _, power in ipairs(self.powers) do
+    for _, power in pairs(self.powers) do
       if power:move(vec) then
         log:exit(depth)
         return true
@@ -196,35 +198,6 @@ function Piece:deselect()
   end
 end
 
-
-
--------------------------------------------------------------------------------
--- ABILITY --------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Piece:add_ability()
-  self.abilities:add(self.env)
-
-  -- add ability mark
-  if self.able == nil then
-    cfg.cell.order = 1
-    self.able = lay.image(self, cfg.cell, "src/battle/ability_".. Color.string(self.color).. ".png")
-    cfg.cell.order = nil
-  end
-end
--------------------------------------------------------------------------------
-function Piece:use_ability(ability)
-  local depth = log:trace(self, ":use_ability ", ability):enter()
-    self:add_power(ability)                   -- increase power
-    self.board:select(nil)                  -- remove selection if was selected
-
-    -- remove ability mark
-    if self.abilities:is_empty() then
-      log:trace("remove able")
-      self.able:removeSelf()
-      self.able = nil
-    end
-  log:exit(depth)
-end
 -------------------------------------------------------------------------------
 function Piece:add_power(ability)
   local name = tostring(ability)

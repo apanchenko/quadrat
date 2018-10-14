@@ -6,12 +6,14 @@ local Recruit      = require 'src.battle.powers.Recruit'
 local Swap         = require 'src.battle.powers.Swap'
 local Sphere       = require 'src.battle.powers.Sphere'
 local Impeccable   = require 'src.battle.powers.Impeccable'
+local Teach        = require 'src.battle.powers.Teach'
 local Zones        = require 'src.battle.zones.Zones'
+local ass          = require 'src.core.ass'
 
 local Powers =
 {
-  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
-  Impeccable
+  MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
+  Impeccable, Teach
 }
 
 -- Ability has a potential to become certain power.
@@ -40,8 +42,9 @@ function Ability:__tostring()
   return name
 end
 -------------------------------------------------------------------------------
-function Ability:increase()
-  self.count = self.count + 1
+function Ability:increase(count)
+  ass.natural(count, tostring(count))
+  self.count = self.count + count
 end
 -------------------------------------------------------------------------------
 function Ability:decrease()

@@ -11,6 +11,10 @@ function Vec.new(x, y)
   return setmetatable({x = x or 0, y = (y or x) or 0}, Vec)
 end
 
+-- equals
+function Vec:equals(v)
+  return self.x == v.x and self.y == v.y
+end
 -------------------------------------------------------------------------------
 function Vec.from(obj)
   return Vec.new(obj.x, obj.y)

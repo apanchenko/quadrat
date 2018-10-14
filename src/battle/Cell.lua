@@ -23,7 +23,10 @@ function Cell.new(pos)
   self.img = lay.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self
 end
-
+-- equals
+function Cell:equals(cell)
+  return cell and self.pos:equals(cell.pos)
+end
 
 
 -------------------------------------------------------------------------------
@@ -81,7 +84,7 @@ function Cell:receive(piece)
   -- consume jade to get ability
   if self.jade then
     self:remove_jade()
-    piece:add_ability()
+    piece.abilities:add_random()
   end
 
   self.piece = piece
