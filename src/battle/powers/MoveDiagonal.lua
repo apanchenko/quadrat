@@ -1,6 +1,7 @@
-local vec = require "src.core.vec"
-local lay = require "src.core.lay"
-local cfg = require "src.Config"
+local Vec = require 'src.core.vec'
+local lay = require 'src.core.lay'
+local ass = require 'src.core.ass'
+local cfg = require 'src.Config'
 
 local PowerMoveDiagonal =
 {
@@ -37,8 +38,11 @@ end
 -- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:can_move(from, to)
-  local vec = from - to
-  return (vec.x==1 or vec.x==-1) and (vec.y==1 or vec.y==-1)
+  ass.is(from, Vec)
+  ass.is(to, Vec)
+
+  local diff = from - to
+  return (diff.x==1 or diff.x==-1) and (diff.y==1 or diff.y==-1)
 end
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:move_before(cell_from, cell_to)

@@ -1,6 +1,7 @@
 local vec   = require "src.core.vec"
 local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
+local ass   = require "src.core.ass"
 
 Cell =
 {
@@ -22,10 +23,6 @@ function Cell.new(pos)
   self.view = display.newGroup()
   self.img = lay.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self
-end
--- equals
-function Cell:equals(cell)
-  return cell and self.pos:equals(cell.pos)
 end
 
 
@@ -65,20 +62,19 @@ end
 -- PIECE-----------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function Cell:leave()
-  assert(self.piece)
+  ass(self.piece)
   local piece = self.piece;
   self.piece = nil
   return piece
 end
 -------------------------------------------------------------------------------
 function Cell:receive(piece)
-  assert(piece)
+  ass(piece)
 
   -- kill victim
   if self.piece then                      -- peek possible victim at to position
-    assert(piece.color ~= self.piece.color) -- cannibalism deprecated
-    self.piece:die()
-    self.piece = nil
+    ass(piece.color ~= self.piece.color) -- cannibalism deprecated
+    self.piece:putoff()
   end
 
   -- consume jade to get ability

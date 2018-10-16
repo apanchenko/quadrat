@@ -1,12 +1,13 @@
 local _         = require 'src.core.underscore'
-local vec       = require "src.core.vec"
-local Player    = require "src.Player"
-local Abilities = require "src.battle.PieceAbilities"
+local Vec       = require 'src.core.vec'
+local Player    = require 'src.Player'
+local Abilities = require 'src.battle.PieceAbilities'
 local Color     = require 'src.battle.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
+local map       = require 'src.core.map'
 
 -------------------------------------------------------------------------------
 local Piece = 
@@ -57,8 +58,8 @@ function Piece:__tostring()
   if self.color ~= nil then
     s = s.. Color.string(self.color)
   end
-  if self.pos then
-    s = s.. " ".. tostring(self.pos)
+  if self.cell then
+    s = s.. " ".. tostring(self.cell)
   end
   if self.powers then
     for k in pairs(self.powers) do
@@ -74,7 +75,6 @@ function Piece:set_color(color)
 
     -- nothing to change
     if color ~= self.clolor then
-      -- save color
       self.color = color
 
       -- change image
@@ -89,7 +89,23 @@ function Piece:set_color(color)
   log:exit(depth)
 end
 -------------------------------------------------------------------------------
-function Piece:die()
+
+
+
+-- insert piece into group, with scale for dragging
+function Piece:puton(board, cell)
+  ass.is(board, 'Board')
+  ass.is(cell, 'Cell')
+
+  board.view:insert(self.view)
+  self.board = board
+  self:move_middle(nil, cell)
+
+  ass(self.cell == cell)
+end
+
+-- remove piece from board
+function Piece:putoff()
   self.view:removeSelf()
   self.view = nil
   self.img:removeSelf()
@@ -97,61 +113,52 @@ function Piece:die()
   self.abilities = nil
   self.powers = nil
   self.board = nil
+  if self.cell then
+    ass(self.cell.piece == self)
+    self.cell.piece = nil
+    self.cell = nil
+  end
 end
 
-
-
--------------------------------------------------------------------------------
--- MOVE------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- insert piece into group, with scale for dragging
-function Piece:puton(board, pos)
-  board.view:insert(self.view)
-  self.board = board
-  self:move(nil, pos)
+-- get position
+function Piece:get_pos()
+  return self.cell.pos
 end
+
 -------------------------------------------------------------------------------
-function Piece:can_move(to)
-  for _, power in pairs(self.powers) do
-    if power:can_move(self.pos, to) then
-      return true
-    end
+function Piece:can_move(to_pos)
+  ass.is(to_pos, Vec)
+
+  if map.any(self.powers, function(p) return p:can_move(self.cell.pos, to_pos) end) then
+    return true
   end
 
-  local vec = self.pos - to -- movement vector
+  local vec = self.cell.pos - to_pos -- movement vector
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
--------------------------------------------------------------------------------
--- if can be jumed by opponent piece
-function Piece:is_jump_protected()
-  for _, p in pairs(self.powers) do
-    log:trace("  ", p.typename, " ", p.is_jump_protected)
-    if p.is_jump_protected then
-      log:trace(p.typename, ":jp true")
-      return true
-    end
-  end
-  log:trace(self, ":jp false")
-  return false
 
+-- if cannot be jumed by opponent piece
+function Piece:is_jump_protected()
+  return map.any(self.powers, function(p) return p.is_jump_protected end)
 end
--------------------------------------------------------------------------------
+
+-- before piece moved
 function Piece:move_before(cell_from, cell_to)
-  _.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
+  map.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
 end
 -------------------------------------------------------------------------------
-function Piece:move(cell_from, cell_to)
-  local depth = log:trace(self, ":move to ", cell_to):enter()
+function Piece:move_middle(cell_from, cell_to)
+  local depth = log:trace(self, ":move_middle to ", cell_to):enter()
     if cell_from then
-      assert(cell_from.piece == self)
+      ass(cell_from.piece == self)
       cell_from:leave()           -- get piece at from position
     end
 
     cell_to:receive(self)                    -- cell that actor is going to move to
 
-    self.pos = cell_to.pos
+    self.cell = cell_to
 
-    for _, power in pairs(self.powers) do
+    for name, power in pairs(self.powers) do
       if power:move(vec) then
         log:exit(depth)
         return true
@@ -265,20 +272,20 @@ function Piece:touch(event)
       self.board:select(nil)                -- deselect another piece
     end
     self:set_focus(event.id)
-    self.mark = vec.from(self.view)
+    self.mark = Vec.from(self.view)
 
   elseif self.isFocus then
 
     if event.phase == "moved" then
-      local start = vec(event.xStart, event.yStart)
-      local shift = (vec.from(event) - start) / vec(self.board.view.xScale) + self.mark
+      local start = Vec(event.xStart, event.yStart)
+      local shift = (Vec.from(event) - start) / Vec(self.board.view.xScale) + self.mark
       local proj = (shift / cfg.cell.size):round()
-      vec.copy(shift, self.view)
+      Vec.copy(shift, self.view)
 
-      if self.board:can_move(self.pos, proj) then
+      if self.board:can_move(self.cell.pos, proj) then
         self:create_project()
         self.proj = proj
-        vec.copy(proj * cfg.cell.size, self.project)
+        Vec.copy(proj * cfg.cell.size, self.project)
       else
         self:remove_project()
         self.proj = nil
@@ -288,11 +295,11 @@ function Piece:touch(event)
       self:set_focus(nil)
       self:remove_project()
       if self.proj then
-        self.board:player_move(self.pos, self.proj)
+        self.board:player_move(self.cell, self.proj)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
-        vec.copy(self.pos * cfg.cell.size, self.view) -- return to original position
+        Vec.copy(self.cell.pos * cfg.cell.size, self.view) -- return to original position
         if self.isSelected then
           self.board:select(nil)            -- remove selection if was selected
         else
@@ -309,7 +316,7 @@ function Piece:create_project()
   if not self.project then
     local path = "src/battle/piece_"..Color.string(self.color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
-    vec.copy(self.view, self.project)
+    Vec.copy(self.view, self.project)
   end
 end
 -------------------------------------------------------------------------------
@@ -334,11 +341,11 @@ function Piece:set_focus(eventId)
 end
 -------------------------------------------------------------------------------
 function Piece:update_group_pos()
-  local pos = self.pos * cfg.cell.size
+  local pos = self.cell.pos * cfg.cell.size
   if self.isSelected then
     pos.y = pos.y - 10
   end
-  vec.copy(pos, self.view)
+  Vec.copy(pos, self.view)
 end
 
 return Piece

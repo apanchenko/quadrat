@@ -23,7 +23,7 @@ end
 function Swap:apply(piece)
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
-    local zone = self.Zone.new(piece.pos)
+    local zone = self.Zone.new(piece:get_pos())
     local cells = board:select_cells(function(cell) return zone:filter(cell) end)
     for i = 1, #cells do
       local p = cells[i].piece

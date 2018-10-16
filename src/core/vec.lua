@@ -11,10 +11,6 @@ function Vec.new(x, y)
   return setmetatable({x = x or 0, y = (y or x) or 0}, Vec)
 end
 
--- equals
-function Vec:equals(v)
-  return self.x == v.x and self.y == v.y
-end
 -------------------------------------------------------------------------------
 function Vec.from(obj)
   return Vec.new(obj.x, obj.y)
@@ -66,7 +62,7 @@ function Vec:abs()
   return Vec.new(math.abs(self.x), math.abs(self.y))
 end
 
--------------------------------------------------------------------------------
+-- selftest
 function Vec.test()
   local a = Vec.new(3, 4)
   local b = Vec.new(2, 3)
@@ -78,5 +74,5 @@ function Vec.test()
   assert(Vec.new(2.3, 4.5):round().x == 2)
 end
 
--------------------------------------------------------------------------------
+-- return module
 return Vec

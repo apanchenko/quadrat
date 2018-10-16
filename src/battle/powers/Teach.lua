@@ -23,10 +23,10 @@ end
 function Teach:apply(piece)
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
-    local zone = self.Zone.new(piece.pos)
+    local zone = self.Zone.new(piece:get_pos())
 
     -- select cells in zone
-    local cells = board:select_cells(function(c) return zone:filter(c) and not zone.pos:equals(c.pos) end)
+    local cells = board:select_cells(function(c) return zone:filter(c) and not zone.pos==c.pos end)
     for i = 1, #cells do
       -- friend piece
       local p = cells[i].piece

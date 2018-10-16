@@ -25,7 +25,7 @@ function Relocate:apply(piece)
   -- choose random cell
   local target = cells[math.random(#cells)]
 
-  board:move(piece.pos, target.pos)
+  board:move(piece:get_pos(), target.pos)
   return nil
 end
 -------------------------------------------------------------------------------

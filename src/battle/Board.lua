@@ -1,6 +1,6 @@
 local Cell     = require 'src.battle.Cell'
 local Piece    = require 'src.battle.Piece'
-local vec      = require 'src.core.vec'
+local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
 local Color    = require 'src.battle.Color'
 local cfg      = require 'src.Config'
@@ -8,7 +8,7 @@ local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
 
-Board = {}
+Board = {typename='Board'}
 Board.__index = Board
 
 -------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ function Board.new(battle)
   self.grid = {}
   for i = 0, self.cols - 1 do
   for j = 0, self.rows - 1 do
-    local cell = Cell.new(vec(i, j))
+    local cell = Cell.new(Vec(i, j))
     lay.render(self, cell, cell.pos * cfg.cell.size)
     self.grid[i * self.cols + j] = cell
   end
@@ -44,7 +44,7 @@ function Board.new(battle)
   self.color = Color.R
 
   self.view.anchorChildren = true          -- center on screen
-  vec.center(self.view)
+  Vec.center(self.view)
   lay.render(self.battle, self.view, cfg.board)
   lay.render(self.battle, self.hover, cfg.board)
   return self
@@ -116,7 +116,8 @@ end
 -------------------------------------------------------------------------------
 -- Check if piece can move from one position to another
 function Board:can_move(fr, to)
---(  local logdepth = log:enter()
+  ass.is(fr, Vec)
+  ass.is(to, Vec)
 
   -- check move rights
   local actor = self:cell(fr).piece        -- peek piece at from position
@@ -147,35 +148,23 @@ function Board:can_move(fr, to)
   return true
 end
 -------------------------------------------------------------------------------
-function Board:move(from_pos, to_pos)
-  local cell_from = self:cell(from_pos)    -- get piece at from position
-  local cell_to   = self:cell(to_pos)      -- cell that actor is going to move to
+function Board:move(cell_from, vec_to)
+  ass.is(cell_from, Cell)
+  ass.is(vec_to, Vec)
+
+  local cell_to   = self:cell(vec_to)      -- cell that actor is going to move to
   local piece     = cell_from.piece
 
-  self:move_before(piece, cell_from, cell_to)
-  self:move_middle(piece, cell_from, cell_to)
-  self:move_after (piece, cell_from, cell_to)
+  piece:move_before(cell_from, cell_to)
+  piece:move_middle(cell_from, cell_to)
+  piece:move_after (cell_from, cell_to)
 end
 -------------------------------------------------------------------------------
-function Board:player_move(from_pos, to_pos)
-  self:move(from_pos, to_pos)
+function Board:player_move(cell_from, to_pos)
+  self:move(cell_from, to_pos)
   self.color = not self.color               -- switch to another player
   self.tomove_listener:tomove(self.color)   -- notify listener about player moved
 end
--------------------------------------------------------------------------------
-function Board:move_before(piece, cell_from, cell_to)
-  piece:move_before(cell_from, cell_to)
-end
--------------------------------------------------------------------------------
-function Board:move_middle(piece, cell_from, cell_to)
-  piece:move(cell_from, cell_to)            -- move piece to new position
-end
--------------------------------------------------------------------------------
-function Board:move_after(piece, cell_from, cell_to)
-  piece:move_after(cell_from, cell_to)
-end
-
-
 
 -------------------------------------------------------------------------------
 function Board:count_pieces()

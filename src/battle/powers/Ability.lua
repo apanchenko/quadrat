@@ -7,13 +7,14 @@ local Swap         = require 'src.battle.powers.Swap'
 local Sphere       = require 'src.battle.powers.Sphere'
 local Impeccable   = require 'src.battle.powers.Impeccable'
 local Teach        = require 'src.battle.powers.Teach'
+local Destroy      = require 'src.battle.powers.Destroy'
 local Zones        = require 'src.battle.zones.Zones'
 local ass          = require 'src.core.ass'
 
 local Powers =
 {
   MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
-  Impeccable, Teach
+  Impeccable, Teach, Destroy
 }
 
 -- Ability has a potential to become certain power.

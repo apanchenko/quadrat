@@ -2,40 +2,44 @@ local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
 local Zones     = require 'src.battle.zones.Zones'
+local Color     = require 'src.battle.Color'
 local log       = require 'src.core.log'
 
-local Recruit =
+local Destroy =
 {
-  typename = "Recruit",
+  typename = "Destroy",
   is_areal = true
 }
-Recruit.__index = Recruit
+Destroy.__index = Destroy
 
 -------------------------------------------------------------------------------
-function Recruit.new(Zone)
+function Destroy.new(Zone)
   assert(Zone)
-  local self = setmetatable({}, Recruit)
+  local self = setmetatable({}, Destroy)
   self.Zone = Zone
   return self
 end
 -------------------------------------------------------------------------------
-function Recruit:apply(piece)
+function Destroy:apply(piece)
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
     local zone = self.Zone.new(piece:get_pos())
-    local cells = board:select_cells(function(cell) return zone:filter(cell) end)
+
+    -- select cells in zone
+    local cells = board:select_cells(function(c) return zone:filter(c) and zone.pos~=c.pos end)
     for i = 1, #cells do
+      -- enemy piece
       local p = cells[i].piece
-      if p then
-        p:set_color(piece.color)
+      if p and p.color ~= piece.color then
+        p:putoff()
       end
     end
   log:exit(depth)
   return nil
 end
 -------------------------------------------------------------------------------
-function Recruit:__tostring()
-  return "Recruit ".. self.Zone.typename
+function Destroy:__tostring()
+  return Destroy.typename.. self.Zone.typename
 end
 
-return Recruit
+return Destroy
