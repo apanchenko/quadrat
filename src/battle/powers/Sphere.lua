@@ -42,8 +42,8 @@ end
 -------------------------------------------------------------------------------
 function Sphere:can_move(from, to)
   --log:trace(self, ":can_move from ", from, " to ", to)
-  local cols = self.piece.board.cols
-  local rows = self.piece.board.rows
+  local cols = self.piece.board.model:cols()
+  local rows = self.piece.board.model:rows()
   local vec = (from - to):abs()
   return (vec.x==0 and vec.y==cols-1) or (vec.x==rows-1 and vec.y==0)
 end

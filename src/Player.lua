@@ -2,7 +2,7 @@ local vec = require 'src.core.vec'
 local cfg = require 'src.Config'
 local lay = require 'src.core.lay'
 local ass = require 'src.core.ass'
-local Color = require 'src.battle.Color'
+local Color = require 'src.model.Color'
 
 -------------------------------------------------------------------------------
 local Player = {

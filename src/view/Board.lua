@@ -2,7 +2,7 @@ local Cell     = require 'src.battle.Cell'
 local Piece    = require 'src.battle.Piece'
 local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
-local Color    = require 'src.battle.Color'
+local Color    = require 'src.model.Color'
 local cfg      = require 'src.Config'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
@@ -24,24 +24,23 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board.new(battle)
+function Board.new(battle, model)
   local self = setmetatable({}, Board)
   self.battle = battle
-  self.cols = cfg.board.cols
-  self.rows = cfg.board.rows
+  self.model = model
   self.view = display.newGroup()
   self.hover = display.newGroup()
 
   self.grid = {}
-  for i = 0, self.cols - 1 do
-  for j = 0, self.rows - 1 do
-    local cell = Cell.new(Vec(i, j))
-    lay.render(self, cell, cell.pos * cfg.cell.size)
-    self.grid[i * self.cols + j] = cell
-  end
+  for place, mcell in model:cells() do
+    local vcell = Cell.new(model:pos(place))
+    lay.render(self, vcell, vcell.pos * cfg.cell.size)
+    self.grid[place] = vcell
   end
 
-  self.color = Color.R
+  for k, v in model:pieces() do
+    Piece.new(v):puton(self, self.grid[k])  
+  end
 
   self.view.anchorChildren = true          -- center on screen
   Vec.center(self.view)
@@ -63,36 +62,17 @@ function Board:set_tomove_listener(tomove_listener)
   self.tomove_listener = tomove_listener    -- move listener
 end
 -------------------------------------------------------------------------------
--- two rows initial position
-function Board:position_default()
-  local lastrow = self.rows - 1
-  for x = 0, self.cols - 1 do
-    self:put(Color.R, x, 0)
-    self:put(Color.R, x, 1)
-    self:put(Color.B, x, lastrow)
-    self:put(Color.B, x, lastrow - 1)
-  end
-end
--------------------------------------------------------------------------------
--- one row initial position
-function Board:position_minimal()
-  for x = 0, self.cols - 1 do
-    self:put(Color.R, x, 0)
-    self:put(Color.B, x, self.rows - 1)
-  end
-end
--------------------------------------------------------------------------------
 function Board:put(color, x, y)
   local log_depth = log:trace(self, ":put"):enter()
-    assert(0 <= x and x < self.cols)
-    assert(0 <= y and y < self.rows)
+    assert(0 <= x and x < self.model:width())
+    assert(0 <= y and y < self.model:height())
     local piece = Piece.new(color)                -- create a new piece
-    piece:puton(self, self.grid[x * self.cols + y])                     -- put piece on board
+    piece:puton(self, self.grid[x * self.model:width() + y])                     -- put piece on board
   log:exit(log_depth)
 end
 -------------------------------------------------------------------------------
 function Board:cell(pos)
-  return self.grid[pos.x * self.cols + pos.y]            -- peek piece from cell by position
+  return self.grid[pos.x * self.model:width() + pos.y]            -- peek piece from cell by position
 end
 -------------------------------------------------------------------------------
 function Board:select_cells(filter)
@@ -122,9 +102,11 @@ function Board:can_move(fr, to)
   -- check move rights
   local actor = self:cell(fr).piece        -- peek piece at from position
   if actor == nil then                      -- check if it exists
+    log:trace(self, "can_move, actor is nil")
     return false                            -- can not move
   end
-  if actor.color ~= self.color then         -- check color who moves now
+  if not self.model:is_move(actor.color) then         -- check color who moves now
+    log:trace(self, "can_move, wrong color")
     return false                            -- can not move
   end
 
@@ -158,12 +140,14 @@ function Board:move(cell_from, vec_to)
   piece:move_before(cell_from, cell_to)
   piece:move_middle(cell_from, cell_to)
   piece:move_after (cell_from, cell_to)
+
+  self.model:move()
 end
 -------------------------------------------------------------------------------
 function Board:player_move(cell_from, to_pos)
   self:move(cell_from, to_pos)
-  self.color = not self.color               -- switch to another player
-  self.tomove_listener:tomove(self.color)   -- notify listener about player moved
+  self.color = not self.model:who_move()               -- switch to another player
+  self.tomove_listener:tomove(self.model:who_move())   -- notify listener about player moved
 end
 
 -------------------------------------------------------------------------------
@@ -173,7 +157,7 @@ function Board:count_pieces()
   for k, cell in ipairs(self.grid) do
     local piece = cell.piece
     if piece then
-      if piece.color == Color.R then
+      if Color.is_red(piece.color) then
         red = red + 1
       else
         bla = bla + 1
@@ -203,12 +187,6 @@ function Board:select(piece)
   if piece then
     piece:select()                          -- then select a new one
   end
-end
-
--------------------------------------------------------------------------------
--- select piece
-function Board:is_color(color)
-  return self.color == color
 end
 
 return Board

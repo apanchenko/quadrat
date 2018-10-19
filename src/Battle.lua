@@ -1,13 +1,14 @@
-local composer = require "composer"
-local Board    = require "src.battle.Board"
-local Piece    = require "src.battle.Piece"
-local vec      = require "src.core.vec"
-local Player   = require "src.Player"
-local Color    = require 'src.battle.Color'
-local cfg      = require 'src.Config'
-local lay      = require 'src.core.lay'
-local ass      = require 'src.core.ass'
-local log      = require 'src.core.log'
+local composer   = require "composer"
+local Board     = require 'src.model.Board'
+local Color      = require 'src.model.Color'
+local VBoard     = require "src.view.Board"
+local Piece      = require "src.battle.Piece"
+local vec        = require "src.core.vec"
+local Player     = require "src.Player"
+local cfg        = require 'src.Config'
+local lay        = require 'src.core.lay'
+local ass        = require 'src.core.ass'
+local log        = require 'src.core.log'
 
 -- variables
 local battle = composer.newScene()
@@ -25,15 +26,20 @@ function battle:create(event)
 
   -- players
   self.players = {}
-  self.players[Color.R] = Player(Color.R, "Salvador")
-  self.players[Color.B] = Player(Color.B, "Gala")
-  lay.render(self, self.players[Color.R], cfg.player.red)
-  lay.render(self, self.players[Color.B], cfg.player.black)
+
+  local color = Color.red(true)
+  self.players[color] = Player(color, "Salvador")
+  lay.render(self, self.players[color], cfg.player.red)
+
+  color = Color.swap(color)
+  self.players[color] = Player(color, "Gala")
+  lay.render(self, self.players[color], cfg.player.black)
+
+  local board = Board.new(cfg.board.cols, cfg.board.rows)
 
   -- board
-  self.board = Board.new(self)
+  self.board = VBoard.new(self, board)
   self.board:set_tomove_listener(self)
-  self.board:position_minimal()
   log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
 
   self.jade_moves = cfg.jade.moves
@@ -53,6 +59,9 @@ end
 
 -------------------------------------------------------------------------------
 function battle:tomove(color)
+  ass(self)
+  Color.ass(color)
+
   local red, bla = self.board:count_pieces()
 
   -- check if black wins
@@ -67,7 +76,7 @@ function battle:tomove(color)
     return
   end
 
-  log:trace(self.players[color].name, " is going to move. Red: ", red, ". Black: ", bla)
+  log:trace(tostring(self.players[color]), " is going to move. Red: ", red, ". Black: ", bla)
 
   -- move pointer
   transition.moveTo(self.move_pointer, {y=self.players[color].view.y, time=500})

@@ -2,7 +2,7 @@ local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
 local Zones     = require 'src.battle.zones.Zones'
-local Color     = require 'src.battle.Color'
+local Color     = require 'src.model.Color'
 local log       = require 'src.core.log'
 
 local Teach =

@@ -48,6 +48,10 @@ settings =
 				["es"] = "Window Title Test (Spanish)",
 		},
 	},  
+	excludeFiles =
+	{
+			all = { "res/*.*" },
+	},
 
 	plugins =
 	{

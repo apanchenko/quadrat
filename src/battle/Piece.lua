@@ -2,7 +2,7 @@ local _         = require 'src.core.underscore'
 local Vec       = require 'src.core.vec'
 local Player    = require 'src.Player'
 local Abilities = require 'src.battle.PieceAbilities'
-local Color     = require 'src.battle.Color'
+local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
@@ -37,13 +37,12 @@ Methods:
   select()
   deselect()
 -----------------------------------------------------------------------------]]--
-function Piece.new(color)
-  Color.ass(color)
+function Piece.new(model)
   local depth = log:trace("Piece.new"):enter()
-    local self = setmetatable({}, Piece)
+    local self = setmetatable({model = model}, Piece)
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
-    self:set_color(color)
+    self:set_color(model:color())
     self.scale = 1
     self.abilities = Abilities.new(self)
     self.powers = {}
@@ -262,8 +261,10 @@ end
 -------------------------------------------------------------------------------
 -- touch listener function
 function Piece:touch(event)
-  --self.env.log:trace(self, ":touch phase ", event.phase)
-  if self.board:is_color(self.color) == false then
+  --log:trace(self, ":touch phase ", event.phase)
+
+  if not self.board.model:is_move(self.color) then
+    log:trace("  inactive color")
     return true
   end
   
