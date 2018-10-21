@@ -4,7 +4,7 @@ local map = {}
 
 function map.any(table, fn)
   ass.table(table)
-  ass.fn(fn)
+  ass.fun(fn)
   for k, v in pairs(table) do
     if fn(v) then
       return true
@@ -15,7 +15,7 @@ end
 
 function map.all(table, fn)
   ass.table(table)
-  ass.fn(fn)
+  ass.fun(fn)
   for k, v in pairs(table) do
     if not fn(v) then
       return false
@@ -26,7 +26,7 @@ end
 
 function map.each(table, fn)
   ass.table(table)
-  ass.fn(fn)
+  ass.fun(fn)
   for k, v in pairs(table) do
     fn(v)
   end

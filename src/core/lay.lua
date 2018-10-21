@@ -1,5 +1,6 @@
 local cfg = require 'src.Config'
 local ass = require 'src.core.ass'
+local log = require 'src.core.log'
 
 lay = {}
 
@@ -66,6 +67,8 @@ function lay.image(group, opts, path)
   ass.table(opts, "opts")
 
   path = path or opts.path
+  ass.string(path, 'path')
+  --log:trace("lay.image ".. path)
 
   local w = opts.w or (cfg.vw * opts.vw)
 

@@ -7,7 +7,7 @@ local Color = {}
 
 -- assert is color
 function Color.ass(color)
-  ass.type(color, "number", "color")
+  ass.number(color, "color")
   ass(color == R or color == B, "color")
 end
 
@@ -32,10 +32,7 @@ end
 --
 function Color.string(color)
   Color.ass(color)
-  if color == R then
-    return "red"
-  end
-  return "black"
+  return color == R and "red" or "black"
 end
   
 

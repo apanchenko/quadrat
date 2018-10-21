@@ -1,7 +1,7 @@
 local _         = require 'src.core.underscore'
 local Vec       = require 'src.core.vec'
 local Player    = require 'src.Player'
-local Abilities = require 'src.battle.PieceAbilities'
+local Abilities = require 'src.view.PieceAbilities'
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
@@ -10,24 +10,24 @@ local log       = require 'src.core.log'
 local map       = require 'src.core.map'
 
 -------------------------------------------------------------------------------
-local Piece = 
+local Stone = 
 {
-  typename = "Piece"
+  typename = "Stone"
 }
-Piece.__index = Piece
+Stone.__index = Stone
 
 --[[-----------------------------------------------------------------------------
 Arguments:
-  color      - color for the piece
+  color      - color for the Stone
 
 Variables:
-  group      - display group for all piece content
+  group      - display group for all Stone content
   color      - is red or black
-  img        - image, piece view
+  img        - image, Stone view
   i, j       - int number, position on board
   abilities  - abilities gathered
   powers     - array of activated abilities
-  isSelected - one piece may be selected only
+  isSelected - one Stone may be selected only
   isFocus    - is event drag started
 
 Methods:
@@ -37,9 +37,9 @@ Methods:
   select()
   deselect()
 -----------------------------------------------------------------------------]]--
-function Piece.new(model)
-  local depth = log:trace("Piece.new"):enter()
-    local self = setmetatable({model = model}, Piece)
+function Stone.new(model)
+  local depth = log:trace("Stone.new"):enter()
+    local self = setmetatable({model = model}, Stone)
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
     self:set_color(model:color())
@@ -52,8 +52,8 @@ function Piece.new(model)
   return self
 end
 -------------------------------------------------------------------------------
-function Piece:__tostring() 
-  local s = "piece["
+function Stone:__tostring() 
+  local s = "Stone["
   if self.color ~= nil then
     s = s.. Color.string(self.color)
   end
@@ -68,7 +68,7 @@ function Piece:__tostring()
   return s.. "]"
 end
 -------------------------------------------------------------------------------
-function Piece:set_color(color)
+function Stone:set_color(color)
   local depth = log:trace(self, ":set_color ", Color.string(color)):enter()
     Color.ass(color)
 
@@ -81,7 +81,7 @@ function Piece:set_color(color)
         self.img:removeSelf()
       end
       cfg.cell.order = 1
-      self.img = lay.image(self, cfg.cell, "src/battle/piece_"..Color.string(self.color)..".png")
+      self.img = lay.image(self, cfg.cell, "src/view/stone_"..Color.string(self.color)..".png")
       cfg.cell.order = nil
     end
 
@@ -91,8 +91,8 @@ end
 
 
 
--- insert piece into group, with scale for dragging
-function Piece:puton(board, cell)
+-- insert Stone into group, with scale for dragging
+function Stone:puton(board, cell)
   ass.is(board, 'Board')
   ass.is(cell, 'Cell')
 
@@ -103,8 +103,8 @@ function Piece:puton(board, cell)
   ass(self.cell == cell)
 end
 
--- remove piece from board
-function Piece:putoff()
+-- remove Stone from board
+function Stone:putoff()
   self.view:removeSelf()
   self.view = nil
   self.img:removeSelf()
@@ -113,19 +113,19 @@ function Piece:putoff()
   self.powers = nil
   self.board = nil
   if self.cell then
-    ass(self.cell.piece == self)
-    self.cell.piece = nil
+    ass(self.cell.Stone == self)
+    self.cell.Stone = nil
     self.cell = nil
   end
 end
 
 -- get position
-function Piece:get_pos()
+function Stone:get_pos()
   return self.cell.pos
 end
 
 -------------------------------------------------------------------------------
-function Piece:can_move(to_pos)
+function Stone:can_move(to_pos)
   ass.is(to_pos, Vec)
 
   if map.any(self.powers, function(p) return p:can_move(self.cell.pos, to_pos) end) then
@@ -136,21 +136,21 @@ function Piece:can_move(to_pos)
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end
 
--- if cannot be jumed by opponent piece
-function Piece:is_jump_protected()
+-- if cannot be jumed by opponent Stone
+function Stone:is_jump_protected()
   return map.any(self.powers, function(p) return p.is_jump_protected end)
 end
 
--- before piece moved
-function Piece:move_before(cell_from, cell_to)
+-- before Stone moved
+function Stone:move_before(cell_from, cell_to)
   map.each(self.powers, function(p) p:move_before(cell_from, cell_to) end)
 end
 -------------------------------------------------------------------------------
-function Piece:move_middle(cell_from, cell_to)
+function Stone:move_middle(cell_from, cell_to)
   local depth = log:trace(self, ":move_middle to ", cell_to):enter()
     if cell_from then
-      ass(cell_from.piece == self)
-      cell_from:leave()           -- get piece at from position
+      ass(cell_from.Stone == self)
+      cell_from:leave()           -- get Stone at from position
     end
 
     cell_to:receive(self)                    -- cell that actor is going to move to
@@ -168,7 +168,7 @@ function Piece:move_middle(cell_from, cell_to)
   log:exit(depth)
 end
 -------------------------------------------------------------------------------
-function Piece:move_after(cell_from, cell_to)
+function Stone:move_after(cell_from, cell_to)
   local depth = log:trace(self, ":move_after"):enter()
     for name, power in pairs(self.powers) do
       power:move_after(self, self.board, cell_from, cell_to)
@@ -182,7 +182,7 @@ end
 -- SELECTION-------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
-function Piece:select()
+function Stone:select()
   local depth = log:trace(self, ":select"):enter()
     assert(self.isSelected == false)
     self.isSelected = true                    -- set selected
@@ -192,7 +192,7 @@ function Piece:select()
 end
 -------------------------------------------------------------------------------
 -- to be called from Board. Use self.board:select instead
-function Piece:deselect()
+function Stone:deselect()
   if self.isSelected then
     local depth = log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
@@ -207,7 +207,7 @@ end
 -------------------------------------------------------------------------------
 -- ABILITY --------------------------------------------------------------------
 -------------------------------------------------------------------------------
-function Piece:add_ability()
+function Stone:add_ability()
   self.abilities:add(self.env)
 
   -- add ability mark
@@ -218,7 +218,7 @@ function Piece:add_ability()
   end
 end
 -------------------------------------------------------------------------------
-function Piece:use_ability(ability)
+function Stone:use_ability(ability)
   local depth = log:trace(self, ":use_ability ", ability):enter()
     self:add_power(ability)                   -- increase power
     self.board:select(nil)                  -- remove selection if was selected
@@ -232,7 +232,7 @@ function Piece:use_ability(ability)
   log:exit(depth)
 end
 -------------------------------------------------------------------------------
-function Piece:add_power(ability)
+function Stone:add_power(ability)
   local name = tostring(ability)
   local depth = log:trace(self, ":add_power ", name):enter()
     local p = self.powers[name]
@@ -244,7 +244,7 @@ function Piece:add_power(ability)
   log:exit(depth)
 end
 -------------------------------------------------------------------------------
-function Piece:remove_power(name)
+function Stone:remove_power(name)
   local depth = log:trace(self, ":remove_power ", name):enter()
     local p = self.powers[name]
     if p then
@@ -260,7 +260,7 @@ end
 -- PRIVATE---------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- touch listener function
-function Piece:touch(event)
+function Stone:touch(event)
   --log:trace(self, ":touch phase ", event.phase)
 
   if not self.board.model:is_move(self.color) then
@@ -270,7 +270,7 @@ function Piece:touch(event)
   
   if event.phase == "began" then
     if self.isSelected == false then
-      self.board:select(nil)                -- deselect another piece
+      self.board:select(nil)                -- deselect another Stone
     end
     self:set_focus(event.id)
     self.mark = Vec.from(self.view)
@@ -283,7 +283,7 @@ function Piece:touch(event)
       local proj = (shift / cfg.cell.size):round()
       Vec.copy(shift, self.view)
 
-      if self.board:can_move(self.cell.pos, proj) then
+      if self.board.model:can_move(self.cell.pos, proj) then
         self:create_project()
         self.proj = proj
         Vec.copy(proj * cfg.cell.size, self.project)
@@ -296,7 +296,7 @@ function Piece:touch(event)
       self:set_focus(nil)
       self:remove_project()
       if self.proj then
-        self.board:player_move(self.cell, self.proj)
+        self.board:move(self.cell, self.proj)
         self.board:select(nil)              -- deselect any
         self.proj = nil
       else
@@ -304,7 +304,7 @@ function Piece:touch(event)
         if self.isSelected then
           self.board:select(nil)            -- remove selection if was selected
         else
-          self.board:select(self)           -- select this piece
+          self.board:select(self)           -- select this Stone
         end
       end
     end
@@ -313,23 +313,23 @@ function Piece:touch(event)
   return true
 end
 -------------------------------------------------------------------------------
-function Piece:create_project()
+function Stone:create_project()
   if not self.project then
-    local path = "src/battle/piece_"..Color.string(self.color).."_project.png"
+    local path = "src/view/stone_"..Color.string(self.color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
     Vec.copy(self.view, self.project)
   end
 end
 -------------------------------------------------------------------------------
-function Piece:remove_project()
+function Stone:remove_project()
   if self.project then
     self.project:removeSelf()
     self.project = nil
   end
 end
 -------------------------------------------------------------------------------
-function Piece:set_focus(eventId)
-  log:trace(self, ":set_focus")
+function Stone:set_focus(eventId)
+  --log:trace(self, ":set_focus")
   display.getCurrentStage():setFocus(self.view, eventId)
   self.isFocus = (eventId ~= nil)
 
@@ -341,7 +341,7 @@ function Piece:set_focus(eventId)
 
 end
 -------------------------------------------------------------------------------
-function Piece:update_group_pos()
+function Stone:update_group_pos()
   local pos = self.cell.pos * cfg.cell.size
   if self.isSelected then
     pos.y = pos.y - 10
@@ -349,4 +349,4 @@ function Piece:update_group_pos()
   Vec.copy(pos, self.view)
 end
 
-return Piece
+return Stone

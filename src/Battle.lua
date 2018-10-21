@@ -1,8 +1,8 @@
 local composer   = require "composer"
-local Board     = require 'src.model.Board'
+local Space      = require 'src.model.Space'
 local Color      = require 'src.model.Color'
 local VBoard     = require "src.view.Board"
-local Piece      = require "src.battle.Piece"
+local Stone      = require "src.view.Stone"
 local vec        = require "src.core.vec"
 local Player     = require "src.Player"
 local cfg        = require 'src.Config'
@@ -35,14 +35,19 @@ function battle:create(event)
   self.players[color] = Player(color, "Gala")
   lay.render(self, self.players[color], cfg.player.black)
 
-  local board = Board.new(cfg.board.cols, cfg.board.rows)
+  self.space = Space.new(cfg.board.cols, cfg.board.rows)
+  self.space.on_move:add(self)
 
   -- board
-  self.board = VBoard.new(self, board)
-  self.board:set_tomove_listener(self)
+  self.board = VBoard.new(self, self.space)
   log:trace("Create ", self.board, ", w:", self.board.view.width, " sx:", self.board.view.xScale)
 
   self.jade_moves = cfg.jade.moves
+end
+
+--
+function battle:__tostring()
+  return 'battle'
 end
 
 -------------------------------------------------------------------------------
@@ -58,11 +63,10 @@ function battle:destroy(event)
 end
 
 -------------------------------------------------------------------------------
-function battle:tomove(color)
-  ass(self)
-  Color.ass(color)
-
-  local red, bla = self.board:count_pieces()
+function battle:on_move()
+  local color = self.space:who_move()
+  local red, bla = self.space:get_piece_count()
+  log:trace(self, ":on_move r ", red, ", b ", bla)
 
   -- check if black wins
   if red == 0 then                          

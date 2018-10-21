@@ -34,7 +34,7 @@ function ass.string(value, name)   ass.type(value, "string", name) end
 -- check 'value' is a string
 function ass.boolean(value, name)  ass.type(value, "boolean", name) end
 -- check 'value' is a function
-function ass.fn(value, name)       ass.type(value, "function", name) end
+function ass.fun(value, name)      ass.type(value, "function", name) end
 
 -- check 'value' is a basic type
 function ass.type(value, typename, name)

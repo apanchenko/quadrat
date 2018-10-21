@@ -13,11 +13,11 @@ PieceAbilities.__index = PieceAbilities
 function PieceAbilities:__tostring() return "PieceAbilities" end
 
 -- A set of abilities a piece have.
-function PieceAbilities.new(piece)
-  ass.is(piece, "Piece")
+function PieceAbilities.new(stone)
+  ass.is(stone, 'Stone')
   local self = setmetatable({}, PieceAbilities)
   self.list = {} -- list of abilities
-  self.piece = piece -- owner piece
+  self.piece = stone -- owner piece
   self.mark = nil -- image marking that piece have abilities
   return self
 end

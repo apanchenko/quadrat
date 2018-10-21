@@ -62,6 +62,11 @@ function Vec:abs()
   return Vec.new(math.abs(self.x), math.abs(self.y))
 end
 
+-- test if v is Vec
+function Vec.is_valid(v)
+  return v~=nil and v.typename==Vec.typename and type(v.x)=='number' and type(v.y)=='number'
+end
+
 -- selftest
 function Vec.test()
   local a = Vec.new(3, 4)

@@ -1,6 +1,6 @@
 local ass = require 'src.core.ass'
 
-local Cell = {}
+local Spot = {}
 
 -- flags
 local empty    = 0
@@ -11,17 +11,23 @@ local high     = 16
 local jade     = 32
 
 -- create empty cell
-function Cell.create()
+function Spot.new()
   return empty
+end
+
+--
+function Spot.is_jade(spot)
+  ass.number(spot)
+  return spot & jade
 end
 
 -- is valid
 -- todo
-function Cell.is_valid(cell)
+function Spot.is_valid(cell)
   if type(cell) ~= 'number' then
     return false
   end
   return true
 end
 
-return Cell
+return Spot

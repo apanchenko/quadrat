@@ -27,7 +27,7 @@ function Player.new(color, name, view)
   self.view = display.newGroup()
 
   -- piece image
-  lay.image(self, cfg.player, "src/battle/piece_"..Color.string(self.color)..".png")
+  lay.image(self, cfg.player, "src/view/stone_"..Color.string(self.color)..".png")
 
   -- player name
   lay.text(self, {text=self.name, vx=8})

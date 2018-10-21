@@ -1,5 +1,5 @@
-local Cell     = require 'src.battle.Cell'
-local Piece    = require 'src.battle.Piece'
+local Cell     = require 'src.view.Cell'
+local Stone    = require 'src.view.Stone'
 local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
 local Color    = require 'src.model.Color'
@@ -32,14 +32,14 @@ function Board.new(battle, model)
   self.hover = display.newGroup()
 
   self.grid = {}
-  for place, mcell in model:cells() do
-    local vcell = Cell.new(model:pos(place))
+  for k, v in model:spots() do
+    local vcell = Cell.new(model:pos(k))
     lay.render(self, vcell, vcell.pos * cfg.cell.size)
-    self.grid[place] = vcell
+    self.grid[k] = vcell
   end
 
   for k, v in model:pieces() do
-    Piece.new(v):puton(self, self.grid[k])  
+    Stone.new(v):puton(self, self.grid[k])  
   end
 
   self.view.anchorChildren = true          -- center on screen
@@ -50,24 +50,15 @@ function Board.new(battle, model)
 end
 
 
-
 -------------------------------------------------------------------------------
 -- POSITION--------------------------------------------------------------------
--------------------------------------------------------------------------------
--- set move listener as object:function(color)
-function Board:set_tomove_listener(tomove_listener)
-  assert(tomove_listener)
-  assert(tomove_listener.tomove)
-  assert(type(tomove_listener.tomove) == "function")
-  self.tomove_listener = tomove_listener    -- move listener
-end
 -------------------------------------------------------------------------------
 function Board:put(color, x, y)
   local log_depth = log:trace(self, ":put"):enter()
     assert(0 <= x and x < self.model:width())
     assert(0 <= y and y < self.model:height())
-    local piece = Piece.new(color)                -- create a new piece
-    piece:puton(self, self.grid[x * self.model:width() + y])                     -- put piece on board
+    local stone = Stone.new(color)                -- create a new piece
+    stone:puton(self, self.grid[x * self.model:width() + y])                     -- put piece on board
   log:exit(log_depth)
 end
 -------------------------------------------------------------------------------
@@ -94,42 +85,6 @@ end
 -------------------------------------------------------------------------------
 -- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
--- Check if piece can move from one position to another
-function Board:can_move(fr, to)
-  ass.is(fr, Vec)
-  ass.is(to, Vec)
-
-  -- check move rights
-  local actor = self:cell(fr).piece        -- peek piece at from position
-  if actor == nil then                      -- check if it exists
-    log:trace(self, "can_move, actor is nil")
-    return false                            -- can not move
-  end
-  if not self.model:is_move(actor.color) then         -- check color who moves now
-    log:trace(self, "can_move, wrong color")
-    return false                            -- can not move
-  end
-
-  -- check move ability
-  if not actor:can_move(to) then
-    return false
-  end
-
-  -- check kill ability
-  local tocell = self:cell(to)
-  local victim = tocell.piece               -- peek piece at to position
-  if victim then
-    if victim.color == actor.color then
-      return false                            -- can not kill piece of the same breed
-    end
-    if victim:is_jump_protected() then
-      return false
-    end
-  end
-
-  return true
-end
--------------------------------------------------------------------------------
 function Board:move(cell_from, vec_to)
   ass.is(cell_from, Cell)
   ass.is(vec_to, Vec)
@@ -141,30 +96,7 @@ function Board:move(cell_from, vec_to)
   piece:move_middle(cell_from, cell_to)
   piece:move_after (cell_from, cell_to)
 
-  self.model:move()
-end
--------------------------------------------------------------------------------
-function Board:player_move(cell_from, to_pos)
-  self:move(cell_from, to_pos)
-  self.color = not self.model:who_move()               -- switch to another player
-  self.tomove_listener:tomove(self.model:who_move())   -- notify listener about player moved
-end
-
--------------------------------------------------------------------------------
-function Board:count_pieces()
-  local red = 0
-  local bla = 0
-  for k, cell in ipairs(self.grid) do
-    local piece = cell.piece
-    if piece then
-      if Color.is_red(piece.color) then
-        red = red + 1
-      else
-        bla = bla + 1
-      end
-    end
-  end
-  return red, bla
+  self.model:move(cell_from.pos, vec_to)
 end
 
 -------------------------------------------------------------------------------
