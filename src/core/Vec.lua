@@ -1,7 +1,4 @@
-local Vec =
-{
-  typename = "Vec"
-}
+local Vec = { typename = 'Vec' }
 Vec.__index = Vec
 setmetatable(Vec, {__call = function(cls, ...) return cls.new(...) end})
 
@@ -39,7 +36,7 @@ function Vec.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
 -------------------------------------------------------------------------------
 function Vec:__tostring()
-  return self.x..","..self.y
+  return '['.. self.x.. ",".. self.y.. ']'
 end
 -------------------------------------------------------------------------------
 function Vec:length2()

@@ -9,7 +9,7 @@ local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
 
-Board = {typename='Board'}
+Board = { typename='Board' }
 Board.__index = Board
 
 -------------------------------------------------------------------------------
@@ -34,10 +34,10 @@ function Board.new(battle, space)
   self.hover = display.newGroup()
 
   self.grid = {}
-  for k, v in space:spots() do
-    local vcell = Cell.new(space:pos(k))
-    lay.render(self, vcell, vcell.pos * cfg.cell.size)
-    self.grid[k] = vcell
+  for k, spot in space:spots() do
+    local cell = Cell.new(spot)
+    lay.render(self, cell, cell.pos * cfg.cell.size)
+    self.grid[k] = cell
   end
 
   self.view.anchorChildren = true          -- center on screen
@@ -48,9 +48,7 @@ function Board.new(battle, space)
 end
 
 
--------------------------------------------------------------------------------
 -- POSITION--------------------------------------------------------------------
--------------------------------------------------------------------------------
 function Board:cell(pos)
   return self.grid[pos.x * self.model:width() + pos.y]            -- peek piece from cell by position
 end
@@ -71,33 +69,30 @@ end
 
 
 
--------------------------------------------------------------------------------
 -- MOVE------------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Board:move(cell_from, vec_to)
-  ass.is(cell_from, Cell)
-  ass.is(vec_to, Vec)
-
-  local cell_to   = self:cell(vec_to)      -- cell that actor is going to move to
-  local piece     = cell_from.piece
-
-  piece:move_before(cell_from, cell_to)
-  piece:move_middle(cell_from, cell_to)
-  piece:move_after (cell_from, cell_to)
-
-  self.model:move(cell_from.pos, vec_to)
-end
-
 -- model listener
 function Board:spawn_jade(pos)
-  ass.is(pos, Vec)
   self:cell(pos):set_jade()
 end
-
 -- model listener
-function Board:spawn_piece(piece)
-  local stone = Stone.new(piece) -- create a new stone
-  stone:puton(self, self.grid[self.model:index(piece.pos)]) -- put piece on board
+function Board:remove_jade(pos)
+  self:cell(pos):remove_jade()
+end
+-- model listener
+function Board:spawn_piece(color, pos)
+  local stone = Stone.new(color) -- create a new stone
+  self.grid[self.model:index(pos)]:set_stone(stone) -- cell that actor is going to move to
+  stone:puton(self, pos) -- put piece on board
+end
+-- model listener
+function Board:move_piece(to, from)
+  local stone = self:cell(from):remove_stone()
+  self:cell(to):set_stone(stone)
+end
+-- model listener
+function Board:remove_piece(pos)
+  local stone = self:cell(pos):remove_stone()
+  stone:putoff()
 end
 
 -------------------------------------------------------------------------------

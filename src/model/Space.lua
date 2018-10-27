@@ -86,19 +86,19 @@ function Space:piece(vec)
   ass.is(vec, Vec)
   local spot = self:spot(vec)
   if spot then
-    return spot.piece
+    return spot:piece()
   end
   return nil
 end
 
 -- number of red pieces, number of black pieces
-function Space:get_piece_count()
+function Space:count_pieces()
   local red = 0
   local bla = 0
   for i = 0, #self.grid do -- pics is not dense, so use # on grid
-    local piece = self.grid[i].piece
+    local piece = self.grid[i]:piece()
     if piece then
-      if Color.is_red(piece:get_color()) then
+      if Color.is_red(piece:color()) then
         red = red + 1
       else
         bla = bla + 1
@@ -122,11 +122,11 @@ function Space:can_move(fr, to)
   -- check move rights
   local actor = self:piece(fr)        -- peek piece at from position
   if actor == nil then                      -- check if it exists
-    log:trace(self, "can_move, actor is nil")
+    log:trace(self, ':can_move from', fr, 'piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= actor:get_color() then         -- check color who moves now
-    log:trace(self, "can_move, wrong color")
+  if self:who_move() ~= actor:color() then         -- check color who moves now
+    log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
 
@@ -146,27 +146,25 @@ end
 
 -- do move
 function Space:move(fr, to)
-  local depth = log:trace(self, ':move ', fr, ' -> ', to):enter()
-    ass.is(fr, Vec)
-    ass.is(to, Vec)
-    ass(self:can_move(fr, to))
+  ass.is(fr, Vec)
+  ass.is(to, Vec)
+  ass(self:can_move(fr, to))
 
-    -- change piece position
-    self:spot(to):move_piece(self:spot(fr))
+  -- change piece position
+  self:spot(to):move_piece(self:spot(fr))
 
-    -- change current move color
-    self.color = Color.swap(self.color) -- invert color
-    self.move_count = self.move_count + 1 -- increment moves count
+  -- change current move color
+  self.color = Color.swap(self.color) -- invert color
+  self.move_count = self.move_count + 1 -- increment moves count
 
-    -- randomly spawn jades
-    if (self.move_count % Config.jade.moves) == 0 then
-      for i = 0, #self.grid do -- pics is not dense, so use # on grid
-        self.grid[i]:spawn_jade()
-      end
+  -- randomly spawn jades
+  if (self.move_count % Config.jade.moves) == 0 then
+    for i = 0, #self.grid do -- pics is not dense, so use # on grid
+      self.grid[i]:spawn_jade()
     end
+  end
 
-    self.on_change:call('on_move') -- notify mode done
-  log:exit(depth)
+  self.on_change:call('move', self.color) -- notify color to move
 end
 
 -- ----------------------------------------------------------------------------
@@ -175,5 +173,7 @@ function Space:valid()
   return true
 end
 
+
+log:wrap(Space, 'setup', 'move')
 -- return module
 return Space

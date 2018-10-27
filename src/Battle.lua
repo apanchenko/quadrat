@@ -37,7 +37,7 @@ function battle:create(event)
   lay.render(self, self.players[color], cfg.player.black)
 
   self.space = Space.new(cfg.board.cols, cfg.board.rows)
-  self.space.on_change:add(ChangesLog.new())
+  --self.space.on_change:add(ChangesLog.new())
   self.space.on_change:add(self)
 
   self.board = VBoard.new(self, self.space)
@@ -46,10 +46,9 @@ function battle:create(event)
 end
 
 --
-function battle:on_move()
-  local color = self.space:who_move()
-  local red, bla = self.space:get_piece_count()
-  --log:trace(self, ":move r ", red, ", b ", bla)
+function battle:move(color)
+  Color.ass(color)
+  local red, bla = self.space:count_pieces()
 
   -- check if black wins
   if red == 0 then

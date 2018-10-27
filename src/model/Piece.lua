@@ -15,7 +15,7 @@ function Piece.new(color, pos)
   end
   local self =
   {
-    color = color,
+    _color = color,
     jumpp = false,
     pos = pos
   }
@@ -23,9 +23,7 @@ function Piece.new(color, pos)
 end
 
 --
-function Piece:get_color()
-  return self.color
-end
+function Piece:color() return self._color end
 
 --
 function Piece:is_jump_protected()
@@ -45,7 +43,7 @@ end
 function Piece:can_jump(victim)
   ass.is(victim, Piece)
   -- can not kill piece of the same breed
-  if victim:get_color() == self:get_color() then return false end
+  if victim:color() == self:color() then return false end
   -- victim is protected
   if victim:is_jump_protected()     then return false end
   return true
