@@ -7,7 +7,6 @@ Event.__index = Event
 
 -- 
 function Event.new(name)
-  ass.string(name)
   local self = setmetatable({}, Event)
   self.list = {}
   self.name = name
@@ -16,15 +15,15 @@ end
 
 --
 function Event:__tostring()
-  return 'event['.. self.name.. ' '.. #self.list.. ']'
+  return 'event['.. #self.list.. ']'
 end
 
 -- add listener
 function Event:add(listener)
-  ass(listener)
+  ass.is(self, Event)
+  ass.table(listener, 'listener')
   log:trace(self, ":add ", listener)
   table.insert(self.list, listener)
-  log:trace(self, ":added ", listener)
 end
 
 -- remove listener
@@ -50,8 +49,12 @@ end
 function Event:call(name, ...)
   name = name or self.name
   ass.string(name)
-  for k,v in ipairs(self.on_move) do
-    v[name](v, ...)
+  for k,v in ipairs(self.list) do
+    if v[name] then
+      v[name](v, ...)
+    --else
+      --log:trace(self, ':call ', v, ' has no method ', name)
+    end
   end
 end
 

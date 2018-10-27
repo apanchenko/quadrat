@@ -44,6 +44,7 @@ end
 
 -- check value is a table with field 'typename'
 function ass.is(value, typename)
+  assert(typename)
   if type(typename) ~= 'string' then
     typename = typename.typename
   end

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 local composer = require("composer")
 print(_VERSION)
-require('src.core.vec').test()
+require('src.core.Vec').test()
 
 composer.gotoScene("src.Menu")
 

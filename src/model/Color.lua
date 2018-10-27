@@ -3,7 +3,11 @@ local ass = require 'src.core.ass'
 local R = 1
 local B = 2
 
-local Color = {}
+local Color =
+{
+  R = R,
+  B = B
+}
 
 -- assert is color
 function Color.ass(color)

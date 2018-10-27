@@ -1,4 +1,4 @@
-local vec   = require "src.core.vec"
+local vec   = require "src.core.Vec"
 local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local ass   = require "src.core.ass"
@@ -29,25 +29,9 @@ end
 -------------------------------------------------------------------------------
 -- JADE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
--- may spawn jade
-function Cell:drop_jade(jade_probability)
-  assert(type(jade_probability) == "number")
-  assert(jade_probability >= 0)
-  assert(jade_probability <= 1)
-
-  if self.piece or self.jade then
-    return
-  end
-
-  if math.random() > jade_probability then
-    return
-  end
-
-  self:set_jade()
-end
--------------------------------------------------------------------------------
 function Cell:set_jade()
-  assert(self.jade == nil)
+  ass.nul(self.jade, 'jade')
+  ass.nul(self.piece, 'piece')
   self.jade = lay.image(self.view, cfg.jade)
 end
 -------------------------------------------------------------------------------
@@ -61,6 +45,7 @@ end
 -------------------------------------------------------------------------------
 -- PIECE-----------------------------------------------------------------------
 -------------------------------------------------------------------------------
+--
 function Cell:leave()
   ass(self.piece)
   local piece = self.piece;

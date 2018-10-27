@@ -1,8 +1,9 @@
 local Cell     = require 'src.view.Cell'
 local Stone    = require 'src.view.Stone'
-local Vec      = require 'src.core.vec'
+local Vec      = require 'src.core.Vec'
 local Player   = require 'src.Player'
 local Color    = require 'src.model.Color'
+local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
@@ -24,22 +25,19 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board.new(battle, model)
+function Board.new(battle, space)
   local self = setmetatable({}, Board)
   self.battle = battle
-  self.model = model
+  self.model = space
+  self.model.on_change:add(self)
   self.view = display.newGroup()
   self.hover = display.newGroup()
 
   self.grid = {}
-  for k, v in model:spots() do
-    local vcell = Cell.new(model:pos(k))
+  for k, v in space:spots() do
+    local vcell = Cell.new(space:pos(k))
     lay.render(self, vcell, vcell.pos * cfg.cell.size)
     self.grid[k] = vcell
-  end
-
-  for k, v in model:pieces() do
-    Stone.new(v):puton(self, self.grid[k])  
   end
 
   self.view.anchorChildren = true          -- center on screen
@@ -52,15 +50,6 @@ end
 
 -------------------------------------------------------------------------------
 -- POSITION--------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Board:put(color, x, y)
-  local log_depth = log:trace(self, ":put"):enter()
-    assert(0 <= x and x < self.model:width())
-    assert(0 <= y and y < self.model:height())
-    local stone = Stone.new(color)                -- create a new piece
-    stone:puton(self, self.grid[x * self.model:width() + y])                     -- put piece on board
-  log:exit(log_depth)
-end
 -------------------------------------------------------------------------------
 function Board:cell(pos)
   return self.grid[pos.x * self.model:width() + pos.y]            -- peek piece from cell by position
@@ -99,12 +88,16 @@ function Board:move(cell_from, vec_to)
   self.model:move(cell_from.pos, vec_to)
 end
 
--------------------------------------------------------------------------------
--- randomly spawn jades in cells
-function Board:drop_jades()
-  for _, cell in ipairs(self.grid) do
-    cell:drop_jade(cfg.jade.probability)
-  end
+-- model listener
+function Board:spawn_jade(pos)
+  ass.is(pos, Vec)
+  self:cell(pos):set_jade()
+end
+
+-- model listener
+function Board:spawn_piece(piece)
+  local stone = Stone.new(piece) -- create a new stone
+  stone:puton(self, self.grid[self.model:index(piece.pos)]) -- put piece on board
 end
 
 -------------------------------------------------------------------------------

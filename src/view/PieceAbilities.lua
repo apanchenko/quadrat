@@ -1,6 +1,6 @@
 local _         = require 'src.core.underscore'
 local widget    = require "widget"
-local vec       = require "src.core.vec"
+local vec       = require "src.core.Vec"
 local Ability   = require "src.battle.powers.Ability"
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'

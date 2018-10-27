@@ -1,5 +1,5 @@
 local ass   = require 'src.core.ass'
-local Vec   = require 'src.core.vec'
+local Vec   = require 'src.core.Vec'
 local Color = require 'src.model.Color'
 
 -- piece is a set of qualities such as color, jumpproof etc.
@@ -7,28 +7,29 @@ local Piece = {}
 Piece.typename = 'Piece'
 Piece.__index = Piece
 
--- indeces
-local COLOR = 1
-local JUMPP = 2
-
 -- create a piece
-function Piece.new(color)
+function Piece.new(color, pos)
   Color.ass(color)
-
-  local self = {}
-  self[COLOR] = color
-  self[JUMPP] = false
+  if pos then
+    ass.is(pos, Vec)
+  end
+  local self =
+  {
+    color = color,
+    jumpp = false,
+    pos = pos
+  }
   return setmetatable(self, Piece)
 end
 
 --
-function Piece:color()
-  return self[COLOR]
+function Piece:get_color()
+  return self.color
 end
 
 --
 function Piece:is_jump_protected()
-  return self[JUMPP]
+  return self.jumpp
 end
 
 --
@@ -44,7 +45,7 @@ end
 function Piece:can_jump(victim)
   ass.is(victim, Piece)
   -- can not kill piece of the same breed
-  if victim:color() == self:color() then return false end
+  if victim:get_color() == self:get_color() then return false end
   -- victim is protected
   if victim:is_jump_protected()     then return false end
   return true

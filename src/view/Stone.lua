@@ -1,5 +1,5 @@
 local _         = require 'src.core.underscore'
-local Vec       = require 'src.core.vec'
+local Vec       = require 'src.core.Vec'
 local Player    = require 'src.Player'
 local Abilities = require 'src.view.PieceAbilities'
 local Color     = require 'src.model.Color'
@@ -10,10 +10,8 @@ local log       = require 'src.core.log'
 local map       = require 'src.core.map'
 
 -------------------------------------------------------------------------------
-local Stone = 
-{
-  typename = "Stone"
-}
+local Stone = {}
+Stone.typename = "Stone"
 Stone.__index = Stone
 
 --[[-----------------------------------------------------------------------------
@@ -37,12 +35,13 @@ Methods:
   select()
   deselect()
 -----------------------------------------------------------------------------]]--
-function Stone.new(model)
+function Stone.new(piece)
   local depth = log:trace("Stone.new"):enter()
-    local self = setmetatable({model = model}, Stone)
+    ass.is(piece, 'Piece', 'piece')
+    local self = setmetatable({}, Stone)
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
-    self:set_color(model:color())
+    self:set_color(piece:get_color())
     self.scale = 1
     self.abilities = Abilities.new(self)
     self.powers = {}
@@ -263,7 +262,7 @@ end
 function Stone:touch(event)
   --log:trace(self, ":touch phase ", event.phase)
 
-  if not self.board.model:is_move(self.color) then
+  if self.board.model:who_move() ~= self.color then
     log:trace("  inactive color")
     return true
   end

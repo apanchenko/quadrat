@@ -1,4 +1,4 @@
-local vec = require("src.core.vec")
+local vec = require("src.core.Vec")
 
 local cfg = {}
 

@@ -1,8 +1,9 @@
 local Spot      = require 'src.model.Spot'
 local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
+local Config    = require 'src.model.Config'
 local Event     = require 'src.core.Event'
-local Vec       = require 'src.core.vec'
+local Vec       = require 'src.core.Vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 
@@ -16,31 +17,23 @@ function Space.new(cols, rows)
   ass.natural(cols)
   ass.natural(rows)
 
-  -- create empty grid
-  local grid = {}
-  local pics = {}
+  local self = setmetatable({}, Space)
+  self.cols  = cols    -- width
+  self.rows  = rows    -- height
+  self.grid  = {}      -- cells
+  self.color = Color.red(true) -- who moves now
+  self.move_count = 0 -- number of moves from start
+  self.on_change = Event.new()
+  log:trace(self, '.new')
+
+  -- fill grid
   for x = 0, cols - 1 do
-  for y = 0, rows - 1 do
-    place = x * cols + y
-    grid[place] = Spot.new()
-    if y == 0 or y == rows-1 then
-      pics[place] = Piece.new(Color.red(y == 0))
+    for y = 0, rows - 1 do
+      self.grid[x * cols + y] = Spot.new(x, y, self)
     end
   end
-  end
 
-  local self =
-  {
-    cols  = cols,    -- width
-    rows  = rows,    -- height
-    grid  = grid,    -- cells
-    pics  = pics,    -- pieces
-    color = Color.red(true), -- who moves now
-    move_count = 0,  -- number of moves from start
-
-    on_move = Event.new('on_move')
-  }  
-  return setmetatable(self, Space)
+  return self
 end
 
 --
@@ -50,13 +43,20 @@ function Space:width()      return self.cols end
 --
 function Space:height()     return self.rows end
 --
-function Space:pieces()     return pairs(self.pics) end
---
 function Space:row(place)   return place % self.cols end
 -- place // self.cols
 function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 -- GRID------------------------------------------------------------------------
+-- initial pieces placement
+function Space:setup()
+  ass.is(self, Space)
+  for x = 0, self.cols - 1 do
+    self.grid[x * self.cols]:spawn_piece(Color.R)
+    self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
+  end
+end
+
 -- iterate cells
 function Space:spots()
   return pairs(self.grid)
@@ -84,7 +84,11 @@ end
 -- get piece by position vector
 function Space:piece(vec)
   ass.is(vec, Vec)
-  return self.pics[self:index(vec)]
+  local spot = self:spot(vec)
+  if spot then
+    return spot.piece
+  end
+  return nil
 end
 
 -- number of red pieces, number of black pieces
@@ -92,9 +96,9 @@ function Space:get_piece_count()
   local red = 0
   local bla = 0
   for i = 0, #self.grid do -- pics is not dense, so use # on grid
-    local piece = self.pics[i]
+    local piece = self.grid[i].piece
     if piece then
-      if Color.is_red(piece:color()) then
+      if Color.is_red(piece:get_color()) then
         red = red + 1
       else
         bla = bla + 1
@@ -110,12 +114,6 @@ function Space:who_move()
   return self.color
 end
 
--- is color moves
-function Space:is_move(color)
-  Color.ass(color)
-  return self.color == color
-end
-
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
   ass.is(fr, Vec)
@@ -127,7 +125,7 @@ function Space:can_move(fr, to)
     log:trace(self, "can_move, actor is nil")
     return false                            -- can not move
   end
-  if not self:is_move(actor:color()) then         -- check color who moves now
+  if self:who_move() ~= actor:get_color() then         -- check color who moves now
     log:trace(self, "can_move, wrong color")
     return false                            -- can not move
   end
@@ -148,37 +146,26 @@ end
 
 -- do move
 function Space:move(fr, to)
-  ass.is(fr, Vec)
-  ass.is(to, Vec)
-  ass(self:can_move(fr, to))
   local depth = log:trace(self, ':move ', fr, ' -> ', to):enter()
+    ass.is(fr, Vec)
+    ass.is(to, Vec)
+    ass(self:can_move(fr, to))
 
-  -- change piece position
-  local fr_index = self:index(fr)
-  local to_index = self:index(to)
-  local piece = self.pics[to_index]
-  if piece then
-    piece:die() -- kill piece on target spot
-  end
-  self.pics[to_index] = self.pics[fr_index] -- put piece onto target spot
-  self.pics[fr_index] = nil -- make source spot empty
+    -- change piece position
+    self:spot(to):move_piece(self:spot(fr))
 
-  -- change current move color
-  self.color = Color.swap(self.color) -- invert color
-  self.move_count = self.move_count + 1 -- increment moves count
+    -- change current move color
+    self.color = Color.swap(self.color) -- invert color
+    self.move_count = self.move_count + 1 -- increment moves count
 
-  -- randomly spawn jades in cells
-  for i = 0, #self.grid do -- pics is not dense, so use # on grid
-    if self.pics[i] == nil then
-      local spot = self.spots[i]
-      if math.random() > jade_probability then
-        return
+    -- randomly spawn jades
+    if (self.move_count % Config.jade.moves) == 0 then
+      for i = 0, #self.grid do -- pics is not dense, so use # on grid
+        self.grid[i]:spawn_jade()
       end
     end
-    self:set_jade()
-  end
 
-  self.on_move() -- notify mode done
+    self.on_change:call('on_move') -- notify mode done
   log:exit(depth)
 end
 
