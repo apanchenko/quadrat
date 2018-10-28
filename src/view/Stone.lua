@@ -24,7 +24,7 @@ function Stone.new(color)
     --self.abilities = Abilities.new(self)
     self.powers = {}
     self.isSelected = false
-    self.isFocus = false
+    self.is_drag = false
   log:exit(depth)
   return self
 end
@@ -164,7 +164,7 @@ function Stone:deselect()
   end
 end
 
--- PRIVATE---------------------------------------------------------------------
+-- TOUCH-----------------------------------------------------------------------
 -- touch listener function
 function Stone:touch(event)
   -- do not touch opponent stones
@@ -177,7 +177,7 @@ function Stone:touch(event)
     return true
   end
 
-  if not self.isFocus then
+  if not self.is_drag then
     return true
   end
 
@@ -193,7 +193,7 @@ function Stone:touch(event)
   end
 
   if event.phase == "ended" or event.phase == "cancelled" then
-    self:set_focus(nil)
+    self:set_drag(nil)
     if self.proj then
       self.board.model:move(self._pos, self.proj)
       self.board:select(nil)              -- deselect any
@@ -215,7 +215,7 @@ function Stone:touch_began(event)
   if self.isSelected == false then
     self.board:select(nil)                -- deselect another Stone
   end
-  self:set_focus(event.id)
+  self:set_drag(event.id)
 end
 --
 function Stone:touch_moved(event)
@@ -242,20 +242,17 @@ function Stone:remove_project()
   end
   self.proj = nil
 end
--------------------------------------------------------------------------------
-function Stone:set_focus(eventId)
-  --log:trace(self, ":set_focus")
+--
+function Stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
-  self.isFocus = (eventId ~= nil)
-
-  if self.isFocus then
+  self.is_drag = (eventId ~= nil)
+  if self.is_drag then
     self.board.hover:insert(self.view)
   else
     self.board.view:insert(self.view)
   end
-
 end
--------------------------------------------------------------------------------
+--
 function Stone:update_group_pos()
   local pos = self._pos * cfg.cell.size
   if self.isSelected then
