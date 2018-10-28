@@ -31,10 +31,12 @@ function Piece:is_jump_protected()
 end
 
 --
-function Piece:can_move(space, fr, to)
+function Piece:pre_can_move(space, fr, to)
   ass.is(space, 'Space')
   ass.is(fr, Vec)
   ass.is(to, Vec)
+end
+function Piece:can_move(space, fr, to)
   local vec = fr - to -- movement vector
   return (vec.x == 0 or vec.y == 0) and vec:length2() == 1
 end

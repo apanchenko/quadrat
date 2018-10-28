@@ -41,7 +41,6 @@ end
 -- STONE-----------------------------------------------------------------------
 --
 function Cell:remove_stone()
-  log:trace(self, ':remove_stone')
   ass.is(self.stone, 'Stone')
   local stone = self.stone
   stone:set_pos(nil)
@@ -50,11 +49,12 @@ function Cell:remove_stone()
 end
 --
 function Cell:set_stone(stone)
-  log:trace(self, ':set_stone')
+  ass.is(self, Cell)
   ass.is(stone, 'Stone')
   stone:set_pos(self.pos)
   self.stone = stone
 end
 
+log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
 
 return Cell

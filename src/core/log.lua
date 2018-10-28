@@ -44,8 +44,9 @@ function log:wrap(t, ...)
       local self = args[1]
       table.remove(args, 1)
       local depth = log:trace(self, ':'..name, unpack(args)):enter()
-      fun(...)
+      local result = fun(...)
       log:exit(depth)
+      return result
     end
   end
 end

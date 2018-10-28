@@ -4,8 +4,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.Vec'
 
-local ChangesLog = {}
-ChangesLog.typename = 'ChangesLog'
+local ChangesLog = { typename = 'ChangesLog' }
 ChangesLog.__index = ChangesLog
 
 --
