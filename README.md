@@ -8,6 +8,8 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## todo:
 ### core game
+- separate model and view
+- pieces advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
 - ground mods:       refurb, power plant, 
 - piece mods:        bankrupt, network, spyware, invis, rat tail, purify, inhibit

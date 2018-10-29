@@ -92,6 +92,7 @@ function Stone:set_pos(pos)
     ass.is(pos, Vec)
   end
   self._pos = pos
+  self:update_group_pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
@@ -143,27 +144,6 @@ function Stone:remove_power(name)
   log:exit(depth)
 end
 
--- SELECTION-------------------------------------------------------------------
--- to be called from Board. Use self.board:select instead
-function Stone:select()
-  local depth = log:trace(self, ":select"):enter()
-    assert(self.isSelected == false)
-    self.isSelected = true                    -- set selected
-    self:update_group_pos()                  -- adjust group position
-    --self.abilities:show(self.env)           -- show abilities list
-  log:exit(depth)
-end
--- to be called from Board. Use self.board:select instead
-function Stone:deselect()
-  if self.isSelected then
-    local depth = log:trace(self, ":deselect"):enter()
-      self.isSelected = false                   -- set not selected
-      self:update_group_pos()                  -- adgjust group position
-      --self.abilities:hide()
-    log:exit(depth)
-  end
-end
-
 -- TOUCH-----------------------------------------------------------------------
 -- touch listener function
 function Stone:touch(event)
@@ -196,13 +176,12 @@ function Stone:touch(event)
     self:set_drag(nil)
     if self.proj then
       self.board.model:move(self._pos, self.proj)
-      self.board:select(nil)              -- deselect any
+      self.board:select(nil) -- deselect any
     else
-      Vec.copy(self._pos * cfg.cell.size, self.view) -- return to original position
       if self.isSelected then
-        self.board:select(nil)            -- remove selection if was selected
+        self.board:select(nil) -- release
       else
-        self.board:select(self)           -- select this Stone
+        self.board:select(self) -- or select
       end
     end
     self:remove_project()
@@ -224,6 +203,23 @@ function Stone:touch_moved(event)
   local proj = (shift / cfg.cell.size):round()
   Vec.copy(shift, self.view)
   return proj;
+end
+-- to be called from Board. Use self.board:select instead
+function Stone:select()
+  assert(self.isSelected == false)
+  self.isSelected = true                    -- set selected
+  self:update_group_pos()                  -- adjust group position
+  --self.abilities:show(self.env)           -- show abilities list
+end
+-- to be called from Board. Use self.board:select instead
+function Stone:deselect()
+  if self.isSelected then
+    local depth = log:trace(self, ":deselect"):enter()
+      self.isSelected = false                   -- set not selected
+      self:update_group_pos()                  -- adgjust group position
+      --self.abilities:hide()
+    log:exit(depth)
+  end
 end
 --
 function Stone:create_project(proj)
@@ -247,13 +243,16 @@ function Stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
-    self.board.hover:insert(self.view)
-  else
     self.board.view:insert(self.view)
   end
 end
 --
 function Stone:update_group_pos()
+  if self._pos == nil then
+    self.view.x = 0
+    self.view.y = 0
+    return
+  end
   local pos = self._pos * cfg.cell.size
   if self.isSelected then
     pos.y = pos.y - 10
@@ -261,4 +260,6 @@ function Stone:update_group_pos()
   Vec.copy(pos, self.view)
 end
 
+-------------------------------------------------------------------------------
+log:wrap(Stone, 'select')
 return Stone

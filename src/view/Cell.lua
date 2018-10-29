@@ -10,7 +10,7 @@ Cell.__index = Cell
 function Cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
-Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 2}
+Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 1}
 Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 --
@@ -40,11 +40,15 @@ end
 
 -- STONE-----------------------------------------------------------------------
 --
+function Cell:stone()
+  return self._stone
+end
+--
 function Cell:remove_stone()
-  ass.is(self.stone, 'Stone')
-  local stone = self.stone
+  ass.is(self._stone, 'Stone')
+  local stone = self._stone
   stone:set_pos(nil)
-  self.stone = nil
+  self._stone = nil
   return stone
 end
 --
@@ -52,9 +56,8 @@ function Cell:set_stone(stone)
   ass.is(self, Cell)
   ass.is(stone, 'Stone')
   stone:set_pos(self.pos)
-  self.stone = stone
+  self._stone = stone
 end
 
 log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
-
 return Cell

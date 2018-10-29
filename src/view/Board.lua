@@ -31,7 +31,6 @@ function Board.new(battle, space)
   self.model = space
   self.model.on_change:add(self)
   self.view = display.newGroup()
-  self.hover = display.newGroup()
 
   self.grid = {}
   for k, spot in space:spots() do
@@ -41,9 +40,7 @@ function Board.new(battle, space)
   end
 
   self.view.anchorChildren = true          -- center on screen
-  Vec.center(self.view)
   lay.render(self.battle, self.view, cfg.board)
-  lay.render(self.battle, self.hover, cfg.board)
   return self
 end
 
@@ -97,15 +94,16 @@ end
 
 -------------------------------------------------------------------------------
 -- select piece
-function Board:select(piece)
-  for _, cell in ipairs(self.grid) do
-    if cell.piece then
-      cell.piece:deselect()                 -- deselect all
+function Board:select(stone)
+  for _, cell in pairs(self.grid) do
+    local s = cell:stone()
+    if s then
+      s:deselect()                 -- deselect all
     end
   end
 
-  if piece then
-    piece:select()                          -- then select a new one
+  if stone then
+    stone:select()                          -- then select a new one
   end
 end
 

@@ -29,6 +29,7 @@ end
 
 -- wrap functions in table t with log
 function log:wrap(t, ...)
+  ass(self, 'log:wrap called with .')
   ass.table(t)
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
@@ -41,8 +42,7 @@ function log:wrap(t, ...)
     -- define a new function
     t[name] = function(...)
       local args = {...}
-      local self = args[1]
-      table.remove(args, 1)
+      local self = table.remove(args, 1)
       local depth = log:trace(self, ':'..name, unpack(args)):enter()
       local result = fun(...)
       log:exit(depth)
