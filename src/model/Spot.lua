@@ -38,26 +38,30 @@ end
 function Spot:spawn_piece(color)
   ass.is(self, Spot)
   ass.nul(self._piece)
-  self._piece = Piece.new(color, self._pos)
+  self._piece = Piece.new(self._space, color, self._pos)
   self._space.on_change:call('spawn_piece', color, self._pos) -- notify
 end
 
 -- move piece from another spot to this
 function Spot:move_piece(from)
   ass.is(from, Spot, 'from')
-  -- consume jade
-  if self._jade then
-    self._jade = false 
-    self._space.on_change:call('remove_jade', self._pos) -- notify
-  end
   -- kill piece
   if self._piece then
     self._piece.die()
     self._space.on_change:call('remove_piece', self._pos) -- notify
   end
+
+  -- change piece position
   self._piece = from._piece
   self._piece.pos = self._pos
   from._piece = nil
+
+  -- consume jade
+  if self._jade then
+    self._jade = false 
+    self._space.on_change:call('remove_jade', self._pos) -- notify
+    self._piece:add_ability()
+  end
   self._space.on_change:call('move_piece', self._pos, from._pos) -- notify
 end
 

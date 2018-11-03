@@ -8,7 +8,6 @@ local vec        = require "src.core.Vec"
 local Player     = require "src.Player"
 local cfg        = require 'src.Config'
 local lay        = require 'src.core.lay'
-local ass        = require 'src.core.ass'
 local log        = require 'src.core.log'
 
 -- variables

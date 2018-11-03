@@ -261,5 +261,6 @@ function Stone:update_group_pos()
 end
 
 -------------------------------------------------------------------------------
+ass:wrap(Stone, 'select', 'set_color', 'puton', 'putoff')
 log:wrap(Stone, 'select')
 return Stone

@@ -7,7 +7,7 @@ local platform = system.getInfo( "platform" )
 -------------------------------------------------------------------------------
 -- button handler
 local function handle_button(next_scene)
-    print("menu:handle_button "..next_scene)
+    print("menu:handle_button ".. next_scene)
     if next_scene == "exit" then
         native.requestExit()
     else

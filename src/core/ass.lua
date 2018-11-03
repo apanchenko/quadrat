@@ -1,3 +1,5 @@
+local check = require 'src.core.check'
+
 local ass =
 {
   typename = "ass"
@@ -38,8 +40,9 @@ function ass.fun(value, name)      ass.type(value, "function", name) end
 
 -- check 'value' is a basic type
 function ass.type(value, typename, name)
+  name = name or 'value'
   ass(value, name)
-  assert(type(value) == typename, "type ".. type(value).. ", expected ".. typename)
+  assert(type(value) == typename, name.." is '"..type(value).."' ("..tostring(value).."), expected '"..typename.."'")
 end
 
 -- check value is a table with field 'typename'
@@ -54,5 +57,26 @@ function ass.is(value, typename)
   assert(value.typename == typename, "typename ".. value.typename.. ", expected ".. typename)
 end
 
+-- wrap functions in table t
+function ass:wrap(T, ...)
+  ass(self, 'ass:wrap called with .')
+  ass.table(T)
+  local names = {...} -- list of function names to wrap
+  for i=1, #names do -- wrap each function
+    -- function name
+    local name = names[i]
+    ass.string(name)
+    -- original function
+    local fun = T[name]
+    ass.fun(fun)
+    -- define a new function
+    T[name] = function(...)
+      local args = {...}
+      ass.is(args[1], T, "method '"..name.."' called with .")
+      local result = fun(...)
+      return result
+    end
+  end
+end
 
 return ass

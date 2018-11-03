@@ -28,19 +28,19 @@ function log:exit(depth)
 end
 
 -- wrap functions in table t with log
-function log:wrap(t, ...)
-  ass(self, 'log:wrap called with .')
-  ass.table(t)
+function log:wrap(T, ...)
+  ass.is(self, log, 'log:wrap called with .')
+  ass.table(T, 'T')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name
     local name = names[i]
     ass.string(name)
     -- original function
-    local fun = t[name]
+    local fun = T[name]
     ass.fun(fun)
     -- define a new function
-    t[name] = function(...)
+    T[name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
       local depth = log:trace(self, ':'..name, unpack(args)):enter()
