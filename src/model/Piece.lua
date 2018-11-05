@@ -5,7 +5,7 @@ local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
 --
-local Piece = { typename = 'Piece' }
+local Piece = setmetatable({ typename = 'Piece' }, { __tostring = function() return 'Piece' end })
 Piece.__index = Piece
 
 -- create a piece
@@ -25,6 +25,9 @@ function Piece.new(space, color, pos)
   }
   return setmetatable(self, Piece)
 end
+
+--
+function Piece:__tostring() return 'piece'..tostring(self._pos) end
 
 --
 function Piece:color() return self._color end
@@ -83,6 +86,6 @@ function Piece:learn_ability(ability)
   self._space.on_change:call('learn_ability', self._pos, name) -- notify
 end
 
-
-log:wrap(Piece, 'add_ability', 'learn_ability')
+log:trace(Piece)
+log:wrap(Piece, 'set_pos', 'add_ability', 'learn_ability')
 return Piece

@@ -46,7 +46,8 @@ function ass.type(value, typename, name)
 end
 
 -- check value is a table with field 'typename'
-function ass.is(value, typename)
+function ass.is(value, typename, message)
+  --[[
   assert(typename)
   if type(typename) ~= 'string' then
     typename = typename.typename
@@ -55,6 +56,10 @@ function ass.is(value, typename)
   ass.table(value)
   ass.string(value.typename)
   assert(value.typename == typename, "typename ".. value.typename.. ", expected ".. typename)
+  --]]--
+  if not check.is(value, typename) then
+    print(message or (tostring(value)..' is not '..tostring(typename)))
+  end
 end
 
 -- wrap functions in table t

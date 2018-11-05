@@ -1,11 +1,14 @@
 local _   = require 'src.core.underscore'
 local ass = require 'src.core.ass'
 
-local log =
+local log_mt = 
 {
-  typename = "log",
-  depth = 0
+  __tostring = function(log)
+    return 'log'
+  end
 }
+
+local log = setmetatable({ typename = 'log', depth = 0 }, log_mt)
 
 -- increase stack depth
 function log:enter()
@@ -51,4 +54,5 @@ function log:wrap(T, ...)
   end
 end
 
+print(tostring(log))
 return log
