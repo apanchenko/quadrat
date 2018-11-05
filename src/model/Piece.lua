@@ -20,7 +20,7 @@ function Piece.new(space, color, pos)
     _space = space,
     _color = color,
     jumpp = false,
-    pos = pos, -- current position
+    _pos = pos, -- current position
     _list = {} -- list of abilities
   }
   return setmetatable(self, Piece)
@@ -28,6 +28,12 @@ end
 
 --
 function Piece:color() return self._color end
+
+--
+function Piece:set_pos(pos)
+  ass.is(pos, Vec)
+  self._pos = pos
+end
 
 --
 function Piece:is_jump_protected()

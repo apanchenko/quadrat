@@ -53,7 +53,7 @@ function Spot:move_piece(from)
 
   -- change piece position
   self._piece = from._piece
-  self._piece.pos = self._pos
+  self._piece:set_pos(self._pos)
   from._piece = nil
 
   -- consume jade

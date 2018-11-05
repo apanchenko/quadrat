@@ -58,8 +58,7 @@ function ass.is(value, typename)
 end
 
 -- wrap functions in table t
-function ass:wrap(T, ...)
-  ass(self, 'ass:wrap called with .')
+function ass.Wrap(T, ...)
   ass.table(T)
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
