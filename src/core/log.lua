@@ -27,15 +27,15 @@ end
 -- wrap functions in table t with log
 function log:wrap(T, ...)
   ass(tostring(self) == 'log', ' in Log:wrap')
-  ass.table(T, 'T')
+  ass.Table(T, 'T')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name
     local name = names[i]
-    ass.string(name)
+    ass.String(name)
     -- original function
     local fun = T[name]
-    ass.fun(fun)
+    ass.Fun(fun)
     -- define a new function
     T[name] = function(...)
       local args = {...}

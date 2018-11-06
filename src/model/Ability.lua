@@ -45,7 +45,7 @@ end
 
 -- increase ability count
 function Ability:increase(count)
-  ass.natural(count, tostring(count))
+  ass.Natural(count, tostring(count))
   self.count = self.count + count
 end
 

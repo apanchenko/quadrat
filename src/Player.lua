@@ -17,7 +17,7 @@ setmetatable(Player, {__call = function(cls, ...) return cls.new(...) end})
 -- @param (optional) display group to render
 function Player.new(color, name, view)
   Color.ass(color)
-  ass.string(name)
+  ass.String(name)
 
   local self = setmetatable({}, Player)
 

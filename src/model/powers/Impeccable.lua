@@ -14,7 +14,7 @@ Impeccable.__index = Impeccable
 
 -------------------------------------------------------------------------------
 function Impeccable.new(Zone)
-  ass.nul(Zone)
+  ass.Nil(Zone)
 
   local self = setmetatable({}, Impeccable)
   return self

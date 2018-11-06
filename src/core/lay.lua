@@ -12,9 +12,9 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 local function render(target, obj, opts)
-  ass.table(target, "target")
-  ass.table(obj, "object")
-  ass.table(opts, "opts")
+  ass.Table(target, "target")
+  ass.Table(obj, "object")
+  ass.Table(opts, "opts")
 
   target = target.view or target
   child = obj.view or obj
@@ -64,10 +64,10 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 function lay.image(group, opts, path)
-  ass.table(opts, "opts")
+  ass.Table(opts, "opts")
 
   path = path or opts.path
-  ass.string(path, 'path')
+  ass.String(path, 'path')
   --log:trace("lay.image ".. path)
 
   local w = opts.w or (cfg.vw * opts.vw)
@@ -96,7 +96,7 @@ opts:
   fontSize
 -----------------------------------------------------------------------------]]--
 function lay.text(group, opts)
-  ass.table(opts, "opts")
+  ass.Table(opts, "opts")
 
   if opts.font == nil then
     opts.font = cfg.font                    -- select default font

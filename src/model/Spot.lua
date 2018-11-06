@@ -15,9 +15,9 @@ local peak     = 17
 
 -- create empty cell
 function Spot.new(x, y, space)
-  ass.number(x)
-  ass.number(y)
-  ass.is(space, 'Space')
+  ass.Number(x)
+  ass.Number(y)
+  ass.Is(space, 'Space')
   local self = setmetatable({}, Spot)
   self._space = space -- duplicate
   self._pos = Vec(x, y) -- duplicate
@@ -36,15 +36,15 @@ end
 
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
-  ass.is(self, Spot)
-  ass.nul(self._piece)
+  ass.Is(self, Spot)
+  ass.Nil(self._piece)
   self._piece = Piece.new(self._space, color, self._pos)
   self._space.on_change:call('spawn_piece', color, self._pos) -- notify
 end
 
 -- move piece from another spot to this
 function Spot:move_piece(from)
-  ass.is(from, Spot, 'from')
+  ass.Is(from, Spot, 'from')
   -- kill piece
   if self._piece then
     self._piece.die()
@@ -67,7 +67,7 @@ end
 
 -- take chance to spawn a new jade if can
 function Spot:spawn_jade()
-  ass.is(self, Spot)
+  ass.Is(self, Spot)
   if self._jade then -- already used by jade
     return
   end

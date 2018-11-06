@@ -20,8 +20,8 @@ end
 
 -- add listener
 function Event:add(listener)
-  ass.is(self, Event)
-  ass.table(listener, 'listener')
+  ass.Is(self, Event)
+  ass.Table(listener, 'listener')
   log:trace(self, ":add ", listener)
   table.insert(self.list, listener)
 end
@@ -48,7 +48,7 @@ end
 --
 function Event:call(name, ...)
   name = name or self.name
-  ass.string(name)
+  ass.String(name)
   for k,v in ipairs(self.list) do
     if v[name] then
       v[name](v, ...)

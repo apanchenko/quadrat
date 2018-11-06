@@ -66,8 +66,8 @@ end
 
 -- insert Stone into group, with scale for dragging
 function Stone:puton(board, pos)
-  ass.is(board, 'Board')
-  ass.is(pos, Vec)
+  ass.Is(board, 'Board')
+  ass.Is(pos, Vec)
   board.view:insert(self.view)
   self.board = board
   self._pos = pos
@@ -89,7 +89,7 @@ end
 -- set stone position
 function Stone:set_pos(pos)
   if pos ~= nil then
-    ass.is(pos, Vec)
+    ass.Is(pos, Vec)
   end
   self._pos = pos
   self:update_group_pos()

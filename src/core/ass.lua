@@ -1,66 +1,43 @@
 local check = require 'src.core.check'
 
-local ass =
-{
-  typename = "ass"
-}
-
 -- check 'value' is not nil
-function ass.not_nil(value, name)
-  name = name or "value"
-  assert(value ~= nil, name.. ' is nil')
-end
-setmetatable(ass, {__call = function(cls, ...) return cls.not_nil(...) end})
-
--- check 'value' is nil
-function ass.nul(value, name)
-  name = name or "value"
-  assert(value == nil, name.. " is not nil")
-end
+local ass = setmetatable({},
+{
+  __call = function(cls, v, name) return v ~= nil or error((name or 'value')..' is nil') end
+})
 
 -- check 'num' is natural number
-function ass.natural(num, message)
-  ass.number(num, message)
-  ass(num >= 0, message)
-end
-
--- check 'value' is a number
-function ass.number(value, name)   ass.type(value, 'number', name) end
-
--- check 'value' is a table
-function ass.table(v)   return check.Table(v) or error(tostring(v)..' is not a table') end
--- check 'value' is a string
-function ass.string(v)  return check.String(v) or error(tostring(v)..' is not a string') end
--- check 'value' is a string
+function ass.Natural(n) return ass.Number(n) and ass(n >= 0) end
+-- 'v' is nil
+function ass.Nil(v)     return v == nil or error(tostring(v)..' is not nil') end
+-- 'v' is a number
+function ass.Number(v)  return check.Number(v) or error(tostring(v)..' is not a number') end
+-- 'v' is a table
+function ass.Table(v)   return check.Table(v) or error(tostring(v)..' is not a table') end
+-- 'v' is a string
+function ass.String(v)  return check.String(v) or error(tostring(v)..' is not a string') end
+-- 'v' is a boolean
 function ass.Boolean(v) return check.Boolean(v) or error(tostring(v)..' is not a boolean') end
--- check 'value' is a function
-function ass.fun(v)     return check.Fun(v) or error(tostring(v)..' is not a function') end
+-- 'v' is a function
+function ass.Fun(v)     return check.Fun(v) or error(tostring(v)..' is not a function') end
+-- 'v' is an instance of T
+function ass.Is(t, T)   return check.Is(t, T) or error(tostring(t)..' is not '..tostring(T)) end
 
--- check 'value' is a basic type
-function ass.type(v, typename, name)
-  name = name or 'v'
-  ass(v, name)
-  assert(type(v) == typename, name.." is '"..type(v).."' ("..tostring(v).."), expected '"..typename.."'")
-end
-
--- check value is a table with field 'typename'
-function ass.is(t, T) return check.Is(t, T) or error(tostring(t)..' is not '..tostring(T)) end
-
--- wrap functions in table t
+-- wrap functions of T
 function ass.Wrap(T, ...)
-  ass.table(T)
+  ass.Table(T)
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name
     local name = names[i]
-    ass.string(name)
+    ass.String(name)
     -- original function
     local fun = T[name]
-    ass.fun(fun)
+    ass.Fun(fun)
     -- define a new function
     T[name] = function(...)
       local args = {...}
-      ass.is(args[1], T, "method '"..name.."' called with .")
+      ass.Is(args[1], T, "method '"..name.."' called with .")
       local result = fun(...)
       return result
     end
@@ -69,7 +46,7 @@ end
 
 function ass.Test()
   print('test ass..')
-  ass.table({})
+  ass.Table({})
 end
 
 return ass

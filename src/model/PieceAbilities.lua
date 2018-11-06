@@ -15,7 +15,7 @@ function PieceAbilities:__tostring() return "PieceAbilities" end
 
 -- A set of abilities a piece have.
 function PieceAbilities.new(stone)
-  ass.is(stone, 'Stone')
+  ass.Is(stone, 'Stone')
   local self = setmetatable({}, PieceAbilities)
   self.list = {} -- list of abilities
   self.piece = stone -- owner piece
@@ -37,7 +37,7 @@ end
 
 -- learn certain ability
 function PieceAbilities:learn(ability)
-  ass.is(ability, "Ability")
+  ass.Is(ability, "Ability")
   local depth = log:trace(self, ":learn ", ability):enter()
     local name = tostring(ability)
     if self.list[name] then

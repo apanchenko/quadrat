@@ -15,7 +15,7 @@ Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 --
 function Cell.new(spot)
-  ass.is(spot, 'Spot')
+  ass.Is(spot, 'Spot')
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.pos = spot:pos()
@@ -27,8 +27,8 @@ end
 -- JADE------------------------------------------------------------------------
 --
 function Cell:set_jade()
-  ass.nul(self.jade, 'jade')
-  ass.nul(self.piece, 'piece')
+  ass.Nil(self.jade, 'jade')
+  ass.Nil(self.piece, 'piece')
   self.jade = lay.image(self.view, cfg.jade)
 end
 --
@@ -45,7 +45,7 @@ function Cell:stone()
 end
 --
 function Cell:remove_stone()
-  ass.is(self._stone, 'Stone')
+  ass.Is(self._stone, 'Stone')
   local stone = self._stone
   stone:set_pos(nil)
   self._stone = nil
@@ -53,8 +53,8 @@ function Cell:remove_stone()
 end
 --
 function Cell:set_stone(stone)
-  ass.is(self, Cell)
-  ass.is(stone, 'Stone')
+  ass.Is(self, Cell)
+  ass.Is(stone, 'Stone')
   stone:set_pos(self.pos)
   self._stone = stone
 end

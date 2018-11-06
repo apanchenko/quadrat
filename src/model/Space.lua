@@ -13,8 +13,8 @@ Space.__index = Space
 -------------------------------------------------------------------------------
 -- create model ready to play
 function Space.new(cols, rows)
-  ass.natural(cols)
-  ass.natural(rows)
+  ass.Natural(cols)
+  ass.Natural(rows)
 
   local self = setmetatable({}, Space)
   self.cols  = cols    -- width
@@ -49,7 +49,7 @@ function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
 function Space:setup()
-  ass.is(self, Space)
+  ass.Is(self, Space)
   for x = 0, self.cols - 1 do
     self.grid[x * self.cols]:spawn_piece(Color.R)
     self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
@@ -63,26 +63,26 @@ end
 
 -- position vector from grid index
 function Space:pos(index)
-  ass.number(index)
+  ass.Number(index)
   return Vec(self:col(index), self:row(index))
 end
 
 -- index of cell and piece, private
 function Space:index(vec)
-  ass.is(vec, Vec)
+  ass.Is(vec, Vec)
   return vec.x * self.cols + vec.y
 end
 
 -- get spot by position vector
 function Space:spot(vec)
-  ass.is(vec, Vec)
+  ass.Is(vec, Vec)
   return self.grid[self:index(vec)]
 end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
 function Space:piece(vec)
-  ass.is(vec, Vec)
+  ass.Is(vec, Vec)
   local spot = self:spot(vec)
   if spot then
     return spot:piece()
@@ -115,8 +115,8 @@ end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
-  ass.is(fr, Vec)
-  ass.is(to, Vec)
+  ass.Is(fr, Vec)
+  ass.Is(to, Vec)
 
   -- check move rights
   local actor = self:piece(fr)        -- peek piece at from position
@@ -145,8 +145,8 @@ end
 
 -- do move
 function Space:move(fr, to)
-  ass.is(fr, Vec)
-  ass.is(to, Vec)
+  ass.Is(fr, Vec)
+  ass.Is(to, Vec)
   ass(self:can_move(fr, to))
 
   -- change piece position

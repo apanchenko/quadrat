@@ -11,7 +11,7 @@ local Color =
 
 -- assert is color
 function Color.ass(color)
-  ass.number(color, "color")
+  ass.Number(color, "color")
   ass(color == R or color == B, "color")
 end
 

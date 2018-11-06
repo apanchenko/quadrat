@@ -13,7 +13,7 @@ Sphere.__index = Sphere
 
 -------------------------------------------------------------------------------
 function Sphere.new(Zone)
-  ass.nul(Zone)
+  ass.Nil(Zone)
 
   local self = setmetatable({}, Sphere)
   return self

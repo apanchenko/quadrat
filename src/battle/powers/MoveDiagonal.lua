@@ -38,8 +38,8 @@ end
 -- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:can_move(from, to)
-  ass.is(from, Vec)
-  ass.is(to, Vec)
+  ass.Is(from, Vec)
+  ass.Is(to, Vec)
 
   local diff = from - to
   return (diff.x==1 or diff.x==-1) and (diff.y==1 or diff.y==-1)

@@ -26,20 +26,20 @@ end
 
 --
 function ChangesLog:spawn_jade(pos)
-  ass.is(pos, Vec)
+  ass.Is(pos, Vec)
   log:trace(self, ':spawn_jade ', pos)
 end
 
 --
 function ChangesLog:spawn_piece(color, pos)
-  ass.is(pos, Vec, 'pos')
+  ass.Is(pos, Vec, 'pos')
   log:trace(self, ':spawn_piece ', color, ' ', pos)
 end
 
 --
 function ChangesLog:move_piece(to, from)
-  ass.is(to, Vec)
-  ass.is(from, Vec)
+  ass.Is(to, Vec)
+  ass.Is(from, Vec)
   log:trace(self, ':move_piece ', from, ' -> ', to)
 end
 

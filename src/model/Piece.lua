@@ -10,10 +10,10 @@ Piece.__index = Piece
 
 -- create a piece
 function Piece.new(space, color, pos)
-  ass.is(space, 'Space')
+  ass.Is(space, 'Space')
   Color.ass(color)
   if pos then
-    ass.is(pos, Vec)
+    ass.Is(pos, Vec)
   end
   local self =
   {
@@ -34,7 +34,7 @@ function Piece:color() return self._color end
 
 --
 function Piece:set_pos(pos)
-  ass.is(pos, Vec)
+  ass.Is(pos, Vec)
   self._pos = pos
 end
 
@@ -45,9 +45,9 @@ end
 
 --
 function Piece:pre_can_move(space, fr, to)
-  ass.is(space, 'Space')
-  ass.is(fr, Vec)
-  ass.is(to, Vec)
+  ass.Is(space, 'Space')
+  ass.Is(fr, Vec)
+  ass.Is(to, Vec)
 end
 function Piece:can_move(space, fr, to)
   local vec = fr - to -- movement vector
@@ -56,7 +56,7 @@ end
 
 --
 function Piece:can_jump(victim)
-  ass.is(victim, Piece)
+  ass.Is(victim, Piece)
   -- can not kill piece of the same breed
   if victim:color() == self:color() then return false end
   -- victim is protected
@@ -76,7 +76,7 @@ end
 
 -- learn certain ability
 function Piece:learn_ability(ability)
-  ass.is(ability, "Ability")
+  ass.Is(ability, "Ability")
   local name = tostring(ability)
   if self._list[name] then
     self._list[name]:increase(ability.count)

@@ -5,7 +5,7 @@ local meta = {}
 local meta.typename = 'meta'
 
 function meta.create_class(typename)
-  ass.string(typename)
+  ass.String(typename)
   local class = {}
   class.typename = 'ChangeLog'
   class.__index = ChangeLog
