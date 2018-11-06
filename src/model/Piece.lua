@@ -5,7 +5,7 @@ local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
 --
-local Piece = setmetatable({ typename = 'Piece' }, { __tostring = function() return 'Piece' end })
+local Piece = setmetatable({}, { __tostring = function() return 'Piece' end })
 Piece.__index = Piece
 
 -- create a piece

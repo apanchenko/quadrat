@@ -9,7 +9,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
 
-local Stone = { typename = "Stone" }
+local Stone = setmetatable({}, { __tostring = function() return 'Stone' end })
 Stone.__index = Stone
 
 --INIT-------------------------------------------------------------------------

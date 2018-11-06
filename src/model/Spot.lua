@@ -4,7 +4,7 @@ local log       = require 'src.core.log'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
 
-local Spot = { typename = 'Spot' }
+local Spot = setmetatable({}, { __tostring = function() return 'Spot' end })
 Spot.__index = Spot
 
 -- flags

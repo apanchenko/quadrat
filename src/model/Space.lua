@@ -7,8 +7,7 @@ local Vec       = require 'src.core.Vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 
-local Space = {}
-Space.typename = 'Space'
+local Space = setmetatable({}, { __tostring = function() return 'Space' end })
 Space.__index = Space
 
 -------------------------------------------------------------------------------

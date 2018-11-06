@@ -8,8 +8,9 @@ local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 
-PieceAbilities = {}
+local PieceAbilities = setmetatable({}, { __tostring = function() return 'PieceAbilities' end })
 PieceAbilities.__index = PieceAbilities
+
 function PieceAbilities:__tostring() return "PieceAbilities" end
 
 -- A set of abilities a piece have.

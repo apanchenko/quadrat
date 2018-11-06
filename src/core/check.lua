@@ -1,25 +1,32 @@
-local check = { typename = "check" }
+local check = {}
 
 -- check 'n' is natural number
-function check.natural(n)  return check.number(n) and (n >= 0) end
+function check.Natural(n)  return check.Number(n) and (n >= 0) end
 -- check 'v' is a number
-function check.number(v)   return type(v) == 'number' end
+function check.Number(v)   return type(v) == 'number' end
 -- check 'v' is a table
-function check.table(v)    return type(v) == 'table' end
+function check.Table(v)    return type(v) == 'table' end
 -- check 'v' is a string
-function check.string(v)   return type(v) == 'string' end
+function check.String(v)   return type(v) == 'string' end
 -- check 'v' is a string
-function check.boolean(v)  return type(v) == 'boolean' end
+function check.Boolean(v)  return type(v) == 'boolean' end
 -- check 'v' is a function
-function check.fun(v)      return type(v) == 'function' end
+function check.Fun(v)      return type(v) == 'function' end
+-- check 'v' has meta T
+function check.Is(v, T)    return tostring(getmetatable(v)) == tostring(T) end
 
--- check value is a table with field 'typename'
-function check.is(t, typename)
-  if type(typename) == 'table' then
-    typename = typename.typename
-  end
-  return check.table(t) and check.string(t.typename) and t.typename == typename
+
+
+function test()
+  print('test check..')
+  assert(check.Natural(1))
+  assert(check.Number(2.7))
+  assert(check.Table({}))
+  assert(check.String(''))
+  assert(check.Boolean(false))
+  assert(check.Fun(function() end))
 end
 
+test()
 
 return check

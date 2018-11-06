@@ -18,7 +18,7 @@ local Powers =
 }
 
 -- Ability has a potential to become certain power.
-local Ability = {typename="Ability"}
+local Ability = setmetatable({}, { __tostring = function() return 'Ability' end })
 Ability.__index = Ability
 
 -- create ability with random power

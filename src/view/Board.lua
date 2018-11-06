@@ -9,7 +9,7 @@ local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
 
-Board = { typename='Board' }
+local Board = setmetatable({}, { __tostring = function() return 'Board' end })
 Board.__index = Board
 
 -------------------------------------------------------------------------------
