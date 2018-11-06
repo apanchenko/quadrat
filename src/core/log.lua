@@ -1,24 +1,17 @@
 local _   = require 'src.core.underscore'
 local ass = require 'src.core.ass'
 
---
-local Log = setmetatable({}, { __tostring = function() return 'Log' end })
-Log.__index = Log
-
--- instance
-local log = setmetatable({ depth = 0 }, Log)
-
---
-function Log:__tostring() return 'log' end
+-- create log instance
+local log = setmetatable({ depth = 0 }, { __tostring = function() return 'log' end })
 
 -- increase stack depth
-function Log:enter()
+function log:enter()
   self.depth = self.depth + 1
   return self.depth
 end
 
 -- chained to instantly call :enter()
-function Log:trace(...)
+function log:trace(...)
   local str = string.rep('  ', self.depth)
   str = _.reduce(arg, str, function(mem, a) return mem.. tostring(a).. ' ' end)
   print(str)
@@ -26,14 +19,14 @@ function Log:trace(...)
 end
 
 -- decrease stack depth
-function Log:exit(depth)
+function log:exit(depth)
   assert(self.depth == depth)
   self.depth = depth - 1
 end
 
 -- wrap functions in table t with log
-function Log:wrap(T, ...)
-  ass.is(self, Log, ' in Log:wrap')
+function log:wrap(T, ...)
+  ass(tostring(self) == 'log', ' in Log:wrap')
   ass.table(T, 'T')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
@@ -55,11 +48,11 @@ function Log:wrap(T, ...)
   end
 end
 
-function Log:test()
+function log.test()
   print('test log..')
-  ass.is(log, Log, 'log test')
+  ass(tostring(log) == 'log', 'log test')
+  ass(log:enter() == 1)
+  log:exit(1)
 end
-
-log:test()
 
 return log

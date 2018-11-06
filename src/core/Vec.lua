@@ -1,6 +1,12 @@
-local Vec = { typename = 'Vec' }
+local Vec = setmetatable({},
+{
+  __tostring = function() return 'Vec' end,
+  __call = function(cls, ...) return cls.new(...) end
+})
+
+--local Vec = { typename = 'Vec' }
 Vec.__index = Vec
-setmetatable(Vec, {__call = function(cls, ...) return cls.new(...) end})
+--setmetatable(Vec, {__call = function(cls, ...) return cls.new(...) end})
 
 -- x, y  - Vecition
 -------------------------------------------------------------------------------
@@ -66,6 +72,7 @@ end
 
 -- selftest
 function Vec.test()
+  print('test Vec..')
   local a = Vec.new(3, 4)
   local b = Vec.new(2, 3)
 
