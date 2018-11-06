@@ -17,7 +17,7 @@ end
 
 -- is_red ? R : B
 function Color.red(is_red)
-  ass.boolean(is_red)
+  ass.Boolean(is_red)
   return is_red and R or B
 end
 

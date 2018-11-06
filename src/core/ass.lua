@@ -25,32 +25,26 @@ function ass.natural(num, message)
 end
 
 -- check 'value' is a number
-function ass.number(value, name)
-  ass.type(value, 'number', name)
-end
+function ass.number(value, name)   ass.type(value, 'number', name) end
 
 -- check 'value' is a table
-function ass.table(value, name)    ass.type(value, "table", name) end
+function ass.table(v)   return check.Table(v) or error(tostring(v)..' is not a table') end
 -- check 'value' is a string
-function ass.string(value, name)   ass.type(value, "string", name) end
+function ass.string(v)  return check.String(v) or error(tostring(v)..' is not a string') end
 -- check 'value' is a string
-function ass.boolean(value, name)  ass.type(value, "boolean", name) end
+function ass.Boolean(v) return check.Boolean(v) or error(tostring(v)..' is not a boolean') end
 -- check 'value' is a function
-function ass.fun(value, name)      ass.type(value, "function", name) end
+function ass.fun(v)     return check.Fun(v) or error(tostring(v)..' is not a function') end
 
 -- check 'value' is a basic type
-function ass.type(value, typename, name)
-  name = name or 'value'
-  ass(value, name)
-  assert(type(value) == typename, name.." is '"..type(value).."' ("..tostring(value).."), expected '"..typename.."'")
+function ass.type(v, typename, name)
+  name = name or 'v'
+  ass(v, name)
+  assert(type(v) == typename, name.." is '"..type(v).."' ("..tostring(v).."), expected '"..typename.."'")
 end
 
 -- check value is a table with field 'typename'
-function ass.is(t, T, message)
-  if not check.Is(t, T) then
-    error(tostring(t)..' is not '..tostring(T).. ': '.. tostring(message))
-  end
-end
+function ass.is(t, T) return check.Is(t, T) or error(tostring(t)..' is not '..tostring(T)) end
 
 -- wrap functions in table t
 function ass.Wrap(T, ...)
@@ -71,6 +65,11 @@ function ass.Wrap(T, ...)
       return result
     end
   end
+end
+
+function ass.Test()
+  print('test ass..')
+  ass.table({})
 end
 
 return ass

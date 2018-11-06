@@ -71,7 +71,7 @@ function Vec.is_valid(v)
 end
 
 -- selftest
-function Vec.test()
+function Vec.Test()
   print('test Vec..')
   local a = Vec.new(3, 4)
   local b = Vec.new(2, 3)

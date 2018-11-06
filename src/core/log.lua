@@ -48,7 +48,7 @@ function log:wrap(T, ...)
   end
 end
 
-function log.test()
+function log.Test()
   print('test log..')
   ass(tostring(log) == 'log', 'log test')
   ass(log:enter() == 1)

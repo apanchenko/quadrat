@@ -15,9 +15,8 @@ function check.Fun(v)      return type(v) == 'function' end
 -- check 'v' has meta T
 function check.Is(v, T)    return tostring(getmetatable(v)) == tostring(T) end
 
-
-
-function test()
+--
+function check.Test()
   print('test check..')
   assert(check.Natural(1))
   assert(check.Number(2.7))
@@ -26,7 +25,5 @@ function test()
   assert(check.Boolean(false))
   assert(check.Fun(function() end))
 end
-
-test()
 
 return check
