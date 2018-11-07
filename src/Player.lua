@@ -16,7 +16,7 @@ setmetatable(Player, {__call = function(cls, ...) return cls.new(...) end})
 -- @param name
 -- @param (optional) display group to render
 function Player.new(color, name, view)
-  Color.ass(color)
+  ass.Is(color, Color)
   ass.String(name)
 
   local self = setmetatable({}, Player)
@@ -27,7 +27,7 @@ function Player.new(color, name, view)
   self.view = display.newGroup()
 
   -- piece image
-  lay.image(self, cfg.player, "src/view/stone_"..Color.string(self.color)..".png")
+  lay.image(self, cfg.player, "src/view/stone_"..tostring(self.color)..".png")
 
   -- player name
   lay.text(self, {text=self.name, vx=8})
@@ -38,7 +38,7 @@ end
 
 --
 function Player:__tostring() 
-  return self.name .. ": " .. Color.string(self.color)
+  return self.name .. ": " .. tostring(self.color)
 end
 
 return Player

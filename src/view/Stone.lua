@@ -15,7 +15,7 @@ Stone.__index = Stone
 --INIT-------------------------------------------------------------------------
 function Stone.new(color)
   local depth = log:trace("Stone.new"):enter()
-    Color.ass(color)
+  ass.Is(color, Color)
     local self = setmetatable({}, Stone)
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
@@ -32,7 +32,7 @@ end
 function Stone:__tostring() 
   local s = "Stone["
   if self.color ~= nil then
-    s = s.. Color.string(self.color)
+    s = s.. tostring(self.color)
   end
   if self._pos then
     s = s.. " ".. tostring(self._pos)
@@ -46,8 +46,8 @@ function Stone:__tostring()
 end
 --
 function Stone:set_color(color)
-  local depth = log:trace(self, ":set_color ", Color.string(color)):enter()
-    Color.ass(color)
+  local depth = log:trace(self, ":set_color ", tostring(color)):enter()
+    ass.Is(color, Color)
 
     -- nothing to change
     if color ~= self.clolor then
@@ -58,7 +58,7 @@ function Stone:set_color(color)
         self.img:removeSelf()
       end
       cfg.cell.order = 1
-      self.img = lay.image(self, cfg.cell, "src/view/stone_"..Color.string(self.color)..".png")
+      self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self.color)..".png")
       cfg.cell.order = nil
     end
   log:exit(depth)
@@ -102,7 +102,7 @@ function Stone:add_ability()
   -- add ability mark
   if self.able == nil then
     cfg.cell.order = 1
-    self.able = lay.image(self, cfg.cell, "src/battle/ability_".. Color.string(self.color).. ".png")
+    self.able = lay.image(self, cfg.cell, "src/battle/ability_".. tostring(self.color).. ".png")
     cfg.cell.order = nil
   end
 end
@@ -224,7 +224,7 @@ end
 --
 function Stone:create_project(proj)
   if not self.project then
-    local path = "src/view/stone_"..Color.string(self.color).."_project.png"
+    local path = "src/view/stone_"..tostring(self.color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
   end
   self.proj = proj
@@ -261,6 +261,9 @@ function Stone:update_group_pos()
 end
 
 -------------------------------------------------------------------------------
-ass.Wrap(Stone, 'select', 'set_color', 'puton', 'putoff')
+ass.Wrap(Stone, 'select')
+ass.Wrap(Stone, 'set_color', Color)
+ass.Wrap(Stone, 'puton', 'Board', Vec)
+ass.Wrap(Stone, 'putoff')
 log:wrap(Stone, 'select')
 return Stone

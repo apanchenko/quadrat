@@ -49,7 +49,7 @@ function PieceAbilities:learn(ability)
     -- add ability mark
     if self.mark == nil then
       cfg.cell.order = 1
-      self.mark = lay.image(self.piece, cfg.cell, "src/battle/ability_".. Color.string(self.piece.color).. ".png")
+      self.mark = lay.image(self.piece, cfg.cell, "src/battle/ability_".. tostring(self.piece.color).. ".png")
       cfg.cell.order = nil
     end
     

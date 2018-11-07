@@ -21,7 +21,7 @@ function check.Test()
   assert(check.Natural(1))
   assert(check.Number(2.7))
   assert(check.Table({}))
-  assert(check.String(''))
+  assert(check.String('hello'))
   assert(check.Boolean(false))
   assert(check.Fun(function() end))
 end

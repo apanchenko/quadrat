@@ -49,7 +49,6 @@ function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
 function Space:setup()
-  ass.Is(self, Space)
   for x = 0, self.cols - 1 do
     self.grid[x * self.cols]:spawn_piece(Color.R)
     self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
@@ -144,9 +143,14 @@ function Space:can_move(fr, to)
 end
 
 -- do move
+Space.assert_arguments_move = {Vec, Vec}
+--[[function Space.assert_arguments_move(...)
+  local args = {...}
+  ass(#args == 2)
+  ass.Is(args[1], Vec)
+  ass.Is(args[2], Vec)
+end]]--
 function Space:move(fr, to)
-  ass.Is(fr, Vec)
-  ass.Is(to, Vec)
   ass(self:can_move(fr, to))
 
   -- change piece position
@@ -172,7 +176,8 @@ function Space:valid()
   return true
 end
 
-
+ass.Wrap(Space, 'setup')
+ass.Wrap(Space, 'move', Vec, Vec)
 log:wrap(Space, 'setup', 'move')
 -- return module
 return Space

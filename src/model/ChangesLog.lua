@@ -20,7 +20,7 @@ end
 
 --
 function ChangesLog:move(color)
-  Color.ass(color)
+  ass.Is(color, Color)
   log:trace(self, ':move ', color)
 end
 

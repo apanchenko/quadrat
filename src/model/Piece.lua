@@ -11,7 +11,7 @@ Piece.__index = Piece
 -- create a piece
 function Piece.new(space, color, pos)
   ass.Is(space, 'Space')
-  Color.ass(color)
+  ass.Is(color, Color)
   if pos then
     ass.Is(pos, Vec)
   end
