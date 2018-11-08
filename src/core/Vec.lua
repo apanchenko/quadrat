@@ -1,12 +1,11 @@
+local Ass = require 'src.core.Ass'
+
 local Vec = setmetatable({},
 {
-  __tostring = function() return 'Vec' end,
-  __call = function(cls, ...) return cls.new(...) end
+  __tostring = function()         return 'Vec' end,
+  __call     = function(cls, ...) return cls.new(...) end
 })
-
---local Vec = { typename = 'Vec' }
 Vec.__index = Vec
---setmetatable(Vec, {__call = function(cls, ...) return cls.new(...) end})
 
 -- x, y  - Vecition
 -------------------------------------------------------------------------------
@@ -82,6 +81,10 @@ function Vec.Test()
   assert(b:length2() == 13)
   assert(Vec.new(2.3, 4.5):round().x == 2)
 end
+
+Ass.Wrap(Vec, 'length2')
+Ass.Wrap(Vec, 'round')
+Ass.Wrap(Vec, 'to', 'table')
 
 -- return module
 return Vec

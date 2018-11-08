@@ -1,8 +1,7 @@
 local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
 
-local Event = {}
-Event.typename = 'Event'
+local Event = setmetatable({}, { __tostring = function() return 'Event' end })
 Event.__index = Event
 
 -- 
@@ -20,15 +19,12 @@ end
 
 -- add listener
 function Event:add(listener)
-  Ass.Is(self, Event)
-  Ass.Table(listener, 'listener')
   log:trace(self, ":add ", listener)
   table.insert(self.list, listener)
 end
 
 -- remove listener
 function Event:remove(listener)
-  Ass(listener)  
   for k,v in ipairs(self.list) do
     if v == listener then
       table.remove(self.list, k)
@@ -57,5 +53,8 @@ function Event:call(name, ...)
     end
   end
 end
+
+Ass.Wrap(Event, 'add', 'table')
+Ass.Wrap(Event, 'remove', 'table')
 
 return Event
