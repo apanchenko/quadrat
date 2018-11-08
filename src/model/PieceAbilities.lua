@@ -5,7 +5,7 @@ local Ability   = require "src.battle.powers.Ability"
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
-local ass       = require 'src.core.ass'
+local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 
 local PieceAbilities = setmetatable({}, { __tostring = function() return 'PieceAbilities' end })
@@ -15,7 +15,7 @@ function PieceAbilities:__tostring() return "PieceAbilities" end
 
 -- A set of abilities a piece have.
 function PieceAbilities.new(stone)
-  ass.Is(stone, 'Stone')
+  Ass.Is(stone, 'Stone')
   local self = setmetatable({}, PieceAbilities)
   self.list = {} -- list of abilities
   self.piece = stone -- owner piece
@@ -37,7 +37,7 @@ end
 
 -- learn certain ability
 function PieceAbilities:learn(ability)
-  ass.Is(ability, "Ability")
+  Ass.Is(ability, "Ability")
   local depth = log:trace(self, ":learn ", ability):enter()
     local name = tostring(ability)
     if self.list[name] then

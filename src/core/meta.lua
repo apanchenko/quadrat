@@ -1,11 +1,11 @@
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
 
 local meta = {}
 local meta.typename = 'meta'
 
 function meta.create_class(typename)
-  ass.String(typename)
+  Ass.String(typename)
   local class = {}
   class.typename = 'ChangeLog'
   class.__index = ChangeLog

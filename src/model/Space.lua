@@ -4,7 +4,7 @@ local Color     = require 'src.model.Color'
 local Config    = require 'src.model.Config'
 local Event     = require 'src.core.Event'
 local Vec       = require 'src.core.Vec'
-local ass       = require 'src.core.ass'
+local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 
 local Space = setmetatable({}, { __tostring = function() return 'Space' end })
@@ -13,8 +13,8 @@ Space.__index = Space
 -------------------------------------------------------------------------------
 -- create model ready to play
 function Space.new(cols, rows)
-  ass.Natural(cols)
-  ass.Natural(rows)
+  Ass.Natural(cols)
+  Ass.Natural(rows)
 
   local self = setmetatable({}, Space)
   self.cols  = cols    -- width
@@ -57,7 +57,7 @@ end
 
 -- position vector from grid index
 function Space:pos(index)
-  ass.Number(index)
+  Ass.Number(index)
   return Vec(self:col(index), self:row(index))
 end
 
@@ -73,7 +73,7 @@ function Space:spot(vec)    return self.grid[self:index(vec)] end
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
 function Space:piece(vec)
-  ass.Is(vec, Vec)
+  Ass.Is(vec, Vec)
   local spot = self:spot(vec)
   if spot then
     return spot:piece()
@@ -133,7 +133,7 @@ end
 
 -- do move
 function Space:move(fr, to)
-  ass(self:can_move(fr, to))
+  Ass(self:can_move(fr, to))
 
   -- change piece position
   self:spot(to):move_piece(self:spot(fr))
@@ -158,20 +158,20 @@ function Space:valid()
   return true
 end
 
-ass.Wrap(Space, 'setup')
-ass.Wrap(Space, 'width')
-ass.Wrap(Space, 'height')
-ass.Wrap(Space, 'row', 'number')
-ass.Wrap(Space, 'col', 'number')
-ass.Wrap(Space, 'pos', 'number')
-ass.Wrap(Space, 'index', Vec)
-ass.Wrap(Space, 'spots')
-ass.Wrap(Space, 'spot', Vec)
-ass.Wrap(Space, 'count_pieces')
-ass.Wrap(Space, 'piece', Vec)
-ass.Wrap(Space, 'who_move')
-ass.Wrap(Space, 'can_move', Vec, Vec)
-ass.Wrap(Space, 'move', Vec, Vec)
+Ass.Wrap(Space, 'setup')
+Ass.Wrap(Space, 'width')
+Ass.Wrap(Space, 'height')
+Ass.Wrap(Space, 'row', 'number')
+Ass.Wrap(Space, 'col', 'number')
+Ass.Wrap(Space, 'pos', 'number')
+Ass.Wrap(Space, 'index', Vec)
+Ass.Wrap(Space, 'spots')
+Ass.Wrap(Space, 'spot', Vec)
+Ass.Wrap(Space, 'count_pieces')
+Ass.Wrap(Space, 'piece', Vec)
+Ass.Wrap(Space, 'who_move')
+Ass.Wrap(Space, 'can_move', Vec, Vec)
+Ass.Wrap(Space, 'move', Vec, Vec)
 
 log:wrap(Space, 'setup', 'move')
 

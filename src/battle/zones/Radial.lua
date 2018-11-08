@@ -1,4 +1,4 @@
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 
 local Radial = 
 {
@@ -8,7 +8,7 @@ Radial.__index = Radial
 
 -------------------------------------------------------------------------------
 function Radial.new(pos)
-  ass.Is(pos, "Vec")
+  Ass.Is(pos, "Vec")
 
   local self = setmetatable({}, Radial)
   self.pos = pos
@@ -20,7 +20,7 @@ function Radial:__tostring()
 end
 -------------------------------------------------------------------------------
 function Radial:filter(cell)
-  ass.Is(cell, "Cell")
+  Ass.Is(cell, "Cell")
 
   local distance = (cell.pos - self.pos):length2()
   return distance < 3

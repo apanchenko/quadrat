@@ -1,6 +1,6 @@
 local Vec = require 'src.core.Vec'
 local lay = require 'src.core.lay'
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 local cfg = require 'src.Config'
 
 local PowerMoveDiagonal =
@@ -38,8 +38,8 @@ end
 -- MOVE------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:can_move(from, to)
-  ass.Is(from, Vec)
-  ass.Is(to, Vec)
+  Ass.Is(from, Vec)
+  Ass.Is(to, Vec)
 
   local diff = from - to
   return (diff.x==1 or diff.x==-1) and (diff.y==1 or diff.y==-1)

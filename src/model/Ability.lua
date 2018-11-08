@@ -9,7 +9,7 @@ local Impeccable   = require 'src.model.powers.Impeccable'
 local Teach        = require 'src.model.powers.Teach'
 local Destroy      = require 'src.model.powers.Destroy'
 local Zones        = require 'src.model.zones.Zones'
-local ass          = require 'src.core.ass'
+local Ass          = require 'src.core.Ass'
 
 local Powers =
 {
@@ -45,7 +45,7 @@ end
 
 -- increase ability count
 function Ability:increase(count)
-  ass.Natural(count, tostring(count))
+  Ass.Natural(count, tostring(count))
   self.count = self.count + count
 end
 

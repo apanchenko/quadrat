@@ -5,7 +5,7 @@ local Abilities = require 'src.view.PieceAbilities'
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
-local ass       = require 'src.core.ass'
+local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
 
@@ -15,7 +15,7 @@ Stone.__index = Stone
 --INIT-------------------------------------------------------------------------
 function Stone.new(color)
   local depth = log:trace("Stone.new"):enter()
-  ass.Is(color, Color)
+  Ass.Is(color, Color)
     local self = setmetatable({}, Stone)
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
@@ -47,7 +47,7 @@ end
 --
 function Stone:set_color(color)
   local depth = log:trace(self, ":set_color ", tostring(color)):enter()
-    ass.Is(color, Color)
+    Ass.Is(color, Color)
 
     -- nothing to change
     if color ~= self.clolor then
@@ -66,8 +66,8 @@ end
 
 -- insert Stone into group, with scale for dragging
 function Stone:puton(board, pos)
-  ass.Is(board, 'Board')
-  ass.Is(pos, Vec)
+  Ass.Is(board, 'Board')
+  Ass.Is(pos, Vec)
   board.view:insert(self.view)
   self.board = board
   self._pos = pos
@@ -76,7 +76,7 @@ end
 
 -- remove Stone from board
 function Stone:putoff()
-  ass(self.board)
+  Ass(self.board)
   self.view:removeSelf()
   self.view = nil
   self.img:removeSelf()
@@ -89,7 +89,7 @@ end
 -- set stone position
 function Stone:set_pos(pos)
   if pos ~= nil then
-    ass.Is(pos, Vec)
+    Ass.Is(pos, Vec)
   end
   self._pos = pos
   self:update_group_pos()
@@ -261,9 +261,9 @@ function Stone:update_group_pos()
 end
 
 -------------------------------------------------------------------------------
-ass.Wrap(Stone, 'select')
-ass.Wrap(Stone, 'set_color', Color)
-ass.Wrap(Stone, 'puton', 'Board', Vec)
-ass.Wrap(Stone, 'putoff')
+Ass.Wrap(Stone, 'select')
+Ass.Wrap(Stone, 'set_color', Color)
+Ass.Wrap(Stone, 'puton', 'Board', Vec)
+Ass.Wrap(Stone, 'putoff')
 log:wrap(Stone, 'select')
 return Stone

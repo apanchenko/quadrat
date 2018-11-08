@@ -2,7 +2,7 @@ local vec   = require "src.core.Vec"
 local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
-local ass   = require "src.core.ass"
+local Ass   = require "src.core.Ass"
 
 Cell = { typename = 'Cell' }
 Cell.__index = Cell
@@ -15,7 +15,7 @@ Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
 
 --
 function Cell.new(spot)
-  ass.Is(spot, 'Spot')
+  Ass.Is(spot, 'Spot')
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
   self.pos = spot:pos()
@@ -27,8 +27,8 @@ end
 -- JADE------------------------------------------------------------------------
 --
 function Cell:set_jade()
-  ass.Nil(self.jade, 'jade')
-  ass.Nil(self.piece, 'piece')
+  Ass.Nil(self.jade, 'jade')
+  Ass.Nil(self.piece, 'piece')
   self.jade = lay.image(self.view, cfg.jade)
 end
 --
@@ -45,7 +45,7 @@ function Cell:stone()
 end
 --
 function Cell:remove_stone()
-  ass.Is(self._stone, 'Stone')
+  Ass.Is(self._stone, 'Stone')
   local stone = self._stone
   stone:set_pos(nil)
   self._stone = nil
@@ -53,8 +53,8 @@ function Cell:remove_stone()
 end
 --
 function Cell:set_stone(stone)
-  ass.Is(self, Cell)
-  ass.Is(stone, 'Stone')
+  Ass.Is(self, Cell)
+  Ass.Is(stone, 'Stone')
   stone:set_pos(self.pos)
   self._stone = stone
 end

@@ -9,7 +9,7 @@ local Player     = require "src.Player"
 local cfg        = require 'src.Config'
 local lay        = require 'src.core.lay'
 local log        = require 'src.core.log'
-local ass        = require 'src.core.ass'
+local Ass        = require 'src.core.Ass'
 
 -- variables
 local battle = composer.newScene()
@@ -47,7 +47,7 @@ end
 
 --
 function battle:move(color)
-  ass.Is(color, Color)
+  Ass.Is(color, Color)
   local red, bla = self.space:count_pieces()
 
   -- check if black wins

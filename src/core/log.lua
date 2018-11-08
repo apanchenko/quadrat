@@ -1,5 +1,5 @@
 local _   = require 'src.core.underscore'
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 
 -- create log instance
 local log = setmetatable({ depth = 0 }, { __tostring = function() return 'log' end })
@@ -26,16 +26,16 @@ end
 
 -- wrap functions in table t with log
 function log:wrap(T, ...)
-  ass(tostring(self) == 'log', ' in Log:wrap')
-  ass.Table(T, 'T')
+  Ass(tostring(self) == 'log', ' in Log:wrap')
+  Ass.Table(T, 'T')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name
     local name = names[i]
-    ass.String(name)
+    Ass.String(name)
     -- original function
     local fun = T[name]
-    ass.Fun(fun)
+    Ass.Fun(fun)
     -- define a new function
     T[name] = function(...)
       local args = {...}
@@ -50,8 +50,8 @@ end
 
 function log.Test()
   print('test log..')
-  ass(tostring(log) == 'log', 'log test')
-  ass(log:enter() == 1)
+  Ass(tostring(log) == 'log', 'log test')
+  Ass(log:enter() == 1)
   log:exit(1)
 end
 

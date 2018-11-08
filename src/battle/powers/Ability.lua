@@ -9,7 +9,7 @@ local Impeccable   = require 'src.battle.powers.Impeccable'
 local Teach        = require 'src.battle.powers.Teach'
 local Destroy      = require 'src.battle.powers.Destroy'
 local Zones        = require 'src.battle.zones.Zones'
-local ass          = require 'src.core.ass'
+local Ass          = require 'src.core.Ass'
 
 local Powers =
 {
@@ -44,7 +44,7 @@ function Ability:__tostring()
 end
 -------------------------------------------------------------------------------
 function Ability:increase(count)
-  ass.Natural(count, tostring(count))
+  Ass.Natural(count, tostring(count))
   self.count = self.count + count
 end
 -------------------------------------------------------------------------------

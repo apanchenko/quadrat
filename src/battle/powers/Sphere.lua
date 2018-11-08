@@ -1,6 +1,6 @@
 local vec = require 'src.core.Vec'
 local lay = require 'src.core.lay'
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 local cfg = require 'src.Config'
 local log = require 'src.core.log'
 
@@ -13,7 +13,7 @@ Sphere.__index = Sphere
 
 -------------------------------------------------------------------------------
 function Sphere.new(Zone)
-  ass.Nil(Zone)
+  Ass.Nil(Zone)
 
   local self = setmetatable({}, Sphere)
   return self

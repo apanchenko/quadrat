@@ -1,4 +1,4 @@
-local ass     = require 'src.core.ass'
+local Ass     = require 'src.core.Ass'
 local log     = require 'src.core.log'
 local Vec     = require 'src.core.Vec'
 local Color   = require 'src.model.Color'
@@ -10,10 +10,10 @@ Piece.__index = Piece
 
 -- create a piece
 function Piece.new(space, color, pos)
-  ass.Is(space, 'Space')
-  ass.Is(color, Color)
+  Ass.Is(space, 'Space')
+  Ass.Is(color, Color)
   if pos then
-    ass.Is(pos, Vec)
+    Ass.Is(pos, Vec)
   end
   local self =
   {
@@ -34,7 +34,7 @@ function Piece:color() return self._color end
 
 --
 function Piece:set_pos(pos)
-  ass.Is(pos, Vec)
+  Ass.Is(pos, Vec)
   self._pos = pos
 end
 
@@ -45,9 +45,9 @@ end
 
 --
 function Piece:pre_can_move(space, fr, to)
-  ass.Is(space, 'Space')
-  ass.Is(fr, Vec)
-  ass.Is(to, Vec)
+  Ass.Is(space, 'Space')
+  Ass.Is(fr, Vec)
+  Ass.Is(to, Vec)
 end
 function Piece:can_move(space, fr, to)
   local vec = fr - to -- movement vector
@@ -56,7 +56,7 @@ end
 
 --
 function Piece:can_jump(victim)
-  ass.Is(victim, Piece)
+  Ass.Is(victim, Piece)
   -- can not kill piece of the same breed
   if victim:color() == self:color() then return false end
   -- victim is protected
@@ -76,7 +76,7 @@ end
 
 -- learn certain ability
 function Piece:learn_ability(ability)
-  ass.Is(ability, "Ability")
+  Ass.Is(ability, "Ability")
   local name = tostring(ability)
   if self._list[name] then
     self._list[name]:increase(ability.count)

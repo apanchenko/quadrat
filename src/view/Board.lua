@@ -6,7 +6,7 @@ local Color    = require 'src.model.Color'
 local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
 local lay      = require 'src.core.lay'
-local ass      = require 'src.core.ass'
+local Ass      = require 'src.core.Ass'
 local log      = require 'src.core.log'
 
 local Board = setmetatable({}, { __tostring = function() return 'Board' end })

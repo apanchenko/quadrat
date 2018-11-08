@@ -1,4 +1,4 @@
-local ass = require 'src.core.ass'
+local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
 
 local Event = {}
@@ -20,15 +20,15 @@ end
 
 -- add listener
 function Event:add(listener)
-  ass.Is(self, Event)
-  ass.Table(listener, 'listener')
+  Ass.Is(self, Event)
+  Ass.Table(listener, 'listener')
   log:trace(self, ":add ", listener)
   table.insert(self.list, listener)
 end
 
 -- remove listener
 function Event:remove(listener)
-  ass(listener)  
+  Ass(listener)  
   for k,v in ipairs(self.list) do
     if v == listener then
       table.remove(self.list, k)
@@ -48,7 +48,7 @@ end
 --
 function Event:call(name, ...)
   name = name or self.name
-  ass.String(name)
+  Ass.String(name)
   for k,v in ipairs(self.list) do
     if v[name] then
       v[name](v, ...)
