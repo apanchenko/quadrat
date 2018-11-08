@@ -3,6 +3,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
+local Color     = require 'src.model.Color'
 
 local Spot = setmetatable({}, { __tostring = function() return 'Spot' end })
 Spot.__index = Spot
@@ -36,7 +37,6 @@ end
 
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
-  ass.Is(self, Spot)
   ass.Nil(self._piece)
   self._piece = Piece.new(self._space, color, self._pos)
   self._space.on_change:call('spawn_piece', color, self._pos) -- notify
@@ -81,6 +81,11 @@ function Spot:spawn_jade()
   self._space.on_change:call('spawn_jade', self._pos) -- notify that a new jade set
 end
 
+ass.Wrap(Spot, 'pos')
+ass.Wrap(Spot, 'piece')
+ass.Wrap(Spot, 'spawn_piece', Color)
+ass.Wrap(Spot, 'move_piece', Spot)
+ass.Wrap(Spot, 'spawn_jade')
 
 log:wrap(Spot, 'spawn_piece', 'move_piece')
 

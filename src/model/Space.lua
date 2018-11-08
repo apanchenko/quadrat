@@ -55,11 +55,6 @@ function Space:setup()
   end
 end
 
--- iterate cells
-function Space:spots()
-  return pairs(self.grid)
-end
-
 -- position vector from grid index
 function Space:pos(index)
   ass.Number(index)
@@ -67,16 +62,13 @@ function Space:pos(index)
 end
 
 -- index of cell and piece, private
-function Space:index(vec)
-  ass.Is(vec, Vec)
-  return vec.x * self.cols + vec.y
-end
+function Space:index(vec)   return vec.x * self.cols + vec.y end
+
+-- iterate cells
+function Space:spots()      return pairs(self.grid) end
 
 -- get spot by position vector
-function Space:spot(vec)
-  ass.Is(vec, Vec)
-  return self.grid[self:index(vec)]
-end
+function Space:spot(vec)    return self.grid[self:index(vec)] end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
@@ -114,9 +106,6 @@ end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
-  ass.Is(fr, Vec)
-  ass.Is(to, Vec)
-
   -- check move rights
   local actor = self:piece(fr)        -- peek piece at from position
   if actor == nil then                      -- check if it exists
@@ -143,13 +132,6 @@ function Space:can_move(fr, to)
 end
 
 -- do move
-Space.assert_arguments_move = {Vec, Vec}
---[[function Space.assert_arguments_move(...)
-  local args = {...}
-  ass(#args == 2)
-  ass.Is(args[1], Vec)
-  ass.Is(args[2], Vec)
-end]]--
 function Space:move(fr, to)
   ass(self:can_move(fr, to))
 
@@ -170,14 +152,28 @@ function Space:move(fr, to)
   self.on_change:call('move', self.color) -- notify color to move
 end
 
--- ----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- true if valid
 function Space:valid()
   return true
 end
 
 ass.Wrap(Space, 'setup')
+ass.Wrap(Space, 'width')
+ass.Wrap(Space, 'height')
+ass.Wrap(Space, 'row', 'number')
+ass.Wrap(Space, 'col', 'number')
+ass.Wrap(Space, 'pos', 'number')
+ass.Wrap(Space, 'index', Vec)
+ass.Wrap(Space, 'spots')
+ass.Wrap(Space, 'spot', Vec)
+ass.Wrap(Space, 'count_pieces')
+ass.Wrap(Space, 'piece', Vec)
+ass.Wrap(Space, 'who_move')
+ass.Wrap(Space, 'can_move', Vec, Vec)
 ass.Wrap(Space, 'move', Vec, Vec)
+
 log:wrap(Space, 'setup', 'move')
+
 -- return module
 return Space
