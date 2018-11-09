@@ -152,6 +152,7 @@ function Space:use(pos, ability_name)
     log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
+  return piece:use_ability(ability_name)
 end
 
 -- MODULE ---------------------------------------------------------------------
