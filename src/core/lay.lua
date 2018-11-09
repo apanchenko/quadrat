@@ -64,7 +64,7 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 function lay.image(group, opts, path)
-  Ass.Table(opts, "opts")
+  Ass.Table(opts, "invalid opts")
 
   path = path or opts.path
   Ass.String(path, 'path')

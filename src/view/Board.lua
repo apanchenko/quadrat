@@ -5,12 +5,12 @@ local Player   = require 'src.Player'
 local Color    = require 'src.model.Color'
 local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
+local Type     = require 'src.core.Type'
 local lay      = require 'src.core.lay'
 local Ass      = require 'src.core.Ass'
 local log      = require 'src.core.log'
 
-local Board = setmetatable({}, { __tostring = function() return 'Board' end })
-Board.__index = Board
+local Board = Type.Create 'Board'
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
@@ -65,7 +65,6 @@ function Board:get_cells()
 end
 
 
-
 -- MOVE------------------------------------------------------------------------
 -- model listener
 function Board:spawn_jade(pos)
@@ -77,7 +76,7 @@ function Board:remove_jade(pos)
 end
 -- model listener
 function Board:spawn_piece(color, pos)
-  local stone = Stone.new(color) -- create a new stone
+  local stone = Stone.New(color, self.model) -- create a new stone
   self.grid[self.model:index(pos)]:set_stone(stone) -- cell that actor is going to move to
   stone:puton(self, pos) -- put piece on board
 end
@@ -91,6 +90,15 @@ function Board:remove_piece(pos)
   local stone = self:cell(pos):remove_stone()
   stone:putoff()
 end
+-- model listener
+function Board:add_ability(pos, ability_name)
+  local cell = self:cell(pos)
+  Ass.Is(cell, Cell)
+  local stone = cell:stone()
+  Ass.Is(stone, Stone)
+  stone:add_ability(ability_name)
+end
+
 
 -------------------------------------------------------------------------------
 -- select piece
@@ -98,13 +106,19 @@ function Board:select(stone)
   for _, cell in pairs(self.grid) do
     local s = cell:stone()
     if s then
-      s:deselect()                 -- deselect all
+      s:deselect() -- deselect all
     end
   end
 
   if stone then
-    stone:select()                          -- then select a new one
+    stone:select() -- then select a new one
   end
 end
+
+
+-- MODULE ---------------------------------------------------------------------
+Ass.Wrap(Board, 'add_ability', Vec, 'string')
+
+log:wrap(Board, 'add_ability')
 
 return Board

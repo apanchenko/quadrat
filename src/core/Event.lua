@@ -1,11 +1,11 @@
+local Type = require 'src.core.Type'
 local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
 
-local Event = setmetatable({}, { __tostring = function() return 'Event' end })
-Event.__index = Event
+local Event = Type.Create('Event')
 
 -- 
-function Event.new(name)
+function Event.New(name)
   local self = setmetatable({}, Event)
   self.list = {}
   self.name = name
@@ -14,7 +14,7 @@ end
 
 --
 function Event:__tostring()
-  return 'event['.. #self.list.. ']'
+  return 'event'
 end
 
 -- add listener
@@ -48,13 +48,14 @@ function Event:call(name, ...)
   for k,v in ipairs(self.list) do
     if v[name] then
       v[name](v, ...)
-    --else
-      --log:trace(self, ':call ', v, ' has no method ', name)
     end
   end
 end
 
+-- MODULE ---------------------------------------------------------------------
 Ass.Wrap(Event, 'add', 'table')
 Ass.Wrap(Event, 'remove', 'table')
+
+log:wrap(Event, 'call')
 
 return Event

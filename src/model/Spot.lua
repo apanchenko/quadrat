@@ -1,3 +1,4 @@
+local Type      = require 'src.core.Type'
 local Vec       = require 'src.core.Vec'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
@@ -5,8 +6,7 @@ local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
 
-local Spot = setmetatable({}, { __tostring = function() return 'Spot' end })
-Spot.__index = Spot
+local Spot = Type.Create('Spot')
 
 -- flags
 local pit      = 1
@@ -38,31 +38,30 @@ end
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
   Ass.Nil(self._piece)
-  self._piece = Piece.new(self._space, color, self._pos)
+  self._piece = Piece.New(self._space.on_change, color)
+  self._piece:set_pos(self._pos)
   self._space.on_change:call('spawn_piece', color, self._pos) -- notify
 end
 
 -- move piece from another spot to this
 function Spot:move_piece(from)
   Ass.Is(from, Spot, 'from')
-  -- kill piece
+  -- kill target piece
   if self._piece then
     self._piece.die()
     self._space.on_change:call('remove_piece', self._pos) -- notify
   end
-
   -- change piece position
   self._piece = from._piece
   self._piece:set_pos(self._pos)
   from._piece = nil
-
+  self._space.on_change:call('move_piece', self._pos, from._pos) -- notify
   -- consume jade
   if self._jade then
     self._jade = false 
     self._space.on_change:call('remove_jade', self._pos) -- notify
     self._piece:add_ability()
   end
-  self._space.on_change:call('move_piece', self._pos, from._pos) -- notify
 end
 
 -- take chance to spawn a new jade if can
@@ -81,6 +80,8 @@ function Spot:spawn_jade()
   self._space.on_change:call('spawn_jade', self._pos) -- notify that a new jade set
 end
 
+
+-- MODULE ---------------------------------------------------------------------
 Ass.Wrap(Spot, 'pos')
 Ass.Wrap(Spot, 'piece')
 Ass.Wrap(Spot, 'spawn_piece', Color)

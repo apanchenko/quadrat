@@ -13,7 +13,7 @@ function Ass.Number(v)      return check.Number(v) or error(tostring(v)..' is no
 -- 'n' is natural number
 function Ass.Natural(v)     return Ass.Number(v) and Ass(v >= 0) end
 -- 'v' is a table
-function Ass.Table(v)       return check.Table(v) or error(tostring(v)..' is not a table') end
+function Ass.Table(v, msg)  return check.Table(v) or error(msg or tostring(v)..' is not a table') end
 -- 'v' is a string
 function Ass.String(v)      return check.String(v) or error(tostring(v)..' is not a string') end
 -- 'v' is a boolean

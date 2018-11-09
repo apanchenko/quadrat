@@ -1,27 +1,27 @@
 local _         = require 'src.core.underscore'
 local Vec       = require 'src.core.Vec'
 local Player    = require 'src.Player'
-local Abilities = require 'src.view.PieceAbilities'
+local Abilities = require 'src.view.StoneAbilities'
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
+local Type       = require 'src.core.Type'
 
-local Stone = setmetatable({}, { __tostring = function() return 'Stone' end })
-Stone.__index = Stone
+local Stone = Type.Create 'Stone'
 
 --INIT-------------------------------------------------------------------------
-function Stone.new(color)
+function Stone.New(color, model)
   local depth = log:trace("Stone.new"):enter()
-  Ass.Is(color, Color)
     local self = setmetatable({}, Stone)
+    self._model = model
     self.view = display.newGroup()
     self.view:addEventListener("touch", self)
     self:set_color(color)
     self.scale = 1
-    --self.abilities = Abilities.new(self)
+    self._abilities = Abilities.New(self, model)
     self.powers = {}
     self.isSelected = false
     self.is_drag = false
@@ -31,8 +31,8 @@ end
 --
 function Stone:__tostring() 
   local s = "Stone["
-  if self.color ~= nil then
-    s = s.. tostring(self.color)
+  if self._color ~= nil then
+    s = s.. tostring(self._color)
   end
   if self._pos then
     s = s.. " ".. tostring(self._pos)
@@ -50,18 +50,22 @@ function Stone:set_color(color)
     Ass.Is(color, Color)
 
     -- nothing to change
-    if color ~= self.clolor then
-      self.color = color
+    if color ~= self._clolor then
+      self._color = color
 
       -- change image
       if self.img then
         self.img:removeSelf()
       end
       cfg.cell.order = 1
-      self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self.color)..".png")
+      self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self._color)..".png")
       cfg.cell.order = nil
     end
   log:exit(depth)
+end
+--
+function Stone:color()
+  return self._color
 end
 
 -- insert Stone into group, with scale for dragging
@@ -81,11 +85,12 @@ function Stone:putoff()
   self.view = nil
   self.img:removeSelf()
   self.img = nil
-  self.abilities = nil
+  self._abilities = nil
   self.powers = nil
   self.board = nil
 end
 
+-- POSITION -------------------------------------------------------------------
 -- set stone position
 function Stone:set_pos(pos)
   if pos ~= nil then
@@ -94,17 +99,14 @@ function Stone:set_pos(pos)
   self._pos = pos
   self:update_group_pos()
 end
+--
+function Stone:pos()
+  return self._pos
+end
 
 -- ABILITY --------------------------------------------------------------------
-function Stone:add_ability()
-  --self.abilities:add(self.env)
-
-  -- add ability mark
-  if self.able == nil then
-    cfg.cell.order = 1
-    self.able = lay.image(self, cfg.cell, "src/battle/ability_".. tostring(self.color).. ".png")
-    cfg.cell.order = nil
-  end
+function Stone:add_ability(name)
+  self._abilities:add(name)
 end
 --
 function Stone:use_ability(ability)
@@ -148,7 +150,7 @@ end
 -- touch listener function
 function Stone:touch(event)
   -- do not touch opponent stones
-  if self.board.model:who_move() ~= self.color then
+  if self.board.model:who_move() ~= self._color then
     return true
   end
   -- take stone
@@ -204,27 +206,27 @@ function Stone:touch_moved(event)
   Vec.copy(shift, self.view)
   return proj;
 end
--- to be called from Board. Use self.board:select instead
+-- to be called from Board
 function Stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
   self:update_group_pos()                  -- adjust group position
-  --self.abilities:show(self.env)           -- show abilities list
+  self._abilities:show()
 end
--- to be called from Board. Use self.board:select instead
+-- to be called from Board
 function Stone:deselect()
   if self.isSelected then
     local depth = log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos()                  -- adgjust group position
-      --self.abilities:hide()
+      self._abilities:hide()
     log:exit(depth)
   end
 end
 --
 function Stone:create_project(proj)
   if not self.project then
-    local path = "src/view/stone_"..tostring(self.color).."_project.png"
+    local path = "src/view/stone_"..tostring(self._color).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
   end
   self.proj = proj
@@ -260,10 +262,16 @@ function Stone:update_group_pos()
   Vec.copy(pos, self.view)
 end
 
--------------------------------------------------------------------------------
+--MODULE-----------------------------------------------------------------------
 Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'set_color', Color)
+Ass.Wrap(Stone, 'color')
 Ass.Wrap(Stone, 'puton', 'Board', Vec)
 Ass.Wrap(Stone, 'putoff')
-log:wrap(Stone, 'select')
+Ass.Wrap(Stone, 'select')
+Ass.Wrap(Stone, 'deselect')
+Ass.Wrap(Stone, 'pos')
+--Ass.Wrap(Stone, 'set_pos', Vec)
+
+log:wrap(Stone, 'select', 'add_ability')
 return Stone

@@ -3,9 +3,9 @@ local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local Ass   = require "src.core.Ass"
+local Type  = require "src.core.Type"
 
-Cell = { typename = 'Cell' }
-Cell.__index = Cell
+local Cell = Type.Create('Cell')
 
 function Cell:__tostring() return 'cell'.. tostring(self.pos) end
 
@@ -27,37 +27,41 @@ end
 -- JADE------------------------------------------------------------------------
 --
 function Cell:set_jade()
-  Ass.Nil(self.jade, 'jade')
-  Ass.Nil(self.piece, 'piece')
-  self.jade = lay.image(self.view, cfg.jade)
+  Ass.Nil(self._jade)
+  Ass.Nil(self._stone)
+  self._jade = lay.image(self.view, cfg.jade)
 end
 --
 function Cell:remove_jade()
-  assert(self.jade)
-  self.jade:removeSelf()
-  self.jade = nil
+  assert(self._jade)
+  self._jade:removeSelf()
+  self._jade = nil
 end
 
 -- STONE-----------------------------------------------------------------------
+--
+function Cell:set_stone(stone)
+  Ass.Nil(self._stone)
+  stone:set_pos(self.pos)
+  self._stone = stone
+end
 --
 function Cell:stone()
   return self._stone
 end
 --
 function Cell:remove_stone()
-  Ass.Is(self._stone, 'Stone')
+  Ass(self._stone)
   local stone = self._stone
   stone:set_pos(nil)
   self._stone = nil
   return stone
 end
---
-function Cell:set_stone(stone)
-  Ass.Is(self, Cell)
-  Ass.Is(stone, 'Stone')
-  stone:set_pos(self.pos)
-  self._stone = stone
-end
+
+-- MODULE-----------------------------------------------------------------------
+Ass.Wrap(Cell, 'set_stone', 'Stone')
+Ass.Wrap(Cell, 'stone')
+Ass.Wrap(Cell, 'remove_stone')
 
 log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
 return Cell

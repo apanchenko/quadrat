@@ -6,13 +6,13 @@ local Event     = require 'src.core.Event'
 local Vec       = require 'src.core.Vec'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
+local Type      = require 'src.core.Type'
 
-local Space = setmetatable({}, { __tostring = function() return 'Space' end })
-Space.__index = Space
+local Space = Type.Create 'Space'
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-function Space.new(cols, rows)
+function Space.New(cols, rows)
   Ass.Natural(cols)
   Ass.Natural(rows)
 
@@ -22,7 +22,7 @@ function Space.new(cols, rows)
   self.grid  = {}      -- cells
   self.color = Color.red(true) -- who moves now
   self.move_count = 0 -- number of moves from start
-  self.on_change = Event.new()
+  self.on_change = Event.New()
   log:trace(self, '.new')
 
   -- fill grid
@@ -34,7 +34,6 @@ function Space.new(cols, rows)
 
   return self
 end
-
 --
 function Space:__tostring() return 'space' end
 --
@@ -54,33 +53,24 @@ function Space:setup()
     self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
   end
 end
-
 -- position vector from grid index
-function Space:pos(index)
-  Ass.Number(index)
-  return Vec(self:col(index), self:row(index))
-end
-
+function Space:pos(index)   return Vec(self:col(index), self:row(index)) end
 -- index of cell and piece, private
 function Space:index(vec)   return vec.x * self.cols + vec.y end
-
 -- iterate cells
 function Space:spots()      return pairs(self.grid) end
-
 -- get spot by position vector
 function Space:spot(vec)    return self.grid[self:index(vec)] end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
 function Space:piece(vec)
-  Ass.Is(vec, Vec)
   local spot = self:spot(vec)
   if spot then
     return spot:piece()
   end
   return nil
 end
-
 -- number of red pieces, number of black pieces
 function Space:count_pieces()
   local red = 0
@@ -100,9 +90,7 @@ end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
-function Space:who_move()
-  return self.color
-end
+function Space:who_move()   return self.color end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
@@ -152,13 +140,23 @@ function Space:move(fr, to)
   self.on_change:call('move', self.color) -- notify color to move
 end
 
--------------------------------------------------------------------------------
--- true if valid
-function Space:valid()
-  return true
+-- use ability
+function Space:use(pos, ability_name)
+  -- check rights
+  local piece = self:piece(pos)        -- peek piece at from position
+  if piece == nil then                      -- check if it exists
+    log:trace(self, ':use at ', pos, ' piece is nil')
+    return false                            -- can not move
+  end
+  if self:who_move() ~= piece:color() then         -- check color who moves now
+    log:trace(self, ":can_move, wrong color")
+    return false                            -- can not move
+  end
 end
 
+-- MODULE ---------------------------------------------------------------------
 Ass.Wrap(Space, 'setup')
+Ass.Wrap(Space, 'pos', 'number')
 Ass.Wrap(Space, 'width')
 Ass.Wrap(Space, 'height')
 Ass.Wrap(Space, 'row', 'number')
@@ -172,8 +170,9 @@ Ass.Wrap(Space, 'piece', Vec)
 Ass.Wrap(Space, 'who_move')
 Ass.Wrap(Space, 'can_move', Vec, Vec)
 Ass.Wrap(Space, 'move', Vec, Vec)
+Ass.Wrap(Space, 'use', Vec, 'string')
 
-log:wrap(Space, 'setup', 'move')
+log:wrap(Space, 'setup', 'move', 'use')
 
 -- return module
 return Space

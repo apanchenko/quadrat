@@ -2,7 +2,7 @@ local composer   = require "composer"
 local Space      = require 'src.model.Space'
 local Color      = require 'src.model.Color'
 local ChangesLog = require 'src.model.ChangesLog'
-local VBoard     = require "src.view.Board"
+local Board     = require "src.view.Board"
 local Stone      = require "src.view.Stone"
 local vec        = require "src.core.Vec"
 local Player     = require "src.Player"
@@ -36,11 +36,11 @@ function battle:create(event)
   self.players[color] = Player(color, "Gala")
   lay.render(self, self.players[color], cfg.player.black)
 
-  self.space = Space.new(cfg.board.cols, cfg.board.rows)
+  self.space = Space.New(cfg.board.cols, cfg.board.rows)
   --self.space.on_change:add(ChangesLog.new())
   self.space.on_change:add(self)
 
-  self.board = VBoard.new(self, self.space)
+  self.board = Board.new(self, self.space)
 
   self.space:setup()
 end
