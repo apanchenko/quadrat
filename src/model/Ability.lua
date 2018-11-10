@@ -13,8 +13,9 @@ local Ass          = require 'src.core.Ass'
 
 local Powers =
 {
-  MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
-  Impeccable, Teach, Destroy
+  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
+  Impeccable
+  --Teach, Destroy
 }
 
 -- Ability has a potential to become certain power.
@@ -22,7 +23,7 @@ local Ability = setmetatable({}, { __tostring = function() return 'Ability' end 
 Ability.__index = Ability
 
 -- create ability with random power
-function Ability.new()
+function Ability.New()
   local self = setmetatable({}, Ability)
   self.Power = Powers[math.random(#Powers)]
 
@@ -36,9 +37,9 @@ end
 
 --
 function Ability:__tostring() 
-  local name = self.Power.typename
+  local name = tostring(self.Power)
   if self.Zone then
-    name = name.. " ".. self.Zone.typename
+    name = name.. ' '.. tostring(self.Zone)
   end
   return name
 end

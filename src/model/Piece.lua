@@ -23,7 +23,13 @@ function Piece.New(event, color)
   return setmetatable(self, Piece)
 end
 --
-function Piece:__tostring()         return 'piece'..tostring(self._pos) end
+function Piece:__tostring()
+  local str = 'piece'
+  if self._pos then
+    str = str.. tostring(self._pos)
+  end
+  return str
+end
 --
 function Piece:color()              return self._color end
 --
@@ -49,7 +55,7 @@ end
 -- ABILITY---------------------------------------------------------------------
 -- add random ability
 function Piece:add_ability()
-  self:learn_ability(Ability.new())
+  self:learn_ability(Ability.New())
 end
 --
 function Piece:learn_ability(ability)
@@ -107,6 +113,6 @@ Ass.Wrap(Piece, 'add_power', Ability)
 Ass.Wrap(Piece, 'remove_power', 'string')
 
 log:trace(Piece)
-log:wrap(Piece, 'set_pos', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
+log:wrap(Piece, 'set_pos', --[['add_ability', 'learn_ability',--]] 'use_ability', 'add_power', 'remove_power')
 
 return Piece
