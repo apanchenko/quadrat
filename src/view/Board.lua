@@ -98,7 +98,14 @@ function Board:add_ability(pos, ability_name)
   Ass.Is(stone, Stone)
   stone:add_ability(ability_name)
 end
-
+-- model listener
+function Board:remove_ability(pos, ability_name)
+  local cell = self:cell(pos)
+  Ass.Is(cell, Cell)
+  local stone = cell:stone()
+  Ass.Is(stone, Stone)
+  stone:remove_ability(ability_name)
+end
 
 -------------------------------------------------------------------------------
 -- select piece
@@ -117,8 +124,10 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
+--[[
 Ass.Wrap(Board, 'add_ability', Vec, 'string')
+Ass.Wrap(Board, 'remove_ability', Vec, 'string')
 
-log:wrap(Board, 'add_ability')
-
+log:wrap(Board, 'add_ability', 'remove_ability')
+--]]
 return Board

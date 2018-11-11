@@ -19,7 +19,7 @@ function Ass.String(v)      return check.String(v) or error(tostring(v)..' is no
 -- 'v' is a boolean
 function Ass.Boolean(v)     return check.Boolean(v) or error(tostring(v)..' is not a boolean') end
 -- 'v' is a function
-function Ass.Fun(v)         return check.Fun(v) or error(tostring(v)..' is not a function') end
+function Ass.Fun(v, msg)    return check.Fun(v) or error(msg or tostring(v)..' is not a function') end
 -- 'v' is an instance of T
 function Ass.Is(t, T, msg)  return check.Is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 

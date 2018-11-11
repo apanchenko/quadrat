@@ -26,6 +26,8 @@ end
 function StoneAbilities:__tostring() 
   return "abilities"
 end
+
+-------------------------------------------------------------------------------
 -- add ability
 function StoneAbilities:add(name)
   local count = self._list[name]
@@ -34,9 +36,22 @@ function StoneAbilities:add(name)
   else
     self._list[name] = count + 1
   end
-  -- add ability mark
   if self._mark == nil then
     self._mark = lay.image(self._stone, cfg.cell, "src/battle/ability_"..tostring(self._stone:color())..".png")
+  end
+end
+
+-- remove ability
+function StoneAbilities:remove(name)
+  local count = self._list[name]
+  if count == 1 then
+    self._list[name] = nil
+  else
+    self._list[name] = count - 1
+  end
+  if self:is_empty() then
+    self._mark:removeSelf()
+    self._mark = nil
   end
 end
 
@@ -55,7 +70,7 @@ function StoneAbilities:show()
     opts.id = name
     opts.label = name.. ' '.. count
     opts.onRelease = function(event)
-      self:use(event.target.id)
+      self._model:use(self._stone:pos(), event.target.id)
       return true
     end
     log:trace(opts.label)
@@ -72,23 +87,14 @@ function StoneAbilities:hide()
   self._view = nil
 end
 
--- use instant ability or create power
-function StoneAbilities:use(name)
-  if self:is_empty() and self._mark then
-    self._mark:removeSelf()
-    self._mark = nil
-  end
-  self._model:use(self._stone:pos(), name)
-end
-
-
 --MODEULE----------------------------------------------------------------------
+--
 Ass.Wrap(StoneAbilities, 'add', 'string')
+Ass.Wrap(StoneAbilities, 'remove', 'string')
 Ass.Wrap(StoneAbilities, 'is_empty')
 Ass.Wrap(StoneAbilities, 'show')
 Ass.Wrap(StoneAbilities, 'hide')
-Ass.Wrap(StoneAbilities, 'use', 'string')
 
-log:wrap(StoneAbilities, 'add', 'show', 'hide', 'use')
-
+log:wrap(StoneAbilities, 'add', 'show', 'hide')
+--]]
 return StoneAbilities

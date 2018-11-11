@@ -32,10 +32,10 @@ function log:wrap(T, ...)
   for i=1, #names do -- wrap each function
     -- function name
     local name = names[i]
-    Ass.String(name)
+    Ass.String(name, 'log:wrap - '..i..' function name is not a string')
     -- original function
     local fun = T[name]
-    Ass.Fun(fun)
+    Ass.Fun(fun, 'log:wrap - no function '..tostring(T)..':'..name)
     -- define a new function
     T[name] = function(...)
       local args = {...}

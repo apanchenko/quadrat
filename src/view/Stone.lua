@@ -105,24 +105,10 @@ function Stone:pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
-function Stone:add_ability(name)
-  self._abilities:add(name)
-end
---
-function Stone:use_ability(ability)
-  local depth = log:trace(self, ":use_ability ", ability):enter()
-    self:add_power(ability)                   -- increase power
-    self.board:select(nil)                  -- remove selection if was selected
+function Stone:add_ability(name)    self._abilities:add(name) end
+function Stone:remove_ability(name) self._abilities:remove(name) end
 
-    -- remove ability mark
-    if self.abilities:is_empty() then
-      log:trace("remove able")
-      self.able:removeSelf()
-      self.able = nil
-    end
-  log:exit(depth)
-end
---
+-- POWER ----------------------------------------------------------------------
 function Stone:add_power(ability)
   local name = tostring(ability)
   local depth = log:trace(self, ":add_power ", name):enter()
@@ -263,6 +249,7 @@ function Stone:update_group_pos()
 end
 
 --MODULE-----------------------------------------------------------------------
+--[[
 Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'set_color', Color)
 Ass.Wrap(Stone, 'color')
@@ -272,6 +259,9 @@ Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'deselect')
 Ass.Wrap(Stone, 'pos')
 --Ass.Wrap(Stone, 'set_pos', Vec)
+Ass.Wrap(Stone, 'add_ability', 'string')
+Ass.Wrap(Stone, 'remove_ability', 'string')
 
-log:wrap(Stone, 'select', 'add_ability')
+log:wrap(Stone, 'select', 'add_ability', 'remove_ability')
+--]]
 return Stone

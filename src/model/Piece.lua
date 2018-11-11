@@ -75,7 +75,7 @@ function Piece:use_ability(name)
     return false
   end
   self._list[name] = ability:decrease() -- consume ability
-  self._event:call('consume_ability', self._pos, name, ability:get_count()) -- notify
+  self._event:call('remove_ability', self._pos, name, ability:get_count()) -- notify
   self:add_power(ability) -- increase power
 end
 
@@ -101,6 +101,7 @@ function Piece:remove_power(name)
 end
 
 -- MODULE ---------------------------------------------------------------------
+--[[
 Ass.Wrap(Piece, 'color')
 Ass.Wrap(Piece, 'pos')
 Ass.Wrap(Piece, 'set_pos', Vec)
@@ -113,6 +114,6 @@ Ass.Wrap(Piece, 'add_power', Ability)
 Ass.Wrap(Piece, 'remove_power', 'string')
 
 log:trace(Piece)
-log:wrap(Piece, 'set_pos', --[['add_ability', 'learn_ability',--]] 'use_ability', 'add_power', 'remove_power')
-
+log:wrap(Piece, 'set_pos', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
+--]]
 return Piece
