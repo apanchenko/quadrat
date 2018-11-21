@@ -46,10 +46,15 @@ end
 
 
 -- POSITION--------------------------------------------------------------------
+-- peek piece from cell by position
 function Board:cell(pos)
-  return self.grid[pos.x * self.model:width() + pos.y]            -- peek piece from cell by position
+  return self.grid[pos.x * self.model:width() + pos.y]            
 end
--------------------------------------------------------------------------------
+--
+function Board:stone(pos)
+  return self:cell(pos):stone()
+end
+--
 function Board:select_cells(filter)
   local selected = {}
   for k, cell in ipairs(self.grid) do
@@ -59,7 +64,7 @@ function Board:select_cells(filter)
 	end
   return selected
 end
--------------------------------------------------------------------------------
+--
 function Board:get_cells()
   return self.grid 
 end
@@ -92,19 +97,15 @@ function Board:remove_piece(pos)
 end
 -- model listener
 function Board:add_ability(pos, ability_name)
-  local cell = self:cell(pos)
-  Ass.Is(cell, Cell)
-  local stone = cell:stone()
-  Ass.Is(stone, Stone)
-  stone:add_ability(ability_name)
+  self:stone(pos):add_ability(ability_name)
 end
 -- model listener
 function Board:remove_ability(pos, ability_name)
-  local cell = self:cell(pos)
-  Ass.Is(cell, Cell)
-  local stone = cell:stone()
-  Ass.Is(stone, Stone)
-  stone:remove_ability(ability_name)
+  self:stone(pos):remove_ability(ability_name)
+end
+-- model listener
+function Board:add_power(pos, name, result_count)
+  self:stone(pos):add_power(name, result_count)
 end
 
 -------------------------------------------------------------------------------
@@ -124,10 +125,11 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
---[[
+---[[
 Ass.Wrap(Board, 'add_ability', Vec, 'string')
 Ass.Wrap(Board, 'remove_ability', Vec, 'string')
+Ass.Wrap(Board, 'add_power', Vec, 'string', 'number')
 
-log:wrap(Board, 'add_ability', 'remove_ability')
+log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')
 --]]
 return Board

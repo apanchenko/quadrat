@@ -1,22 +1,7 @@
-local MoveDiagonal = require 'src.model.powers.MoveDiagonal'
-local Multiply     = require 'src.model.powers.Multiply'
-local Rehash       = require 'src.model.powers.Rehash'
-local Relocate     = require 'src.model.powers.Relocate'
-local Recruit      = require 'src.model.powers.Recruit'
-local Swap         = require 'src.model.powers.Swap'
-local Sphere       = require 'src.model.powers.Sphere'
-local Impeccable   = require 'src.model.powers.Impeccable'
-local Teach        = require 'src.model.powers.Teach'
-local Destroy      = require 'src.model.powers.Destroy'
+local Powers       = require 'src.model.powers.Powers'
 local Zones        = require 'src.model.zones.Zones'
 local Ass          = require 'src.core.Ass'
 
-local Powers =
-{
-  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
-  Impeccable
-  --Teach, Destroy
-}
 
 -- Ability has a potential to become certain power.
 local Ability = setmetatable({}, { __tostring = function() return 'Ability' end })

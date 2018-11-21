@@ -8,7 +8,8 @@ local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
-local Type       = require 'src.core.Type'
+local Type      = require 'src.core.Type'
+local Powers    = require 'src.model.powers.Powers'
 
 local Stone = Type.Create 'Stone'
 
@@ -30,7 +31,7 @@ function Stone.New(color, model)
 end
 --
 function Stone:__tostring() 
-  local s = "Stone["
+  local s = "stone["
   if self._color ~= nil then
     s = s.. tostring(self._color)
   end
@@ -109,27 +110,25 @@ function Stone:add_ability(name)    self._abilities:add(name) end
 function Stone:remove_ability(name) self._abilities:remove(name) end
 
 -- POWER ----------------------------------------------------------------------
-function Stone:add_power(ability)
-  local name = tostring(ability)
-  local depth = log:trace(self, ":add_power ", name):enter()
-    local p = self.powers[name]
-    if p then
-      p:increase()
-    else
-      self.powers[name] = ability:create_power():apply(self)
-    end
-  log:exit(depth)
+function Stone:add_power(name, result_count)
+  if self.powers[name] == nil then
+    self.powers[name] = lay.image(self, cfg.cell, 'src/view/powers/'..name..'.png')
+    --self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
+  else
+--    local Power = Powers.Find(name)
+--    Ass.Table(Power)
+--    if Power.Stackable then
+--    end
+  end
 end
 --
 function Stone:remove_power(name)
-  local depth = log:trace(self, ":remove_power ", name):enter()
-    local p = self.powers[name]
-    if p then
-      if not p:decrease() then
-        self.powers[name] = nil
-      end
+  local p = self.powers[name]
+  if p then
+    if not p:decrease() then
+      self.powers[name] = nil
     end
-  log:exit(depth)
+  end
 end
 
 -- TOUCH-----------------------------------------------------------------------
@@ -249,7 +248,7 @@ function Stone:update_group_pos()
 end
 
 --MODULE-----------------------------------------------------------------------
---[[
+---[[
 Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'set_color', Color)
 Ass.Wrap(Stone, 'color')
@@ -261,7 +260,8 @@ Ass.Wrap(Stone, 'pos')
 --Ass.Wrap(Stone, 'set_pos', Vec)
 Ass.Wrap(Stone, 'add_ability', 'string')
 Ass.Wrap(Stone, 'remove_ability', 'string')
+Ass.Wrap(Stone, 'add_power', 'string', 'number')
 
-log:wrap(Stone, 'select', 'add_ability', 'remove_ability')
+log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power')
 --]]
 return Stone

@@ -112,7 +112,7 @@ function Space:can_move(fr, to)
 
   -- check kill ability
   local victim = self:piece(to)               -- peek piece at to position
-  if victim and not actor:can_jump(victim) then
+  if victim and victim:color() ~= actor:color() and victim:is_jump_protected() then
     return false
   end
 

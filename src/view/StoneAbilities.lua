@@ -49,9 +49,13 @@ function StoneAbilities:remove(name)
   else
     self._list[name] = count - 1
   end
+  local reshow = self._view ~= nil
+  if reshow then self:hide() end
   if self:is_empty() then
     self._mark:removeSelf()
     self._mark = nil
+  else
+    if reshow then self:show() end
   end
 end
 
@@ -82,9 +86,10 @@ end
 
 -- hide from board when piece deselected
 function StoneAbilities:hide()
-  assert(self._view)                        -- check shown
-  self._view:removeSelf()
-  self._view = nil
+  if self._view then -- check shown
+    self._view:removeSelf()
+    self._view = nil
+  end
 end
 
 --MODEULE----------------------------------------------------------------------
@@ -95,6 +100,6 @@ Ass.Wrap(StoneAbilities, 'is_empty')
 Ass.Wrap(StoneAbilities, 'show')
 Ass.Wrap(StoneAbilities, 'hide')
 
-log:wrap(StoneAbilities, 'add', 'show', 'hide')
+log:wrap(StoneAbilities, 'add', 'remove', 'show', 'hide')
 --]]
 return StoneAbilities

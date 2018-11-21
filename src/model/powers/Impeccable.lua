@@ -5,7 +5,13 @@ local cfg = require 'src.Config'
 local log = require 'src.core.log'
 local Type = require 'src.core.Type'
 
-local Impeccable = Type.Create('Impeccable', { is_areal = false, is_jump_protected = true })
+local Impeccable = Type.Create('Impeccable',
+{
+  is_areal = false,
+  is_jump_protected = true,
+  Stackable = false
+})
+
 --
 function Impeccable.new(Zone)
   Ass.Nil(Zone)
@@ -32,6 +38,10 @@ end
 --
 function Impeccable:decrease()
   return self
+end
+--
+function Impeccable:count()
+  return 1
 end
 
 
