@@ -9,14 +9,14 @@ cfg.font          = native.systemFont
 
 cfg.battle        = {}
 cfg.battle.bg     = {vw=100, vh=100, path="src/background.png"}
-cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/battle/arrow.png"}
+cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/view/arrow.png"}
 cfg.cell          = {w=64, h=64, size=vec(64, 64)}
 cfg.board         = {vx=2, vw=96, vy=15, cols=5, rows=5}
 cfg.player        = {vw=6, ratio=1,
   red             = {vx=18, vy=4},
   black           = {vx=18, vy=9}
 }
-cfg.jade          = {w=cfg.cell.w, h=cfg.cell.h, path="src/battle/jade.png", 
+cfg.jade          = {w=cfg.cell.w, h=cfg.cell.h, path="src/view/jade.png", 
   moves           = 1,          -- drop jades every Nth move
   probability     = 0.2   -- probability that a jade will spawn on a cell
 }

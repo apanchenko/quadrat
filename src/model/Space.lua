@@ -19,6 +19,7 @@ function Space.New(cols, rows)
   local self = setmetatable({}, Space)
   self.cols  = cols    -- width
   self.rows  = rows    -- height
+  self.size  = Vec(cols, rows)
   self.grid  = {}      -- cells
   self.color = Color.red(true) -- who moves now
   self.move_count = 0 -- number of moves from start
@@ -45,6 +46,13 @@ function Space:row(place)   return place % self.cols end
 -- place // self.cols
 function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 
+--
+function Space:notify(method, ...)
+  Ass.Is(self, Space)
+  Ass.Is(method, 'string')
+  self.on_change:call(method, ...) -- notify
+end
+
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
 function Space:setup()
@@ -52,6 +60,7 @@ function Space:setup()
     self.grid[x * self.cols]:spawn_piece(Color.R)
     self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
   end
+  self:notify('move', self.color) -- notify color to move
 end
 -- position vector from grid index
 function Space:pos(index)   return Vec(self:col(index), self:row(index)) end
@@ -61,6 +70,16 @@ function Space:index(vec)   return vec.x * self.cols + vec.y end
 function Space:spots()      return pairs(self.grid) end
 -- get spot by position vector
 function Space:spot(vec)    return self.grid[self:index(vec)] end
+--
+function Space:select_cells(filter)
+  local selected = {}
+  for k, cell in ipairs(self.grid) do
+    if filter(cell) then
+      selected[#selected + 1] = cell
+    end
+	end
+  return selected
+end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
@@ -78,7 +97,7 @@ function Space:count_pieces()
   for i = 0, #self.grid do -- pics is not dense, so use # on grid
     local piece = self.grid[i]:piece()
     if piece then
-      if Color.is_red(piece:color()) then
+      if Color.is_red(piece.color) then
         red = red + 1
       else
         bla = bla + 1
@@ -88,19 +107,24 @@ function Space:count_pieces()
   return red, bla
 end
 
+
 -- MOVE------------------------------------------------------------------------
 -- get color to move
 function Space:who_move()   return self.color end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
+  if not (fr < self.size and to < self.size and Vec.Zero <= fr and Vec.Zero <= to) then
+    return false;
+  end
+
   -- check move rights
   local actor = self:piece(fr)        -- peek piece at from position
   if actor == nil then                      -- check if it exists
     log:trace(self, ':can_move from', fr, 'piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= actor:color() then         -- check color who moves now
+  if self:who_move() ~= actor.color then         -- check color who moves now
     log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
@@ -112,7 +136,7 @@ function Space:can_move(fr, to)
 
   -- check kill ability
   local victim = self:piece(to)               -- peek piece at to position
-  if victim and victim:color() ~= actor:color() and victim:is_jump_protected() then
+  if victim and (victim.color == actor.color or victim:is_jump_protected()) then
     return false
   end
 
@@ -137,7 +161,7 @@ function Space:move(fr, to)
     end
   end
 
-  self.on_change:call('move', self.color) -- notify color to move
+  self:notify('move', self.color) -- notify color to move
 end
 
 -- use ability
@@ -148,7 +172,7 @@ function Space:use(pos, ability_name)
     log:trace(self, ':use at ', pos, ' piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= piece:color() then         -- check color who moves now
+  if self:who_move() ~= piece.color then         -- check color who moves now
     log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end

@@ -1,27 +1,32 @@
-local vec = require "src.core.Vec"
-local lay = require "src.core.lay"
-local cfg = require "src.Config"
+local Type      = require 'src.core.Type'
+local Ass       = require 'src.core.Ass'
+local Col       = Type.Create 'Col'
+local log       = require 'src.core.log'
 
-local Col = {typename="Col"}
-Col.__index = Col
-
--------------------------------------------------------------------------------
 -- TYPE------------------------------------------------------------------------
--------------------------------------------------------------------------------
-function Col.new(pos)
+function Col.New(pos)
   assert(pos)
 
   local self = setmetatable({}, Col)
   self.pos = pos
   return self
 end
--------------------------------------------------------------------------------
-function Col:__tostring()
-  return Col.typename
+
+--
+function Col:filter(pos)
+  return pos.x == self.pos.x
 end
--------------------------------------------------------------------------------
-function Col:filter(cell)
-  return cell.pos.x == self.pos.x
+
+-- selftest
+function Col.Test()
+  print('test Col..')
+
+  assert(tostring(Col) == 'Col')
 end
+
+-- MODULE ---------------------------------------------------------------------
+Ass.Wrap(Col, 'filter', 'Vec')
+
+log:wrap(Col, 'filter')
 
 return Col

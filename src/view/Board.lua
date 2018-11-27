@@ -54,21 +54,6 @@ end
 function Board:stone(pos)
   return self:cell(pos):stone()
 end
---
-function Board:select_cells(filter)
-  local selected = {}
-  for k, cell in ipairs(self.grid) do
-    if filter(cell) then
-      selected[#selected + 1] = cell
-    end
-	end
-  return selected
-end
---
-function Board:get_cells()
-  return self.grid 
-end
-
 
 -- MOVE------------------------------------------------------------------------
 -- model listener

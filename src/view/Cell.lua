@@ -11,7 +11,7 @@ function Cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
 Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 1}
-Cell.sheet = graphics.newImageSheet("src/battle/cell_1_s.png", Cell.sheet_opt)
+Cell.sheet = graphics.newImageSheet("src/view/cell_1_s.png", Cell.sheet_opt)
 
 --
 function Cell.new(spot)

@@ -1,7 +1,7 @@
 local vec       = require "src.core.Vec"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
-local Zones     = require 'src.battle.zones.Zones'
+local Zones     = require 'src.model.zones.Zones'
 local Color     = require 'src.model.Color'
 local log       = require 'src.core.log'
 
@@ -23,7 +23,7 @@ end
 function Swap:apply(piece)
   local depth = log:trace(self, ":apply"):enter()
     local board = piece.board
-    local zone = self.Zone.new(piece:get_pos())
+    local zone = self.Zone.New(piece:get_pos())
     local cells = board:select_cells(function(cell) return zone:filter(cell) end)
     for i = 1, #cells do
       local p = cells[i].piece

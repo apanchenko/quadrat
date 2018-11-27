@@ -1,7 +1,6 @@
 local _         = require 'src.core.underscore'
 local widget    = require "widget"
 local vec       = require "src.core.Vec"
-local Ability   = require "src.battle.powers.Ability"
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
@@ -37,7 +36,7 @@ function StoneAbilities:add(name)
     self._list[name] = count + 1
   end
   if self._mark == nil then
-    self._mark = lay.image(self._stone, cfg.cell, "src/battle/ability_"..tostring(self._stone:color())..".png")
+    self._mark = lay.image(self._stone, cfg.cell, "src/view/ability_"..tostring(self._stone:color())..".png")
   end
 end
 

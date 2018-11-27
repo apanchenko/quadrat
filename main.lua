@@ -10,6 +10,7 @@ require('src.core.Ass').Test()
 require('src.core.log').Test()
 require('src.core.Vec').Test()
 require('src.model.Color').Test()
+require('src.model.zones.Zones').Test()
 
 local composer   = require 'composer'
 composer.gotoScene("src.Menu")

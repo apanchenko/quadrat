@@ -19,7 +19,6 @@ end
 function Rehash:apply(piece)
   -- get board cells
   local board = piece.board
-  local grid = board:get_cells()
 
   -- empty cells to rehash
   local cells = board:select_cells(function(c) return c.piece == nil end)

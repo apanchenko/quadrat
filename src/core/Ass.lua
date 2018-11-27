@@ -24,13 +24,14 @@ function Ass.Fun(v, msg)    return check.Fun(v) or error(msg or tostring(v)..' i
 function Ass.Is(t, T, msg)  return check.Is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 
 -- wrap function of T
+-- ellipsis not supported
 function Ass.Wrap(T, name, ...)
   Ass.Table(T)
   Ass.String(name)
   local arg_types = {...}
   -- original function
   local fun = T[name]
-  Ass.Fun(fun)
+  Ass.Fun(fun, tostring(T)..' has no function '..name)
   -- define a new function
   T[name] = function(s, ...)
     -- check self
@@ -39,7 +40,7 @@ function Ass.Wrap(T, name, ...)
     local args = {...}
     local full_name = tostring(T)..':'..name
     Ass(#args == #arg_types, 'wrong number of arguments in '..full_name)
-    for i=1, #args do 
+    for i=1, #args do
       Ass.Is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..full_name)
     end
     -- call original function

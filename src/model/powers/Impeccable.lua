@@ -13,22 +13,16 @@ local Impeccable = Type.Create('Impeccable',
 })
 
 --
-function Impeccable.new(Zone)
+function Impeccable.New(Zone)
   Ass.Nil(Zone)
   local self = setmetatable({}, Impeccable)
   return self
 end
---
-function Impeccable:__tostring()
-  return 'Impeccable'
-end
-
 
 -- POWER ----------------------------------------------------------------------
 --
 function Impeccable:apply(piece)
   self._piece = piece
-  --self.img = lay.image(piece, cfg.cell, "src/battle/powers/impeccable.png")
   return self
 end
 --

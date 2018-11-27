@@ -1,11 +1,10 @@
 local Powers       = require 'src.model.powers.Powers'
 local Zones        = require 'src.model.zones.Zones'
 local Ass          = require 'src.core.Ass'
-
+local Type         = require 'src.core.Type'
 
 -- Ability has a potential to become certain power.
-local Ability = setmetatable({}, { __tostring = function() return 'Ability' end })
-Ability.__index = Ability
+local Ability = Type.Create('Ability')
 
 -- create ability with random power
 function Ability.New()
@@ -51,7 +50,7 @@ end
 
 --
 function Ability:create_power()
-  return self.Power.new(self.Zone)
+  return self.Power.New(self.Zone)
 end
 
 return Ability

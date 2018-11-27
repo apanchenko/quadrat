@@ -2,7 +2,10 @@ local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
 local check = require 'src.core.check'
 
-local Type = {}
+local Type =
+{
+  Ellipsis = 1
+}
 
 function Type.Create(name, t)
   t = t or {}

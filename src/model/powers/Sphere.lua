@@ -21,7 +21,7 @@ end
 -------------------------------------------------------------------------------
 function Sphere:apply(piece)
   self.piece = piece
-  self.img = lay.image(piece, cfg.cell, "src/battle/powers/sphere.png")
+  self.img = lay.image(piece, cfg.cell, "src/view/powers/sphere.png")
   return self
 end
 -------------------------------------------------------------------------------

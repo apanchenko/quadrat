@@ -10,13 +10,13 @@ local Ability = require 'src.model.Ability'
 local Piece = Type.Create 'Piece'
 
 -- create a piece
-function Piece.New(event, color)
-  Ass.Is(event, 'Event')
+function Piece.New(space, color)
+  Ass.Is(space, 'Space')
   Ass.Is(color, Color)
   local self =
   {
-    _event = event,
-    _color = color,
+    space = space,
+    color = color,
     _list = {}, -- list of abilities
     _powers = {}
   }
@@ -25,17 +25,13 @@ end
 --
 function Piece:__tostring()
   local str = 'piece'
-  if self._pos then
-    str = str.. tostring(self._pos)
+  if self.pos then
+    str = str.. tostring(self.pos)
   end
   return str
 end
 --
-function Piece:color()              return self._color end
---
-function Piece:pos()                return self._pos end
---
-function Piece:set_pos(pos)         self._pos = pos end
+function Piece:set_pos(pos)         self.pos = pos end
 --
 function Piece:can_move(space, fr, to) return (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 end
 --
@@ -55,7 +51,7 @@ function Piece:learn_ability(ability)
   else
     self._list[name] = ability
   end
-  self._event:call('add_ability', self._pos, name) -- notify
+  self.space:notify('add_ability', self.pos, name) -- notify
 end
 --
 function Piece:use_ability(name)
@@ -65,7 +61,7 @@ function Piece:use_ability(name)
     return false
   end
   self._list[name] = ability:decrease() -- consume ability
-  self._event:call('remove_ability', self._pos, name) -- notify
+  self.space:notify('remove_ability', self.pos, name) -- notify
   self:add_power(ability) -- increase power
 end
 
@@ -80,7 +76,7 @@ function Piece:add_power(ability)
     p = ability:create_power():apply(self)
     self._powers[name] = p
   end
-  self._event:call('add_power', self._pos, name, p:count()) -- notify
+  self.space:notify('add_power', self.pos, name, p:count()) -- notify
 end
 --
 function Piece:remove_power(name)
@@ -99,9 +95,6 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
----[[
-Ass.Wrap(Piece, 'color')
-Ass.Wrap(Piece, 'pos')
 Ass.Wrap(Piece, 'set_pos', Vec)
 Ass.Wrap(Piece, 'can_move', 'Space', Vec, Vec)
 Ass.Wrap(Piece, 'add_ability')

@@ -18,7 +18,7 @@ function PowerMoveDiagonal.new(Zone)
 end
 -------------------------------------------------------------------------------
 function PowerMoveDiagonal:apply(piece)
-  self.img = lay.image(piece, cfg.cell, "src/battle/powers/move_diagonal.png")
+  self.img = lay.image(piece, cfg.cell, "src/view/powers/move_diagonal.png")
   return self
 end
 -------------------------------------------------------------------------------
