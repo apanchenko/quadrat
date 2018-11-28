@@ -27,22 +27,23 @@ end
 --
 function RandomPlayer:move(color)
   if color == self.color then
-    timer.performWithDelay(20, function() self:move_async() end)
+    timer.performWithDelay(100, function() self:move_async() end)
   end
 end
-
 --
 function RandomPlayer:move_async()
-  local w = self.space:width() - 1
-  local h = self.space:height() - 1
-
   local attempts = 1000
 
   while self.space:who_move() == self.color do
-    local from = Vec.Random(0, 0, w, h)
+    local from = Vec.Random(Vec.Zero, self.space.size - Vec.One)
     local piece = self.space:piece(from)
     if piece ~= nil and piece.color == self.color then
-      local to = from + Vec.Random(-1, -1, 1, 1)
+      local ability = map.random(piece._list)
+      if ability then
+        piece:use_ability(tostring(ability))
+      end
+
+      local to = from + Vec.Random(Vec.Zero-Vec.One, Vec.One)
       if self.space:can_move(from, to) then
         self.space:move(from, to)
       end

@@ -12,8 +12,10 @@ function Vec.New(x, y)
   return setmetatable({x = x or 0, y = (y or x) or 0}, Vec)
 end
 -- random vector
-function Vec.Random(x1, y1, x2, y2)
-  return setmetatable({x = math.random(x1, x2), y = math.random(y1, y2)}, Vec)
+function Vec.Random(min, max)
+  Ass.Is(min, Vec)
+  Ass.Is(max, Vec)
+  return setmetatable({x = math.random(min.x, max.x), y = math.random(min.y, max.y)}, Vec)
 end
 
 -------------------------------------------------------------------------------
@@ -73,6 +75,7 @@ function Vec.is_valid(v)
 end
 
 Vec.Zero = Vec.New(0, 0)
+Vec.One = Vec.New(1, 1)
 
 -- selftest
 function Vec.Test()
