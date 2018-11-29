@@ -19,19 +19,20 @@ end
 -- POWER ----------------------------------------------------------------------
 --
 function Destroy:apply(piece)
-  local board = piece.board
+  local space = piece.space
   local zone = self.Zone.New(piece.pos)
 
   -- select cells in zone
-  local cells = board:select_cells(function(c) return zone:filter(c.pos) and zone.pos~=c.pos end)
-  for i = 1, #cells do
+  local spots = space:select_spots(function(spot) return zone:filter(spot.pos) and zone.pos ~= spot.pos end)
+  for i = 1, #spots do
     -- enemy piece
-    local p = cells[i].piece
-    if p and p.color ~= piece.color then
-      p:putoff()
+    local spot = spots[i]
+    if spot.piece and spot.piece.color ~= piece.color then
+      spot.piece.die()
+      spot.piece = nil
+      space:notify('remove_piece', spot.pos) -- notify
     end
   end
-  return nil
 end
 
 --

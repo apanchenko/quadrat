@@ -34,15 +34,18 @@ end
 function RandomPlayer:move_async()
   local attempts = 1000
 
+  -- do something until can move
   while self.space:who_move() == self.color do
+    -- select random piece of my color
     local from = Vec.Random(Vec.Zero, self.space.size - Vec.One)
     local piece = self.space:piece(from)
     if piece ~= nil and piece.color == self.color then
-      local ability = map.random(piece._list)
+      -- execute random ability
+      local ability = map.random(piece.abilities)
       if ability then
         piece:use_ability(tostring(ability))
       end
-
+      -- move to random point
       local to = from + Vec.Random(Vec.Zero-Vec.One, Vec.One)
       if self.space:can_move(from, to) then
         self.space:move(from, to)

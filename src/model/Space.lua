@@ -71,11 +71,11 @@ function Space:spots()      return pairs(self.grid) end
 -- get spot by position vector
 function Space:spot(vec)    return self.grid[self:index(vec)] end
 --
-function Space:select_cells(filter)
+function Space:select_spots(filter)
   local selected = {}
-  for k, cell in ipairs(self.grid) do
-    if filter(cell) then
-      selected[#selected + 1] = cell
+  for k, spot in ipairs(self.grid) do
+    if filter(spot) then
+      selected[#selected + 1] = spot
     end
 	end
   return selected
@@ -86,7 +86,7 @@ end
 function Space:piece(vec)
   local spot = self:spot(vec)
   if spot then
-    return spot:piece()
+    return spot.piece
   end
   return nil
 end
@@ -95,7 +95,7 @@ function Space:count_pieces()
   local red = 0
   local bla = 0
   for i = 0, #self.grid do -- pics is not dense, so use # on grid
-    local piece = self.grid[i]:piece()
+    local piece = self.grid[i].piece
     if piece then
       if Color.is_red(piece.color) then
         red = red + 1

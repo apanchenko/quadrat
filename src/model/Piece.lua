@@ -17,7 +17,7 @@ function Piece.New(space, color)
   {
     space = space,
     color = color,
-    _list = {}, -- list of abilities
+    abilities = {}, -- list of abilities
     _powers = {}
   }
   return setmetatable(self, Piece)
@@ -46,21 +46,21 @@ end
 --
 function Piece:learn_ability(ability)
   local name = tostring(ability)
-  if self._list[name] then
-    self._list[name]:increase(ability.count)
+  if self.abilities[name] then
+    self.abilities[name]:increase(ability.count)
   else
-    self._list[name] = ability
+    self.abilities[name] = ability
   end
   self.space:notify('add_ability', self.pos, name) -- notify
 end
 --
 function Piece:use_ability(name)
-  local ability = self._list[name]
+  local ability = self.abilities[name]
   if ability == nil then
     log:trace(self, ":use_ability, no ability: ".. name)
     return false
   end
-  self._list[name] = ability:decrease() -- consume ability
+  self.abilities[name] = ability:decrease() -- consume ability
   self.space:notify('remove_ability', self.pos, name) -- notify
   self:add_power(ability) -- increase power
 end
@@ -76,7 +76,10 @@ function Piece:add_power(ability)
     p = ability:create_power():apply(self)
     self._powers[name] = p
   end
-  self.space:notify('add_power', self.pos, name, p:count()) -- notify
+
+  if p then
+    self.space:notify('add_power', self.pos, name, p:count()) -- notify
+  end
 end
 --
 function Piece:remove_power(name)

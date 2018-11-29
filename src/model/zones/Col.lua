@@ -27,6 +27,6 @@ end
 -- MODULE ---------------------------------------------------------------------
 Ass.Wrap(Col, 'filter', 'Vec')
 
-log:wrap(Col, 'filter')
+--log:wrap(Col, 'filter')
 
 return Col

@@ -18,7 +18,7 @@ function Cell.new(spot)
   Ass.Is(spot, 'Spot')
   local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
-  self.pos = spot:pos()
+  self.pos = spot.pos
   self.view = display.newGroup()
   self.img = lay.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self

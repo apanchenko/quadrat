@@ -20,22 +20,21 @@ end
 function Teach:__tostring()
   return tostring(Teach).. tostring(self.Zone)
 end
--------------------------------------------------------------------------------
+--
 function Teach:apply(piece)
-  local space = piece.space
   local zone = self.Zone.New(piece.pos)
 
   -- select cells in zone
-  local cells = space:select_cells(function(c) return zone:filter(c.pos) and not zone.pos==c.pos end)
-  for i = 1, #cells do
-    -- friend piece
-    local p = cells[i].piece
-    if p and p.color == piece.color then
-      -- learn my abilities
-      for name, ability in piece.abilities:pairs() do
-        p.abilities:learn(ability)
-      end --abilities
-    end --p
+  local spots = piece.space:select_spots(function(spot)
+    return zone:filter(spot.pos) and spot.pos ~= zone.pos and spot.piece and spot.piece.color == piece.color
+  end)
+
+  for i = 1, #spots do
+    local spot = spots[i]
+    -- learn my abilities
+    for name, ability in pairs(piece.abilities) do
+      spot.piece:learn_ability(ability)
+    end --abilities
   end --cells
   return nil
 end
