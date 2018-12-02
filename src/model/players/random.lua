@@ -13,15 +13,7 @@ local random = object:new()
 function random:create(space, color)
   Ass.Is(space, 'Space')
   Ass.Is(color, Color)
-
-  local t =
-  {
-    space = space,
-    color = color
-  }
-  setmetatable(t, self)
-  self.__index = self
-  return t
+  return random:new({space = space, color = color})
 end
 --
 function random:__tostring()

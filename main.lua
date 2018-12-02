@@ -5,11 +5,12 @@
 -----------------------------------------------------------------------------------------
 
 print(_VERSION)
-require('src.core.check').Test()
-require('src.core.Ass').Test()
-require('src.core.log').Test()
-require('src.core.Vec').Test()
 require('src.core.object').test()
+require('src.core.check').test()
+require('src.core.Ass').Test()
+require('src.core.map').test()
+require('src.core.log').Test()
+require('src.core.vec').test()
 require('src.model.Color').Test()
 require('src.model.zones.Zones').Test()
 

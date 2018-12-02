@@ -4,6 +4,10 @@ local log = require 'src.core.log'
 -------------------------------------------------------------------------------
 local object = {}
 
+function object.__call(cls, ...)
+  return cls:create(...)
+end
+
 function object:__tostring()
   return 'object'
 end
@@ -15,7 +19,6 @@ function object:new(t)
   self.__index = self
   return t
 end
-
 
 -- selftest -------------------------------------------------------------------
 function object.test()

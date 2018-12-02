@@ -1,15 +1,15 @@
-local Ass = require 'src.core.Ass'
-local Types = require 'src.core.Types'
+local Ass   = require 'src.core.Ass'
+local type  = require 'src.core.type'
 
-local Array = {}
+local array = {}
 
 --
-function Array.Add(t, v)
+function array.add(t, v)
   t[#t + 1] = v
 end
 
 --
-function Array.All(t, fn)
+function array.all(t, fn)
   for i = 1, #t do
     if not fn(t[i]) then
       return false
@@ -19,23 +19,23 @@ function Array.All(t, fn)
 end
 
 --
-function Array.Each(table, fn)
+function array.each(table, fn)
   for i = 1, #t do
     fn(t[i])
   end
 end
 
 -- return random element of table
-function Array.Random(t)
+function array.random(t)
   return t[math.random(#t)]
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Array, 'Add', 'table', Types.Any)
-Ass.Wrap(Array, 'All', 'table', Types.Fun)
-Ass.Wrap(Array, 'Each', 'table', Types.Fun)
-Ass.Wrap(Array, 'Random', 'table')
+Ass.Wrap(array, 'add', type.tab, type.any)
+Ass.Wrap(array, 'all', type.tab, type.fun)
+Ass.Wrap(array, 'each', type.tab, type.fun)
+Ass.Wrap(array, 'random', type.tab)
 
-log:wrap(Array)
+log:wrap(array)
 
 return Array

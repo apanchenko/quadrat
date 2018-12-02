@@ -1,11 +1,13 @@
-local Ass = require 'src.core.Ass'
+local Ass   = require 'src.core.Ass'
+local types = require 'src.core.types'
+local log   = require 'src.core.log'
 
-local map = {}
+-- name to value
+local map = setmetatable({}, {__tostring = function() return 'map' end})
 
-function map.any(table, fn)
-  Ass.Table(table, 'not table in map.any')
-  Ass.Fun(fn)
-  for k, v in pairs(table) do
+-- or
+function map.any(t, fn)
+  for k, v in pairs(t) do
     if fn(v) then
       return true
     end
@@ -13,10 +15,9 @@ function map.any(table, fn)
   return false
 end
 
-function map.all(table, fn)
-  Ass.Table(table, 'not table in map.all')
-  Ass.Fun(fn)
-  for k, v in pairs(table) do
+-- and
+function map.all(t, fn)
+  for k, v in pairs(t) do
     if not fn(v) then
       return false
     end
@@ -24,22 +25,21 @@ function map.all(table, fn)
   return true
 end
 
-function map.each(table, fn)
-  Ass.Table(table, 'not table in map.each')
-  Ass.Fun(fn)
-  for k, v in pairs(table) do
+-- call fn with every element
+function map.each(t, fn)
+  for k, v in pairs(t) do
     fn(v)
   end
 end
 
--- number of elements in table
+-- number of elements
 function map.count(t)
   local count = 0
   for _ in pairs(t) do count = count + 1 end
   return count
 end
 
--- return random element of table
+-- random element of table
 function map.random(t)
   local count = map.count(t)
   if count == 0 then
@@ -54,5 +54,30 @@ function map.random(t)
     end
   end
 end
+
+-- MODULE ---------------------------------------------------------------------
+Ass.Wrap(map, '.all', types.tab, types.fun)
+Ass.Wrap(map, '.each', types.tab, types.fun)
+Ass.Wrap(map, '.count', types.tab)
+Ass.Wrap(map, '.random', types.tab)
+
+log:wrap(map)
+
+--
+function map.test()
+  log:trace("map.test")
+
+  Ass(tostring(map) == 'map')
+  local t = {}
+  t['week'] = 'semana'
+  t['month'] = 'mes'
+  t['year'] = 'ano'
+
+  --Ass(map.each(t, function(v) log:trace(v) end))
+  Ass(map.any(t, function(v) return #v > 3 end))
+  Ass(map.all(t, function(v) return #v > 2 end))
+  Ass(map.count(t) == 3)
+end
+
 
 return map

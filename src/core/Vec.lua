@@ -1,98 +1,96 @@
-local Ass = require 'src.core.Ass'
+local object  = require 'src.core.object'
+local types   = require 'src.core.types'
+local Ass     = require 'src.core.Ass'
 
-local Vec = setmetatable({},
-{
-  __tostring = function()         return 'Vec' end,
-  __call     = function(cls, ...) return cls.New(...) end
-})
-Vec.__index = Vec
+-- 2d vector
+local vec = object:new()
 
--- x, y
-function Vec.New(x, y)
-  return setmetatable({x = x or 0, y = (y or x) or 0}, Vec)
-end
--- random vector
-function Vec.Random(min, max)
-  Ass.Is(min, Vec)
-  Ass.Is(max, Vec)
-  return setmetatable({x = math.random(min.x, max.x), y = math.random(min.y, max.y)}, Vec)
-end
-
--------------------------------------------------------------------------------
-function Vec.from(obj)
-  return Vec.New(obj.x, obj.y)
-end
-
--------------------------------------------------------------------------------
-function Vec.copy(from, to)
+-- stateless ------------------------------------------------------------------
+--
+function vec.copy(from, to)
   to.x = from.x
   to.y = from.y
 end
-
--------------------------------------------------------------------------------
-function Vec.center(obj)
+--
+function vec.center(obj)
   obj.x = display.contentWidth / 2
   obj.y = display.contentHeight / 2
 end
+--
+function vec.__add(l, r) return vec:create(l.x + r.x, l.y + r.y) end
+function vec.__sub(l, r) return vec:create(l.x - r.x, l.y - r.y) end
+function vec.__div(l, r) return vec:create(l.x / r.x, l.y / r.y) end
+function vec.__mul(l, r) return vec:create(l.x * r.x, l.y * r.y) end
+function vec.__eq (l, r) return (l.x == r.x) and (l.y == r.y) end
+function vec.__lt (l, r) return (l.x < r.x) and (l.y < r.y) end
+function vec.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
--------------------------------------------------------------------------------
-function Vec.__add(l, r) return Vec.New(l.x + r.x, l.y + r.y) end
-function Vec.__sub(l, r) return Vec.New(l.x - r.x, l.y - r.y) end
-function Vec.__div(l, r) return Vec.New(l.x / r.x, l.y / r.y) end
-function Vec.__mul(l, r) return Vec.New(l.x * r.x, l.y * r.y) end
-function Vec.__eq (l, r) return (l.x == r.x) and (l.y == r.y) end
-function Vec.__lt (l, r) return (l.x < r.x) and (l.y < r.y) end
-function Vec.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
+-- create ---------------------------------------------------------------------
+-- x, y
+function vec:create(x, y)
+  local t = setmetatable({x = x, y = y}, self)
+  self.__index = self
+  return t
+end
+-- random
+function vec:random(min, max)
+  Ass.Is(min, vec)
+  Ass.Is(max, vec)
+  return setmetatable({x = math.random(min.x, max.x), y = math.random(min.y, max.y)}, vec)
+end
+--
+function vec:from(obj)
+  return vec:new(obj.x, obj.y)
+end
 
--------------------------------------------------------------------------------
-function Vec:__tostring()
+-- methods ---------------------------------------------------------------------
+--
+function vec:__tostring()
   return '['.. self.x.. ",".. self.y.. ']'
 end
--------------------------------------------------------------------------------
-function Vec:length2()
+--
+function vec:length2()
   return (self.x * self.x) + (self.y * self.y)
 end
-
--------------------------------------------------------------------------------
-function Vec:round()
-  return Vec.New(math.floor(self.x + 0.5), math.floor(self.y + 0.5))
+--
+function vec:round()
+  return vec:create(math.floor(self.x + 0.5), math.floor(self.y + 0.5))
 end
-
--------------------------------------------------------------------------------
-function Vec:to(obj)
+--
+function vec:to(obj)
   obj.x = self.x
   obj.y = self.y
 end
-
 -- turn positive
-function Vec:abs()
-  return Vec.new(math.abs(self.x), math.abs(self.y))
+function vec:abs()
+  return vec:create(math.abs(self.x), math.abs(self.y))
 end
 
--- test if v is Vec
-function Vec.is_valid(v)
-  return v~=nil and v.typename==Vec.typename and type(v.x)=='number' and type(v.y)=='number'
-end
-
-Vec.Zero = Vec.New(0, 0)
-Vec.One = Vec.New(1, 1)
+-- constants ------------------------------------------------------------------
+vec.zero = vec(0, 0)
+vec.one = vec(1, 1)
 
 -- selftest
-function Vec.Test()
-  print('test Vec..')
-  local a = Vec.New(3, 4)
-  local b = Vec.New(2, 3)
+function vec.test()
+  print('vec.test..')
+  assert(tostring(vec.one) == '[1,1]')
+  
+  local a = vec(1, 2)
+  local b = vec(3, 4)
+  local c = b - a
 
-  assert(a.x == 3 and a.y == 4)
-  assert((a-b).x == 1 and (a-b).y == 1)
+  assert(a.x == 1 and a.y == 2)
+  assert(a:length2() == 5)
+  assert(c.x == 2 and c.y == 2)
+  assert(vec(2.3, 4.5):round().x == 2)
 
-  assert(b:length2() == 13)
-  assert(Vec.New(2.3, 4.5):round().x == 2)
+  local d = vec(-1.5, -0.5)
+  Ass(d:abs().x == 1.5)
 end
 
-Ass.Wrap(Vec, 'length2')
-Ass.Wrap(Vec, 'round')
-Ass.Wrap(Vec, 'to', 'table')
+Ass.Wrap(vec, ':length2')
+Ass.Wrap(vec, ':round')
+Ass.Wrap(vec, ':to', types.tab)
 
 -- return module
-return Vec
+return vec
