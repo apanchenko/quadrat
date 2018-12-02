@@ -8,10 +8,11 @@ local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
+local Class      = require 'src.core.Class'
 local Type      = require 'src.core.Type'
 local Powers    = require 'src.model.powers.Powers'
 
-local Stone = Type.Create 'Stone'
+local Stone = Class.Create 'Stone'
 
 --INIT-------------------------------------------------------------------------
 function Stone.New(color, model)
@@ -47,22 +48,18 @@ function Stone:__tostring()
 end
 --
 function Stone:set_color(color)
-  local depth = log:trace(self, ":set_color ", tostring(color)):enter()
-    Ass.Is(color, Color)
+  -- nothing to change
+  if color ~= self._clolor then
+    self._color = color
 
-    -- nothing to change
-    if color ~= self._clolor then
-      self._color = color
-
-      -- change image
-      if self.img then
-        self.img:removeSelf()
-      end
-      cfg.cell.order = 1
-      self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self._color)..".png")
-      cfg.cell.order = nil
+    -- change image
+    if self.img then
+      self.img:removeSelf()
     end
-  log:exit(depth)
+    cfg.cell.order = 1
+    self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self._color)..".png")
+    cfg.cell.order = nil
+  end
 end
 --
 function Stone:color()
@@ -258,10 +255,10 @@ Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'deselect')
 Ass.Wrap(Stone, 'pos')
 --Ass.Wrap(Stone, 'set_pos', Vec)
-Ass.Wrap(Stone, 'add_ability', 'string')
-Ass.Wrap(Stone, 'remove_ability', 'string')
-Ass.Wrap(Stone, 'add_power', 'string', 'number')
+Ass.Wrap(Stone, 'add_ability', Type.Str)
+Ass.Wrap(Stone, 'remove_ability', Type.Str)
+Ass.Wrap(Stone, 'add_power', Type.Str, Type.Num)
 
-log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power')
+log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
 --]]
 return Stone

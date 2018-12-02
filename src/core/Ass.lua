@@ -23,28 +23,46 @@ function Ass.Fun(v, msg)    return check.Fun(v) or error(msg or tostring(v)..' i
 -- 'v' is an instance of T
 function Ass.Is(t, T, msg)  return check.Is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 
+local IsStatic = function(name)
+  local first = string.sub(name, 1, 1)
+  return string.upper(first) == first
+end
+
+local Separators = {[true] = '.', [false] = ':'}
+
 -- wrap function of T
 -- ellipsis not supported
 function Ass.Wrap(T, name, ...)
-  Ass.Table(T)
+  Ass.Table(T, 'first arg is not a table in Ass.Wrap('..tostring(T)..', '..tostring(name)..')')
   Ass.String(name)
   local arg_types = {...}
   -- original function
   local fun = T[name]
   Ass.Fun(fun, tostring(T)..' has no function '..name)
-  -- define a new function
-  T[name] = function(s, ...)
-    -- check self
-    Ass.Is(s, T, tostring(T)..":"..name.." called with .")
-    -- check arguments
+
+  local is_static = IsStatic(name)
+  local full_name = tostring(T)..Separators[is_static]..name
+
+  local check_arguments = function(arg_types, ...)
     local args = {...}
-    local full_name = tostring(T)..':'..name
-    Ass(#args == #arg_types, 'wrong number of arguments in '..full_name)
+    Ass(#args == #arg_types, full_name..' expected '..#arg_types..' args, found '..#args)
     for i=1, #args do
       Ass.Is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..full_name)
     end
-    -- call original function
-    return fun(s, ...)
+  end
+
+  -- define a new function
+  if is_static then
+    T[name] = function(...)
+      check_arguments(arg_types, ...)
+      return fun(...) -- call original function
+    end
+  else
+    T[name] = function(s, ...)
+      Ass.Is(s, T, full_name.." called via .") -- check self
+      check_arguments(arg_types, ...)
+      return fun(s, ...) -- call original function
+    end    
   end
 end
 

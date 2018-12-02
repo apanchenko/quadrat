@@ -3,9 +3,9 @@ local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local Ass   = require "src.core.Ass"
-local Type  = require "src.core.Type"
+local Class  = require "src.core.Class"
 
-local Cell = Type.Create('Cell')
+local Cell = Class.Create('Cell')
 
 function Cell:__tostring() return 'cell'.. tostring(self.pos) end
 

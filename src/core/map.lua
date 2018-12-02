@@ -3,7 +3,7 @@ local Ass = require 'src.core.Ass'
 local map = {}
 
 function map.any(table, fn)
-  Ass.Table(table)
+  Ass.Table(table, 'not table in map.any')
   Ass.Fun(fn)
   for k, v in pairs(table) do
     if fn(v) then
@@ -14,7 +14,7 @@ function map.any(table, fn)
 end
 
 function map.all(table, fn)
-  Ass.Table(table)
+  Ass.Table(table, 'not table in map.all')
   Ass.Fun(fn)
   for k, v in pairs(table) do
     if not fn(v) then
@@ -25,7 +25,7 @@ function map.all(table, fn)
 end
 
 function map.each(table, fn)
-  Ass.Table(table)
+  Ass.Table(table, 'not table in map.each')
   Ass.Fun(fn)
   for k, v in pairs(table) do
     fn(v)

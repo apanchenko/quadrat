@@ -5,12 +5,13 @@ local Player   = require 'src.Player'
 local Color    = require 'src.model.Color'
 local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
-local Type     = require 'src.core.Type'
+local Class    = require 'src.core.Class'
 local lay      = require 'src.core.lay'
 local Ass      = require 'src.core.Ass'
 local log      = require 'src.core.log'
+local Type     = require 'src.core.Type'
 
-local Board = Type.Create 'Board'
+local Board = Class.Create 'Board'
 
 -------------------------------------------------------------------------------
 function Board:__tostring()
@@ -64,33 +65,37 @@ end
 function Board:remove_jade(pos)
   self:cell(pos):remove_jade()
 end
--- model listener
+-- PIECE -----------------------------------------------------------------------
 function Board:spawn_piece(color, pos)
   local stone = Stone.New(color, self.model) -- create a new stone
   self.grid[self.model:index(pos)]:set_stone(stone) -- cell that actor is going to move to
   stone:puton(self, pos) -- put piece on board
 end
--- model listener
+--
 function Board:move_piece(to, from)
   local stone = self:cell(from):remove_stone()
   self:cell(to):set_stone(stone)
 end
--- model listener
+--
 function Board:remove_piece(pos)
   local stone = self:cell(pos):remove_stone()
   stone:putoff()
 end
--- model listener
+--
 function Board:add_ability(pos, ability_name)
   self:stone(pos):add_ability(ability_name)
 end
--- model listener
+--
 function Board:remove_ability(pos, ability_name)
   self:stone(pos):remove_ability(ability_name)
 end
--- model listener
-function Board:add_power(pos, name, result_count)
-  self:stone(pos):add_power(name, result_count)
+--
+function Board:add_power(pos, name, count)
+  self:stone(pos):add_power(name, count)
+end
+--
+function Board:set_color(pos, color)
+  self:stone(pos):set_color(color)
 end
 
 -------------------------------------------------------------------------------
@@ -111,9 +116,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ---[[
-Ass.Wrap(Board, 'add_ability', Vec, 'string')
-Ass.Wrap(Board, 'remove_ability', Vec, 'string')
-Ass.Wrap(Board, 'add_power', Vec, 'string', 'number')
+Ass.Wrap(Board, 'add_ability', Vec, Type.Str)
+Ass.Wrap(Board, 'remove_ability', Vec, Type.Str)
+Ass.Wrap(Board, 'add_power', Vec, Type.Str, Type.Num)
+Ass.Wrap(Board, 'set_color', Vec, Color)
 
 log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')
 --]]

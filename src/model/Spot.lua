@@ -1,4 +1,4 @@
-local Type      = require 'src.core.Type'
+local Class      = require 'src.core.Class'
 local Vec       = require 'src.core.Vec'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
@@ -6,7 +6,7 @@ local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
 
-local Spot = Type.Create('Spot')
+local Spot = Class.Create('Spot')
 
 -- flags
 local pit      = 1

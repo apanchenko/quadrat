@@ -27,7 +27,7 @@ end
 -- wrap functions in table t with log
 function log:wrap(T, ...)
   Ass(tostring(self) == 'log', ' in Log:wrap')
-  Ass.Table(T, 'T')
+  Ass.Table(T, 'first arg is not a table in log.wrap('..tostring(T)..')')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name

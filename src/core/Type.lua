@@ -1,22 +1,10 @@
-local Ass = require 'src.core.Ass'
-local log = require 'src.core.log'
-local check = require 'src.core.check'
-
-local Type =
+return
 {
-  Ellipsis = 1
+  Any = 0, -- not nil
+  Nil = 1,
+  Tab = 2,
+  Num = 3,
+  Str = 4,
+  Fun = 5,
+  Ell = 6, -- ellipsis
 }
-
-function Type.Create(name, t)
-  t = t or {}
-
-  Ass.String(name)
-  Ass.Table(t)
-
-  local T = setmetatable(t, { __tostring = function() return name end })
-  T.__index = T
-
-  return T
-end
-
-return Type

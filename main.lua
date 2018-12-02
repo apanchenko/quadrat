@@ -9,6 +9,7 @@ require('src.core.check').Test()
 require('src.core.Ass').Test()
 require('src.core.log').Test()
 require('src.core.Vec').Test()
+require('src.core.object').test()
 require('src.model.Color').Test()
 require('src.model.zones.Zones').Test()
 

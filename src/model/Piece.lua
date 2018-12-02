@@ -1,4 +1,5 @@
 local map     = require 'src.core.map'
+local Class   = require 'src.core.Class'
 local Type    = require 'src.core.Type'
 local Ass     = require 'src.core.Ass'
 local log     = require 'src.core.log'
@@ -7,7 +8,7 @@ local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
 --
-local Piece = Type.Create 'Piece'
+local Piece = Class.Create 'Piece'
 
 -- create a piece
 function Piece.New(space, color)
@@ -18,7 +19,7 @@ function Piece.New(space, color)
     space = space,
     color = color,
     abilities = {}, -- list of abilities
-    _powers = {}
+    powers = {}
   }
   return setmetatable(self, Piece)
 end
@@ -33,9 +34,19 @@ end
 --
 function Piece:set_pos(pos)         self.pos = pos end
 --
-function Piece:can_move(space, fr, to) return (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 end
+function Piece:can_move(space, fr, to)
+  if (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 then
+    return true
+  end
+  return map.any(self.powers, function(p) return p:can_move(fr, to) end)
+end
 --
 function Piece:die()
+end
+--
+function Piece:set_color(color)
+  self.color = color
+  self.space:notify('set_color', self.pos, color) -- notify
 end
 
 -- ABILITY---------------------------------------------------------------------
@@ -66,47 +77,46 @@ function Piece:use_ability(name)
 end
 
 -- POWER ----------------------------------------------------------------------
---
 function Piece:add_power(ability)
   local name = tostring(ability)
-  local p = self._powers[name]
+  local p = self.powers[name]
   if p then
     p:increase()
   else
-    p = ability:create_power():apply(self)
-    self._powers[name] = p
+    p = ability:create_power(self)
+    self.powers[name] = p
   end
 
   if p then
-    self.space:notify('add_power', self.pos, name, p:count()) -- notify
+    self.space:notify('add_power', self.pos, name, 1) -- notify
   end
 end
 --
 function Piece:remove_power(name)
-  local p = self._powers[name]
+  local p = self.powers[name]
   if p then
     if not p:decrease() then
-      self._powers[name] = nil
+      self.powers[name] = nil
     end
   end
 end
 
 -- TRAITS ---------------------------------------------------------------------
---
 function Piece:is_jump_protected()
-  return map.any(self._powers, function(p) return p.is_jump_protected == true end)
+  return map.any(self.powers, function(p) return p.is_jump_protected == true end)
 end
 
 -- MODULE ---------------------------------------------------------------------
+Ass.Wrap(Piece, 'New', 'Space', 'Color')
 Ass.Wrap(Piece, 'set_pos', Vec)
 Ass.Wrap(Piece, 'can_move', 'Space', Vec, Vec)
+Ass.Wrap(Piece, 'set_color', 'Color')
 Ass.Wrap(Piece, 'add_ability')
 Ass.Wrap(Piece, 'learn_ability', Ability)
-Ass.Wrap(Piece, 'use_ability', 'string')
+Ass.Wrap(Piece, 'use_ability', Type.Str)
 Ass.Wrap(Piece, 'add_power', Ability)
-Ass.Wrap(Piece, 'remove_power', 'string')
+Ass.Wrap(Piece, 'remove_power', Type.Str)
 
-log:trace(Piece)
-log:wrap(Piece, 'set_pos', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
---]]
+log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
+
 return Piece

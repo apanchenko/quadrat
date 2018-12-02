@@ -1,6 +1,6 @@
-local Type      = require 'src.core.Type'
+local Class      = require 'src.core.Class'
 local Ass       = require 'src.core.Ass'
-local Col       = Type.Create 'Col'
+local Col       = Class.Create 'Col'
 local log       = require 'src.core.log'
 
 -- TYPE------------------------------------------------------------------------

@@ -1,37 +1,40 @@
 local map     = require 'src.core.map'
-local Type    = require 'src.core.Type'
 local Ass     = require 'src.core.Ass'
 local log     = require 'src.core.log'
 local Vec     = require 'src.core.Vec'
+local object  = require 'src.core.object'
 local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
 --
-local RandomPlayer = Type.Create 'RandomPlayer'
+local random = object:new()
 
 -- create
-function RandomPlayer.New(space, color)
+function random:create(space, color)
   Ass.Is(space, 'Space')
   Ass.Is(color, Color)
-  local self =
+
+  local t =
   {
     space = space,
     color = color
   }
-  return setmetatable(self, RandomPlayer)
+  setmetatable(t, self)
+  self.__index = self
+  return t
 end
 --
-function RandomPlayer:__tostring()
+function random:__tostring()
   return 'random_player['..tostring(self.color)..']'
 end
 --
-function RandomPlayer:move(color)
+function random:move(color)
   if color == self.color then
     timer.performWithDelay(100, function() self:move_async() end)
   end
 end
 --
-function RandomPlayer:move_async()
+function random:move_async()
   local attempts = 1000
 
   -- do something until can move
@@ -61,9 +64,9 @@ function RandomPlayer:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(RandomPlayer, 'move', Color)
-Ass.Wrap(RandomPlayer, 'move_async')
+Ass.Wrap(random, 'move', Color)
+Ass.Wrap(random, 'move_async')
 
-log:wrap(RandomPlayer, 'move', 'move_async')
+log:wrap(random, 'move', 'move_async')
 
-return RandomPlayer
+return random

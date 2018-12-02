@@ -2,8 +2,8 @@ local composer   = require "composer"
 local Space      = require 'src.model.Space'
 local Color      = require 'src.model.Color'
 local ChangesLog = require 'src.model.ChangesLog'
-local RandomPlayer = require 'src.model.players.RandomPlayer'
-local Board     = require "src.view.Board"
+local player     = require 'src.model.players.random'
+local Board      = require "src.view.Board"
 local Stone      = require "src.view.Stone"
 local vec        = require "src.core.Vec"
 local Player     = require "src.Player"
@@ -43,9 +43,9 @@ function battle:create(event)
 
   self.board = Board.new(self, self.space)
 
-  self.bot1 = RandomPlayer.New(self.space, Color.R)
+  self.bot1 = player:create(self.space, Color.R)
   self.space.on_change:add(self.bot1)
-  self.bot2 = RandomPlayer.New(self.space, Color.B)
+  self.bot2 = player:create(self.space, Color.B)
   --self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing

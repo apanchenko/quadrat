@@ -12,7 +12,7 @@ local Destroy      = require 'src.model.powers.Destroy'
 
 local Powers =
 {
-  --MoveDiagonal, Multiply, Rehash, Relocate, Recruit, Swap, Sphere,
+  MoveDiagonal, Multiply, Recruit, --Rehash, Relocate, , Swap, Sphere,
   Impeccable, Teach, Destroy
 }
 

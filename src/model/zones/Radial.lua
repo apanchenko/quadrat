@@ -1,10 +1,10 @@
 local Ass       = require 'src.core.Ass'
 local Vec       = require 'src.core.Vec'
-local Type      = require 'src.core.Type'
+local Class      = require 'src.core.Class'
 local log       = require 'src.core.log'
 local _         = require 'src.core.underscore'
 
-local Radial = Type.Create 'Radial'
+local Radial = Class.Create 'Radial'
 
 -------------------------------------------------------------------------------
 function Radial.New(pos)

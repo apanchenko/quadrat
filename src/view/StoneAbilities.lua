@@ -6,9 +6,10 @@ local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
+local Class     = require 'src.core.Class'
 local Type      = require 'src.core.Type'
 
-local StoneAbilities = Type.Create('StoneAbilities')
+local StoneAbilities = Class.Create('StoneAbilities')
 
 -- A set of abilities a piece have.
 function StoneAbilities.New(stone, model)
@@ -93,8 +94,8 @@ end
 
 --MODEULE----------------------------------------------------------------------
 --
-Ass.Wrap(StoneAbilities, 'add', 'string')
-Ass.Wrap(StoneAbilities, 'remove', 'string')
+Ass.Wrap(StoneAbilities, 'add', Type.Str)
+Ass.Wrap(StoneAbilities, 'remove', Type.Str)
 Ass.Wrap(StoneAbilities, 'is_empty')
 Ass.Wrap(StoneAbilities, 'show')
 Ass.Wrap(StoneAbilities, 'hide')

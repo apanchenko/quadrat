@@ -1,10 +1,12 @@
 local Powers       = require 'src.model.powers.Powers'
 local Zones        = require 'src.model.zones.Zones'
 local Ass          = require 'src.core.Ass'
+local Class        = require 'src.core.Class'
 local Type         = require 'src.core.Type'
+local log          = require 'src.core.log'
 
 -- Ability has a potential to become certain power.
-local Ability = Type.Create('Ability')
+local Ability = Class.Create 'Ability'
 
 -- create ability with random power
 function Ability.New()
@@ -44,13 +46,18 @@ function Ability:decrease()
 end
 
 --
-function Ability:get_count()
-  return self.count
+function Ability:create_power(piece)
+  local power = self.Power.New(self.Zone)
+  return power:apply(piece)
 end
 
---
-function Ability:create_power()
-  return self.Power.New(self.Zone)
-end
+
+-- MODULE ---------------------------------------------------------------------
+Ass.Wrap(Ability, 'New')
+Ass.Wrap(Ability, 'increase', Type.Num)
+Ass.Wrap(Ability, 'decrease')
+Ass.Wrap(Ability, 'create_power', 'Piece')
+
+log:wrap(Ability)
 
 return Ability

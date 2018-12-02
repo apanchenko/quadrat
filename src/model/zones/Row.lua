@@ -1,8 +1,8 @@
 local Ass       = require 'src.core.Ass'
-local Type      = require 'src.core.Type'
+local Class      = require 'src.core.Class'
 local log       = require 'src.core.log'
 
-local Row = Type.Create('Row')
+local Row = Class.Create('Row')
 
 --
 function Row.New(pos)

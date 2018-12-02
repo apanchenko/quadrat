@@ -1,3 +1,5 @@
+local Type = require 'src.core.Type'
+
 local check = {}
 
 -- check 'n' is natural number
@@ -15,7 +17,17 @@ function check.Fun(v)       return type(v) == 'function' end
 -- check 'v' is of type 't'
 function check.Type(v, t)   return check.String(t) and type(v) == t end
   -- check 'v' has meta T
-function check.Is(v, T)     return check.Type(v, T) or tostring(getmetatable(v)) == tostring(T) end
+function check.Is(v, T)
+  return
+       tostring(getmetatable(v)) == tostring(T)
+    or (T == Type.Any and v ~= nil)
+    or (T == Type.Nil and v == nil)
+    or (T == Type.Tab and check.Table(v))
+    or (T == Type.Num and check.Number(v))
+    or (T == Type.Str and check.String(v))
+    or (T == Type.Fun and check.Fun(v))
+    or (T == Type.Ell and false)
+end
 
 --
 function check.Test()
