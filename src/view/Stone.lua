@@ -1,5 +1,5 @@
 local _         = require 'src.core.underscore'
-local Vec       = require 'src.core.Vec'
+local Vec       = require 'src.core.vec'
 local Player    = require 'src.Player'
 local Abilities = require 'src.view.StoneAbilities'
 local Color     = require 'src.model.Color'
@@ -8,8 +8,8 @@ local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
-local Class      = require 'src.core.Class'
-local Type      = require 'src.core.Type'
+local Class     = require 'src.core.Class'
+local types     = require 'src.core.types'
 local Powers    = require 'src.model.powers.Powers'
 
 local Stone = Class.Create 'Stone'
@@ -255,9 +255,9 @@ Ass.Wrap(Stone, 'select')
 Ass.Wrap(Stone, 'deselect')
 Ass.Wrap(Stone, 'pos')
 --Ass.Wrap(Stone, 'set_pos', Vec)
-Ass.Wrap(Stone, 'add_ability', Type.Str)
-Ass.Wrap(Stone, 'remove_ability', Type.Str)
-Ass.Wrap(Stone, 'add_power', Type.Str, Type.Num)
+Ass.Wrap(Stone, 'add_ability', types.str)
+Ass.Wrap(Stone, 'remove_ability', types.str)
+Ass.Wrap(Stone, 'add_power', types.str, types.num)
 
 log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
 --]]

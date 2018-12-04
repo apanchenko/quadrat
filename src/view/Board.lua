@@ -1,6 +1,6 @@
 local Cell     = require 'src.view.Cell'
 local Stone    = require 'src.view.Stone'
-local Vec      = require 'src.core.Vec'
+local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
 local Color    = require 'src.model.Color'
 local Piece    = require 'src.model.Piece'
@@ -9,7 +9,7 @@ local Class    = require 'src.core.Class'
 local lay      = require 'src.core.lay'
 local Ass      = require 'src.core.Ass'
 local log      = require 'src.core.log'
-local Type     = require 'src.core.Type'
+local Type     = require 'src.core.types'
 
 local Board = Class.Create 'Board'
 

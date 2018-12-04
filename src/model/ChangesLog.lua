@@ -2,7 +2,7 @@ local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
-local Vec       = require 'src.core.Vec'
+local Vec       = require 'src.core.vec'
 
 local ChangesLog = { typename = 'ChangesLog' }
 ChangesLog.__index = ChangesLog

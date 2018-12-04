@@ -1,4 +1,4 @@
-local vec   = require "src.core.Vec"
+local vec   = require "src.core.vec"
 local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
@@ -59,9 +59,9 @@ function Cell:remove_stone()
 end
 
 -- MODULE-----------------------------------------------------------------------
-Ass.Wrap(Cell, 'set_stone', 'Stone')
-Ass.Wrap(Cell, 'stone')
-Ass.Wrap(Cell, 'remove_stone')
+Ass.Wrap(Cell, ':set_stone', 'Stone')
+Ass.Wrap(Cell, ':stone')
+Ass.Wrap(Cell, ':remove_stone')
 
 log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
 return Cell

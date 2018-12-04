@@ -30,7 +30,8 @@ end
 
 --
 function check.test()
-  print('test check..')
+  print('check.test..')
+  print(tostring(check))
   assert(check.natural(1))
   assert(check.number(2.7))
   assert(check.table({}))

@@ -30,17 +30,18 @@ local Separators = {[true] = '.', [false] = ':'}
 
 -- wrap function of T
 -- ellipsis not supported
-function Ass.Wrap(T, name, ...)
-  Ass.Table(T, 'first arg is not a table in Ass.Wrap('..tostring(T)..', '..tostring(name)..')')
+function Ass.Wrap(t, name, ...)
+  local tstr = tostring(t)
+  Ass.Table(t, 'first arg is not a table in Ass.Wrap('..tstr..', '..tostring(name)..')')
   Ass.String(name)
 
-  local arg_types = {...} 
+  local arg_types = {...}
   local sep = string.sub(name, 1, 1)
   local fname = string.sub(name, 2)
-  local method = tostring(T)..name
-  local fun = T[fname]
+  local method = tostring(t)..name
+  local fun = t[fname]
 
-  Ass(sep == '.' or sep == ':', 'ass.wrap('..fname..') use . or : before function name')
+  Ass(sep == '.' or sep == ':', 'ass.wrap('..tstr..", '"..name.."') use . or : before function name")
   Ass.Fun(fun, tostring(T)..' has no function '..name)
 
   local check_arguments = function(arg_types, ...)
@@ -53,13 +54,13 @@ function Ass.Wrap(T, name, ...)
 
   -- define a new function
   if first == '.' then
-    T[name] = function(...)
+    t[name] = function(...)
       check_arguments(arg_types, ...)
       return fun(...) -- call original function
     end
   else
-    T[name] = function(s, ...)
-      Ass.Is(s, T, full_name.." called via .") -- check self
+    t[name] = function(s, ...)
+      Ass.Is(s, t, full_name.." called via .") -- check self
       check_arguments(arg_types, ...)
       return fun(s, ...) -- call original function
     end    

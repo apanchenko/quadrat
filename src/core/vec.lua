@@ -3,7 +3,7 @@ local types   = require 'src.core.types'
 local Ass     = require 'src.core.Ass'
 
 -- 2d vector
-local vec = object:new()
+local vec = object:new({ name = 'vec', x = 0, y = 0 })
 
 -- stateless ------------------------------------------------------------------
 --

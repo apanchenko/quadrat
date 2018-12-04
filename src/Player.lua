@@ -1,4 +1,4 @@
-local vec = require 'src.core.Vec'
+local vec = require 'src.core.vec'
 local cfg = require 'src.Config'
 local lay = require 'src.core.lay'
 local Ass = require 'src.core.Ass'

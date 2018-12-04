@@ -1,4 +1,4 @@
-local vec = require 'src.core.Vec'
+local vec = require 'src.core.vec'
 local lay = require 'src.core.lay'
 local Ass = require 'src.core.Ass'
 local cfg = require 'src.Config'
@@ -51,7 +51,7 @@ function Impeccable:move_after(piece, board, cell_from, cell_to) end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Impeccable, 'apply', 'Piece')
+Ass.Wrap(Impeccable, ':apply', 'Piece')
 
 log:wrap(Impeccable, 'apply')
 

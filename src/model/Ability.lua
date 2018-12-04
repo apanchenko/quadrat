@@ -2,7 +2,7 @@ local Powers       = require 'src.model.powers.Powers'
 local Zones        = require 'src.model.zones.Zones'
 local Ass          = require 'src.core.Ass'
 local Class        = require 'src.core.Class'
-local Type         = require 'src.core.Type'
+local types        = require 'src.core.types'
 local log          = require 'src.core.log'
 
 -- Ability has a potential to become certain power.
@@ -53,10 +53,10 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Ability, 'New')
-Ass.Wrap(Ability, 'increase', Type.Num)
-Ass.Wrap(Ability, 'decrease')
-Ass.Wrap(Ability, 'create_power', 'Piece')
+Ass.Wrap(Ability, '.New')
+Ass.Wrap(Ability, ':increase', types.Num)
+Ass.Wrap(Ability, ':decrease')
+Ass.Wrap(Ability, ':create_power', 'Piece')
 
 log:wrap(Ability)
 

@@ -3,11 +3,11 @@ local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
 local Config    = require 'src.model.Config'
 local Event     = require 'src.core.Event'
-local Vec       = require 'src.core.Vec'
+local Vec       = require 'src.core.vec'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local Type      = require 'src.core.Type'
+local Type      = require 'src.core.types'
 
 local Space = Class.Create 'Space'
 
@@ -181,22 +181,22 @@ function Space:use(pos, ability_name)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Space, 'setup')
-Ass.Wrap(Space, 'pos', Type.Num)
-Ass.Wrap(Space, 'width')
-Ass.Wrap(Space, 'height')
-Ass.Wrap(Space, 'row', Type.Num)
-Ass.Wrap(Space, 'col', Type.Num)
-Ass.Wrap(Space, 'pos', Type.Num)
-Ass.Wrap(Space, 'index', Vec)
-Ass.Wrap(Space, 'spots')
-Ass.Wrap(Space, 'spot', Vec)
-Ass.Wrap(Space, 'count_pieces')
-Ass.Wrap(Space, 'piece', Vec)
-Ass.Wrap(Space, 'who_move')
-Ass.Wrap(Space, 'can_move', Vec, Vec)
-Ass.Wrap(Space, 'move', Vec, Vec)
-Ass.Wrap(Space, 'use', Vec, Type.Str)
+Ass.Wrap(Space, ':setup')
+Ass.Wrap(Space, ':pos', Type.Num)
+Ass.Wrap(Space, ':width')
+Ass.Wrap(Space, ':height')
+Ass.Wrap(Space, ':row', Type.Num)
+Ass.Wrap(Space, ':col', Type.Num)
+Ass.Wrap(Space, ':pos', Type.Num)
+Ass.Wrap(Space, ':index', Vec)
+Ass.Wrap(Space, ':spots')
+Ass.Wrap(Space, ':spot', Vec)
+Ass.Wrap(Space, ':count_pieces')
+Ass.Wrap(Space, ':piece', Vec)
+Ass.Wrap(Space, ':who_move')
+Ass.Wrap(Space, ':can_move', Vec, Vec)
+Ass.Wrap(Space, ':move', Vec, Vec)
+Ass.Wrap(Space, ':use', Vec, Type.Str)
 
 log:wrap(Space, 'setup', 'move', 'use')
 

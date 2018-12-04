@@ -1,7 +1,7 @@
 local Class = require 'src.core.Class'
 local Ass = require 'src.core.Ass'
 local log = require 'src.core.log'
-local Type = require 'src.core.Type'
+local types = require 'src.core.types'
 
 local Event = Class.Create('Event')
 
@@ -54,8 +54,8 @@ function Event:call(name, ...)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Event, 'add', Type.Tab)
-Ass.Wrap(Event, 'remove', Type.Tab)
+Ass.Wrap(Event, ':add', types.tab)
+Ass.Wrap(Event, ':remove', types.tab)
 
 log:wrap(Event, 'call')
 

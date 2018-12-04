@@ -1,13 +1,13 @@
 local _         = require 'src.core.underscore'
 local widget    = require "widget"
-local vec       = require "src.core.Vec"
+local vec       = require "src.core.vec"
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local Type      = require 'src.core.Type'
+local types     = require 'src.core.types'
 
 local StoneAbilities = Class.Create('StoneAbilities')
 
@@ -94,8 +94,8 @@ end
 
 --MODEULE----------------------------------------------------------------------
 --
-Ass.Wrap(StoneAbilities, 'add', Type.Str)
-Ass.Wrap(StoneAbilities, 'remove', Type.Str)
+Ass.Wrap(StoneAbilities, 'add', types.str)
+Ass.Wrap(StoneAbilities, 'remove', types.str)
 Ass.Wrap(StoneAbilities, 'is_empty')
 Ass.Wrap(StoneAbilities, 'show')
 Ass.Wrap(StoneAbilities, 'hide')

@@ -1,30 +1,32 @@
-local Ass = require 'src.core.Ass'
-local log = require 'src.core.log'
+local ass   = require 'src.core.Ass'
+local log   = require 'src.core.log'
+local types = require 'src.core.types'
 
 -------------------------------------------------------------------------------
 local object = {}
-
+--
 function object.__call(cls, ...)
   return cls:create(...)
 end
-
+--
 function object:__tostring()
-  return 'object'
+  return self.name or 'object'
 end
-
-function object:new(t)
-  t = t or {}
-  Ass.Table(t)
-  setmetatable(t, self)
+--
+function object:new(def)
+  def = def or {}
+  setmetatable(def, self)
   self.__index = self
-  return t
+  return def
 end
 
 -- selftest -------------------------------------------------------------------
+ass.Wrap(object, ':new', types.str, types.tab)
+--
 function object.test()
   log:trace("object.test")
 
-  local account = object:new({ balance = 0 })
+  local account = object:new({ name = 'account', balance = 0 })
   function account:__tostring()
     return 'account '..self.balance
   end
@@ -32,7 +34,9 @@ function object.test()
     self.balance = self.balance + v
   end
 
-  local limit = account:new({ limit = 100 })
+  ass(tostring(account) == 'account')
+
+  local limit = account:new({ name = 'limit', limit = 100 })
   function limit:__tostring()
     return 'limit account '..self.balance..' of '..self.limit
   end
@@ -46,16 +50,16 @@ function object.test()
 
   local masha = account:new()
   masha:deposit(30)
-  Ass(tostring(masha) == 'account 30')
+  ass(tostring(masha) == 'account 30')
 
   local kolya = limit:new()
   kolya:deposit(120)
-  Ass(tostring(kolya) == 'limit account 100 of 100')
+  ass(tostring(kolya) == 'limit account 100 of 100')
 
-  Ass(getmetatable(account) == object)
-  Ass(getmetatable(masha) == account)
-  Ass(getmetatable(limit) == account)
-  Ass(getmetatable(kolya) == limit)
+  ass(getmetatable(account) == object)
+  ass(getmetatable(masha) == account)
+  ass(getmetatable(limit) == account)
+  ass(getmetatable(kolya) == limit)
 end
 
 return object

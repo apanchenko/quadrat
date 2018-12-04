@@ -10,7 +10,7 @@ obj     display object to render
 opts:
   vx    defaults to 0
   vy    defaults to 0
------------------------------------------------------------------------------]]--
+-------------------------------------------------------------------------------]]
 local function render(target, obj, opts)
   Ass.Table(target, "target")
   Ass.Table(obj, "object")

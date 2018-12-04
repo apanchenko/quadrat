@@ -1,4 +1,4 @@
-local vec       = require "src.core.Vec"
+local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
@@ -39,7 +39,7 @@ function Destroy:__tostring()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Destroy, 'apply', 'Piece')
+Ass.Wrap(Destroy, ':apply', 'Piece')
 
 log:wrap(Destroy, 'apply')
 

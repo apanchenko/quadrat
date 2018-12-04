@@ -1,4 +1,4 @@
-local vec       = require "src.core.Vec"
+local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
 local cfg       = require "src.Config"
 local Zones     = require 'src.model.zones.Zones'
@@ -41,6 +41,6 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Teach, 'apply', 'Piece')
+Ass.Wrap(Teach, ':apply', 'Piece')
 log:wrap(Teach, 'apply')
 return Teach

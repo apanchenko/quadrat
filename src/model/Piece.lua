@@ -1,9 +1,9 @@
 local map     = require 'src.core.map'
 local Class   = require 'src.core.Class'
-local Type    = require 'src.core.Type'
+local types   = require 'src.core.types'
 local Ass     = require 'src.core.Ass'
 local log     = require 'src.core.log'
-local Vec     = require 'src.core.Vec'
+local Vec     = require 'src.core.vec'
 local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
@@ -107,15 +107,15 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Piece, 'New', 'Space', 'Color')
-Ass.Wrap(Piece, 'set_pos', Vec)
-Ass.Wrap(Piece, 'can_move', 'Space', Vec, Vec)
-Ass.Wrap(Piece, 'set_color', 'Color')
-Ass.Wrap(Piece, 'add_ability')
-Ass.Wrap(Piece, 'learn_ability', Ability)
-Ass.Wrap(Piece, 'use_ability', Type.Str)
-Ass.Wrap(Piece, 'add_power', Ability)
-Ass.Wrap(Piece, 'remove_power', Type.Str)
+Ass.Wrap(Piece, '.New', 'Space', 'Color')
+Ass.Wrap(Piece, ':set_pos', Vec)
+Ass.Wrap(Piece, ':can_move', 'Space', Vec, Vec)
+Ass.Wrap(Piece, ':set_color', 'Color')
+Ass.Wrap(Piece, ':add_ability')
+Ass.Wrap(Piece, ':learn_ability', Ability)
+Ass.Wrap(Piece, ':use_ability', types.str)
+Ass.Wrap(Piece, ':add_power', Ability)
+Ass.Wrap(Piece, ':remove_power', types.str)
 
 log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
 

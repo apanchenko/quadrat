@@ -1,9 +1,9 @@
-local vec       = require "src.core.Vec"
+local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local Type      = require 'src.core.Type'
+local types     = require 'src.core.types'
 local cfg       = require 'src.Config'
 local Color     = require 'src.model.Color'
 
@@ -64,9 +64,9 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 --Ass.Wrap(Multiply, 'New', Type.Nil)
-Ass.Wrap(Multiply, 'apply', 'Piece')
-Ass.Wrap(Multiply, 'increase')
-Ass.Wrap(Multiply, 'decrease')
+Ass.Wrap(Multiply, ':apply', 'Piece')
+Ass.Wrap(Multiply, ':increase')
+Ass.Wrap(Multiply, ':decrease')
 
 log:wrap(Multiply, 'apply', 'increase', 'decrease')
 

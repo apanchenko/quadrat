@@ -1,7 +1,7 @@
 local map     = require 'src.core.map'
 local Ass     = require 'src.core.Ass'
 local log     = require 'src.core.log'
-local Vec     = require 'src.core.Vec'
+local Vec     = require 'src.core.vec'
 local object  = require 'src.core.object'
 local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
@@ -56,8 +56,8 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(random, 'move', Color)
-Ass.Wrap(random, 'move_async')
+Ass.Wrap(random, ':move', Color)
+Ass.Wrap(random, ':move_async')
 
 log:wrap(random, 'move', 'move_async')
 

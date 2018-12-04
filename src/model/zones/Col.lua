@@ -1,7 +1,9 @@
 local Class      = require 'src.core.Class'
 local Ass       = require 'src.core.Ass'
-local Col       = Class.Create 'Col'
 local log       = require 'src.core.log'
+local vec       = require 'src.core.vec'
+
+local Col       = Class.Create 'Col'
 
 -- TYPE------------------------------------------------------------------------
 function Col.New(pos)
@@ -25,7 +27,7 @@ function Col.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Col, 'filter', 'Vec')
+Ass.Wrap(Col, '.filter', vec)
 
 --log:wrap(Col, 'filter')
 

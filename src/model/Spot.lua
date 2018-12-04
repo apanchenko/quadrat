@@ -1,5 +1,5 @@
 local Class      = require 'src.core.Class'
-local Vec       = require 'src.core.Vec'
+local Vec       = require 'src.core.vec'
 local Ass       = require 'src.core.Ass'
 local log       = require 'src.core.log'
 local Config    = require 'src.model.Config'
@@ -78,9 +78,9 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Spot, 'spawn_piece', Color)
-Ass.Wrap(Spot, 'move_piece', Spot)
-Ass.Wrap(Spot, 'spawn_jade')
+Ass.Wrap(Spot, ':spawn_piece', Color)
+Ass.Wrap(Spot, ':move_piece', Spot)
+Ass.Wrap(Spot, ':spawn_jade')
 
 log:wrap(Spot, 'spawn_piece', 'move_piece')
 
