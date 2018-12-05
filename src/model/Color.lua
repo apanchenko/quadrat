@@ -1,4 +1,4 @@
-local Ass = require 'src.core.Ass'
+local ass = require 'src.core.ass'
 
 local Color = setmetatable({}, { __tostring = function() return 'Color' end })
 Color.__index = Color
@@ -7,19 +7,19 @@ Color.B = setmetatable({}, Color)
 
 -- is_red ? R : B
 function Color.red(is_red)
-  Ass.Boolean(is_red)
+  ass.bool(is_red)
   return is_red and Color.R or Color.B
 end
 
 -- is_red ? R : B
 function Color.is_red(color)
-  Ass.Is(color, Color)
+  ass.is(color, Color)
   return color == Color.R
 end
 
 -- change color to another
 function Color.swap(color)
-  Ass.Is(color, Color)
+  ass.is(color, Color)
   return color == Color.R and Color.B or Color.R
 end
 
@@ -29,17 +29,17 @@ function Color:__tostring()
 end
 
 --
-function Color.Test()
+function Color.test()
   print('test Color..')
-  Ass(Color.R == Color.R)
-  Ass(Color.B == Color.B)
-  Ass(Color.R ~= Color.B)
-  Ass(Color.red(true) == Color.R)
-  Ass(Color.red(false) == Color.B)
-  Ass(Color.is_red(Color.R))
-  Ass(Color.swap(Color.R) == Color.B)
-  Ass(tostring(Color.R) == 'red')
-  Ass(tostring(Color.B) == 'black')
+  ass(Color.R == Color.R)
+  ass(Color.B == Color.B)
+  ass(Color.R ~= Color.B)
+  ass(Color.red(true) == Color.R)
+  ass(Color.red(false) == Color.B)
+  ass(Color.is_red(Color.R))
+  ass(Color.swap(Color.R) == Color.B)
+  ass(tostring(Color.R) == 'red')
+  ass(tostring(Color.B) == 'black')
 end
 
 return Color

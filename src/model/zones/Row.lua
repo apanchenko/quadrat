@@ -1,4 +1,4 @@
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local Class     = require 'src.core.Class'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
@@ -25,7 +25,7 @@ function Row.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Row, '.filter', vec)
+ass.wrap(Row, '.filter', vec)
 
 log:wrap(Row)
 

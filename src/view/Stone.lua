@@ -5,7 +5,7 @@ local Abilities = require 'src.view.StoneAbilities'
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local map       = require 'src.core.map'
 local Class     = require 'src.core.Class'
@@ -68,8 +68,8 @@ end
 
 -- insert Stone into group, with scale for dragging
 function Stone:puton(board, pos)
-  Ass.Is(board, 'Board')
-  Ass.Is(pos, Vec)
+  ass.is(board, 'Board')
+  ass.is(pos, Vec)
   board.view:insert(self.view)
   self.board = board
   self._pos = pos
@@ -78,7 +78,7 @@ end
 
 -- remove Stone from board
 function Stone:putoff()
-  Ass(self.board)
+  ass(self.board)
   self.view:removeSelf()
   self.view = nil
   self.img:removeSelf()
@@ -92,7 +92,7 @@ end
 -- set stone position
 function Stone:set_pos(pos)
   if pos ~= nil then
-    Ass.Is(pos, Vec)
+    ass.is(pos, Vec)
   end
   self._pos = pos
   self:update_group_pos()
@@ -113,7 +113,7 @@ function Stone:add_power(name, result_count)
     --self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
   else
 --    local Power = Powers.Find(name)
---    Ass.Table(Power)
+--    ass.table(Power)
 --    if Power.Stackable then
 --    end
   end
@@ -183,7 +183,11 @@ end
 --
 function Stone:touch_moved(event)
   local start = Vec(event.xStart, event.yStart)
-  local shift = (Vec.from(event) - start) / Vec(self.board.view.xScale) + (self._pos * cfg.cell.size)
+  local xScale = self.board.view.xScale
+  local shift = Vec:from(event)
+  shift = shift - start
+  shift = shift / Vec(xScale, xScale)
+  shift = shift + (self._pos * cfg.cell.size)
   local proj = (shift / cfg.cell.size):round()
   Vec.copy(shift, self.view)
   return proj;
@@ -246,18 +250,18 @@ end
 
 --MODULE-----------------------------------------------------------------------
 ---[[
-Ass.Wrap(Stone, 'select')
-Ass.Wrap(Stone, 'set_color', Color)
-Ass.Wrap(Stone, 'color')
-Ass.Wrap(Stone, 'puton', 'Board', Vec)
-Ass.Wrap(Stone, 'putoff')
-Ass.Wrap(Stone, 'select')
-Ass.Wrap(Stone, 'deselect')
-Ass.Wrap(Stone, 'pos')
---Ass.Wrap(Stone, 'set_pos', Vec)
-Ass.Wrap(Stone, 'add_ability', types.str)
-Ass.Wrap(Stone, 'remove_ability', types.str)
-Ass.Wrap(Stone, 'add_power', types.str, types.num)
+ass.wrap(Stone, ':select')
+ass.wrap(Stone, ':set_color', Color)
+ass.wrap(Stone, ':color')
+ass.wrap(Stone, ':puton', 'Board', Vec)
+ass.wrap(Stone, ':putoff')
+ass.wrap(Stone, ':select')
+ass.wrap(Stone, ':deselect')
+ass.wrap(Stone, ':pos')
+--ass.wrap(Stone, 'set_pos', Vec)
+ass.wrap(Stone, ':add_ability', types.str)
+ass.wrap(Stone, ':remove_ability', types.str)
+ass.wrap(Stone, ':add_power', types.str, types.num)
 
 log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
 --]]

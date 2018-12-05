@@ -1,5 +1,5 @@
 local Class      = require 'src.core.Class'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 
@@ -27,7 +27,7 @@ function Col.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Col, '.filter', vec)
+ass.wrap(Col, '.filter', vec)
 
 --log:wrap(Col, 'filter')
 

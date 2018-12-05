@@ -1,39 +1,37 @@
 local check = require 'src.core.check'
 
-local Ass = setmetatable({}, {__call = function(cls, v, msg) return cls.True(v, msg) end})
+local m = {}
 
 -- 'v' is true
-function Ass.True(v, msg)   return v or error(msg or tostring(v)..' is false') end
+function m.__call(_, v, msg) return v or error(msg or tostring(v)..' is false') end
+
+local ass = setmetatable({}, m)
+
 -- 'v' is nil
-function Ass.Nil(v, msg)    return v == nil or error(msg or tostring(v)..' is not nil') end
+function ass.nul(v, msg)    return v == nil or error(msg or tostring(v)..' is not nil') end
 -- 'v' is not nil
-function Ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
+function ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
 -- 'v' is a number
-function Ass.number(v)      return check.number(v) or error(tostring(v)..' is not a number') end
+function ass.number(v)      return check.number(v) or error(tostring(v)..' is not a number') end
 -- 'n' is natural number
-function Ass.Natural(v)     return Ass.number(v) and Ass(v >= 0) end
+function ass.natural(v)     return ass.number(v) and ass(v >= 0) end
 -- 'v' is a table
-function Ass.Table(v, msg)  return check.table(v) or error(msg or tostring(v)..' is not a table') end
+function ass.table(v, msg)  return check.table(v) or error(msg or tostring(v)..' is not a table') end
 -- 'v' is a string
-function Ass.String(v)      return check.string(v) or error(tostring(v)..' is not a string') end
+function ass.str(v)         return check.string(v) or error(tostring(v)..' is not a string') end
 -- 'v' is a boolean
-function Ass.Boolean(v)     return check.boolean(v) or error(tostring(v)..' is not a boolean') end
+function ass.bool(v)        return check.boolean(v) or error(tostring(v)..' is not a boolean') end
 -- 'v' is a function
-function Ass.Fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' is not a function') end
+function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' is not a function') end
 -- 'v' is an instance of T
-function Ass.Is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
-
-local IsStatic = function(name)
-end
-
-local Separators = {[true] = '.', [false] = ':'}
+function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 
 -- wrap function of T
 -- ellipsis not supported
-function Ass.Wrap(t, name, ...)
+function ass.wrap(t, name, ...)
   local tstr = tostring(t)
-  Ass.Table(t, 'first arg is not a table in Ass.Wrap('..tstr..', '..tostring(name)..')')
-  Ass.String(name)
+  ass.table(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
+  ass.str(name)
 
   local arg_types = {...}
   local sep = string.sub(name, 1, 1)
@@ -41,26 +39,30 @@ function Ass.Wrap(t, name, ...)
   local method = tostring(t)..name
   local fun = t[fname]
 
-  Ass(sep == '.' or sep == ':', 'ass.wrap('..tstr..", '"..name.."') use . or : before function name")
-  Ass.Fun(fun, tostring(T)..' has no function '..name)
+  --print('ass.wrap ('..tstr..", '"..name.."'). Sep "..sep)
+  ass(sep == '.' or sep == ':', 'ass.wrap('..tstr..", '"..name.."') use . or : before function name")
+  ass.fun(fun, tostring(T)..' has no function '..name)
 
   local check_arguments = function(arg_types, ...)
     local args = {...}
-    Ass(#args == #arg_types, full_name..' expected '..#arg_types..' args, found '..#args)
+    --print('  check args - expected '..#arg_types..', found '..#args)
+    ass(#args == #arg_types, method..' expected '..#arg_types..' args, found '..#args)
     for i=1, #args do
-      Ass.Is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..full_name)
+      ass.is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..method)
     end
   end
 
   -- define a new function
-  if first == '.' then
-    t[name] = function(...)
+  if sep == '.' then
+    t[fname] = function(...)
+      --print('wrapped '..name)
       check_arguments(arg_types, ...)
       return fun(...) -- call original function
     end
   else
-    t[name] = function(s, ...)
-      Ass.Is(s, t, full_name.." called via .") -- check self
+    t[fname] = function(s, ...)
+      --print('call wrapped '..name..'('..tostring(s)..', ' ..tostring(({...})[1]) )
+      --ass.is(s, t, name.." called via .") -- check self
       check_arguments(arg_types, ...)
       return fun(s, ...) -- call original function
     end    
@@ -68,16 +70,16 @@ function Ass.Wrap(t, name, ...)
 end
 
 --
-function Ass.Test()
-  print('test Ass..')
-  Ass(true)
-  Ass.Nil(x)
-  Ass.number(8.8)
-  Ass.Natural(9)
-  Ass.Table({})
-  Ass.String("String")
-  Ass.Boolean(false)
-  Ass.Fun(function() end)
+function ass.test()
+  print('test ass..')
+  ass(true)
+  ass.nul(x)
+  ass.number(8.8)
+  ass.natural(9)
+  ass.table({})
+  ass.str("String")
+  ass.bool(false)
+  ass.fun(function() end)
 end
 
-return Ass
+return ass

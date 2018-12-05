@@ -1,4 +1,4 @@
-local Ass   = require 'src.core.Ass'
+local ass   = require 'src.core.ass'
 local types = require 'src.core.types'
 local log   = require 'src.core.log'
 
@@ -56,10 +56,10 @@ function map.random(t)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(map, '.all', types.tab, types.fun)
-Ass.Wrap(map, '.each', types.tab, types.fun)
-Ass.Wrap(map, '.count', types.tab)
-Ass.Wrap(map, '.random', types.tab)
+ass.wrap(map, '.all', types.tab, types.fun)
+ass.wrap(map, '.each', types.tab, types.fun)
+ass.wrap(map, '.count', types.tab)
+ass.wrap(map, '.random', types.tab)
 
 log:wrap(map)
 
@@ -67,16 +67,16 @@ log:wrap(map)
 function map.test()
   log:trace("map.test")
 
-  Ass(tostring(map) == 'map')
+  ass(tostring(map) == 'map')
   local t = {}
   t['week'] = 'semana'
   t['month'] = 'mes'
   t['year'] = 'ano'
 
-  --Ass(map.each(t, function(v) log:trace(v) end))
-  Ass(map.any(t, function(v) return #v > 3 end))
-  Ass(map.all(t, function(v) return #v > 2 end))
-  Ass(map.count(t) == 3)
+  --ass(map.each(t, function(v) log:trace(v) end))
+  ass(map.any(t, function(v) return #v > 3 end))
+  ass(map.all(t, function(v) return #v > 2 end))
+  ass(map.count(t) == 3)
 end
 
 

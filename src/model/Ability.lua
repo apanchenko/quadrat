@@ -1,6 +1,6 @@
 local Powers       = require 'src.model.powers.Powers'
 local Zones        = require 'src.model.zones.Zones'
-local Ass          = require 'src.core.Ass'
+local ass          = require 'src.core.ass'
 local Class        = require 'src.core.Class'
 local types        = require 'src.core.types'
 local log          = require 'src.core.log'
@@ -32,7 +32,7 @@ end
 
 -- increase ability count
 function Ability:increase(count)
-  Ass.Natural(count, tostring(count))
+  ass.natural(count, tostring(count))
   self.count = self.count + count
 end
 
@@ -53,10 +53,10 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Ability, '.New')
-Ass.Wrap(Ability, ':increase', types.Num)
-Ass.Wrap(Ability, ':decrease')
-Ass.Wrap(Ability, ':create_power', 'Piece')
+ass.wrap(Ability, '.New')
+ass.wrap(Ability, ':increase', types.num)
+ass.wrap(Ability, ':decrease')
+ass.wrap(Ability, ':create_power', 'Piece')
 
 log:wrap(Ability)
 

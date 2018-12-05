@@ -1,6 +1,6 @@
 local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
 local cfg       = require "src.Config"
@@ -9,7 +9,7 @@ local Color     = require 'src.model.Color'
 local Destroy = Class.Create('Destroy', {is_areal = true})
 
 function Destroy.New(Zone)
-  Ass(Zone)
+  ass(Zone)
   local self = setmetatable({}, Destroy)
   self.Zone = Zone
   return self
@@ -39,7 +39,7 @@ function Destroy:__tostring()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Destroy, ':apply', 'Piece')
+ass.wrap(Destroy, ':apply', 'Piece')
 
 log:wrap(Destroy, 'apply')
 

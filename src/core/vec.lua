@@ -1,6 +1,6 @@
 local object  = require 'src.core.object'
 local types   = require 'src.core.types'
-local Ass     = require 'src.core.Ass'
+local ass     = require 'src.core.ass'
 
 -- 2d vector
 local vec = object:new({ name = 'vec', x = 0, y = 0 })
@@ -34,13 +34,13 @@ function vec:create(x, y)
 end
 -- random
 function vec:random(min, max)
-  Ass.Is(min, vec)
-  Ass.Is(max, vec)
+  ass.is(min, vec)
+  ass.is(max, vec)
   return setmetatable({x = math.random(min.x, max.x), y = math.random(min.y, max.y)}, vec)
 end
 --
 function vec:from(obj)
-  return vec:new(obj.x, obj.y)
+  return vec(obj.x, obj.y)
 end
 
 -- methods ---------------------------------------------------------------------
@@ -75,22 +75,28 @@ function vec.test()
   print('vec.test..')
   assert(tostring(vec.one) == '[1,1]')
   
-  local a = vec(1, 2)
+  local a = vec(2, 2)
   local b = vec(3, 4)
   local c = b - a
 
-  assert(a.x == 1 and a.y == 2)
-  assert(a:length2() == 5)
-  assert(c.x == 2 and c.y == 2)
+  assert(a.x == 2 and a.y == 2)
+  assert(a:length2() == 8)
+  assert(c.x == 1 and c.y == 2)
   assert(vec(2.3, 4.5):round().x == 2)
 
   local d = vec(-1.5, -0.5)
-  Ass(d:abs().x == 1.5)
+  ass(d:abs().x == 1.5)
 end
 
-Ass.Wrap(vec, ':length2')
-Ass.Wrap(vec, ':round')
-Ass.Wrap(vec, ':to', types.tab)
+ass.wrap(vec, '.copy', types.tab, types.tab)
+ass.wrap(vec, '.center', types.tab)
+ass.wrap(vec, ':create', types.num, types.num)
+ass.wrap(vec, ':random', vec, vec)
+ass.wrap(vec, ':from', types.tab)
+ass.wrap(vec, ':length2')
+ass.wrap(vec, ':round')
+ass.wrap(vec, ':to', types.tab)
+ass.wrap(vec, ':abs')
 
 -- return module
 return vec

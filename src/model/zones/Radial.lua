@@ -1,4 +1,4 @@
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local vec       = require 'src.core.vec'
 local Class      = require 'src.core.Class'
 local log       = require 'src.core.log'
@@ -8,7 +8,7 @@ local Radial = Class.Create 'Radial'
 
 -------------------------------------------------------------------------------
 function Radial.New(pos)
-  Ass.Is(pos, vec)
+  ass.is(pos, vec)
 
   local self = setmetatable({}, Radial)
   self.pos = pos
@@ -30,20 +30,20 @@ end
 function Radial.Test()
   print('test Radial..')
 
-  Ass(tostring(Radial) == 'Radial')
+  ass(tostring(Radial) == 'Radial')
   local radial = Radial.New(vec(3, 3))
 
   local trues = {vec(2,2), vec(3,2), vec(4,2),
                  vec(2,3),           vec(4,3),
                  vec(2,4), vec(3,4), vec(4,4)}
-  Ass(_.all(trues, function(v) return radial:filter(v) end))
+  ass(_.all(trues, function(v) return radial:filter(v) end))
 
-  Ass(not radial:filter(vec(0, 0)))
-  Ass(not radial:filter(vec(3, 3)))
+  ass(not radial:filter(vec(0, 0)))
+  ass(not radial:filter(vec(3, 3)))
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Radial, '.filter', vec)
+ass.wrap(Radial, ':filter', vec)
 
 log:wrap(Radial)
 

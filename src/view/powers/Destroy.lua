@@ -1,6 +1,6 @@
 local vec       = require 'src.core.vec'
 local lay       = require 'src.core.lay'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
 local cfg       = require 'src.Config'
@@ -15,7 +15,7 @@ function Destroy.New(stone, count)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Destroy, 'New', 'Stone', Type.Num)
+ass.wrap(Destroy, 'New', 'Stone', Type.Num)
 
 --log:wrap(Destroy, 'apply')
 

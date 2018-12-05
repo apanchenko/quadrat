@@ -1,6 +1,6 @@
 local Class      = require 'src.core.Class'
 local Vec       = require 'src.core.vec'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
@@ -16,9 +16,9 @@ local peak     = 17
 
 -- create empty cell
 function Spot.new(x, y, space)
-  Ass.Number(x)
-  Ass.Number(y)
-  Ass.Is(space, 'Space')
+  ass.number(x)
+  ass.number(y)
+  --ass.Is(space, 'Space')
   local self = setmetatable({}, Spot)
   self.space = space -- duplicate
   self.pos = Vec(x, y) -- duplicate
@@ -33,7 +33,7 @@ end
 
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
-  Ass.Nil(self.piece)
+  ass.nul(self.piece)
   self.piece = Piece.New(self.space, color)
   self.piece:set_pos(self.pos)
   self.space.on_change:call('spawn_piece', color, self.pos) -- notify
@@ -41,7 +41,7 @@ end
 
 -- move piece from another spot to this
 function Spot:move_piece(from)
-  Ass.Is(from, Spot, 'from')
+  ass.is(from, Spot, 'from')
   -- kill target piece
   if self.piece then
     self.piece.die()
@@ -62,7 +62,7 @@ end
 
 -- take chance to spawn a new jade if can
 function Spot:spawn_jade()
-  Ass.Is(self, Spot)
+  ass.is(self, Spot)
   if self.jade then -- already used by jade
     return
   end
@@ -78,9 +78,9 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Spot, ':spawn_piece', Color)
-Ass.Wrap(Spot, ':move_piece', Spot)
-Ass.Wrap(Spot, ':spawn_jade')
+ass.wrap(Spot, ':spawn_piece', Color)
+ass.wrap(Spot, ':move_piece', Spot)
+ass.wrap(Spot, ':spawn_jade')
 
 log:wrap(Spot, 'spawn_piece', 'move_piece')
 

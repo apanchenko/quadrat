@@ -10,7 +10,7 @@ local Player     = require "src.Player"
 local cfg        = require 'src.Config'
 local lay        = require 'src.core.lay'
 local log        = require 'src.core.log'
-local Ass        = require 'src.core.Ass'
+local ass        = require 'src.core.ass'
 
 -- variables
 local battle = composer.newScene()
@@ -46,14 +46,14 @@ function battle:create(event)
   self.bot1 = player:create(self.space, Color.R)
   self.space.on_change:add(self.bot1)
   self.bot2 = player:create(self.space, Color.B)
-  --self.space.on_change:add(self.bot2)
+  self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing
 end
 
 --
 function battle:move(color)
-  Ass.Is(color, Color)
+  ass.is(color, Color)
   local red, bla = self.space:count_pieces()
 
   -- check if black wins

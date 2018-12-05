@@ -4,7 +4,7 @@ local cfg       = require "src.Config"
 local Zones     = require 'src.model.zones.Zones'
 local Color     = require 'src.model.Color'
 local log       = require 'src.core.log'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local Class      = require 'src.core.Class'
 
 local Teach = Class.Create('Teach', {is_areal = true})
@@ -41,6 +41,6 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Teach, ':apply', 'Piece')
+ass.wrap(Teach, ':apply', 'Piece')
 log:wrap(Teach, 'apply')
 return Teach

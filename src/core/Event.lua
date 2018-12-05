@@ -1,5 +1,5 @@
 local Class = require 'src.core.Class'
-local Ass = require 'src.core.Ass'
+local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 local types = require 'src.core.types'
 
@@ -45,7 +45,7 @@ end
 --
 function Event:call(name, ...)
   name = name or self.name
-  Ass.String(name)
+  ass.str(name)
   for k,v in ipairs(self.list) do
     if v[name] then
       v[name](v, ...)
@@ -54,8 +54,8 @@ function Event:call(name, ...)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Event, ':add', types.tab)
-Ass.Wrap(Event, ':remove', types.tab)
+ass.wrap(Event, ':add', types.tab)
+ass.wrap(Event, ':remove', types.tab)
 
 log:wrap(Event, 'call')
 

@@ -1,6 +1,6 @@
 local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
 local Type      = require 'src.core.types'
@@ -33,8 +33,8 @@ function Recruit:apply(piece)
 end
 
 -- MODULE ---------------------------------------------------------------------
---Ass.Wrap(Multiply, 'New', )
-Ass.Wrap(Recruit, 'apply', 'Piece')
+--ass.wrap(Multiply, 'New', )
+ass.wrap(Recruit, 'apply', 'Piece')
 
 log:wrap(Recruit, 'apply')
 

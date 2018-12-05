@@ -1,5 +1,5 @@
 local cfg = require 'src.Config'
-local Ass = require 'src.core.Ass'
+local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 
 lay = {}
@@ -12,9 +12,9 @@ opts:
   vy    defaults to 0
 -------------------------------------------------------------------------------]]
 local function render(target, obj, opts)
-  Ass.Table(target, "target")
-  Ass.Table(obj, "object")
-  Ass.Table(opts, "opts")
+  ass.table(target, "target")
+  ass.table(obj, "object")
+  ass.table(opts, "opts")
 
   target = target.view or target
   child = obj.view or obj
@@ -64,10 +64,10 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 function lay.image(group, opts, path)
-  Ass.Table(opts, "invalid opts")
+  ass.table(opts, "invalid opts")
 
   path = path or opts.path
-  Ass.String(path, 'path')
+  ass.str(path, 'path')
   --log:trace("lay.image ".. path)
 
   local w = opts.w or (cfg.vw * opts.vw)
@@ -96,7 +96,7 @@ opts:
   fontSize
 -----------------------------------------------------------------------------]]--
 function lay.text(group, opts)
-  Ass.Table(opts, "opts")
+  ass.table(opts, "opts")
 
   if opts.font == nil then
     opts.font = cfg.font                    -- select default font

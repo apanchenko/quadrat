@@ -4,18 +4,18 @@ local Color     = require 'src.model.Color'
 local Config    = require 'src.model.Config'
 local Event     = require 'src.core.Event'
 local Vec       = require 'src.core.vec'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local Type      = require 'src.core.types'
+local types     = require 'src.core.types'
 
 local Space = Class.Create 'Space'
 
 -------------------------------------------------------------------------------
 -- create model ready to play
 function Space.New(cols, rows)
-  Ass.Natural(cols)
-  Ass.Natural(rows)
+  ass.natural(cols)
+  ass.natural(rows)
 
   local self = setmetatable({}, Space)
   self.cols  = cols    -- width
@@ -49,8 +49,8 @@ function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 --
 function Space:notify(method, ...)
-  Ass.Is(self, Space)
-  Ass.Is(method, Type.Str)
+  ass.is(self, Space)
+  ass.is(method, types.str)
   self.on_change:call(method, ...) -- notify
 end
 
@@ -115,7 +115,7 @@ function Space:who_move()   return self.color end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
-  if not (fr < self.size and to < self.size and Vec.Zero <= fr and Vec.Zero <= to) then
+  if not (fr < self.size and to < self.size and Vec.zero <= fr and Vec.zero <= to) then
     return false;
   end
 
@@ -146,7 +146,7 @@ end
 
 -- do move
 function Space:move(fr, to)
-  Ass(self:can_move(fr, to))
+  ass(self:can_move(fr, to))
 
   -- change piece position
   self:spot(to):move_piece(self:spot(fr))
@@ -181,22 +181,22 @@ function Space:use(pos, ability_name)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Space, ':setup')
-Ass.Wrap(Space, ':pos', Type.Num)
-Ass.Wrap(Space, ':width')
-Ass.Wrap(Space, ':height')
-Ass.Wrap(Space, ':row', Type.Num)
-Ass.Wrap(Space, ':col', Type.Num)
-Ass.Wrap(Space, ':pos', Type.Num)
-Ass.Wrap(Space, ':index', Vec)
-Ass.Wrap(Space, ':spots')
-Ass.Wrap(Space, ':spot', Vec)
-Ass.Wrap(Space, ':count_pieces')
-Ass.Wrap(Space, ':piece', Vec)
-Ass.Wrap(Space, ':who_move')
-Ass.Wrap(Space, ':can_move', Vec, Vec)
-Ass.Wrap(Space, ':move', Vec, Vec)
-Ass.Wrap(Space, ':use', Vec, Type.Str)
+ass.wrap(Space, ':setup')
+ass.wrap(Space, ':pos', types.num)
+ass.wrap(Space, ':width')
+ass.wrap(Space, ':height')
+ass.wrap(Space, ':row', types.num)
+ass.wrap(Space, ':col', types.num)
+ass.wrap(Space, ':pos', types.num)
+ass.wrap(Space, ':index', Vec)
+ass.wrap(Space, ':spots')
+ass.wrap(Space, ':spot', Vec)
+ass.wrap(Space, ':count_pieces')
+ass.wrap(Space, ':piece', Vec)
+ass.wrap(Space, ':who_move')
+ass.wrap(Space, ':can_move', Vec, Vec)
+ass.wrap(Space, ':move', Vec, Vec)
+ass.wrap(Space, ':use', Vec, types.str)
 
 log:wrap(Space, 'setup', 'move', 'use')
 

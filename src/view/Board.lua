@@ -7,9 +7,9 @@ local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
 local Class    = require 'src.core.Class'
 local lay      = require 'src.core.lay'
-local Ass      = require 'src.core.Ass'
+local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
-local Type     = require 'src.core.types'
+local types    = require 'src.core.types'
 
 local Board = Class.Create 'Board'
 
@@ -116,10 +116,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ---[[
-Ass.Wrap(Board, 'add_ability', Vec, Type.Str)
-Ass.Wrap(Board, 'remove_ability', Vec, Type.Str)
-Ass.Wrap(Board, 'add_power', Vec, Type.Str, Type.Num)
-Ass.Wrap(Board, 'set_color', Vec, Color)
+ass.wrap(Board, ':add_ability', Vec, types.str)
+ass.wrap(Board, ':remove_ability', Vec, types.str)
+ass.wrap(Board, ':add_power', Vec, types.str, types.num)
+ass.wrap(Board, ':set_color', Vec, Color)
 
 log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')
 --]]

@@ -1,37 +1,43 @@
 local types = require 'src.core.types'
 
-local check = setmetatable({}, {__tostring = function() return 'check' end})
+local check = {}
 
--- check 'n' is natural number
-function check.natural(n)   return check.number(n) and (n >= 0) end
 -- check 'v' is a number
-function check.number(v)    return type(v) == 'number' end
+local function num(v)     return type(v) == 'number' end
+-- check 'n' is natural number
+local function nat(n)     return num(n) and (n >= 0) end
 -- check 'v' is a table
-function check.table(v)     return type(v) == 'table' end
+local function tab(v)     return type(v) == 'table' end
 -- check 'v' is a string
-function check.string(v)    return type(v) == 'string' end
+local function str(v)     return type(v) == 'string' end
 -- check 'v' is a string
-function check.boolean(v)   return type(v) == 'boolean' end
+local function bool(v)    return type(v) == 'boolean' end
 -- check 'v' is a function
-function check.fun(v)       return type(v) == 'function' end
--- check 'v' is of type 't'
-function check.type(v, t)   return check.string(t) and type(v) == t end
-  -- check 'v' has meta T
-function check.is(v, t)
-  return getmetatable(v) == t
-    or (t == nil and v == nil)
+local function fun(v)     return type(v) == 'function' end
+-- check 'v' has meta T
+local function is(v, t)   return getmetatable(v) == t
+    --or (t == nil and v == nil)
     or (t == types.any and v ~= nil)
-    or (t == types.tab and check.table(v))
-    or (t == types.num and check.number(v))
-    or (t == types.str and check.string(v))
-    or (t == types.fun and check.fun(v))
+    or (t == types.tab and tab(v))
+    or (t == types.num and num(v))
+    or (t == types.str and str(v))
+    or (t == types.fun and fun(v))
     or (t == types.ell and false)
+    or (str(t) and tostring(getmetatable(v)) == t)
 end
+
+--
+check.boolean = bool
+check.fun = fun
+check.natural = nat
+check.number = num
+check.string = str
+check.table = tab
+check.is = is
 
 --
 function check.test()
   print('check.test..')
-  print(tostring(check))
   assert(check.natural(1))
   assert(check.number(2.7))
   assert(check.table({}))

@@ -5,7 +5,7 @@ local Rad = require 'src.model.zones.Radial'
 local Zones = {Row, Col, Rad}
 
 -- selftest
-function Zones.Test()
+function Zones.test()
   for i = 1, #Zones do
     Zones[i].Test()
   end

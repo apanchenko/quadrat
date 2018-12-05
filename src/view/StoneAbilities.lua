@@ -4,7 +4,7 @@ local vec       = require "src.core.vec"
 local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
 local types     = require 'src.core.types'
@@ -13,8 +13,6 @@ local StoneAbilities = Class.Create('StoneAbilities')
 
 -- A set of abilities a piece have.
 function StoneAbilities.New(stone, model)
-  Ass.Is(stone, 'Stone')
-  Ass.Is(model, 'Space')
   local self = setmetatable({}, StoneAbilities)
   self._list = {} -- list of abilities
   self._stone = stone -- owner
@@ -94,11 +92,11 @@ end
 
 --MODEULE----------------------------------------------------------------------
 --
-Ass.Wrap(StoneAbilities, 'add', types.str)
-Ass.Wrap(StoneAbilities, 'remove', types.str)
-Ass.Wrap(StoneAbilities, 'is_empty')
-Ass.Wrap(StoneAbilities, 'show')
-Ass.Wrap(StoneAbilities, 'hide')
+ass.wrap(StoneAbilities, ':add', types.str)
+ass.wrap(StoneAbilities, ':remove', types.str)
+ass.wrap(StoneAbilities, ':is_empty')
+ass.wrap(StoneAbilities, ':show')
+ass.wrap(StoneAbilities, ':hide')
 
 log:wrap(StoneAbilities, 'add', 'remove', 'show', 'hide')
 --]]

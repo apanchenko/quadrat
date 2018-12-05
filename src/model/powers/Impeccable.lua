@@ -1,6 +1,6 @@
 local vec = require 'src.core.vec'
 local lay = require 'src.core.lay'
-local Ass = require 'src.core.Ass'
+local ass = require 'src.core.ass'
 local cfg = require 'src.Config'
 local log = require 'src.core.log'
 local Class = require 'src.core.Class'
@@ -14,7 +14,7 @@ local Impeccable = Class.Create('Impeccable',
 
 --
 function Impeccable.New(Zone)
-  Ass.Nil(Zone)
+  ass.nul(Zone)
   local self = setmetatable({}, Impeccable)
   return self
 end
@@ -51,7 +51,7 @@ function Impeccable:move_after(piece, board, cell_from, cell_to) end
 
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(Impeccable, ':apply', 'Piece')
+ass.wrap(Impeccable, ':apply', 'Piece')
 
 log:wrap(Impeccable, 'apply')
 

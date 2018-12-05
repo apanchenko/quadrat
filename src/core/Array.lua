@@ -1,4 +1,4 @@
-local Ass   = require 'src.core.Ass'
+local ass   = require 'src.core.ass'
 local types = require 'src.core.types'
 
 local array = {}
@@ -31,10 +31,10 @@ function array.random(t)
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(array, '.add', types.tab, types.any)
-Ass.Wrap(array, '.all', types.tab, types.fun)
-Ass.Wrap(array, '.each', types.tab, types.fun)
-Ass.Wrap(array, '.random', types.tab)
+ass.wrap(array, '.add', types.tab, types.any)
+ass.wrap(array, '.all', types.tab, types.fun)
+ass.wrap(array, '.each', types.tab, types.fun)
+ass.wrap(array, '.random', types.tab)
 
 log:wrap(array)
 

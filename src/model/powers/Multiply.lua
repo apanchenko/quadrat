@@ -1,6 +1,6 @@
 local vec       = require "src.core.vec"
 local lay       = require "src.core.lay"
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
 local types     = require 'src.core.types'
@@ -63,10 +63,10 @@ function Multiply:move_after(piece, board, cell_from, cell_to)
 end
 
 -- MODULE ---------------------------------------------------------------------
---Ass.Wrap(Multiply, 'New', Type.Nil)
-Ass.Wrap(Multiply, ':apply', 'Piece')
-Ass.Wrap(Multiply, ':increase')
-Ass.Wrap(Multiply, ':decrease')
+--ass.wrap(Multiply, 'New', Type.Nil)
+ass.wrap(Multiply, ':apply', 'Piece')
+ass.wrap(Multiply, ':increase')
+ass.wrap(Multiply, ':decrease')
 
 log:wrap(Multiply, 'apply', 'increase', 'decrease')
 

@@ -1,5 +1,5 @@
 local map     = require 'src.core.map'
-local Ass     = require 'src.core.Ass'
+local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
 local Vec     = require 'src.core.vec'
 local object  = require 'src.core.object'
@@ -11,8 +11,7 @@ local random = object:new()
 
 -- create
 function random:create(space, color)
-  Ass.Is(space, 'Space')
-  Ass.Is(color, Color)
+  ass.is(color, Color)
   return random:new({space = space, color = color})
 end
 --
@@ -32,7 +31,7 @@ function random:move_async()
   -- do something until can move
   while self.space:who_move() == self.color do
     -- select random piece of my color
-    local from = Vec.Random(Vec.Zero, self.space.size - Vec.One)
+    local from = Vec:random(Vec.zero, self.space.size - Vec.one)
     local piece = self.space:piece(from)
     if piece ~= nil and piece.color == self.color then
       -- execute random ability
@@ -41,7 +40,7 @@ function random:move_async()
         piece:use_ability(tostring(ability))
       end
       -- move to random point
-      local to = from + Vec.Random(Vec.Zero-Vec.One, Vec.One)
+      local to = from + Vec:random(Vec.zero-Vec.one, Vec.one)
       if self.space:can_move(from, to) then
         self.space:move(from, to)
       end
@@ -56,8 +55,8 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-Ass.Wrap(random, ':move', Color)
-Ass.Wrap(random, ':move_async')
+ass.wrap(random, ':move', Color)
+ass.wrap(random, ':move_async')
 
 log:wrap(random, 'move', 'move_async')
 

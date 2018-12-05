@@ -1,6 +1,6 @@
 local Vec   = require 'src.core.vec'
 local lay   = require 'src.core.lay'
-local Ass   = require 'src.core.Ass'
+local ass   = require 'src.core.ass'
 local cfg   = require 'src.Config'
 local Class  = require 'src.core.Class'
 
@@ -12,7 +12,7 @@ local MoveDiagonal = Class.Create('MoveDiagonal',
 })
 --
 function MoveDiagonal.New(Zone)
-  Ass.Nil(Zone)
+  ass.nul(Zone)
   return setmetatable({}, MoveDiagonal)
 end
 --
@@ -36,8 +36,8 @@ end
 
 -- MOVE------------------------------------------------------------------------
 function MoveDiagonal:can_move(from, to)
-  Ass.Is(from, Vec)
-  Ass.Is(to, Vec)
+  ass.is(from, Vec)
+  ass.is(to, Vec)
 
   local diff = from - to
   return (diff.x==1 or diff.x==-1) and (diff.y==1 or diff.y==-1)

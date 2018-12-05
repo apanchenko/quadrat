@@ -1,6 +1,6 @@
 local Piece     = require 'src.model.Piece'
 local Color     = require 'src.model.Color'
-local Ass       = require 'src.core.Ass'
+local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 
@@ -20,26 +20,26 @@ end
 
 --
 function ChangesLog:move(color)
-  Ass.Is(color, Color)
+  ass.is(color, Color)
   log:trace(self, ':move ', color)
 end
 
 --
 function ChangesLog:spawn_jade(pos)
-  Ass.Is(pos, Vec)
+  ass.is(pos, Vec)
   log:trace(self, ':spawn_jade ', pos)
 end
 
 --
 function ChangesLog:spawn_piece(color, pos)
-  Ass.Is(pos, Vec, 'pos')
+  ass.is(pos, Vec, 'pos')
   log:trace(self, ':spawn_piece ', color, ' ', pos)
 end
 
 --
 function ChangesLog:move_piece(to, from)
-  Ass.Is(to, Vec)
-  Ass.Is(from, Vec)
+  ass.is(to, Vec)
+  ass.is(from, Vec)
   log:trace(self, ':move_piece ', from, ' -> ', to)
 end
 

@@ -1,7 +1,7 @@
 local vec = require 'src.core.vec'
 local cfg = require 'src.Config'
 local lay = require 'src.core.lay'
-local Ass = require 'src.core.Ass'
+local ass = require 'src.core.ass'
 local Color = require 'src.model.Color'
 
 -------------------------------------------------------------------------------
@@ -16,8 +16,8 @@ setmetatable(Player, {__call = function(cls, ...) return cls.new(...) end})
 -- @param name
 -- @param (optional) display group to render
 function Player.new(color, name, view)
-  Ass.Is(color, Color)
-  Ass.String(name)
+  ass.is(color, Color)
+  ass.str(name)
 
   local self = setmetatable({}, Player)
 
