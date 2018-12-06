@@ -1,4 +1,4 @@
-local Powers       = require 'src.model.powers.Powers'
+local Powers       = require 'src.model.power.Powers'
 local Zones        = require 'src.model.zones.Zones'
 local ass          = require 'src.core.ass'
 local Class        = require 'src.core.Class'

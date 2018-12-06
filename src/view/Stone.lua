@@ -1,16 +1,17 @@
-local _         = require 'src.core.underscore'
-local Vec       = require 'src.core.vec'
-local Player    = require 'src.Player'
-local Abilities = require 'src.view.StoneAbilities'
-local Color     = require 'src.model.Color'
-local cfg       = require 'src.Config'
-local lay       = require 'src.core.lay'
-local ass       = require 'src.core.ass'
-local log       = require 'src.core.log'
-local map       = require 'src.core.map'
-local Class     = require 'src.core.Class'
-local types     = require 'src.core.types'
-local Powers    = require 'src.model.powers.Powers'
+local _           = require 'src.core.underscore'
+local Vec         = require 'src.core.vec'
+local lay         = require 'src.core.lay'
+local ass         = require 'src.core.ass'
+local log         = require 'src.core.log'
+local map         = require 'src.core.map'
+local Class       = require 'src.core.Class'
+local types       = require 'src.core.types'
+local Powers      = require 'src.model.power.Powers'
+local Color       = require 'src.model.Color'
+local Abilities   = require 'src.view.StoneAbilities'
+local power_image = require 'src.view.power.image'
+local cfg         = require 'src.Config'
+local Player      = require 'src.Player'
 
 local Stone = Class.Create 'Stone'
 
@@ -109,7 +110,8 @@ function Stone:remove_ability(name) self._abilities:remove(name) end
 -- POWER ----------------------------------------------------------------------
 function Stone:add_power(name, result_count)
   if self.powers[name] == nil then
-    self.powers[name] = lay.image(self, cfg.cell, 'src/view/powers/'..name..'.png')
+    self.powers[name] = power_image:create(self, name)
+    --lay.image(self, cfg.cell, 'src/view/powers/'..name..'.png')
     --self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
   else
 --    local Power = Powers.Find(name)
@@ -122,9 +124,7 @@ end
 function Stone:remove_power(name)
   local p = self.powers[name]
   if p then
-    if not p:decrease() then
-      self.powers[name] = nil
-    end
+    self.powers[name] = p:decrease()
   end
 end
 

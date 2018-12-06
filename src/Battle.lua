@@ -46,7 +46,7 @@ function battle:create(event)
   self.bot1 = player:create(self.space, Color.R)
   self.space.on_change:add(self.bot1)
   self.bot2 = player:create(self.space, Color.B)
-  self.space.on_change:add(self.bot2)
+  --self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing
 end

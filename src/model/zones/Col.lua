@@ -27,7 +27,7 @@ function Col.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Col, '.filter', vec)
+ass.wrap(Col, ':filter', vec)
 
 --log:wrap(Col, 'filter')
 

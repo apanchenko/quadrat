@@ -25,7 +25,7 @@ function Row.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Row, '.filter', vec)
+ass.wrap(Row, ':filter', vec)
 
 log:wrap(Row)
 
