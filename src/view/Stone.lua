@@ -12,6 +12,7 @@ local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.Config'
 local Player      = require 'src.Player'
+local powers      = require 'src.view.power.powers'
 
 local Stone = Class.Create 'Stone'
 
@@ -110,7 +111,7 @@ function Stone:remove_ability(name) self._abilities:remove(name) end
 -- POWER ----------------------------------------------------------------------
 function Stone:add_power(name, result_count)
   if self.powers[name] == nil then
-    self.powers[name] = power_image:create(self, name)
+    self.powers[name] = powers[name]:create(self, name)
     --lay.image(self, cfg.cell, 'src/view/powers/'..name..'.png')
     --self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
   else

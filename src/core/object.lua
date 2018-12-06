@@ -43,11 +43,11 @@ function object.test()
   function limit:__tostring()
     return 'limit account '..self.balance..' of '..self.limit
   end
+  limit._deposit = limit.deposit
   function limit:deposit(v)
-    if self.balance + v > self.limit then
+    self:_deposit(v)
+    if self.balance > self.limit then
       self.balance = self.limit
-    else
-      self.balance = self.balance + v
     end
   end
 

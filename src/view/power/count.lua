@@ -4,31 +4,33 @@ local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local cfg         = require 'src.Config'
 
-local image = object:new({ name = 'view.power.image' })
+-- power draws a counter ------------------------------------------------------
+local count = object:new({ name = 'view.power.count' })
 
-function image:__tostring()
+function count:__tostring()
   return 'account '..self.balance
 end
 
 -- create image with initial one count
-function image:create(stone, name)
+function count:create(stone, name)
   local t = setmetatable({}, self)
   self.__index = self
-  self.image = lay.image(stone, cfg.cell, 'src/view/power/'..name..'.png')
+  self.count = 2
+  self.text = lay.text(stone, {text=tostring(self.count + 1), fontSize=22})
   return t
 end
 
 --
-function image:decrease()
-  self.image:removeSelf()
+function count:decrease()
+  self.text:removeSelf()
   return nil
 end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(image, ':create', 'Stone', types.str)
-ass.wrap(image, ':decrease')
+ass.wrap(count, ':create', 'Stone', types.str)
+ass.wrap(count, ':decrease')
 
-log:wrap(image, 'create', 'decrease')
+log:wrap(count, 'create', 'decrease')
 
-return image
+return count
