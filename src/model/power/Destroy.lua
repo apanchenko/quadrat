@@ -1,51 +1,50 @@
-local vec       = require "src.core.vec"
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local object    = require 'src.core.object'
-local col       = require 'src.model.zones.Col'
+local areal     = require 'src.model.power.areal'
 
-local Destroy = object:new({name = 'Destroy', is_areal = true})
+local destroy = function(space, owner, zone)
+  local self = areal(space, owner, zone)
 
-function Destroy:create(zone)
-  local t = setmetatable({zone = zone}, self)
-  self.__index = self
-  return t
+  self.apply_to_spot = function(spot)
+    if spot.piece and spot.piece.color ~= owner.color then
+      spot.piece.die() -- enemy piece
+      spot.piece = nil
+      space:notify('remove_piece', spot.pos) -- notify
+    end
+  end
+
+  self.tostring = function()
+    return 'Destroy '..tostring(zone)
+  end
+
+  return self
 end
+
+--[[
+local destroy = areal:new()
 
 -- POWER ----------------------------------------------------------------------
 --
-function Destroy:apply(piece)
-  local zone = self.zone.New(piece.pos)
-
-  -- select cells in zone
-  local spots = piece.space:select_spots(function(spot)
-    return zone:filter(spot.pos) and zone.pos ~= spot.pos and spot.piece and spot.piece.color ~= piece.color
-  end)
-
-  for i = 1, #spots do
-    local spot = spots[i]
+function destroy:apply_to_spot(spot)
+  if spot.piece and spot.piece.color ~= self.owner.color then
     spot.piece.die() -- enemy piece
     spot.piece = nil
-    piece.space:notify('remove_piece', spot.pos) -- notify
+    self.space:notify('remove_piece', spot.pos) -- notify
   end
 end
 
 --
-function Destroy:__tostring()
-  return tostring(Destroy).. ' '.. tostring(self.zone)
+function destroy:__tostring()
+  return tostring(destroy).. ' '.. tostring(self.zone)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Destroy, ':apply', 'Piece')
+ass.wrap(destroy, ':apply_to_spot', 'Spot')
+log:wrap(destroy, 'apply_to_spot')
 
-log:wrap(Destroy, 'apply')
-
-function Destroy.test()
-  log:trace('Destroy:test')
-
-  local destroy = Destroy(col)
-
-  ass(tostring(destroy) == 'Destroy Col')
+function destroy.test()
+  --ass(tostring(Destroy:new()) == 'Destroy Col')
 end
+--]]
 
-return Destroy
+return destroy
