@@ -1,24 +1,21 @@
 local vec       = require "src.core.vec"
-local lay       = require "src.core.lay"
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local Class     = require 'src.core.Class'
-local cfg       = require "src.Config"
-local Color     = require 'src.model.Color'
+local object    = require 'src.core.object'
+local col       = require 'src.model.zones.Col'
 
-local Destroy = Class.Create('Destroy', {is_areal = true})
+local Destroy = object:new({name = 'Destroy', is_areal = true})
 
-function Destroy.New(Zone)
-  ass(Zone)
-  local self = setmetatable({}, Destroy)
-  self.Zone = Zone
-  return self
+function Destroy:create(zone)
+  local t = setmetatable({zone = zone}, self)
+  self.__index = self
+  return t
 end
 
 -- POWER ----------------------------------------------------------------------
 --
 function Destroy:apply(piece)
-  local zone = self.Zone.New(piece.pos)
+  local zone = self.zone.New(piece.pos)
 
   -- select cells in zone
   local spots = piece.space:select_spots(function(spot)
@@ -35,12 +32,20 @@ end
 
 --
 function Destroy:__tostring()
-  return tostring(Destroy).. tostring(self.Zone)
+  return tostring(Destroy).. ' '.. tostring(self.zone)
 end
 
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(Destroy, ':apply', 'Piece')
 
 log:wrap(Destroy, 'apply')
+
+function Destroy.test()
+  log:trace('Destroy:test')
+
+  local destroy = Destroy(col)
+
+  ass(tostring(destroy) == 'Destroy Col')
+end
 
 return Destroy

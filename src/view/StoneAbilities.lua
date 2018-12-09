@@ -70,7 +70,10 @@ function StoneAbilities:show()
   for name, count in pairs(self._list) do     -- create new button
     local opts = cfg.abilities.button
     opts.id = name
-    opts.label = name.. ' '.. count
+    opts.label = name
+    if count > 1 then
+      opts.label = opts.label.. ' '.. count
+    end
     opts.onRelease = function(event)
       self._model:use(self._stone:pos(), event.target.id)
       return true

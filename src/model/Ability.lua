@@ -47,7 +47,7 @@ end
 
 --
 function Ability:create_power(piece)
-  local power = self.Power.New(self.Zone)
+  local power = self.Power(self.Zone)
   return power:apply(piece)
 end
 

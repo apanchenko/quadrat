@@ -13,6 +13,7 @@ require('src.core.log').test()
 require('src.core.vec').test()
 require('src.model.Color').test()
 require('src.model.zones.Zones').test()
+require('src.model.power.Destroy').test()
 
 local composer   = require 'composer'
 composer.gotoScene("src.Menu")
