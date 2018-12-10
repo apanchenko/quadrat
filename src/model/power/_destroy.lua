@@ -2,7 +2,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local areal     = require 'src.model.power.areal'
 
-local destroy = function(space, owner, zone)
+return function(space, owner, zone)
   local self = areal(space, owner, zone)
 
   self.apply_to_spot = function(spot)
@@ -46,5 +46,3 @@ function destroy.test()
   --ass(tostring(Destroy:new()) == 'Destroy Col')
 end
 --]]
-
-return destroy
