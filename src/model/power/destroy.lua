@@ -2,26 +2,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local areal     = require 'src.model.power.areal'
 
-return function(space, owner, zone)
-  local self = areal(space, owner, zone)
-
-  self.apply_to_spot = function(spot)
-    if spot.piece and spot.piece.color ~= owner.color then
-      spot.piece.die() -- enemy piece
-      spot.piece = nil
-      space:notify('remove_piece', spot.pos) -- notify
-    end
-  end
-
-  self.tostring = function()
-    return 'Destroy '..tostring(zone)
-  end
-
-  return self
-end
-
---[[
-local destroy = areal:new()
+local destroy = areal:extend('destroy')
 
 -- POWER ----------------------------------------------------------------------
 --
@@ -32,17 +13,21 @@ function destroy:apply_to_spot(spot)
     self.space:notify('remove_piece', spot.pos) -- notify
   end
 end
-
 --
 function destroy:__tostring()
-  return tostring(destroy).. ' '.. tostring(self.zone)
+  return 'Destroy '.. tostring(self.zone)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(destroy, ':apply_to_spot', 'Spot')
+--ass.wrap(destroy, ':apply_to_spot', 'Spot')
 log:wrap(destroy, 'apply_to_spot')
 
 function destroy.test()
-  --ass(tostring(Destroy:new()) == 'Destroy Col')
+  ass(tostring(areal))
+  ass(tostring(destroy))
+  log:trace(areal)
+  log:trace(destroy)
+  --ass(tostring(destroy:new()) == 'Destroy Col')
 end
---]]
+
+return destroy

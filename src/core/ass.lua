@@ -29,14 +29,15 @@ function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..'
 -- wrap function of T
 -- ellipsis not supported
 function ass.wrap(t, name, ...)
-  local tstr = tostring(t)
-  ass.table(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
+  local tstr = tostring(tostring(t))
+  ass.table(t, 'first arg is not a table in ass.wrap(?, '..tostring(name)..')')
+  --ass.table(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
   ass.str(name)
 
   local arg_types = {...}
   local sep = string.sub(name, 1, 1)
   local fname = string.sub(name, 2)
-  local method = tostring(t)..name
+  local method = tstr..name
   local fun = t[fname]
 
   --print('ass.wrap ('..tstr..", '"..name.."'). Sep "..sep)

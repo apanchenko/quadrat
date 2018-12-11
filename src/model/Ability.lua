@@ -47,9 +47,11 @@ end
 
 --
 function Ability:create_power(piece)
-  local power = self.Power(piece.space, piece, self.Zone)
+  --local power = self.Power(piece.space, piece, self.Zone)
   --power:areal_init(piece.space, piece, self.Zone)
-  return power.apply()
+
+  local power = self.Power:create(piece.space, piece, self.Zone)
+  return power:apply()
 end
 
 

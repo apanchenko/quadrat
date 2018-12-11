@@ -7,12 +7,13 @@ local Color   = require 'src.model.Color'
 local Ability = require 'src.model.Ability'
 
 --
-local random = object:new()
+local random = object:extend('random')
 
 -- create
+random._create = object.create
 function random:create(space, color)
   ass.is(color, Color)
-  return random:new({space = space, color = color})
+  return self:_create({space = space, color = color})
 end
 --
 function random:__tostring()

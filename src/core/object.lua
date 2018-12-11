@@ -11,11 +11,17 @@ function object.__call(cls, ...)
 end
 --
 function object:__tostring()
-  return self.name or 'subobject'
+  return self.name
 end
 --
-function object:new(def)
-  def = def or {}
+function object:extend(name)
+  local sub = setmetatable({name=name}, self)
+  self.__index = self
+  function sub:__tostring() return self.name end
+  return sub
+end
+--
+function object:create(def)
   ass.is(def, types.tab, 'object:new('..tostring(def)..')')
   setmetatable(def, self)
   self.__index = self
@@ -23,13 +29,16 @@ function object:new(def)
 end
 
 -- selftest -------------------------------------------------------------------
+ass.wrap(object, ':extend', types.str)
 --ass.wrap(object, ':new', types.tab)
 
 --
 function object.test()
-  log:trace("object.test " .. tostring(object))
+  ass(tostring(object))
 
-  local account = object:new({ name = 'account', balance = 0 })
+  local account = object:extend('account')
+  account.balance = 0
+
   function account:__tostring()
     return 'account '..self.balance
   end
@@ -39,7 +48,9 @@ function object.test()
 
   ass(tostring(account) == 'account')
 
-  local limit = account:new({ name = 'limit', limit = 100 })
+  local limit = account:extend('limit')
+  limit.limit = 100
+
   function limit:__tostring()
     return 'limit account '..self.balance..' of '..self.limit
   end
@@ -51,11 +62,11 @@ function object.test()
     end
   end
 
-  local masha = account:new()
+  local masha = account:create({})
   masha:deposit(30)
   ass(tostring(masha) == 'account 30')
 
-  local kolya = limit:new()
+  local kolya = limit:create({})
   kolya:deposit(120)
   ass(tostring(kolya) == 'limit account 100 of 100')
 

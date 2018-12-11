@@ -4,7 +4,7 @@ local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local cfg         = require 'src.Config'
 
-local image = object:new({ name = 'view.power.image' })
+local image = object:extend('view.power.image')
 
 function image:__tostring()
   return 'account '..self.balance

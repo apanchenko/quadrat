@@ -5,7 +5,7 @@ local log         = require 'src.core.log'
 local cfg         = require 'src.Config'
 
 -- power draws a counter ------------------------------------------------------
-local count = object:new({ name = 'view.power.count' })
+local count = object:extend('view.power.count')
 
 function count:__tostring()
   return 'account '..self.balance
