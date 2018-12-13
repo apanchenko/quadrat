@@ -4,7 +4,6 @@ local object  = require 'src.core.object'
 
 -- base power
 local power = object:extend('power')
-power.is_jump_protected = true
 
 -- constructor
 -- @param piece - apply power to this piece
