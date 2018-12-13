@@ -25,6 +25,8 @@ function ass.bool(v)        return check.boolean(v) or error(tostring(v)..' is n
 function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' is not a function') end
 -- 'v' is an instance of T
 function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
+--
+function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
 
 -- wrap function of T
 -- ellipsis not supported

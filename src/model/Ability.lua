@@ -13,9 +13,9 @@ function Ability.New()
   local self = setmetatable({}, Ability)
   self.Power = Powers[math.random(#Powers)]
 
-  --if self.Power.is_areal then
+  if self.Power.is_areal then
     self.Zone = Zones[math.random(#Zones)]
-  --end
+  end
 
   self.count = 1
   return self
@@ -47,10 +47,7 @@ end
 
 --
 function Ability:create_power(piece)
-  --local power = self.Power(piece.space, piece, self.Zone)
-  --power:areal_init(piece.space, piece, self.Zone)
-
-  local power = self.Power:create(piece.space, piece, self.Zone)
+  local power = self.Power:create(piece, self.Zone)
   return power:apply()
 end
 

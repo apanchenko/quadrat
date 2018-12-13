@@ -6,7 +6,7 @@ local powers = {}
 powers["Multiply"] = count
 powers["MoveDiagonal"] = image
 powers["Recruit"] = image
-powers["Impeccable"] = image
+powers["jumpproof"] = image
 powers["Teach"] = image
 powers["Destroy"] = image
 

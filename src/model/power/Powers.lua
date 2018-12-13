@@ -7,7 +7,7 @@ local Powers =
   --require 'src.model.power.Recruit',
   --require 'src.model.power.Swap',
   --require 'src.model.power.Sphere',
-  --require 'src.model.power.Impeccable',
+  require 'src.model.power.jumpproof',
   --require 'src.model.power.Teach',
   require 'src.model.power.destroy'
 }

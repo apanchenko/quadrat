@@ -11,13 +11,13 @@ function object.__call(cls, ...)
 end
 --
 function object:__tostring()
-  return self.name
+  return self._typename
 end
 --
-function object:extend(name)
-  local sub = setmetatable({name=name}, self)
+function object:extend(typename)
+  local sub = setmetatable({_typename=typename}, self)
   self.__index = self
-  function sub:__tostring() return self.name end
+  function sub:__tostring() return self._typename end
   return sub
 end
 --
@@ -46,7 +46,7 @@ function object.test()
     self.balance = self.balance + v
   end
 
-  ass(tostring(account) == 'account')
+  ass.eq(tostring(account), 'account')
 
   local limit = account:extend('limit')
   limit.limit = 100
