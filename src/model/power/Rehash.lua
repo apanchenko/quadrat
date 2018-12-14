@@ -1,51 +1,29 @@
-local vec = require "src.core.vec"
-local lay = require "src.core.lay"
-local cfg = require "src.Config"
+local power = require 'src.model.power.power'
+local ass   = require 'src.core.ass'
+local rehash = power:extend('rehash')
 
-local Rehash =
-{
-  typename = "Rehash",
-  is_areal = false
-}
-Rehash.__index = Rehash
-
--------------------------------------------------------------------------------
-function Rehash.new(Zone)
-  assert(Zone == nil)
-  local self = setmetatable({}, Rehash)
-  return self
-end
--------------------------------------------------------------------------------
-function Rehash:apply(piece)
-  -- get board cells
-  local board = piece.board
-
-  -- empty cells to rehash
-  local cells = board:select_cells(function(c) return c.piece == nil end)
+-- use
+function rehash:apply()
+  -- get empty spots to rehash
+  local spots = self.piece.space:select_spots(function(c) return c.piece == nil end)
 
   -- count and remove jades
   local count = 0
-  for i = 1, #cells do
-    if cells[i].jade then
+  for i = 1, #spots do
+    if spots[i].jade then
       count = count + 1
-      cells[i]:remove_jade()
+      spots[i]:remove_jade()
     end
   end
-  assert(count <= #cells)
+  ass.le(count, #spots)
 
   -- select 'count' rendom empty cells
   for i = 1, count do
-    local j = math.random(#cells)
-    cells[j]:set_jade()
-    cells[j] = cells[#cells]
-    cells[#cells] = nil
+    local j = math.random(#spots)
+    spots[j]:set_jade()
+    spots[j] = spots[#spots]
+    spots[#spots] = nil
   end
-
-  return nil
-end
--------------------------------------------------------------------------------
-function Rehash:__tostring()
-  return Rehash.typename
 end
 
-return Rehash
+return rehash
