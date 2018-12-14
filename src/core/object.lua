@@ -22,58 +22,54 @@ function object:extend(typename)
 end
 --
 function object:create(def)
-  ass.is(def, types.tab, 'object:new('..tostring(def)..')')
-  setmetatable(def, self)
+  def = setmetatable(def or {}, self)
   self.__index = self
   return def
 end
 
 -- selftest -------------------------------------------------------------------
 ass.wrap(object, ':extend', types.str)
---ass.wrap(object, ':new', types.tab)
+--ass.wrap(object, ':create')
 
 --
 function object.test()
   ass(tostring(object))
 
+  -- account extends object
   local account = object:extend('account')
+  -- add balance property to account
   account.balance = 0
-
-  function account:__tostring()
-    return 'account '..self.balance
-  end
-  function account:deposit(v)
-    self.balance = self.balance + v
-  end
+  -- account instance to string
+  function account:__tostring()     return 'account '..self.balance end
+  -- add function deposit to account
+  function account:deposit(v)       self.balance = self.balance + v end
 
   ass.eq(tostring(account), 'account')
 
-  local limit = account:extend('limit')
-  limit.limit = 100
+  -- extended type of account
+  local limited = account:extend('limited')
+  -- add limit property
+  limited.limit = 100
+  -- limited account instance tostring
+  function limited:__tostring()     return 'limited account '..self.balance..' of '..self.limit end
+  -- overload deposit method
+  limited._deposit = limited.deposit
+  function limited:deposit(v)       self:_deposit(math.min(v, self.limit)) end
 
-  function limit:__tostring()
-    return 'limit account '..self.balance..' of '..self.limit
-  end
-  limit._deposit = limit.deposit
-  function limit:deposit(v)
-    self:_deposit(v)
-    if self.balance > self.limit then
-      self.balance = self.limit
-    end
-  end
-
-  local masha = account:create({})
+  -- masha's account
+  local masha = account:create()
   masha:deposit(30)
   ass(tostring(masha) == 'account 30')
 
-  local kolya = limit:create({})
+  -- kolya's limited account
+  local kolya = limited:create()
   kolya:deposit(120)
-  ass(tostring(kolya) == 'limit account 100 of 100')
+  ass(tostring(kolya) == 'limited account 100 of 100')
 
-  ass(getmetatable(account) == object)
-  ass(getmetatable(masha) == account)
-  ass(getmetatable(limit) == account)
-  ass(getmetatable(kolya) == limit)
+  ass.is(account, object)
+  ass.is(masha, account)
+  ass.is(limited, account)
+  ass.is(kolya, limited)
 end
 
 return object

@@ -76,6 +76,20 @@ function Spot:spawn_jade()
   self.space.on_change:call('spawn_jade', self.pos) -- notify that a new jade set
 end
 
+-- take chance to spawn a new jade if can
+function Spot:set_jade()
+  self.jade = true
+  self.space.on_change:call('spawn_jade', self.pos) -- notify that a new jade set
+end
+
+-- take chance to spawn a new jade if can
+function Spot:remove_jade()
+  ass.is(self, Spot)
+  if self.jade then -- already used by jade
+    self.jade = false
+    self.space.on_change:call('remove_jade', self.pos) -- notify that a new jade set
+    end
+end
 
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(Spot, ':spawn_piece', Color)

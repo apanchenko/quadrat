@@ -1,18 +1,20 @@
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local types     = require 'src.core.types'
-local object    = require 'src.core.object'
+local power     = require 'src.model.power.power'
 
 -- areal power
-local areal = object:extend('areal')
+local areal = power:extend('areal')
 areal.is_areal = true
 
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
-local _create = object.create
+areal.power_create = power.create
 function areal:create(piece, zone)
-  return _create(self, {piece=piece, zone=zone})
+  local a = self:power_create(piece)
+  a.zone = zone
+  return a
 end
 
 -- use and consume power

@@ -8,12 +8,16 @@ local Ability = require 'src.model.Ability'
 
 --
 local random = object:extend('random')
+random.space = nil
+random.color = nil
 
 -- create
 random._create = object.create
 function random:create(space, color)
-  ass.is(color, Color)
-  return self:_create({space = space, color = color})
+  local t = self:_create()
+  t.space = space
+  t.color = color
+  return t
 end
 --
 function random:__tostring()

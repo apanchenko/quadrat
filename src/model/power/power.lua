@@ -7,9 +7,9 @@ local power = object:extend('power')
 
 -- constructor
 -- @param piece - apply power to this piece
-local _create = object.create
+power.object_create = object.create
 function power:create(piece)
-  return _create(self, {piece=piece})
+  return self:object_create({piece=piece})
 end
 -- use
 function power:apply()
@@ -21,7 +21,6 @@ function power:increase()
 end
 --
 function power:decrease()
-  return self
 end
 --
 function power:count()

@@ -27,6 +27,8 @@ function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' i
 function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 --
 function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
+--
+function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > '.. tostring(b)) end
 
 -- wrap function of T
 -- ellipsis not supported
@@ -51,7 +53,7 @@ function ass.wrap(t, name, ...)
     --print('  check args - expected '..#arg_types..', found '..#args)
     ass(#args == #arg_types, method..' expected '..#arg_types..' args, found '..#args)
     for i=1, #args do
-      ass.is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..method)
+      ass.is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..method.. ', found '..tostring(args[i]))
     end
   end
 
