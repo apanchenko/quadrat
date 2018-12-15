@@ -9,5 +9,6 @@ powers["Recruit"] = image
 powers["jumpproof"] = image
 powers["Teach"] = image
 powers["Destroy"] = image
+powers["sphere"] = image
 
 return powers
