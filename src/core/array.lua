@@ -36,6 +36,4 @@ ass.wrap(array, '.all', types.tab, types.fun)
 ass.wrap(array, '.each', types.tab, types.fun)
 ass.wrap(array, '.random', types.tab)
 
-log:wrap(array)
-
-return Array
+return array

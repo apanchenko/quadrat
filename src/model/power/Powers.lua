@@ -3,7 +3,7 @@ local Powers =
   --require 'src.model.power.MoveDiagonal',
   --require 'src.model.power.Multiply',
   require 'src.model.power.rehash',
-  --require 'src.model.power.Relocate',
+  require 'src.model.power.relocate',
   --require 'src.model.power.Recruit',
   --require 'src.model.power.Swap',
   --require 'src.model.power.Sphere',

@@ -1,5 +1,6 @@
 local power = require 'src.model.power.power'
 local ass   = require 'src.core.ass'
+
 local rehash = power:extend('rehash')
 
 -- use
