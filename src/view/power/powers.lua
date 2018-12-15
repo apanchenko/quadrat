@@ -3,8 +3,8 @@ local image       = require 'src.view.power.image'
 
 local powers = {}
 
-powers["Multiply"] = count
-powers["MoveDiagonal"] = image
+powers["multiply"] = count
+powers["movediagonal"] = image
 powers["jumpproof"] = image
 powers["sphere"] = image
 
