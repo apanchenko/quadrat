@@ -4,7 +4,7 @@ local Powers =
   --require 'src.model.power.Multiply',
   require 'src.model.power.rehash',
   require 'src.model.power.relocate',
-  --require 'src.model.power.Recruit',
+  require 'src.model.power.recruit',
   --require 'src.model.power.Swap',
   --require 'src.model.power.Sphere',
   require 'src.model.power.jumpproof',
