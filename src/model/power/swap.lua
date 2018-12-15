@@ -5,7 +5,7 @@ local Color     = require 'src.model.Color'
 local swap = areal:extend('Swap')
 
 -- implement pure virtual areal:apply_to_spot
--- change color of enemy pieces in zone
+-- swap color of all pieces in zone
 function swap:apply_to_spot(spot)
   local piece = spot.piece
   if piece then
