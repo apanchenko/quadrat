@@ -22,8 +22,7 @@ end
 
 --
 function Radial:filter(pos)
-  local distance = (pos - self.pos):length2()
-  return distance == 1 or distance == 2
+  return (pos - self.pos):length2() < 3
 end
 
 -- selftest
@@ -34,12 +33,11 @@ function Radial.Test()
   local radial = Radial.New(vec(3, 3))
 
   local trues = {vec(2,2), vec(3,2), vec(4,2),
-                 vec(2,3),           vec(4,3),
+                 vec(2,3), vec(3,3), vec(4,3),
                  vec(2,4), vec(3,4), vec(4,4)}
   ass(_.all(trues, function(v) return radial:filter(v) end))
 
   ass(not radial:filter(vec(0, 0)))
-  ass(not radial:filter(vec(3, 3)))
 end
 
 -- MODULE ---------------------------------------------------------------------

@@ -10,5 +10,6 @@ powers["jumpproof"] = image
 powers["Teach"] = image
 powers["Destroy"] = image
 powers["sphere"] = image
+powers["Swap"] = image
 
 return powers

@@ -4,7 +4,7 @@ local areal     = require 'src.model.power.areal'
 local recruit = areal:extend('Recruit')
 
 -- implement pure virtual areal:apply_to_spot
--- change colot of enemy pieces in zone
+-- change color of enemy pieces in zone
 function recruit:apply_to_spot(spot)
   local my_color = self.piece.color
   local piece = spot.piece
