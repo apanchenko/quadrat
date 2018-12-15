@@ -48,10 +48,11 @@ function Spot:move_piece(from)
     self.space:notify('remove_piece', self.pos) -- notify
   end
   -- change piece position
+  from.piece:move_before(from, self)
   self.piece = from.piece
-  self.piece:set_pos(self.pos)
+  self.piece:move(from, self)
   from.piece = nil
-  self.space.on_change:call('move_piece', self.pos, from.pos) -- notify
+  self.piece:move_after(from, self)
   -- consume jade
   if self.jade then
     self.jade = false 
@@ -73,7 +74,7 @@ function Spot:spawn_jade()
     return
   end
   self.jade = true
-  self.space.on_change:call('spawn_jade', self.pos) -- notify that a new jade set
+  self.space:notify('spawn_jade', self.pos) -- notify that a new jade set
 end
 
 -- take chance to spawn a new jade if can

@@ -6,12 +6,9 @@ local cfg         = require 'src.Config'
 
 local image = object:extend('view.power.image')
 
-function image:__tostring()
-  return 'account '..self.balance
-end
-
 -- create image with initial one count
-function image:create(stone, name)
+function image:create(stone, name, count)
+  ass.eq(count, 1)
   local t = setmetatable({}, self)
   self.__index = self
   self.image = lay.image(stone, cfg.cell, 'src/view/power/'..name..'.png')
@@ -19,16 +16,16 @@ function image:create(stone, name)
 end
 
 --
-function image:decrease()
+function image:set_count(count)
+  ass.eq(count, 0)
   self.image:removeSelf()
-  return nil
 end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(image, ':create', 'Stone', types.str)
-ass.wrap(image, ':decrease')
+ass.wrap(image, ':create', 'Stone', types.str, types.num)
+ass.wrap(image, ':set_count', types.num)
 
-log:wrap(image, 'create', 'decrease')
+log:wrap(image, 'create', 'set_count')
 
 return image

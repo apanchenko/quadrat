@@ -1,7 +1,7 @@
 local Powers =
 {
   require 'src.model.power.movediagonal',
-  --require 'src.model.power.Multiply',
+  require 'src.model.power.multiply',
   require 'src.model.power.rehash',
   require 'src.model.power.relocate',
   require 'src.model.power.recruit',

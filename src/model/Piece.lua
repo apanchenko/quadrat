@@ -31,21 +31,39 @@ function Piece:__tostring()
   return str
 end
 --
-function Piece:set_pos(pos)         self.pos = pos end
---
-function Piece:can_move(space, fr, to)
-  if (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 then
-    return true
-  end
-  return map.any(self.powers, function(p) return p:can_move(fr, to) end)
-end
---
 function Piece:die()
 end
 --
 function Piece:set_color(color)
   self.color = color
   self.space:notify('set_color', self.pos, color) -- notify
+end
+
+-- POSITION & MOVE ------------------------------------------------------------
+--
+function Piece:set_pos(pos)
+  self.pos = pos
+end
+--
+function Piece:can_move(fr, to)
+  if (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 then
+    return true
+  end
+  return map.any(self.powers, function(p) return p:can_move(fr, to) end)
+end
+--
+function Piece:move_before(fr, to)
+  map.each(self.powers, function(p) return p:move_before(fr, to) end)
+end
+--
+function Piece:move(fr, to)
+  self.pos = to.pos
+  map.each(self.powers, function(p) return p:move(fr, to) end)
+end
+--
+function Piece:move_after(fr, to)
+  self.space:notify('move_piece', to.pos, fr.pos) -- notify
+  map.each(self.powers, function(p) return p:move_after(fr, to) end)
 end
 
 -- ABILITY---------------------------------------------------------------------
@@ -78,26 +96,25 @@ end
 -- POWER ----------------------------------------------------------------------
 function Piece:add_power(ability)
   local name = tostring(ability)
-  local p = self.powers[name]
-  if p then
-    p:increase()
+  local power = self.powers[name]
+  if power then
+    power:increase()
   else
-    p = ability:create_power(self)
-    self.powers[name] = p
+    power = ability:create_power(self)
+    self.powers[name] = power
   end
 
-  if p then
-    self.space:notify('add_power', self.pos, name, 1) -- notify
+  if power then
+    self.space:notify('add_power', self.pos, name, power:get_count()) -- notify
   end
 end
 --
-function Piece:remove_power(name)
-  local p = self.powers[name]
-  if p then
-    if not p:decrease() then
-      self.powers[name] = nil
-    end
+function Piece:decrease_power(name)
+  local power = self.powers[name]
+  if power then
+    self.powers[name] = power:decrease()
   end
+  self.space:notify('add_power', self.pos, name, power:get_count()) -- notify
 end
 
 -- TRAITS ---------------------------------------------------------------------
@@ -108,14 +125,14 @@ end
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(Piece, '.New', 'Space', 'Color')
 ass.wrap(Piece, ':set_pos', Vec)
-ass.wrap(Piece, ':can_move', 'Space', Vec, Vec)
+ass.wrap(Piece, ':can_move', Vec, Vec)
 ass.wrap(Piece, ':set_color', 'Color')
 ass.wrap(Piece, ':add_ability')
 ass.wrap(Piece, ':learn_ability', Ability)
 ass.wrap(Piece, ':use_ability', types.str)
 ass.wrap(Piece, ':add_power', Ability)
-ass.wrap(Piece, ':remove_power', types.str)
+ass.wrap(Piece, ':decrease_power', types.str)
 
-log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'remove_power')
+log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'decrease_power')
 
 return Piece

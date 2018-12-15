@@ -110,22 +110,11 @@ function Stone:remove_ability(name) self._abilities:remove(name) end
 
 -- POWER ----------------------------------------------------------------------
 function Stone:add_power(name, result_count)
-  if self.powers[name] == nil then
-    self.powers[name] = powers[name]:create(self, name)
-    --lay.image(self, cfg.cell, 'src/view/powers/'..name..'.png')
-    --self.text = lay.text(piece, {text=tostring(self.count + 1), fontSize=22})
+  local power = self.powers[name]
+  if power == nil then
+    self.powers[name] = powers[name]:create(self, name, result_count)
   else
---    local Power = Powers.Find(name)
---    ass.table(Power)
---    if Power.Stackable then
---    end
-  end
-end
---
-function Stone:remove_power(name)
-  local p = self.powers[name]
-  if p then
-    self.powers[name] = p:decrease()
+    self.powers[name] = power:set_count(result_count)
   end
 end
 

@@ -17,13 +17,12 @@ function power:apply()
 end
 --
 function power:increase()
-  -- do nothing here
 end
 --
 function power:decrease()
 end
 --
-function power:count()
+function power:get_count()
   return 1
 end
 
@@ -32,8 +31,8 @@ function power:can_move(from, to)
 end
 --
 function power:move_before(cell_from, cell_to) end
-function power:move(vec) end
-function power:move_after(piece, board, cell_from, cell_to) end
+function power:move(cell_from, cell_to) end
+function power:move_after(cell_from, cell_to) end
 
 --
 ass.wrap(power, ':create', 'Piece')

@@ -131,7 +131,7 @@ function Space:can_move(fr, to)
   end
 
   -- check move ability
-  if not actor:can_move(self, fr, to) then
+  if not actor:can_move(fr, to) then
     return false
   end
 
