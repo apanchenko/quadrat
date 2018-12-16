@@ -1,16 +1,16 @@
-local composer   = require "composer"
-local Space      = require 'src.model.Space'
-local Color      = require 'src.model.Color'
-local ChangesLog = require 'src.model.ChangesLog'
-local player     = require 'src.model.players.random'
-local Board      = require "src.view.Board"
-local Stone      = require "src.view.Stone"
-local vec        = require "src.core.vec"
-local Player     = require "src.Player"
-local cfg        = require 'src.Config'
-local lay        = require 'src.core.lay'
-local log        = require 'src.core.log'
-local ass        = require 'src.core.ass'
+local composer      = require "composer"
+local Space         = require 'src.model.Space'
+local playerid      = require 'src.model.playerid'
+local ChangesLog    = require 'src.model.ChangesLog'
+local player        = require 'src.model.players.random'
+local Board         = require "src.view.Board"
+local Stone         = require "src.view.Stone"
+local vec           = require "src.core.vec"
+local Player        = require "src.Player"
+local cfg           = require 'src.Config'
+local lay           = require 'src.core.lay'
+local log           = require 'src.core.log'
+local ass           = require 'src.core.ass'
 
 -- variables
 local battle = composer.newScene()
@@ -29,13 +29,13 @@ function battle:create(event)
   -- players
   self.players = {}
 
-  local color = Color.red(true)
-  self.players[color] = Player(color, "Salvador")
-  lay.render(self, self.players[color], cfg.player.red)
+  local white = playerid.white
+  self.players[white] = Player(white, "Salvador")
+  lay.render(self, self.players[white], cfg.player.red)
 
-  color = Color.swap(color)
-  self.players[color] = Player(color, "Gala")
-  lay.render(self, self.players[color], cfg.player.black)
+  local black = playerid.black
+  self.players[black] = Player(black, "Gala")
+  lay.render(self, self.players[black], cfg.player.black)
 
   self.space = Space.New(cfg.board.cols, cfg.board.rows)
   --self.space.on_change:add(ChangesLog.new())
@@ -43,17 +43,16 @@ function battle:create(event)
 
   self.board = Board.new(self, self.space)
 
-  self.bot1 = player:create(self.space, Color.R)
-  --self.space.on_change:add(self.bot1)
-  self.bot2 = player:create(self.space, Color.B)
+  self.bot1 = player:create(self.space, white)
+  self.space.on_change:add(self.bot1)
+  self.bot2 = player:create(self.space, black)
   self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing
 end
 
 --
-function battle:move(color)
-  ass.is(color, Color)
+function battle:move(pid)
   local red, bla = self.space:count_pieces()
 
   -- check if black wins
@@ -68,10 +67,10 @@ function battle:move(color)
     return
   end
 
-  log:trace(tostring(self.players[color]), " is going to move. Red: ", red, ". Black: ", bla)
+  log:trace(tostring(self.players[pid]), " is going to move. Red: ", red, ". Black: ", bla)
 
   -- move pointer
-  transition.moveTo(self.move_pointer, {y=self.players[color].view.y, time=500})
+  transition.moveTo(self.move_pointer, {y=self.players[pid].view.y, time=500})
 end
 
 --
@@ -88,5 +87,7 @@ battle:addEventListener("create", battle)
 battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
+
+ass.wrap(battle, ':move', 'playerid')
 
 return battle

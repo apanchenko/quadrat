@@ -1,7 +1,6 @@
 local _         = require 'src.core.underscore'
 local widget    = require "widget"
 local vec       = require "src.core.vec"
-local Color     = require 'src.model.Color'
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'

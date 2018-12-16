@@ -6,8 +6,6 @@ local log         = require 'src.core.log'
 local map         = require 'src.core.map'
 local Class       = require 'src.core.Class'
 local types       = require 'src.core.types'
-local Powers      = require 'src.model.power.Powers'
-local Color       = require 'src.model.Color'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.Config'
@@ -17,26 +15,24 @@ local powers      = require 'src.view.power.powers'
 local Stone = Class.Create 'Stone'
 
 --INIT-------------------------------------------------------------------------
-function Stone.New(color, model)
-  local depth = log:trace("Stone.new"):enter()
-    local self = setmetatable({}, Stone)
-    self._model = model
-    self.view = display.newGroup()
-    self.view:addEventListener("touch", self)
-    self:set_color(color)
-    self.scale = 1
-    self._abilities = Abilities.New(self, model)
-    self.powers = {}
-    self.isSelected = false
-    self.is_drag = false
-  log:exit(depth)
+function Stone.New(pid, model)
+  local self = setmetatable({}, Stone)
+  self._model = model
+  self.view = display.newGroup()
+  self.view:addEventListener("touch", self)
+  self:set_color(pid)
+  self.scale = 1
+  self._abilities = Abilities.New(self, model)
+  self.powers = {}
+  self.isSelected = false
+  self.is_drag = false
   return self
 end
 --
 function Stone:__tostring() 
   local s = "stone["
-  if self._color ~= nil then
-    s = s.. tostring(self._color)
+  if self.pid ~= nil then
+    s = s.. tostring(self.pid)
   end
   if self._pos then
     s = s.. " ".. tostring(self._pos)
@@ -49,23 +45,23 @@ function Stone:__tostring()
   return s.. "]"
 end
 --
-function Stone:set_color(color)
+function Stone:set_color(pid)
   -- nothing to change
-  if color ~= self._clolor then
-    self._color = color
+  if pid ~= self.pid then
+    self.pid = pid
 
     -- change image
     if self.img then
       self.img:removeSelf()
     end
     cfg.cell.order = 1
-    self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self._color)..".png")
+    self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self.pid)..".png")
     cfg.cell.order = nil
   end
 end
 --
 function Stone:color()
-  return self._color
+  return self.pid
 end
 
 -- insert Stone into group, with scale for dragging
@@ -122,7 +118,8 @@ end
 -- touch listener function
 function Stone:touch(event)
   -- do not touch opponent stones
-  if self.board.model:who_move() ~= self._color then
+  if self.board.model:who_move() ~= self.pid then
+    log:trace('not my move')
     return true
   end
   -- take stone
@@ -202,7 +199,7 @@ end
 --
 function Stone:create_project(proj)
   if not self.project then
-    local path = "src/view/stone_"..tostring(self._color).."_project.png"
+    local path = "src/view/stone_"..tostring(self.pid).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
   end
   self.proj = proj
@@ -241,7 +238,7 @@ end
 --MODULE-----------------------------------------------------------------------
 ---[[
 ass.wrap(Stone, ':select')
-ass.wrap(Stone, ':set_color', Color)
+ass.wrap(Stone, ':set_color', 'playerid')
 ass.wrap(Stone, ':color')
 ass.wrap(Stone, ':puton', 'Board', Vec)
 ass.wrap(Stone, ':putoff')

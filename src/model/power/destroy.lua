@@ -7,7 +7,7 @@ local destroy = areal:extend('Destroy')
 -- POWER ----------------------------------------------------------------------
 --
 function destroy:apply_to_spot(spot)
-  if spot.piece and spot.piece.color ~= self.piece.color then
+  if spot.piece and spot.piece.pid ~= self.piece.pid then
     spot.piece.die() -- enemy piece
     spot.piece = nil
     self.piece.space:notify('remove_piece', spot.pos) -- notify

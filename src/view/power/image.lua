@@ -17,7 +17,9 @@ end
 
 --
 function image:set_count(count)
-  ass.eq(count, 0)
+  if count > 0 then
+    return self
+  end
   self.image:removeSelf()
 end
 

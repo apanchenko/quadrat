@@ -6,10 +6,10 @@ local recruit = areal:extend('Recruit')
 -- implement pure virtual areal:apply_to_spot
 -- change color of enemy pieces in zone
 function recruit:apply_to_spot(spot)
-  local my_color = self.piece.color
+  local mypid = self.piece.pid
   local piece = spot.piece
-  if piece and piece.color ~= my_color then
-    piece:set_color(my_color)
+  if piece and piece.pid ~= mypid then
+    piece:set_color(mypid)
   end
 end
 

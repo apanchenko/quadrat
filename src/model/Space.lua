@@ -1,6 +1,6 @@
 local Spot      = require 'src.model.Spot'
 local Piece     = require 'src.model.Piece'
-local Color     = require 'src.model.Color'
+local playerid  = require 'src.model.playerid'
 local Config    = require 'src.model.Config'
 local Event     = require 'src.core.Event'
 local Vec       = require 'src.core.vec'
@@ -22,7 +22,7 @@ function Space.New(cols, rows)
   self.rows  = rows    -- height
   self.size  = Vec(cols, rows)
   self.grid  = {}      -- cells
-  self.color = Color.red(true) -- who moves now
+  self.pid   = playerid.white -- who moves now
   self.move_count = 0 -- number of moves from start
   self.on_change = Event.New()
   log:trace(self, '.new')
@@ -58,10 +58,10 @@ end
 -- initial pieces placement
 function Space:setup()
   for x = 0, self.cols - 1 do
-    self.grid[x * self.cols]:spawn_piece(Color.R)
-    self.grid[x * self.cols + self.rows - 1]:spawn_piece(Color.B)
+    self.grid[x * self.cols]:spawn_piece(playerid.white)
+    self.grid[x * self.cols + self.rows - 1]:spawn_piece(playerid.black)
   end
-  self:notify('move', self.color) -- notify color to move
+  self:notify('move', self.pid) -- notify color to move
 end
 -- position vector from grid index
 function Space:pos(index)   return Vec(self:col(index), self:row(index)) end
@@ -98,7 +98,7 @@ function Space:count_pieces()
   for i = 0, #self.grid do -- pics is not dense, so use # on grid
     local piece = self.grid[i].piece
     if piece then
-      if Color.is_red(piece.color) then
+      if piece.pid == playerid.white then
         red = red + 1
       else
         bla = bla + 1
@@ -111,7 +111,7 @@ end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
-function Space:who_move()   return self.color end
+function Space:who_move()   return self.pid end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
@@ -125,7 +125,7 @@ function Space:can_move(fr, to)
     log:trace(self, ':can_move from', fr, 'piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= actor.color then         -- check color who moves now
+  if self:who_move() ~= actor.pid then         -- check color who moves now
     log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
@@ -137,7 +137,7 @@ function Space:can_move(fr, to)
 
   -- check kill ability
   local victim = self:piece(to)               -- peek piece at to position
-  if victim and (victim.color == actor.color or victim:is_jump_protected()) then
+  if victim and (victim.pid == actor.pid or victim:is_jump_protected()) then
     return false
   end
 
@@ -152,7 +152,7 @@ function Space:move(fr, to)
   self:spot(to):move_piece(self:spot(fr))
 
   -- change current move color
-  self.color = Color.swap(self.color) -- invert color
+  self.pid = self.pid:swap() -- invert color
   self.move_count = self.move_count + 1 -- increment moves count
 
   -- randomly spawn jades
@@ -162,7 +162,7 @@ function Space:move(fr, to)
     end
   end
 
-  self:notify('move', self.color) -- notify color to move
+  self:notify('move', self.pid) -- notify color to move
 end
 
 -- use ability
@@ -173,7 +173,7 @@ function Space:use(pos, ability_name)
     log:trace(self, ':use at ', pos, ' piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= piece.color then         -- check color who moves now
+  if self:who_move() ~= piece.pid then         -- check color who moves now
     log:trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end

@@ -4,7 +4,6 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
-local Color     = require 'src.model.Color'
 
 local Spot = Class.Create('Spot')
 
@@ -93,7 +92,7 @@ function Spot:remove_jade()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Spot, ':spawn_piece', Color)
+ass.wrap(Spot, ':spawn_piece', 'playerid')
 ass.wrap(Spot, ':move_piece', Spot)
 ass.wrap(Spot, ':spawn_jade')
 

@@ -1,4 +1,4 @@
-local Powers =
+local powers =
 {
   require 'src.model.power.movediagonal',
   require 'src.model.power.multiply',
@@ -13,13 +13,12 @@ local Powers =
 }
 
 --
-function Powers.Find(name)
-  for k,v in ipairs(Powers) do
+function powers.find(name)
+  for k,v in ipairs(powers) do
     if tostring(v) == name then
       return v
     end
   end
 end
 
-
-return Powers
+return powers

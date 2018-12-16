@@ -1,9 +1,10 @@
-local Powers       = require 'src.model.power.Powers'
+local powers       = require 'src.model.power.powers'
 local Zones        = require 'src.model.zones.Zones'
 local ass          = require 'src.core.ass'
 local Class        = require 'src.core.Class'
 local types        = require 'src.core.types'
 local log          = require 'src.core.log'
+local array        = require 'src.core.array'
 
 -- Ability has a potential to become certain power.
 local Ability = Class.Create 'Ability'
@@ -11,7 +12,7 @@ local Ability = Class.Create 'Ability'
 -- create ability with random power
 function Ability.New()
   local self = setmetatable({}, Ability)
-  self.Power = Powers[math.random(#Powers)]
+  self.Power = array.random(powers)
 
   if self.Power.is_areal then
     self.Zone = Zones[math.random(#Zones)]

@@ -28,6 +28,8 @@ function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..'
 --
 function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
 --
+function ass.ne(a, b, msg)  return a ~= b or error(msg or tostring(a).. ' == '.. tostring(b)) end
+--
 function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > '.. tostring(b)) end
 
 -- wrap function of T

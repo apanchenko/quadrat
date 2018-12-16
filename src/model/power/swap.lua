@@ -1,6 +1,5 @@
 local ass       = require 'src.core.ass'
 local areal     = require 'src.model.power.areal'
-local Color     = require 'src.model.Color'
 
 local swap = areal:extend('Swap')
 
@@ -9,7 +8,7 @@ local swap = areal:extend('Swap')
 function swap:apply_to_spot(spot)
   local piece = spot.piece
   if piece then
-    piece:set_color(Color.swap(piece.color))
+    piece:set_color(piece.pid.swap())
   end
 end
 

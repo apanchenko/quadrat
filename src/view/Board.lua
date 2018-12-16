@@ -2,7 +2,6 @@ local Cell     = require 'src.view.Cell'
 local Stone    = require 'src.view.Stone'
 local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
-local Color    = require 'src.model.Color'
 local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
 local Class    = require 'src.core.Class'
@@ -119,7 +118,7 @@ end
 ass.wrap(Board, ':add_ability', Vec, types.str)
 ass.wrap(Board, ':remove_ability', Vec, types.str)
 ass.wrap(Board, ':add_power', Vec, types.str, types.num)
-ass.wrap(Board, ':set_color', Vec, Color)
+ass.wrap(Board, ':set_color', Vec, 'playerid')
 
 log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')
 --]]

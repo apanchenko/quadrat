@@ -1,22 +1,22 @@
-local map     = require 'src.core.map'
-local Class   = require 'src.core.Class'
-local types   = require 'src.core.types'
-local ass     = require 'src.core.ass'
-local log     = require 'src.core.log'
-local Vec     = require 'src.core.vec'
-local Color   = require 'src.model.Color'
-local Ability = require 'src.model.Ability'
+local map       = require 'src.core.map'
+local Class     = require 'src.core.Class'
+local types     = require 'src.core.types'
+local ass       = require 'src.core.ass'
+local log       = require 'src.core.log'
+local Vec       = require 'src.core.vec'
+local playerid  = require 'src.model.playerid'
+local Ability   = require 'src.model.Ability'
 
 --
 local Piece = Class.Create 'Piece'
 
 -- create a piece
-function Piece.New(space, color)
-  ass.is(color, Color)
+function Piece.New(space, pid)
+  ass.is(pid, playerid)
   local self =
   {
     space = space,
-    color = color,
+    pid = pid,
     abilities = {}, -- list of abilities
     powers = {}
   }
@@ -35,7 +35,7 @@ function Piece:die()
 end
 --
 function Piece:set_color(color)
-  self.color = color
+  self.pid = color
   self.space:notify('set_color', self.pos, color) -- notify
 end
 
@@ -123,10 +123,10 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Piece, '.New', 'Space', 'Color')
+ass.wrap(Piece, '.New', 'Space', 'playerid')
 ass.wrap(Piece, ':set_pos', Vec)
 ass.wrap(Piece, ':can_move', Vec, Vec)
-ass.wrap(Piece, ':set_color', 'Color')
+ass.wrap(Piece, ':set_color', 'playerid')
 ass.wrap(Piece, ':add_ability')
 ass.wrap(Piece, ':learn_ability', Ability)
 ass.wrap(Piece, ':use_ability', types.str)

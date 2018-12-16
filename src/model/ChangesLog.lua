@@ -1,5 +1,5 @@
 local Piece     = require 'src.model.Piece'
-local Color     = require 'src.model.Color'
+local playerid  = require 'src.model.playerid'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
@@ -20,7 +20,7 @@ end
 
 --
 function ChangesLog:move(color)
-  ass.is(color, Color)
+  ass.is(color, playerid)
   log:trace(self, ':move ', color)
 end
 

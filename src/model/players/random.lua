@@ -1,31 +1,31 @@
-local map     = require 'src.core.map'
-local ass     = require 'src.core.ass'
-local log     = require 'src.core.log'
-local Vec     = require 'src.core.vec'
-local object  = require 'src.core.object'
-local Color   = require 'src.model.Color'
-local Ability = require 'src.model.Ability'
+local map       = require 'src.core.map'
+local ass       = require 'src.core.ass'
+local log       = require 'src.core.log'
+local Vec       = require 'src.core.vec'
+local object    = require 'src.core.object'
+local playerid  = require 'src.model.playerid'
+local Ability   = require 'src.model.Ability'
 
 --
 local random = object:extend('random')
 random.space = nil
-random.color = nil
+random.pid = nil
 
 -- create
-random._create = object.create
-function random:create(space, color)
-  local t = self:_create()
+local obj_create = object.create
+function random:create(space, pid)
+  local t = obj_create(self)
   t.space = space
-  t.color = color
+  t.pid = pid
   return t
 end
 --
 function random:__tostring()
-  return 'random_player['..tostring(self.color)..']'
+  return 'random_player['..tostring(self.pid)..']'
 end
 --
-function random:move(color)
-  if color == self.color then
+function random:move(pid)
+  if pid == self.pid then
     timer.performWithDelay(100, function() self:move_async() end)
   end
 end
@@ -34,11 +34,11 @@ function random:move_async()
   local attempts = 1000
 
   -- do something until can move
-  while self.space:who_move() == self.color do
+  while self.space:who_move() == self.pid do
     -- select random piece of my color
     local from = Vec:random(Vec.zero, self.space.size - Vec.one)
     local piece = self.space:piece(from)
-    if piece ~= nil and piece.color == self.color then
+    if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
       local ability = map.random(piece.abilities)
       if ability then
@@ -60,7 +60,7 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(random, ':move', Color)
+ass.wrap(random, ':move', playerid)
 ass.wrap(random, ':move_async')
 
 log:wrap(random, 'move', 'move_async')

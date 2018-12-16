@@ -7,7 +7,7 @@ local multiply = counted:extend('multiply')
 -- change color of enemy pieces in zone
 function multiply:move_after(from, to)
   local piece = self.piece
-  from:spawn_piece(piece.color)
+  from:spawn_piece(piece.pid)
   piece:decrease_power(tostring(self)) -- decrease
 end
 
