@@ -33,7 +33,7 @@ end
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
   ass.nul(self.piece)
-  self.piece = Piece.New(self.space, color)
+  self.piece = Piece:create(self.space, color)
   self.piece:set_pos(self.pos)
   self.space.on_change:call('spawn_piece', color, self.pos) -- notify
 end

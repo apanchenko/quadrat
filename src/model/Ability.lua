@@ -1,25 +1,26 @@
 local powers       = require 'src.model.power.powers'
 local Zones        = require 'src.model.zones.Zones'
 local ass          = require 'src.core.ass'
-local Class        = require 'src.core.Class'
-local typ        = require 'src.core.typ'
+local obj          = require 'src.core.obj'
+local typ          = require 'src.core.typ'
 local log          = require 'src.core.log'
 local arr          = require 'src.core.arr'
 
 -- Ability has a potential to become certain power.
-local Ability = Class.Create 'Ability'
+local Ability = obj:extend('Ability')
 
 -- create ability with random power
-function Ability.New()
-  local self = setmetatable({}, Ability)
-  self.Power = arr.random(powers)
+local obj_create = obj.create
+function Ability:create()
+  local this = obj_create(self)
+  this.Power = arr.random(powers)
 
-  if self.Power.is_areal then
-    self.Zone = Zones[math.random(#Zones)]
+  if this.Power.is_areal then
+    this.Zone = arr.random(Zones)
   end
 
-  self.count = 1
-  return self
+  this.count = 1
+  return this
 end
 
 --
@@ -54,7 +55,7 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Ability, '.New')
+ass.wrap(Ability, ':create')
 ass.wrap(Ability, ':increase', typ.num)
 ass.wrap(Ability, ':decrease')
 ass.wrap(Ability, ':create_power', 'Piece')

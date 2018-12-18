@@ -1,6 +1,6 @@
 local map       = require 'src.core.map'
-local Class     = require 'src.core.Class'
-local typ     = require 'src.core.typ'
+local obj       = require 'src.core.obj'
+local typ       = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
@@ -8,19 +8,18 @@ local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
 --
-local Piece = Class.Create 'Piece'
+local Piece = obj:extend('Piece')
 
 -- create a piece
-function Piece.New(space, pid)
-  ass.is(pid, playerid)
-  local self =
+local obj_create = obj.create
+function Piece:create(space, pid)
+  return obj_create(self,
   {
     space = space,
     pid = pid,
     abilities = {}, -- list of abilities
     powers = {}
-  }
-  return setmetatable(self, Piece)
+  })
 end
 --
 function Piece:__tostring()
@@ -69,7 +68,7 @@ end
 -- ABILITY---------------------------------------------------------------------
 -- add random ability
 function Piece:add_ability()
-  self:learn_ability(Ability.New())
+  self:learn_ability(Ability:create())
 end
 --
 function Piece:learn_ability(ability)
@@ -123,7 +122,7 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Piece, '.New', 'Space', 'playerid')
+ass.wrap(Piece, ':create', 'Space', 'playerid')
 ass.wrap(Piece, ':set_pos', Vec)
 ass.wrap(Piece, ':can_move', Vec, Vec)
 ass.wrap(Piece, ':set_color', 'playerid')
