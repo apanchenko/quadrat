@@ -1,11 +1,11 @@
-local _           = require 'src.core.underscore'
+local arr           = require 'src.core.arr'
 local Vec         = require 'src.core.vec'
 local lay         = require 'src.core.lay'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local map         = require 'src.core.map'
 local Class       = require 'src.core.Class'
-local types       = require 'src.core.types'
+local typ       = require 'src.core.typ'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.Config'
@@ -246,9 +246,9 @@ ass.wrap(Stone, ':select')
 ass.wrap(Stone, ':deselect')
 ass.wrap(Stone, ':pos')
 --ass.wrap(Stone, 'set_pos', Vec)
-ass.wrap(Stone, ':add_ability', types.str)
-ass.wrap(Stone, ':remove_ability', types.str)
-ass.wrap(Stone, ':add_power', types.str, types.num)
+ass.wrap(Stone, ':add_ability', typ.str)
+ass.wrap(Stone, ':remove_ability', typ.str)
+ass.wrap(Stone, ':add_power', typ.str, typ.num)
 
 log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
 --]]

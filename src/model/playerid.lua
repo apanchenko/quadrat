@@ -1,5 +1,5 @@
 local ass = require 'src.core.ass'
-local obj = require 'src.core.object'
+local obj = require 'src.core.obj'
 
 local playerid = obj:extend('playerid')
 

@@ -1,15 +1,15 @@
 local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
-local object  = require 'src.core.object'
+local obj     = require 'src.core.obj'
 
 -- base power
-local power = object:extend('power')
+local power = obj:extend('power')
 
 -- constructor
 -- @param piece - apply power to this piece
-power.object_create = object.create
+local obj_create = obj.create
 function power:create(piece)
-  return self:object_create({piece=piece})
+  return obj_create(self, {piece=piece})
 end
 -- use
 function power:apply()

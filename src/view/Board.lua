@@ -8,7 +8,7 @@ local Class    = require 'src.core.Class'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
-local types    = require 'src.core.types'
+local typ    = require 'src.core.typ'
 
 local Board = Class.Create 'Board'
 
@@ -115,9 +115,9 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ---[[
-ass.wrap(Board, ':add_ability', Vec, types.str)
-ass.wrap(Board, ':remove_ability', Vec, types.str)
-ass.wrap(Board, ':add_power', Vec, types.str, types.num)
+ass.wrap(Board, ':add_ability', Vec, typ.str)
+ass.wrap(Board, ':remove_ability', Vec, typ.str)
+ass.wrap(Board, ':add_power', Vec, typ.str, typ.num)
 ass.wrap(Board, ':set_color', Vec, 'playerid')
 
 log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')

@@ -2,12 +2,12 @@ local Spot      = require 'src.model.Spot'
 local Piece     = require 'src.model.Piece'
 local playerid  = require 'src.model.playerid'
 local Config    = require 'src.model.Config'
-local Event     = require 'src.core.Event'
+local evt       = require 'src.core.evt'
 local Vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local types     = require 'src.core.types'
+local typ     = require 'src.core.typ'
 
 local Space = Class.Create 'Space'
 
@@ -24,7 +24,7 @@ function Space.New(cols, rows)
   self.grid  = {}      -- cells
   self.pid   = playerid.white -- who moves now
   self.move_count = 0 -- number of moves from start
-  self.on_change = Event.New()
+  self.on_change = evt:create()
   log:trace(self, '.new')
 
   -- fill grid
@@ -50,7 +50,7 @@ function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 --
 function Space:notify(method, ...)
   ass.is(self, Space)
-  ass.is(method, types.str)
+  ass.is(method, typ.str)
   self.on_change:call(method, ...) -- notify
 end
 
@@ -182,12 +182,12 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(Space, ':setup')
-ass.wrap(Space, ':pos', types.num)
+ass.wrap(Space, ':pos', typ.num)
 ass.wrap(Space, ':width')
 ass.wrap(Space, ':height')
-ass.wrap(Space, ':row', types.num)
-ass.wrap(Space, ':col', types.num)
-ass.wrap(Space, ':pos', types.num)
+ass.wrap(Space, ':row', typ.num)
+ass.wrap(Space, ':col', typ.num)
+ass.wrap(Space, ':pos', typ.num)
 ass.wrap(Space, ':index', Vec)
 ass.wrap(Space, ':spots')
 ass.wrap(Space, ':spot', Vec)
@@ -196,7 +196,7 @@ ass.wrap(Space, ':piece', Vec)
 ass.wrap(Space, ':who_move')
 ass.wrap(Space, ':can_move', Vec, Vec)
 ass.wrap(Space, ':move', Vec, Vec)
-ass.wrap(Space, ':use', Vec, types.str)
+ass.wrap(Space, ':use', Vec, typ.str)
 
 log:wrap(Space, 'setup', 'move', 'use')
 

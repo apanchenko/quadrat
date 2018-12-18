@@ -1,31 +1,25 @@
-local Class = require 'src.core.Class'
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
-local types = require 'src.core.types'
+local typ = require 'src.core.typ'
+local obj = require 'src.core.obj'
 
-local Event = Class.Create('Event')
+local evt = obj:extend('evt')
 
 -- 
-function Event.New(name)
-  local self = setmetatable({}, Event)
-  self.list = {}
-  self.name = name
-  return self
-end
-
---
-function Event:__tostring()
-  return 'event'
+local obj_create = obj.create
+function evt:create()
+  local this = obj_create(self)
+  this.list = {}
+  return this
 end
 
 -- add listener
-function Event:add(listener)
-  log:trace(self, ":add ", listener)
+function evt:add(listener)
   table.insert(self.list, listener)
 end
 
 -- remove listener
-function Event:remove(listener)
+function evt:remove(listener)
   for k,v in ipairs(self.list) do
     if v == listener then
       table.remove(self.list, k)
@@ -34,7 +28,7 @@ function Event:remove(listener)
 end
 
 --
-function Event:__call(...)
+function evt:__call(...)
   local depth = log:trace(self, ":call", ...):enter()
   for k,v in ipairs(self.list) do
     v[self.name](v, ...)
@@ -43,7 +37,7 @@ function Event:__call(...)
 end
 
 --
-function Event:call(name, ...)
+function evt:call(name, ...)
   name = name or self.name
   ass.str(name)
   for k,v in ipairs(self.list) do
@@ -54,9 +48,9 @@ function Event:call(name, ...)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Event, ':add', types.tab)
-ass.wrap(Event, ':remove', types.tab)
+ass.wrap(evt, ':add', typ.tab)
+ass.wrap(evt, ':remove', typ.tab)
 
-log:wrap(Event, 'call')
+log:wrap(evt, 'call')
 
-return Event
+return evt

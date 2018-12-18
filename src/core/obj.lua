@@ -1,42 +1,42 @@
 local ass   = require 'src.core.ass'
 local log   = require 'src.core.log'
-local types = require 'src.core.types'
+local typ   = require 'src.core.typ'
 
 -------------------------------------------------------------------------------
-local object = setmetatable({}, {__tostring = function() return 'object' end})
+local obj = setmetatable({}, {__tostring = function() return 'obj' end})
 
 --
-function object.__call(cls, ...)
+function obj.__call(cls, ...)
   return cls:create(...)
 end
 --
-function object:__tostring()
+function obj:__tostring()
   return self._typename
 end
 --
-function object:extend(typename)
+function obj:extend(typename)
   local sub = setmetatable({_typename=typename}, self)
   self.__index = self
   function sub:__tostring() return self._typename end
   return sub
 end
 --
-function object:create(def)
+function obj:create(def)
   def = setmetatable(def or {}, self)
   self.__index = self
   return def
 end
 
 -- selftest -------------------------------------------------------------------
-ass.wrap(object, ':extend', types.str)
---ass.wrap(object, ':create')
+ass.wrap(obj, ':extend', typ.str)
+--ass.wrap(obj, ':create')
 
 --
-function object.test()
-  ass(tostring(object))
+function obj.test()
+  ass(tostring(obj))
 
-  -- account extends object
-  local account = object:extend('account')
+  -- account extends obj
+  local account = obj:extend('account')
   -- add balance property to account
   account.balance = 0
   -- account instance to string
@@ -66,10 +66,10 @@ function object.test()
   kolya:deposit(120)
   ass(tostring(kolya) == 'limited account 100 of 100')
 
-  ass.is(account, object)
+  ass.is(account, obj)
   ass.is(masha, account)
   ass.is(limited, account)
   ass.is(kolya, limited)
 end
 
-return object
+return obj

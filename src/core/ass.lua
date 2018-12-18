@@ -1,4 +1,4 @@
-local check = require 'src.core.check'
+local check = require 'src.core.chk'
 
 local m = {}
 
@@ -52,7 +52,7 @@ function ass.wrap(t, name, ...)
 
   local check_arguments = function(arg_types, ...)
     local args = {...}
-    --print('  check args - expected '..#arg_types..', found '..#args)
+    --print('  check args - expected '..#arg_typ..', found '..#args)
     ass(#args == #arg_types, method..' expected '..#arg_types..' args, found '..#args)
     for i=1, #args do
       ass.is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..method.. ', found '..tostring(args[i]))

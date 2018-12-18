@@ -1,6 +1,6 @@
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
-local check = require 'src.core.check'
+local chk = require 'src.core.chk'
 
 local Class = {}
 

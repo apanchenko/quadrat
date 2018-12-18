@@ -1,6 +1,6 @@
 local power = require 'src.model.power.power'
 local ass   = require 'src.core.ass'
-local array = require 'src.core.array'
+local arr = require 'src.core.arr'
 
 local relocate = power:extend('Relocate')
 
@@ -11,7 +11,7 @@ function relocate:apply()
   -- select all empty spots
   local spots = space:select_spots(function(c) return c.piece == nil end)
   -- choose random target spot
-  local to_spot = array.random(spots)
+  local to_spot = arr.random(spots)
   -- change piece position
   to_spot:move_piece(from_spot)
 end

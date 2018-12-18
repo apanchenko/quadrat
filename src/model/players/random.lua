@@ -2,17 +2,17 @@ local map       = require 'src.core.map'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
-local object    = require 'src.core.object'
+local obj       = require 'src.core.obj'
 local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
 --
-local random = object:extend('random')
+local random = obj:extend('random')
 random.space = nil
 random.pid = nil
 
 -- create
-local obj_create = object.create
+local obj_create = obj.create
 function random:create(space, pid)
   local t = obj_create(self)
   t.space = space

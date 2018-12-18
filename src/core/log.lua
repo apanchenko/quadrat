@@ -1,4 +1,4 @@
-local _   = require 'src.core.underscore'
+local arr = require 'src.core.arr'
 local ass = require 'src.core.ass'
 
 -- create log instance
@@ -13,7 +13,7 @@ end
 -- chained to instantly call :enter()
 function log:trace(...)
   local str = string.rep('  ', self.depth)
-  str = _.reduce(arg, str, function(mem, a) return mem.. tostring(a).. ' ' end)
+  str = arr.reduce(arg, str, function(mem, a) return mem.. tostring(a).. ' ' end)
   print(str)
   return self
 end
@@ -40,7 +40,7 @@ function log:wrap(T, ...)
     T[name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
-      local depth = log:trace(self, ':'..name, unpack(args)):enter()
+      local depth = log:trace(tostring(self)..':'..name, unpack(args)):enter()
       local result = fun(...)
       log:exit(depth)
       return result

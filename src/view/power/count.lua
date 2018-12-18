@@ -1,19 +1,19 @@
-local object      = require 'src.core.object'
-local types       = require 'src.core.types'
+local obj         = require 'src.core.obj'
+local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local cfg         = require 'src.Config'
 
 -- power draws a counter ------------------------------------------------------
-local count = object:extend('view.power.count')
+local count = obj:extend('view.power.count')
 
--- create image with initial one count
+-- constructor
+local obj_create = obj.create
 function count:create(stone, name, count)
-  local t = setmetatable({}, self)
-  self.__index = self
-  self.count = count
-  self.text = lay.text(stone, {text=tostring(count), fontSize=22})
-  return t
+  local this = obj_create(self)
+  this.count = count
+  this.text = lay.text(stone, {text=tostring(count), fontSize=22})
+  return this
 end
 
 --
@@ -29,8 +29,8 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(count, ':create', 'Stone', types.str, types.num)
-ass.wrap(count, ':set_count', types.num)
+ass.wrap(count, ':create', 'Stone', typ.str, typ.num)
+ass.wrap(count, ':set_count', typ.num)
 
 log:wrap(count, 'create', 'set_count')
 

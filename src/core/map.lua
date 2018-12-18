@@ -1,5 +1,5 @@
 local ass   = require 'src.core.ass'
-local types = require 'src.core.types'
+local typ = require 'src.core.typ'
 local log   = require 'src.core.log'
 
 -- name to value
@@ -56,10 +56,10 @@ function map.random(t)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(map, '.all', types.tab, types.fun)
-ass.wrap(map, '.each', types.tab, types.fun)
-ass.wrap(map, '.count', types.tab)
-ass.wrap(map, '.random', types.tab)
+ass.wrap(map, '.all', typ.tab, typ.fun)
+ass.wrap(map, '.each', typ.tab, typ.fun)
+ass.wrap(map, '.count', typ.tab)
+ass.wrap(map, '.random', typ.tab)
 
 log:wrap(map)
 

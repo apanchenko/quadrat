@@ -5,8 +5,8 @@
 -----------------------------------------------------------------------------------------
 
 print(_VERSION)
-require('src.core.object').test()
-require('src.core.check').test()
+require('src.core.obj').test()
+require('src.core.chk').test()
 require('src.core.ass').test()
 require('src.core.map').test()
 require('src.core.log').test()

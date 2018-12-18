@@ -1,9 +1,9 @@
-local object  = require 'src.core.object'
-local types   = require 'src.core.types'
+local obj  = require 'src.core.obj'
+local typ   = require 'src.core.typ'
 local ass     = require 'src.core.ass'
 
 -- 2d vector
-local vec = object:extend('vec')
+local vec = obj:extend('vec')
 vec.x = 0
 vec.y = 0
 
@@ -90,14 +90,14 @@ function vec.test()
   ass(d:abs().x == 1.5)
 end
 
-ass.wrap(vec, '.copy', types.tab, types.tab)
-ass.wrap(vec, '.center', types.tab)
-ass.wrap(vec, ':create', types.num, types.num)
+ass.wrap(vec, '.copy', typ.tab, typ.tab)
+ass.wrap(vec, '.center', typ.tab)
+ass.wrap(vec, ':create', typ.num, typ.num)
 ass.wrap(vec, ':random', vec, vec)
-ass.wrap(vec, ':from', types.tab)
+ass.wrap(vec, ':from', typ.tab)
 ass.wrap(vec, ':length2')
 ass.wrap(vec, ':round')
-ass.wrap(vec, ':to', types.tab)
+ass.wrap(vec, ':to', typ.tab)
 ass.wrap(vec, ':abs')
 
 -- return module

@@ -1,6 +1,6 @@
 local map       = require 'src.core.map'
 local Class     = require 'src.core.Class'
-local types     = require 'src.core.types'
+local typ     = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
@@ -129,9 +129,9 @@ ass.wrap(Piece, ':can_move', Vec, Vec)
 ass.wrap(Piece, ':set_color', 'playerid')
 ass.wrap(Piece, ':add_ability')
 ass.wrap(Piece, ':learn_ability', Ability)
-ass.wrap(Piece, ':use_ability', types.str)
+ass.wrap(Piece, ':use_ability', typ.str)
 ass.wrap(Piece, ':add_power', Ability)
-ass.wrap(Piece, ':decrease_power', types.str)
+ass.wrap(Piece, ':decrease_power', typ.str)
 
 log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'decrease_power')
 

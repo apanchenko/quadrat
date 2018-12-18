@@ -1,6 +1,6 @@
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local types     = require 'src.core.types'
+local typ     = require 'src.core.typ'
 local power     = require 'src.model.power.power'
 
 -- areal power
@@ -10,9 +10,9 @@ areal.is_areal = true
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
-areal.power_create = power.create
+local power_create = power.create
 function areal:create(piece, zone)
-  local a = self:power_create(piece)
+  local a = power_create(self, piece)
   a.zone = zone
   return a
 end
@@ -30,7 +30,7 @@ function areal:apply()
 end
 
 --
-ass.wrap(areal, ':create', 'Piece', types.tab)
+ass.wrap(areal, ':create', 'Piece', typ.tab)
 ass.wrap(areal, ':apply')
 log:wrap(areal, 'apply')
 

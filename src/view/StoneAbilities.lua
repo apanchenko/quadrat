@@ -1,12 +1,12 @@
-local _         = require 'src.core.underscore'
-local widget    = require "widget"
+local widget    = require 'widget'
+local arr       = require 'src.core.arr'
 local vec       = require "src.core.vec"
 local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Class     = require 'src.core.Class'
-local types     = require 'src.core.types'
+local typ     = require 'src.core.typ'
 
 local StoneAbilities = Class.Create('StoneAbilities')
 
@@ -58,7 +58,7 @@ end
 
 -- return true if empty
 function StoneAbilities:is_empty()
-  return _.is_empty(self._list)
+  return arr.is_empty(self._list)
 end
 
 -- show on board
@@ -94,8 +94,8 @@ end
 
 --MODEULE----------------------------------------------------------------------
 --
-ass.wrap(StoneAbilities, ':add', types.str)
-ass.wrap(StoneAbilities, ':remove', types.str)
+ass.wrap(StoneAbilities, ':add', typ.str)
+ass.wrap(StoneAbilities, ':remove', typ.str)
 ass.wrap(StoneAbilities, ':is_empty')
 ass.wrap(StoneAbilities, ':show')
 ass.wrap(StoneAbilities, ':hide')

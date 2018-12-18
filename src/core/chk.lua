@@ -1,6 +1,4 @@
-local types = require 'src.core.types'
-
-local check = {}
+local typ = require 'src.core.typ'
 
 -- check 'v' is a number
 local function num(v)     return type(v) == 'number' end
@@ -17,33 +15,39 @@ local function fun(v)     return type(v) == 'function' end
 -- check 'v' has meta T
 local function is(v, t)   return getmetatable(v) == t
     --or (t == nil and v == nil)
-    or (t == types.any and v ~= nil)
-    or (t == types.tab and tab(v))
-    or (t == types.num and num(v))
-    or (t == types.str and str(v))
-    or (t == types.fun and fun(v))
-    or (t == types.ell and false)
+    or (t == typ.any and v ~= nil)
+    or (t == typ.tab and tab(v))
+    or (t == typ.num and num(v))
+    or (t == typ.str and str(v))
+    or (t == typ.fun and fun(v))
+    or (t == typ.ell and false)
     or (str(t) and tostring(getmetatable(v)) == t)
+    or (v == t)
 end
 
 --
-check.boolean = bool
-check.fun = fun
-check.natural = nat
-check.number = num
-check.string = str
-check.table = tab
-check.is = is
+local chk =
+{
+  boolean = bool,
+  fun = fun,
+  natural = nat,
+  number = num,
+  string = str,
+  table = tab,
+  is = is
+}
 
 --
-function check.test()
+function chk.test()
   print('check.test..')
-  assert(check.natural(1))
-  assert(check.number(2.7))
-  assert(check.table({}))
-  assert(check.string('hello'))
-  assert(check.boolean(false))
-  assert(check.fun(function() end))
+  assert(chk.natural(1))
+  assert(chk.number(2.7))
+  assert(chk.table({}))
+  assert(chk.string('hello'))
+  assert(chk.boolean(false))
+  assert(chk.fun(function() end))
+  assert(chk.is(1, 1))
+  assert(not chk.is({}, {}))
 end
 
-return check
+return chk
