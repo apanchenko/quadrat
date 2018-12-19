@@ -1,15 +1,13 @@
 local ass       = require 'src.core.ass'
-local Class     = require 'src.core.Class'
+local obj       = require 'src.core.obj'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 
-local Row = Class.Create('Row')
+local Row = obj:extend('Row')
 
 --
-function Row.New(pos)
-  local self = setmetatable({}, Row)
-  self.pos = pos
-  return self
+function Row:new(pos)
+  return obj.new(self, {pos = pos})
 end
 
 --

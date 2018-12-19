@@ -1,17 +1,14 @@
-local Class      = require 'src.core.Class'
+local obj       = require 'src.core.obj'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 
-local Col       = Class.Create 'Col'
+local Col       = obj:extend('Col')
 
 -- TYPE------------------------------------------------------------------------
-function Col.New(pos)
+function Col:new(pos)
   assert(pos)
-
-  local self = setmetatable({}, Col)
-  self.pos = pos
-  return self
+  return obj.new(self, {pos = pos})
 end
 
 --

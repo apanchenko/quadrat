@@ -11,15 +11,15 @@ areal.is_areal = true
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
 function areal:new(piece, zone)
-  local a = power.new(self, piece)
-  a.zone = zone
-  return a
+  self = power.new(self, piece)
+  self.zone = zone
+  return self
 end
 
 -- use and consume power
 function areal:apply()
   -- specify spell area rooted from piece
-  local area = self.zone.New(self.piece.pos)
+  local area = self.zone:new(self.piece.pos)
   -- select spots in area
   local spots = self.piece.space:select_spots(function(spot) return area:filter(spot.pos) end)
   -- apply to each selected spot
