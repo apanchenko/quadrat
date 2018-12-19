@@ -6,26 +6,27 @@ local evt       = require 'src.core.evt'
 local Vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local Class     = require 'src.core.Class'
-local typ     = require 'src.core.typ'
+local obj       = require 'src.core.obj'
+local typ       = require 'src.core.typ'
 
-local Space = Class.Create 'Space'
+local Space = obj:extend('Space')
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-function Space.New(cols, rows)
+local obj_create = obj.create
+function Space:create(cols, rows)
   ass.natural(cols)
   ass.natural(rows)
-
-  local self = setmetatable({}, Space)
-  self.cols  = cols    -- width
-  self.rows  = rows    -- height
-  self.size  = Vec(cols, rows)
-  self.grid  = {}      -- cells
-  self.pid   = playerid.white -- who moves now
-  self.move_count = 0 -- number of moves from start
-  self.on_change = evt:create()
-  log:trace(self, '.new')
+  local self = obj_create(self,
+  {
+    cols  = cols,    -- width
+    rows  = rows,    -- height
+    size  = Vec(cols, rows),
+    grid  = {},      -- cells
+    pid   = playerid.white, -- who moves now
+    move_count = 0, -- number of moves from start
+    on_change = evt:create()
+  })
 
   -- fill grid
   for x = 0, cols - 1 do
@@ -36,8 +37,6 @@ function Space.New(cols, rows)
 
   return self
 end
---
-function Space:__tostring() return 'space' end
 --
 function Space:width()      return self.cols end
 --

@@ -37,7 +37,7 @@ function battle:create(event)
   self.players[black] = Player(black, "Gala")
   lay.render(self, self.players[black], cfg.player.black)
 
-  self.space = Space.New(cfg.board.cols, cfg.board.rows)
+  self.space = Space:create(cfg.board.cols, cfg.board.rows)
   --self.space.on_change:add(ChangesLog.new())
   self.space.on_change:add(self)
 
