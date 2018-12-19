@@ -8,9 +8,8 @@ local cfg         = require 'src.Config'
 local count = obj:extend('view.power.count')
 
 -- constructor
-local obj_create = obj.create
-function count:create(stone, name, count)
-  local this = obj_create(self)
+function count:new(stone, name, count)
+  local this = obj.new(self)
   this.count = count
   this.text = lay.text(stone, {text=tostring(count), fontSize=22})
   return this
@@ -29,9 +28,9 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(count, ':create', 'Stone', typ.str, typ.num)
+ass.wrap(count, ':new', 'Stone', typ.str, typ.num)
 ass.wrap(count, ':set_count', typ.num)
 
-log:wrap(count, 'create', 'set_count')
+log:wrap(count, 'new', 'set_count')
 
 return count

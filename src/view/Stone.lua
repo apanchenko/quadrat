@@ -108,7 +108,7 @@ function Stone:remove_ability(name) self._abilities:remove(name) end
 function Stone:add_power(name, result_count)
   local power = self.powers[name]
   if power == nil then
-    self.powers[name] = powers[name]:create(self, name, result_count)
+    self.powers[name] = powers[name]:new(self, name, result_count)
   else
     self.powers[name] = power:set_count(result_count)
   end

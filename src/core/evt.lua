@@ -6,11 +6,8 @@ local obj = require 'src.core.obj'
 local evt = obj:extend('evt')
 
 -- 
-local obj_create = obj.create
-function evt:create()
-  local this = obj_create(self)
-  this.list = {}
-  return this
+function evt:new()
+  return obj.new(self, {list = {}})
 end
 
 -- add listener

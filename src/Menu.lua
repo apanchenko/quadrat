@@ -1,5 +1,6 @@
 local widget   = require "widget"
 local composer = require "composer"
+local log = require 'src.core.log'
 
 local scene = composer.newScene()
 local platform = system.getInfo( "platform" )
@@ -41,7 +42,7 @@ end
 
 -------------------------------------------------------------------------------
 function scene:create(event)
-
+    print('scene:new')
     local back = display.newImageRect(self.view, "src/background.png", display.contentWidth, display.contentHeight)
     back.anchorX = 0
     back.anchorY = 0
@@ -60,6 +61,7 @@ end
 
 -------------------------------------------------------------------------------
 function scene:show( event )
+  print("scene:show")
     local sceneGroup = self.view
     local phase = event.phase
  

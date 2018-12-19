@@ -13,11 +13,10 @@ local Space = obj:extend('Space')
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-local obj_create = obj.create
-function Space:create(cols, rows)
+function Space:new(cols, rows)
   ass.natural(cols)
   ass.natural(rows)
-  local self = obj_create(self,
+  self = obj.new(self,
   {
     cols  = cols,    -- width
     rows  = rows,    -- height
@@ -25,13 +24,13 @@ function Space:create(cols, rows)
     grid  = {},      -- cells
     pid   = playerid.white, -- who moves now
     move_count = 0, -- number of moves from start
-    on_change = evt:create()
+    on_change = evt:new()
   })
 
   -- fill grid
   for x = 0, cols - 1 do
     for y = 0, rows - 1 do
-      self.grid[x * cols + y] = Spot.new(x, y, self)
+      self.grid[x * cols + y] = Spot:new(x, y, self)
     end
   end
 

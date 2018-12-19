@@ -37,15 +37,15 @@ function battle:create(event)
   self.players[black] = Player(black, "Gala")
   lay.render(self, self.players[black], cfg.player.black)
 
-  self.space = Space:create(cfg.board.cols, cfg.board.rows)
+  self.space = Space:new(cfg.board.cols, cfg.board.rows)
   --self.space.on_change:add(ChangesLog.new())
   self.space.on_change:add(self)
 
   self.board = Board.new(self, self.space)
 
-  self.bot1 = player:create(self.space, white)
+  self.bot1 = player:new(self.space, white)
   self.space.on_change:add(self.bot1)
-  self.bot2 = player:create(self.space, black)
+  self.bot2 = player:new(self.space, black)
   self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing

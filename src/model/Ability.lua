@@ -10,17 +10,18 @@ local arr          = require 'src.core.arr'
 local Ability = obj:extend('Ability')
 
 -- create ability with random power
-local obj_create = obj.create
-function Ability:create()
-  local this = obj_create(self)
-  this.Power = arr.random(powers)
+function Ability:new()
+  self = obj.new(self,
+  {
+    Power = arr.random(powers),
+    count = 1
+  })
 
-  if this.Power.is_areal then
-    this.Zone = arr.random(Zones)
+  if self.Power.is_areal then
+    self.Zone = arr.random(Zones)
   end
 
-  this.count = 1
-  return this
+  return self
 end
 
 --
@@ -49,13 +50,13 @@ end
 
 --
 function Ability:create_power(piece)
-  local power = self.Power:create(piece, self.Zone)
+  local power = self.Power:new(piece, self.Zone)
   return power:apply()
 end
 
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Ability, ':create')
+ass.wrap(Ability, ':new')
 ass.wrap(Ability, ':increase', typ.num)
 ass.wrap(Ability, ':decrease')
 ass.wrap(Ability, ':create_power', 'Piece')

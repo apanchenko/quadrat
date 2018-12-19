@@ -7,7 +7,7 @@ local obj = setmetatable({}, {__tostring = function() return 'obj' end})
 
 --
 function obj.__call(cls, ...)
-  return cls:create(...)
+  return cls:new(...)
 end
 --
 function obj:__tostring()
@@ -21,7 +21,7 @@ function obj:extend(typename)
   return sub
 end
 --
-function obj:create(def)
+function obj:new(def)
   def = setmetatable(def or {}, self)
   self.__index = self
   return def
@@ -29,7 +29,7 @@ end
 
 -- selftest -------------------------------------------------------------------
 ass.wrap(obj, ':extend', typ.str)
---ass.wrap(obj, ':create')
+--ass.wrap(obj, ':new')
 
 --
 function obj.test()
@@ -57,12 +57,12 @@ function obj.test()
   function limited:deposit(v)       self:_deposit(math.min(v, self.limit)) end
 
   -- masha's account
-  local masha = account:create()
+  local masha = account:new()
   masha:deposit(30)
   ass(tostring(masha) == 'account 30')
 
   -- kolya's limited account
-  local kolya = limited:create()
+  local kolya = limited:new()
   kolya:deposit(120)
   ass(tostring(kolya) == 'limited account 100 of 100')
 

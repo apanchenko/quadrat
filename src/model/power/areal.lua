@@ -10,9 +10,8 @@ areal.is_areal = true
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
-local power_create = power.create
-function areal:create(piece, zone)
-  local a = power_create(self, piece)
+function areal:new(piece, zone)
+  local a = power.new(self, piece)
   a.zone = zone
   return a
 end
@@ -30,7 +29,7 @@ function areal:apply()
 end
 
 --
-ass.wrap(areal, ':create', 'Piece', typ.tab)
+ass.wrap(areal, ':new', 'Piece', typ.tab)
 ass.wrap(areal, ':apply')
 log:wrap(areal, 'apply')
 

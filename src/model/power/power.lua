@@ -7,9 +7,8 @@ local power = obj:extend('power')
 
 -- constructor
 -- @param piece - apply power to this piece
-local obj_create = obj.create
-function power:create(piece)
-  return obj_create(self, {piece=piece})
+function power:new(piece)
+  return obj.new(self, {piece=piece})
 end
 -- use
 function power:apply()
@@ -35,9 +34,9 @@ function power:move(cell_from, cell_to) end
 function power:move_after(cell_from, cell_to) end
 
 --
-ass.wrap(power, ':create', 'Piece')
+ass.wrap(power, ':new', 'Piece')
 ass.wrap(power, ':apply')
 
-log:wrap(power, 'create', 'apply')
+log:wrap(power, 'new', 'apply')
 
 return power

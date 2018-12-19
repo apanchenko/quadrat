@@ -11,9 +11,8 @@ local Ability   = require 'src.model.Ability'
 local Piece = obj:extend('Piece')
 
 -- create a piece
-local obj_create = obj.create
-function Piece:create(space, pid)
-  return obj_create(self,
+function Piece:new(space, pid)
+  return obj.new(self,
   {
     space = space,
     pid = pid,
@@ -68,7 +67,7 @@ end
 -- ABILITY---------------------------------------------------------------------
 -- add random ability
 function Piece:add_ability()
-  self:learn_ability(Ability:create())
+  self:learn_ability(Ability:new())
 end
 --
 function Piece:learn_ability(ability)
@@ -122,7 +121,7 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Piece, ':create', 'Space', 'playerid')
+ass.wrap(Piece, ':new', 'Space', 'playerid')
 ass.wrap(Piece, ':set_pos', Vec)
 ass.wrap(Piece, ':can_move', Vec, Vec)
 ass.wrap(Piece, ':set_color', 'playerid')

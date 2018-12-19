@@ -15,5 +15,5 @@ require('src.model.playerid').test()
 require('src.model.zones.Zones').test()
 require('src.model.power.destroy').test()
 
-local composer   = require 'composer'
+local composer = require 'composer'
 composer.gotoScene("src.Menu")

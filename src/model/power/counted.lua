@@ -7,11 +7,10 @@ local counted = power:extend('counted')
 
 -- constructor
 -- @param piece - apply power to this piece
-local power_create = power.create
-function counted:create(piece)
-  local instance = power_create(self, piece)
-  instance.count = 1
-  return instance
+function counted:new(piece)
+  self = power.new(self, piece)
+  self.count = 1
+  return self
 end
 
 --
@@ -40,12 +39,12 @@ function counted:get_count()
 end
 
 --
-ass.wrap(counted, ':create', 'Piece')
+ass.wrap(counted, ':new', 'Piece')
 ass.wrap(counted, ':apply')
 ass.wrap(counted, ':increase')
 ass.wrap(counted, ':decrease')
 ass.wrap(counted, ':get_count')
 
-log:wrap(counted, 'create', 'apply', 'increase', 'decrease')
+log:wrap(counted, 'new', 'apply', 'increase', 'decrease')
 
 return counted

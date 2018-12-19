@@ -19,25 +19,21 @@ function vec.center(obj)
   obj.y = display.contentHeight / 2
 end
 --
-function vec.__add(l, r) return vec:create(l.x + r.x, l.y + r.y) end
-function vec.__sub(l, r) return vec:create(l.x - r.x, l.y - r.y) end
-function vec.__div(l, r) return vec:create(l.x / r.x, l.y / r.y) end
-function vec.__mul(l, r) return vec:create(l.x * r.x, l.y * r.y) end
+function vec.__add(l, r) return vec:new(l.x + r.x, l.y + r.y) end
+function vec.__sub(l, r) return vec:new(l.x - r.x, l.y - r.y) end
+function vec.__div(l, r) return vec:new(l.x / r.x, l.y / r.y) end
+function vec.__mul(l, r) return vec:new(l.x * r.x, l.y * r.y) end
 function vec.__eq (l, r) return (l.x == r.x) and (l.y == r.y) end
 function vec.__lt (l, r) return (l.x < r.x) and (l.y < r.y) end
 function vec.__le (l, r) return (l.x <= r.x) and (l.y <= r.y) end
 
 -- create ---------------------------------------------------------------------
 -- x, y
-function vec:create(x, y)
-  local t = setmetatable({x = x, y = y}, self)
-  self.__index = self
-  return t
+function vec:new(x, y)
+  return obj.new(self, {x = x, y = y})
 end
 -- random
 function vec:random(min, max)
-  ass.is(min, vec)
-  ass.is(max, vec)
   return setmetatable({x = math.random(min.x, max.x), y = math.random(min.y, max.y)}, vec)
 end
 --
@@ -56,7 +52,7 @@ function vec:length2()
 end
 --
 function vec:round()
-  return vec:create(math.floor(self.x + 0.5), math.floor(self.y + 0.5))
+  return vec:new(math.floor(self.x + 0.5), math.floor(self.y + 0.5))
 end
 --
 function vec:to(obj)
@@ -65,7 +61,7 @@ function vec:to(obj)
 end
 -- turn positive
 function vec:abs()
-  return vec:create(math.abs(self.x), math.abs(self.y))
+  return vec:new(math.abs(self.x), math.abs(self.y))
 end
 
 -- constants ------------------------------------------------------------------
@@ -92,7 +88,7 @@ end
 
 ass.wrap(vec, '.copy', typ.tab, typ.tab)
 ass.wrap(vec, '.center', typ.tab)
-ass.wrap(vec, ':create', typ.num, typ.num)
+ass.wrap(vec, ':new', typ.num, typ.num)
 ass.wrap(vec, ':random', vec, vec)
 ass.wrap(vec, ':from', typ.tab)
 ass.wrap(vec, ':length2')

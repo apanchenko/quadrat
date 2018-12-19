@@ -8,11 +8,10 @@ local image = obj:extend('view.power.image')
 
 -- constructor
 -- create image with initial one count
-local obj_create = obj.create
-function image:create(stone, name, count)
-  local this = obj_create(self)
-  this.image = lay.image(stone, cfg.cell, 'src/view/power/'..name..'.png')
-  return this
+function image:new(stone, name, count)
+  self = obj.new(self)
+  self.image = lay.image(stone, cfg.cell, 'src/view/power/'..name..'.png')
+  return self
 end
 
 --
@@ -25,9 +24,9 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(image, ':create', 'Stone', typ.str, 1)
+ass.wrap(image, ':new', 'Stone', typ.str, 1)
 ass.wrap(image, ':set_count', typ.num)
 
-log:wrap(image, 'create', 'set_count')
+log:wrap(image, 'new', 'set_count')
 
 return image

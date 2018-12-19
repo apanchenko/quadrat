@@ -1,11 +1,12 @@
-local Class      = require 'src.core.Class'
+local obj       = require 'src.core.obj'
 local Vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
+local typ       = require 'src.core.typ'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
 
-local Spot = Class.Create('Spot')
+local Spot = obj:extend('Spot')
 
 -- flags
 local pit      = 1
@@ -14,15 +15,13 @@ local high     = 16
 local peak     = 17
 
 -- create empty cell
-function Spot.new(x, y, space)
-  ass.number(x)
-  ass.number(y)
-  --ass.Is(space, 'Space')
-  local self = setmetatable({}, Spot)
-  self.space = space -- duplicate
-  self.pos = Vec(x, y) -- duplicate
-  self.jade = false -- store
-  return self
+function Spot:new(x, y, space)
+  return obj.new(self,
+  {
+    space = space, -- duplicate
+    pos = Vec(x, y), -- duplicate
+    jade = false, -- store
+  })
 end
 
 --
@@ -33,7 +32,7 @@ end
 -- create a new piece on this spot
 function Spot:spawn_piece(color)
   ass.nul(self.piece)
-  self.piece = Piece:create(self.space, color)
+  self.piece = Piece:new(self.space, color)
   self.piece:set_pos(self.pos)
   self.space.on_change:call('spawn_piece', color, self.pos) -- notify
 end
@@ -92,6 +91,7 @@ function Spot:remove_jade()
 end
 
 -- MODULE ---------------------------------------------------------------------
+ass.wrap(Spot, ':new', typ.num, typ.num, 'Space')
 ass.wrap(Spot, ':spawn_piece', 'playerid')
 ass.wrap(Spot, ':move_piece', Spot)
 ass.wrap(Spot, ':spawn_jade')

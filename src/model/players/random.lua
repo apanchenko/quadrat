@@ -12,12 +12,12 @@ random.space = nil
 random.pid = nil
 
 -- create
-local obj_create = obj.create
-function random:create(space, pid)
-  local t = obj_create(self)
-  t.space = space
-  t.pid = pid
-  return t
+function random:new(space, pid)
+  return obj.new(self,
+  {
+    space = space,
+    pid = pid
+  })
 end
 --
 function random:__tostring()
