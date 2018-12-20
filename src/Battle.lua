@@ -41,7 +41,7 @@ function battle:create(event)
   --self.space.on_change:add(ChangesLog.new())
   self.space.on_change:add(self)
 
-  self.board = Board.new(self, self.space)
+  self.board = Board:new(self, self.space)
 
   self.bot1 = player:new(self.space, white)
   self.space.on_change:add(self.bot1)

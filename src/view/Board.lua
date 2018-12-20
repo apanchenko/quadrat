@@ -4,18 +4,13 @@ local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
 local Piece    = require 'src.model.Piece'
 local cfg      = require 'src.Config'
-local Class    = require 'src.core.Class'
+local obj      = require 'src.core.obj'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
-local typ    = require 'src.core.typ'
+local typ      = require 'src.core.typ'
 
-local Board = Class.Create 'Board'
-
--------------------------------------------------------------------------------
-function Board:__tostring()
-  return "board"
-end
+local Board = obj:extend('Board')
 
 --[[-----------------------------------------------------------------------------
   size of the board
@@ -25,10 +20,12 @@ end
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function Board.new(battle, space)
-  local self = setmetatable({}, Board)
-  self.battle = battle
-  self.model = space
+function Board:new(battle, space)
+  self = obj.new(self,
+  {
+    battle = battle,
+    model = space
+  })
   self.model.on_change:add(self)
   self.view = display.newGroup()
 
