@@ -51,11 +51,11 @@ function ass.wrap(t, name, ...)
   ass.fun(fun, tostring(T)..' has no function '..name)
 
   local check_arguments = function(arg_types, ...)
-    local args = {...}
     --print('  check args - expected '..#arg_typ..', found '..#args)
-    ass(#args == #arg_types, method..' expected '..#arg_types..' args, found '..#args)
-    for i=1, #args do
-      ass.is(args[i], arg_types[i], 'expect '..tostring(arg_types[i])..' as '..i..' argument in '..method.. ', found '..tostring(args[i]))
+    ass(#arg == #arg_types, method..' expected '..#arg_types..' args, found '..#arg)
+    for i=1, #arg do
+      ass.is(arg[i], arg_types[i], "expect '"..tostring(arg_types[i]).."' as "..i..' argument in '..method..
+      ", found '"..tostring(arg[i]).."'")
     end
   end
 

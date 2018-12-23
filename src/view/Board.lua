@@ -31,7 +31,7 @@ function Board:new(battle, space)
 
   self.grid = {}
   for k, spot in space:spots() do
-    local cell = Cell.new(spot)
+    local cell = Cell:new(spot)
     lay.render(self, cell, cell.pos * cfg.cell.size)
     self.grid[k] = cell
   end
@@ -63,7 +63,7 @@ function Board:remove_jade(pos)
 end
 -- PIECE -----------------------------------------------------------------------
 function Board:spawn_piece(color, pos)
-  local stone = Stone.New(color, self.model) -- create a new stone
+  local stone = Stone:new(color, self.model) -- create a new stone
   self.grid[self.model:index(pos)]:set_stone(stone) -- cell that actor is going to move to
   stone:puton(self, pos) -- put piece on board
 end

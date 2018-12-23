@@ -4,28 +4,30 @@ local lay         = require 'src.core.lay'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local map         = require 'src.core.map'
-local Class       = require 'src.core.Class'
-local typ       = require 'src.core.typ'
+local obj         = require 'src.core.obj'
+local typ         = require 'src.core.typ'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.Config'
 local Player      = require 'src.Player'
 local powers      = require 'src.view.power.powers'
 
-local Stone = Class.Create 'Stone'
+local Stone = obj:extend('Stone')
 
 --INIT-------------------------------------------------------------------------
-function Stone.New(pid, model)
-  local self = setmetatable({}, Stone)
-  self._model = model
-  self.view = display.newGroup()
+function Stone:new(pid, model)
+  self = obj.new(self,
+  {
+    _model = model,
+    view = display.newGroup(),
+    scale = 1,
+    powers = {},
+    isSelected = false,
+    is_drag = false
+  })
+  self._abilities = Abilities:new(self, model)
   self.view:addEventListener("touch", self)
   self:set_color(pid)
-  self.scale = 1
-  self._abilities = Abilities.New(self, model)
-  self.powers = {}
-  self.isSelected = false
-  self.is_drag = false
   return self
 end
 --
@@ -250,6 +252,6 @@ ass.wrap(Stone, ':add_ability', typ.str)
 ass.wrap(Stone, ':remove_ability', typ.str)
 ass.wrap(Stone, ':add_power', typ.str, typ.num)
 
-log:wrap(Stone, 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
+log:wrap(Stone, 'new', 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
 --]]
 return Stone

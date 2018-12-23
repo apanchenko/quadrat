@@ -3,10 +3,10 @@ local cfg   = require "src.Config"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local ass   = require "src.core.ass"
-local Class = require "src.core.Class"
+local obj   = require "src.core.obj"
 local Spot  = require 'src.model.Spot'
 
-local Cell = Class.Create('Cell')
+local Cell = obj:extend('Cell')
 
 function Cell:__tostring() return 'cell'.. tostring(self.pos) end
 
@@ -15,12 +15,14 @@ Cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 1}
 Cell.sheet = graphics.newImageSheet("src/view/cell_1_s.png", Cell.sheet_opt)
 
 --
-function Cell.new(spot)
+function Cell:new(spot)
   ass.is(spot, Spot)
-  local self = setmetatable({}, Cell)
   local frame = math.random(1, Cell.sheet_opt.numFrames);
-  self.pos = spot.pos
-  self.view = display.newGroup()
+  self = obj.new(self, 
+  {
+    pos = spot.pos,
+    view = display.newGroup(),
+  })
   self.img = lay.sheet(self.view, Cell.sheet, frame, cfg.cell)
   return self
 end

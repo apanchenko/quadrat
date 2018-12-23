@@ -5,19 +5,20 @@ local cfg       = require 'src.Config'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local Class     = require 'src.core.Class'
-local typ     = require 'src.core.typ'
+local obj       = require 'src.core.obj'
+local typ       = require 'src.core.typ'
 
-local StoneAbilities = Class.Create('StoneAbilities')
+local StoneAbilities = obj:extend('StoneAbilities')
 
 -- A set of abilities a piece have.
-function StoneAbilities.New(stone, model)
-  local self = setmetatable({}, StoneAbilities)
-  self._list = {} -- list of abilities
-  self._stone = stone -- owner
-  self._model = model
-  self._mark = nil -- image marking that piece have abilities
-  return self
+function StoneAbilities:new(stone, model)
+  return obj.new(self,
+  {
+    _list = {}, -- list of abilities
+    _stone = stone, -- owner
+    _model = model,
+    _mark = nil -- image marking that piece have abilities
+  })
 end
 --
 function StoneAbilities:__tostring() 
@@ -34,6 +35,7 @@ function StoneAbilities:add(name)
     self._list[name] = count + 1
   end
   if self._mark == nil then
+    print(tostring(self._stone) .. '--' .. tostring(self._stone:color()))
     self._mark = lay.image(self._stone, cfg.cell, "src/view/ability_"..tostring(self._stone:color())..".png")
   end
 end
@@ -94,6 +96,7 @@ end
 
 --MODEULE----------------------------------------------------------------------
 --
+ass.wrap(StoneAbilities, ':new', 'Stone', 'Space')
 ass.wrap(StoneAbilities, ':add', typ.str)
 ass.wrap(StoneAbilities, ':remove', typ.str)
 ass.wrap(StoneAbilities, ':is_empty')
