@@ -64,31 +64,28 @@ function Piece:move_after(fr, to)
   map.each(self.powers, function(p) return p:move_after(fr, to) end)
 end
 
+
 -- ABILITY---------------------------------------------------------------------
--- add random ability
+-- add random ability with initial count
 function Piece:add_ability()
   self:learn_ability(Ability:new())
 end
 --
-function Piece:learn_ability(ability)
-  local name = tostring(ability)
-  if self.abilities[name] then
-    self.abilities[name]:increase(ability.count)
-  else
-    self.abilities[name] = ability
-  end
-  self.space:notify('add_ability', self.pos, name) -- notify
-end
---
 function Piece:use_ability(name)
-  local ability = self.abilities[name]
-  if ability == nil then
-    log:trace(self, ":use_ability, no ability: ".. name)
-    return false
-  end
-  self.abilities[name] = ability:decrease() -- consume ability
-  self.space:notify('remove_ability', self.pos, name) -- notify
-  self:add_power(ability) -- increase power
+  self:add_power(self:consume_ability(name, 1)) -- increase power
+end
+-- add ability
+function Piece:learn_ability(abty)
+  local count = abty:add_to(self.abilities)
+  self.space:notify('set_ability', self.pos, abty:get_id(), count) -- notify
+end
+-- remove
+function Piece:consume_ability(id, count)
+  local abty = self.abilities[id]
+  ass(abty)
+  local count = abty:decrease(self.abilities, count)
+  self.space:notify('set_ability', self.pos, id, count) -- notify
+  return abty
 end
 
 -- POWER ----------------------------------------------------------------------
@@ -128,6 +125,7 @@ ass.wrap(Piece, ':set_color', 'playerid')
 ass.wrap(Piece, ':add_ability')
 ass.wrap(Piece, ':learn_ability', Ability)
 ass.wrap(Piece, ':use_ability', typ.str)
+ass.wrap(Piece, ':consume_ability', typ.str, typ.num)
 ass.wrap(Piece, ':add_power', Ability)
 ass.wrap(Piece, ':decrease_power', typ.str)
 

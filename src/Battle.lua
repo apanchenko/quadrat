@@ -44,7 +44,7 @@ function battle:create(event)
   self.board = Board:new(self, self.space)
 
   self.bot1 = player:new(self.space, white)
-  self.space.on_change:add(self.bot1)
+  --self.space.on_change:add(self.bot1)
   self.bot2 = player:new(self.space, black)
   self.space.on_change:add(self.bot2)
 

@@ -27,10 +27,10 @@ function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' i
 function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
 --
 function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
---
 function ass.ne(a, b, msg)  return a ~= b or error(msg or tostring(a).. ' == '.. tostring(b)) end
---
-function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > '.. tostring(b)) end
+function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > ' .. tostring(b)) end
+function ass.gt(a, b, msg)  return a >  b or error(msg or tostring(a).. ' <= '.. tostring(b)) end
+function ass.ge(a, b, msg)  return a >= b or error(msg or tostring(a).. ' > ' .. tostring(b)) end
 
 -- wrap function of T
 -- ellipsis not supported
@@ -48,7 +48,7 @@ function ass.wrap(t, name, ...)
 
   --print('ass.wrap ('..tstr..", '"..name.."'). Sep "..sep)
   ass(sep == '.' or sep == ':', 'ass.wrap('..tstr..", '"..name.."') use . or : before function name")
-  ass.fun(fun, tostring(T)..' has no function '..name)
+  ass.fun(fun, tostring(t)..' has no function '..name)
 
   local check_arguments = function(arg_types, ...)
     --print('  check args - expected '..#arg_typ..', found '..#args)

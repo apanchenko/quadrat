@@ -17,8 +17,11 @@ function Ability:new()
     count = 1
   })
 
+  self.id = tostring(self.Power)
+
   if self.Power.is_areal then
     self.Zone = arr.random(Zones)
+    self.id = self.id.. ' '.. tostring(self.Zone)
   end
 
   return self
@@ -32,20 +35,33 @@ function Ability:__tostring()
   end
   return name
 end
+--
+function Ability:get_id()     return self.id end
+--
+function Ability:get_count()  return self.count end
 
 -- increase ability count
-function Ability:increase(count)
-  ass.natural(count, tostring(count))
-  self.count = self.count + count
+function Ability:add_to(abilities)
+  local other = abilities[self.id]
+  if other then
+    ass.eq(other.id, self.id)
+    other.count = other.count + self.count
+  else
+    abilities[self.id] = self
+  end
+  return self.count
 end
 
 -- decrease ability count, chained
-function Ability:decrease()
-  self.count = self.count - 1
-  if self.count == 0 then
-    return nil
+function Ability:decrease(abilities, count)
+  ass.eq(self, abilities[self.id])
+  ass.le(count, self.count)
+  if count == self.count then
+    abilities[self.id] = nil
+    return 0
   end
-  return self
+  self.count = self.count - count
+  return self.count
 end
 
 --
@@ -57,8 +73,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(Ability, ':new')
-ass.wrap(Ability, ':increase', typ.num)
-ass.wrap(Ability, ':decrease')
+ass.wrap(Ability, ':add_to', typ.tab)
+ass.wrap(Ability, ':decrease', typ.tab, typ.num)
 ass.wrap(Ability, ':create_power', 'Piece')
 
 log:wrap(Ability)

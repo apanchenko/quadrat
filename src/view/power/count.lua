@@ -9,10 +9,10 @@ local count = obj:extend('view.power.count')
 
 -- constructor
 function count:new(stone, name, count)
-  local this = obj.new(self)
-  this.count = count
-  this.text = lay.text(stone, {text=tostring(count), fontSize=22})
-  return this
+  self = obj.new(self)
+  self.count = count
+  self.text = lay.text(stone, {text=tostring(count), fontSize=22})
+  return self
 end
 
 --

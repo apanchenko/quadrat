@@ -27,34 +27,32 @@ end
 
 -------------------------------------------------------------------------------
 -- add ability
-function StoneAbilities:add(name)
-  local count = self._list[name]
-  if count == nil then
-    self._list[name] = 1
+function StoneAbilities:set_count(id, count)
+  ass.ge(count, 0)
+
+  if count == 0 then
+    self._list[id] = nil
   else
-    self._list[name] = count + 1
+    self._list[id] = count
   end
-  if self._mark == nil then
-    print(tostring(self._stone) .. '--' .. tostring(self._stone:color()))
+
+  if count > 0 and self._mark == nil then
     self._mark = lay.image(self._stone, cfg.cell, "src/view/ability_"..tostring(self._stone:color())..".png")
   end
-end
 
--- remove ability
-function StoneAbilities:remove(name)
-  local count = self._list[name]
-  if count == 1 then
-    self._list[name] = nil
-  else
-    self._list[name] = count - 1
-  end
   local reshow = self._view ~= nil
-  if reshow then self:hide() end
+
+  if reshow then
+    self:hide()
+  end
+
   if self:is_empty() then
     self._mark:removeSelf()
     self._mark = nil
   else
-    if reshow then self:show() end
+    if reshow then
+      self:show()
+    end
   end
 end
 
@@ -97,12 +95,11 @@ end
 --MODEULE----------------------------------------------------------------------
 --
 ass.wrap(StoneAbilities, ':new', 'Stone', 'Space')
-ass.wrap(StoneAbilities, ':add', typ.str)
-ass.wrap(StoneAbilities, ':remove', typ.str)
+ass.wrap(StoneAbilities, ':set_count', typ.str, typ.num)
 ass.wrap(StoneAbilities, ':is_empty')
 ass.wrap(StoneAbilities, ':show')
 ass.wrap(StoneAbilities, ':hide')
 
-log:wrap(StoneAbilities, 'add', 'remove', 'show', 'hide')
+log:wrap(StoneAbilities, 'set_count', 'show', 'hide')
 --]]
 return StoneAbilities

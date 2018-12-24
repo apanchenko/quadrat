@@ -103,8 +103,10 @@ function Stone:pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
-function Stone:add_ability(name)    self._abilities:add(name) end
-function Stone:remove_ability(name) self._abilities:remove(name) end
+function Stone:set_ability(id, count)
+  self._abilities:set_count(id, count)
+end
+
 
 -- POWER ----------------------------------------------------------------------
 function Stone:add_power(name, result_count)
@@ -248,10 +250,9 @@ ass.wrap(Stone, ':select')
 ass.wrap(Stone, ':deselect')
 ass.wrap(Stone, ':pos')
 --ass.wrap(Stone, 'set_pos', Vec)
-ass.wrap(Stone, ':add_ability', typ.str)
-ass.wrap(Stone, ':remove_ability', typ.str)
+ass.wrap(Stone, ':set_ability', typ.str, typ.num)
 ass.wrap(Stone, ':add_power', typ.str, typ.num)
 
-log:wrap(Stone, 'new', 'select', 'add_ability', 'remove_ability', 'add_power', 'set_color')
+log:wrap(Stone, 'new', 'select', 'set_ability', 'add_power', 'set_color')
 --]]
 return Stone

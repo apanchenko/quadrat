@@ -78,12 +78,8 @@ function Board:remove_piece(pos)
   stone:putoff()
 end
 --
-function Board:add_ability(pos, ability_name)
-  self:stone(pos):add_ability(ability_name)
-end
---
-function Board:remove_ability(pos, ability_name)
-  self:stone(pos):remove_ability(ability_name)
+function Board:set_ability(pos, id, count)
+  self:stone(pos):set_ability(id, count)
 end
 --
 function Board:add_power(pos, name, count)
@@ -112,11 +108,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 ---[[
-ass.wrap(Board, ':add_ability', Vec, typ.str)
-ass.wrap(Board, ':remove_ability', Vec, typ.str)
+ass.wrap(Board, ':set_ability', Vec, typ.str, typ.num)
 ass.wrap(Board, ':add_power', Vec, typ.str, typ.num)
 ass.wrap(Board, ':set_color', Vec, 'playerid')
 
-log:wrap(Board, 'add_ability', 'remove_ability', 'add_power')
+log:wrap(Board, 'set_ability', 'add_power')
 --]]
 return Board
