@@ -10,9 +10,14 @@ function log:enter()
   return self.depth
 end
 
--- chained to instantly call :enter()
-function log:trace(...)
-  local str = string.rep('  ', self.depth)
+-- chained
+function log:error(...)   return self:out('E ', ...) end
+function log:warning(...) return self:out('W ', ...) end
+function log:trace(...)   return self:out('T ', ...) end
+function log:info(...)    return self:out('I ', ...) end
+
+function log:out(prefix, ...)
+  local str = prefix.. string.rep('  ', self.depth)
   str = arr.reduce(arg, str, function(mem, a) return mem.. tostring(a).. ' ' end)
   print(str)
   return self
@@ -40,7 +45,7 @@ function log:wrap(T, ...)
     T[name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
-      local depth = log:trace(tostring(self)..':'..name, unpack(args)):enter()
+      local depth = log:trace(tostring(self).. ':'.. name..'('.. arr.tostring(args, ', ').. ')'):enter()
       local result = fun(...)
       log:exit(depth)
       return result

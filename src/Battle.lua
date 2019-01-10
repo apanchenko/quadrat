@@ -11,6 +11,7 @@ local cfg           = require 'src.Config'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
+local net           = require 'src.net'
 
 -- variables
 local battle = composer.newScene()
@@ -49,6 +50,8 @@ function battle:create(event)
   self.space.on_change:add(self.bot2)
 
   self.space:setup() -- start playing
+
+  self.net = net:new()
 end
 
 --
@@ -78,6 +81,12 @@ function battle:win(message)
   lay.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
 end
 
+
+--
+function battle.test()
+  print('test battle..')
+  ass(true)
+end
 
 function battle:show(event) end
 function battle:hide(event) end

@@ -55,7 +55,10 @@ settings =
 
 	plugins =
 	{
-
+		["plugin.photon"] =
+		{
+			publisherId = "com.exitgames",
+		},
 	},
 
 	excludeFiles =

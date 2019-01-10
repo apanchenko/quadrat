@@ -206,6 +206,17 @@ end
 function arr.random(t)
   return t[math.random(#t)]
 end
+-- to string
+function arr.tostring(t, separator)
+  if #t == 0 then
+    return ''
+  end
+  local res = tostring(t[1])
+  for i = 2, #t do
+    res = res.. separator.. tostring(t[i])
+  end
+  return res
+end
 
 -- MODULE ---------------------------------------------------------------------
 ass.wrap(arr, '.add', typ.tab, typ.any)

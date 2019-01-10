@@ -28,7 +28,7 @@ end
 -- call fn with every element
 function map.each(t, fn)
   for k, v in pairs(t) do
-    fn(v)
+    fn(v, k)
   end
 end
 
@@ -53,6 +53,29 @@ function map.random(t)
       return v
     end
   end
+end
+
+-- map to map
+function map.map(t, fn)
+  local mapped = {}
+  for k, v in pairs(t) do
+    mapped[k] = fn(v)
+  end
+  return mapped
+end
+
+-- reduce map to single value
+function map.reduce(t, memo, fn)
+  for k, v in pairs(t) do
+    memo = fn(memo, v, k)
+  end
+  return memo
+end
+
+-- map to string
+function map.tostring(t, key_prefix)
+  key_prefix = key_prefix or ''
+  return map.reduce(t, '', function(memo, v, k) return memo.. key_prefix.. tostring(k).. '='.. tostring(v) end)
 end
 
 -- MODULE ---------------------------------------------------------------------
