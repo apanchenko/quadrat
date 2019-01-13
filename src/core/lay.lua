@@ -40,13 +40,14 @@ lay.render = render
 
 --[[-----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]--
-local function column(obj)
-  view = obj.view or obj
+local function column(obj, space)
+  local view = obj.view or obj
+  space = space or 0
   local y = 0
   for i = 1, view.numChildren do
     local child = view[i]
     child.y = y
-    y = y + child.height
+    y = y + child.height + space
   end
 end 
 lay.column = column

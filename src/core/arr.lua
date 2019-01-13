@@ -206,14 +206,16 @@ end
 function arr.random(t)
   return t[math.random(#t)]
 end
+
 -- to string
-function arr.tostring(t, separator)
+function arr.tostring(t, sep)
+  sep = sep or ', '
   if #t == 0 then
     return ''
   end
   local res = tostring(t[1])
   for i = 2, #t do
-    res = res.. separator.. tostring(t[i])
+    res = res.. sep.. tostring(t[i])
   end
   return res
 end
@@ -223,5 +225,12 @@ ass.wrap(arr, '.add', typ.tab, typ.any)
 ass.wrap(arr, '.all', typ.tab, typ.fun)
 ass.wrap(arr, '.each', typ.tab, typ.fun)
 ass.wrap(arr, '.random', typ.tab)
+
+--
+function arr.test()
+  local t = { 'semana', 'mes', 'ano' }
+
+  ass.eq(arr.tostring(t), 'semana, mes, ano')
+end
 
 return arr

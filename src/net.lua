@@ -3,160 +3,145 @@ local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local map       = require 'src.core.map'
+local arr       = require 'src.core.arr'
 
 local photon    = require 'plugin.photon'
 local Client    = photon.loadbalancing.LoadBalancingClient
-local Constants = photon.loadbalancing.constants
-local tableutil = photon.common.util.tableutil
-local Logger    = photon.common.Logger
-
+local const     = photon.loadbalancing.constants
 local EVENT_CODE = 101
 local MAX_SENDCOUNT = 5
 
 local net = obj:extend('net')
 
--- constructor
-function net:new()
-  self = obj.new(self,
+-- net constructor
+function net:new(on_join_room)
+  this = obj.new(self,
   {
     serverAddress = "ns.exitgames.com:5058",
-    appId = "a5aaee83-7690-404e-b43c-d7c2de4646fe",
-    appVersion = "1.0",
+    appId         = "a5aaee83-7690-404e-b43c-d7c2de4646fe",
+    appVersion    = "0.0.1",
   })
-  local client = Client.new(self.serverAddress, self.appId, self.appVersion)
-  client.logger:setLevel(Logger.Level.WARN)
+  
+  -- create photon client
+  local client = Client.new(this.serverAddress, this.appId, this.appVersion,
+  {
+    initRoom = function(client, room)
+      function room:onPropertiesChange(changedCustomProps, byClient) 
+        if not byClient then
+          --client.game:updateStateFromProps(changedCustomProps)
+        end
+      end
+      return room
+    end,
+
+    initActor = function(client, actor)
+      return actor
+    end
+  })
+
+  client.logger:setLevel(photon.common.Logger.Level.WARN)
+  client.sent_count = 0
+  client.receive_count = 0
+
+  function client:onRoomList(rooms) -- {roomName: loadbalancing.RoomInfo}
+    if map.any(rooms, function(room) return room.isOpen end) then
+      log:trace('join random room')
+      self:joinRandomRoom()
+    else
+      local name = tostring(math.random(10000, 99999))
+      log:trace('create room '.. name)
+      self:createRoom(name)
+    end
+  end
+
+  function client:onStateChange(state)
+    if state == Client.State.JoinedLobby then
+      --log:trace('joinRandomRoom')
+      --self:joinRandomRoom()
+      local name = tostring(math.random(10000, 99999))
+      --log:trace('create room '.. name)
+      --self:createRoom(name)
+    end
+  end
+
+  function client:onJoinRoom(createdByMe)
+    log:trace('room name '.. self:myRoom().name)
+  end
 
   function client:onOperationResponse(errCode, errMsg, code, content)
-    local log_content_prefix = '\n'.. string.rep('  ', log.depth + 1).. '| '
-    local log_depth = log:trace('client:onOperationResponse('..
-      'errCode='.. tostring(errCode).. ', '..
-      'errMsg='.. tostring(errMsg).. ', '..
-      'code='.. tostring(code).. ', '..
-      'content='.. map.tostring(content, log_content_prefix).. ')'):enter()
-
-    if errCode ~= 0 then
-      if code == Constants.OperationCode.JoinRandomGame then  -- master random room fail - try create
+--[[  if errCode ~= 0 then
+      if code == const.OperationCode.JoinRandomGame then  -- master random room fail - try create
         log:trace("createRoom")
         self:createRoom("helloworld")
       else
         log:error(errCode, errMsg)
       end
-    end
-
-    log:exit(log_depth)
-  end
-
-  function client:onStateChange(state)
-    local log_depth = log:trace('client:onStateChange', Client.StateToName(state)):enter()
-    if state == Client.State.JoinedLobby then
-        log:trace('joinRandomRoom')
-        self:joinRandomRoom()
-    end
-    log:exit(log_depth)
+    end --]]
   end
 
   function client:onError(code, msg)
-    --[[
-    Ok No Error.
-    MasterError General Master server peer error.
-    MasterConnectFailed Master server connection error.
-    MasterConnectClosed Disconnected from Master server.
-    MasterTimeout Disconnected from Master server for timeout.
-    MasterEncryptionEstablishError Master server encryption establishing failed.
-    MasterAuthenticationFailed Master server authentication failed.
-    GameError General Game server peer error.
-    GameConnectFailed Game server connection error.
-    GameConnectClosed Disconnected from Game server.
-    GameTimeout Disconnected from Game server for timeout.
-    GameEncryptionEstablishError Game server encryption establishing failed.
-    GameAuthenticationFailed Game server authentication failed.
-    NameServerError General NameServer peer error.
-    NameServerConnectFailed NameServer connection error.
-    NameServerConnectClosed Disconnected from NameServer.
-    NameServerTimeout Disconnected from NameServer for timeout.
-    NameServerEncryptionEstablishError NameServer encryption establishing failed.
-    NameServerAuthenticationFailed NameServer authentication failed.
-    --]]
-    self.logger:error(code, msg)
+    local log_depth = log:trace('net:onError('..
+      'code='.. map.key(Client.PeerErrorCode, code)..', '..
+      'msg='..msg..')'):enter()
     self.last_error = msg;
-  end
-
-  function client:onEvent(code, content, actorNr)
-    self.logger:debug("on event", code, tableutil.toStringReq(content))
-    if code == EVENT_CODE then
-        client.mReceiveCount = client.mReceiveCount + 1
-        client.mLastReceiveEvent = content[2]
-        if client.mReceiveCount == MAX_SENDCOUNT then
-            self.mState = "Data Received"    
-            client:disconnect();
-        end
-    end
-  end
-
-  client.mState = "Init"
-  client.mLastSentEvent = ""
-  client.mSendCount = 0
-  client.mReceiveCount = 0
-  client.mLastReceiveEvent= ""
-  client.mRunning = true
-
-  function client:update()
-    self:sendData()
-    self:service()
+    log:exit(log_depth)
   end
 
   function client:sendData()
-    if self:isJoinedToRoom() and self.mSendCount < MAX_SENDCOUNT then
-        self.mState = "Data Sending"    
-        local data = {}
-        self.mLastSentEvent = "e" .. self.mSendCount
-        data[2] = self.mLastSentEvent
-        data[3] = string.rep("x", 160)
-        self:raiseEvent(EVENT_CODE, data, { receivers = Constants.ReceiverGroup.All } ) 
-        self.mSendCount = self.mSendCount + 1
-        if self.mSendCount >= MAX_SENDCOUNT then
-            self.mState = "Data Sent"
-        end
+    if self:isJoinedToRoom() and self.sent_count < MAX_SENDCOUNT then
+      local data = {}
+      data[2] = "e" .. self.sent_count
+      data[3] = string.rep("x", 160)
+      self:raiseEvent(EVENT_CODE, data, { receivers = const.ReceiverGroup.All } ) 
+      self.sent_count = self.sent_count + 1
     end
   end
 
-  function client:getStateString()
-    local res = Client.StateToName(self.state)..
-      "\n\nevents: ".. self.mState..
-      "\nsent "..self.mLastSentEvent..", total: "..self.mSendCount..
-      "\nreceived "..self.mLastReceiveEvent..", total: "..self.mReceiveCount
-      if self.last_error then
-        res = res.. "\n\n".. self.last_error
+  function client:onEvent(code, content, actorNr)
+    if code == EVENT_CODE then
+      self.receive_count = self.receive_count + 1
+      if self.receive_count == MAX_SENDCOUNT then
+        self:disconnect();
       end
-    return res
-  end
-
-  local prevStr = ""
-  function client:timer(event)
-    local str = nil
-    if self.mRunning then
-        self:update()
-    else
-        timer.cancel(event.source)
-        self.mState = "Stopped"
-    end
-
-    str = client:getStateString()
-    if prevStr ~= str then
-        prevStr = str
-        print("\n\n")
-        print(str)
     end
   end
 
-  self.client = client
+  this.client = client
   ass(client:connectToRegionMaster("EU"))
+  log:wrap_fn(client, 'onRoomList', {
+    {name='rooms', tostring=function(v) return arr.tostring(map.keys(v)) end}}, 'client')
+  log:wrap_fn(client, 'onJoinRoom', {{name='createdByMe'}}, 'client')
+  log:wrap_fn(client, 'onStateChange', {{name='state', tostring=Client.StateToName}}, 'client')
+  log:wrap_fn(client, 'onOperationResponse', {
+    {name='errCode'},
+    {name='errMsg'},
+    {name='code', tostring=function (code) return map.key(const.OperationCode, code) end},
+    {name='content', tostring=map.tostring}}, 'client')
+  log:wrap_fn(client, 'onEvent', {
+    {name='code'},
+    {name='content', tostring=map.tostring},
+    {name='actor'}}, 'client')
 
+  -- start running
+  function client:timer(event)
+    if self.mRunning then
+      --self:sendData()
+      self:service()
+    else
+      timer.cancel(event.source)
+    end
+  end  
+  client.mRunning = true
   timer.performWithDelay(200, client, 0)
-  return self
+
+  return this
 end
 
 --
 log:wrap(net, 'new')
+
+function net.test()
+  print('test net..')
+end
 
 return net

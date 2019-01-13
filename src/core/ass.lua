@@ -16,7 +16,8 @@ function ass.number(v)      return check.number(v) or error(tostring(v)..' is no
 -- 'n' is natural number
 function ass.natural(v)     return ass.number(v) and ass(v >= 0) end
 -- 'v' is a table
-function ass.table(v, msg)  return check.table(v) or error(msg or tostring(v)..' is not a table') end
+function ass.table(v, msg)  return ass.tab(v, msg) end
+function ass.tab(v, msg)    return check.table(v) or error(msg or tostring(v)..' is not a table') end
 -- 'v' is a string
 function ass.str(v)         return check.string(v) or error(tostring(v)..' is not a string') end
 -- 'v' is a boolean

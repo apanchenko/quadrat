@@ -72,10 +72,33 @@ function map.reduce(t, memo, fn)
   return memo
 end
 
+-- find key by value
+function map.key(t, value)
+  for k, v in pairs(t) do
+    if value == v then
+      return k
+    end
+  end
+end
+
+-- return array of keys
+function map.keys(t)
+  local keys = {}
+  for k, v in pairs(t) do
+    keys[#keys + 1] = k
+  end
+  return keys
+end
+
 -- map to string
-function map.tostring(t, key_prefix)
-  key_prefix = key_prefix or ''
-  return map.reduce(t, '', function(memo, v, k) return memo.. key_prefix.. tostring(k).. '='.. tostring(v) end)
+function map.tostring(t, sep)
+  sep = sep or ', '
+  local prefix = ''
+  return map.reduce(t, '{', function(memo, v, k)
+    memo = memo.. prefix.. tostring(k).. '='.. tostring(v)
+    prefix = sep
+    return memo
+  end).. '}'
 end
 
 -- MODULE ---------------------------------------------------------------------
@@ -91,15 +114,14 @@ function map.test()
   log:trace("map.test")
 
   ass(tostring(map) == 'map')
-  local t = {}
-  t['week'] = 'semana'
-  t['month'] = 'mes'
-  t['year'] = 'ano'
+  local t = { week='semana', month='mes', year='ano' }
 
   --ass(map.each(t, function(v) log:trace(v) end))
   ass(map.any(t, function(v) return #v > 3 end))
   ass(map.all(t, function(v) return #v > 2 end))
-  ass(map.count(t) == 3)
+  ass.eq(map.count(t), 3)
+  ass.eq(map.key(t, 'mes'), 'month')
+  --ass.eq(map.tostring(t), '{week=semana, month=mes, year=ano}')
 end
 
 

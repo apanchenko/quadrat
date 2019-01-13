@@ -1,11 +1,8 @@
 local composer      = require "composer"
 local Space         = require 'src.model.Space'
 local playerid      = require 'src.model.playerid'
-local ChangesLog    = require 'src.model.ChangesLog'
 local player        = require 'src.model.players.random'
 local Board         = require "src.view.Board"
-local Stone         = require "src.view.Stone"
-local vec           = require "src.core.vec"
 local Player        = require "src.Player"
 local cfg           = require 'src.Config'
 local lay           = require 'src.core.lay'
@@ -51,7 +48,7 @@ function battle:create(event)
 
   self.space:setup() -- start playing
 
-  self.net = net:new()
+  --self.net = net:new()
 end
 
 --
