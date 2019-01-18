@@ -19,12 +19,15 @@ function random:new(env, pid)
     env = env,
     pid = pid
   })
-  env.space.on_change:add(self)
   return self
+end
+-- listen space
+function random:on_space(space)
+  space.on_change:add(self)
 end
 --
 function random:__tostring()
-  return 'random_player['..tostring(self.pid)..']'
+  return 'player.random['..tostring(self.pid)..']'
 end
 --
 function random:move(pid)

@@ -13,7 +13,7 @@ function user:new(env, pid)
     pid = pid
   })
 end
--- listen board create
+-- listen board
 function user:on_board(board)
   board.on_change:add(self)
 end

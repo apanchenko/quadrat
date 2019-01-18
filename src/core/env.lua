@@ -1,18 +1,32 @@
 local log   = require 'src.core.log'
 local ass   = require 'src.core.ass'
 local map   = require 'src.core.map'
+local chk   = require 'src.core.chk'
 
 local mt = {}
 mt.__index = mt
 
--- notify created values about new value
+-- add new citizen
 function mt.__newindex(self, key, value)
-  map.each(self, function(v)
-    local cb = v['on_'..key]
-    if cb then
-      cb(v, value)
+  map.each(self, function(v, k)
+    -- notify existing citizens about a new one
+    if chk.tab(v) then
+      local cb = v['on_'..key]
+      if cb then
+        cb(v, value)
+      end
+    end
+
+    -- notify new citizen about existing ones
+    if chk.tab(value) then
+      cb = value['on_'..k]
+      if cb then
+        cb(value, v)
+      end
     end
   end)
+
+  -- settle new citizen
   rawset(self, key, value)
 end
 
