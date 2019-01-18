@@ -1,5 +1,6 @@
 local ass = require 'src.core.ass'
 local obj = require 'src.core.obj'
+local log = require 'src.core.log'
 
 local playerid = obj:extend('playerid')
 
@@ -17,8 +18,20 @@ function playerid:swap()
   return W
 end
 
+-- select white or black
+function playerid.select(is_white)
+  if is_white then
+    return W
+  end
+  return B
+end
+
+
 --
 ass.wrap(playerid, ':swap')
+
+log:wrap_fn(playerid, 'swap', {})
+log:wrap_fn(playerid, 'select', {{name='is_white'}}, nil, true)
 
 --
 function playerid.test()

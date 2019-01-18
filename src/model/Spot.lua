@@ -34,7 +34,7 @@ function Spot:spawn_piece(color)
   ass.nul(self.piece)
   self.piece = Piece:new(self.space, color)
   self.piece:set_pos(self.pos)
-  self.space.on_change:call('spawn_piece', color, self.pos) -- notify
+  self.space:notify('spawn_piece', color, self.pos) -- notify
 end
 
 -- move piece from another spot to this

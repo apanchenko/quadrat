@@ -12,16 +12,15 @@ function ass.nul(v, msg)    return v == nil or error(msg or tostring(v)..' is no
 -- 'v' is not nil
 function ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
 -- 'v' is a number
-function ass.number(v)      return check.number(v) or error(tostring(v)..' is not a number') end
+function ass.num(v)         return check.num(v) or error(tostring(v)..' is not a number') end
 -- 'n' is natural number
-function ass.natural(v)     return ass.number(v) and ass(v >= 0) end
+function ass.nat(v)         return ass.num(v) and ass(v >= 0) end
 -- 'v' is a table
-function ass.table(v, msg)  return ass.tab(v, msg) end
-function ass.tab(v, msg)    return check.table(v) or error(msg or tostring(v)..' is not a table') end
+function ass.tab(v, msg)    return check.tab(v) or error(msg or tostring(v)..' is not a table') end
 -- 'v' is a string
-function ass.str(v)         return check.string(v) or error(tostring(v)..' is not a string') end
+function ass.str(v)         return check.str(v) or error(tostring(v)..' is not a string') end
 -- 'v' is a boolean
-function ass.bool(v)        return check.boolean(v) or error(tostring(v)..' is not a boolean') end
+function ass.bool(v)        return check.boo(v) or error(tostring(v)..' is not a boolean') end
 -- 'v' is a function
 function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' is not a function') end
 -- 'v' is an instance of T
@@ -37,8 +36,8 @@ function ass.ge(a, b, msg)  return a >= b or error(msg or tostring(a).. ' > ' ..
 -- ellipsis not supported
 function ass.wrap(t, name, ...)
   local tstr = tostring(tostring(t))
-  ass.table(t, 'first arg is not a table in ass.wrap(?, '..tostring(name)..')')
-  --ass.table(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
+  ass.tab(t, 'first arg is not a table in ass.wrap(?, '..tostring(name)..')')
+  --ass.tab(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
   ass.str(name)
 
   local arg_types = {...}
@@ -82,9 +81,9 @@ function ass.test()
   print('test ass..')
   ass(true)
   ass.nul(x)
-  ass.number(8.8)
-  ass.natural(9)
-  ass.table({})
+  ass.num(8.8)
+  ass.nat(9)
+  ass.tab({})
   ass.str("String")
   ass.bool(false)
   ass.fun(function() end)

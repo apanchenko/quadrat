@@ -1,20 +1,16 @@
-local composer      = require "composer"
-local Space         = require 'src.model.Space'
+local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
-local player        = require 'src.model.players.random'
-local Board         = require "src.view.Board"
-local Player        = require "src.Player"
+local Board         = require 'src.view.Board'
+local Player        = require 'src.Player'
 local cfg           = require 'src.Config'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
-local net           = require 'src.net'
 
--- variables
+-- battle scene
 local battle = composer.newScene()
 
 -------------------------------------------------------------------------------
--- battle scene
 function battle:create(event)
   log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
 
@@ -35,20 +31,16 @@ function battle:create(event)
   self.players[black] = Player(black, "Gala")
   lay.render(self, self.players[black], cfg.player.black)
 
-  self.space = Space:new(cfg.board.cols, cfg.board.rows)
-  --self.space.on_change:add(ChangesLog.new())
+  self.env = event.params
+  self.env.battle = self
+  
+  self.space = self.env.space
   self.space.on_change:add(self)
 
-  self.board = Board:new(self, self.space)
-
-  self.bot1 = player:new(self.space, white)
-  --self.space.on_change:add(self.bot1)
-  self.bot2 = player:new(self.space, black)
-  self.space.on_change:add(self.bot2)
+  self.env.board = Board:new(self, self.space)
+  self.board = self.env.board
 
   self.space:setup() -- start playing
-
-  --self.net = net:new()
 end
 
 --

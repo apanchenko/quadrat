@@ -9,6 +9,7 @@ local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
 local typ      = require 'src.core.typ'
+local evt      = require 'src.core.evt'
 
 local Board = obj:extend('Board')
 
@@ -24,7 +25,8 @@ function Board:new(battle, space)
   self = obj.new(self,
   {
     battle = battle,
-    model = space
+    model = space,
+    on_change = evt:new()
   })
   self.model.on_change:add(self)
   self.view = display.newGroup()
@@ -64,8 +66,9 @@ end
 -- PIECE -----------------------------------------------------------------------
 function Board:spawn_piece(color, pos)
   local stone = Stone:new(color, self.model) -- create a new stone
-  self.grid[self.model:index(pos)]:set_stone(stone) -- cell that actor is going to move to
+  self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   stone:puton(self, pos) -- put piece on board
+  self.on_change:call('on_spawn_stone', stone)
 end
 --
 function Board:move_piece(to, from)

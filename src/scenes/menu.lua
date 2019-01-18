@@ -3,33 +3,20 @@ local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
 local cfg       = require 'src.Config'
+local scene     = require 'src.scenes.scenes'
 
 local menu = composer.newScene()
 local platform = system.getInfo('platform')
 
 -------------------------------------------------------------------------------
--- button handler
-local function handle_button(next_scene)
-  print('menu:handle_button ' .. next_scene)
-  if next_scene == 'exit' then
-    native.requestExit()
-  else
-    composer.gotoScene(next_scene, {effect = 'fade', time = 600})
-  end
-  return true
-end
-
--------------------------------------------------------------------------------
 -- create new button
-local function new_button(id, label)
+local function new_button(id, label, onPress)
   return widget.newButton {
     x = display.contentCenterX,
     y = 0,
     id = id,
     label = label,
-    onPress = function(event)
-      return handle_button(event.target.id)
-    end,
+    onPress = function(event) onPress() return true end,
     emboss = false,
     font = native.systemFont,
     fontSize = 17,
@@ -51,11 +38,11 @@ function menu:create(event)
 
   local buttons = display.newGroup()
 
-  buttons:insert(new_button('src.lobby', 'Play'))
-  buttons:insert(new_button('src.Battle', 'Solo'))
+  buttons:insert(new_button('lobby', 'Play', scene.lobby))
+  buttons:insert(new_button('battle', 'Solo', scene.solo))
 
   if (platform ~= 'ios' and platform ~= 'tvos') then
-    buttons:insert(new_button('exit', 'Exit'))
+    buttons:insert(new_button('exit', 'Exit', scene.exit))
   end
 
   lay.column(buttons, 5)

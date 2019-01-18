@@ -26,7 +26,6 @@ function Stone:new(pid, model)
     is_drag = false
   })
   self._abilities = Abilities:new(self, model)
-  self.view:addEventListener("touch", self)
   self:set_color(pid)
   return self
 end

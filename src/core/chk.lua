@@ -9,7 +9,7 @@ local function tab(v)     return type(v) == 'table' end
 -- check 'v' is a string
 local function str(v)     return type(v) == 'string' end
 -- check 'v' is a string
-local function bool(v)    return type(v) == 'boolean' end
+local function boo(v)     return type(v) == 'boolean' end
 -- check 'v' is a function
 local function fun(v)     return type(v) == 'function' end
 -- check 'v' has meta T
@@ -25,26 +25,25 @@ local function is(v, t)   return getmetatable(v) == t
     or (v == t)
 end
 
---
 local chk =
 {
-  boolean = bool,
+  num = num,
+  nat = nat,
+  tab = tab,
+  str = str,
+  boo = boo,
   fun = fun,
-  natural = nat,
-  number = num,
-  string = str,
-  table = tab,
   is = is
 }
 
 --
 function chk.test()
   print('check.test..')
-  assert(chk.natural(1))
-  assert(chk.number(2.7))
-  assert(chk.table({}))
-  assert(chk.string('hello'))
-  assert(chk.boolean(false))
+  assert(chk.nat(1))
+  assert(chk.num(2.7))
+  assert(chk.tab({}))
+  assert(chk.str('hello'))
+  assert(chk.boo(false))
   assert(chk.fun(function() end))
   assert(chk.is(1, 1))
   assert(not chk.is({}, {}))

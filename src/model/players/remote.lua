@@ -3,44 +3,41 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
-local env       = require 'src.core.env'
 local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
 --
-local random = obj:extend('random')
-random.space = nil
-random.pid = nil
+local remote = obj:extend('remote')
+remote.space = nil
+remote.pid = nil
 
 -- create
-function random:new(env, pid)
-  self = obj.new(self,
+function remote:new(space, pid)
+  return obj.new(self,
   {
-    env = env,
+    space = space,
     pid = pid
   })
-  env.space.on_change:add(self)
-  return self
 end
 --
-function random:__tostring()
-  return 'random_player['..tostring(self.pid)..']'
+function remote:__tostring()
+  return 'remote['..tostring(self.pid)..']'
 end
 --
-function random:move(pid)
+function remote:move(pid)
   if pid == self.pid then
     timer.performWithDelay(100, function() self:move_async() end)
   end
 end
 --
-function random:move_async()
+function remote:move_async()
   local attempts = 1000
-  local space = self.env.space
+
   -- do something until can move
-  while space:who_move() == self.pid do
+  while self.space:who_move() == self.pid do
     -- select random piece of my color
-    local from = Vec:random(Vec.zero, space.size - Vec.one)
-    local piece = space:piece(from)
+    local from = Vec:random(Vec.zero, self.space.size - Vec.one)
+    local piece = self.space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
       local ability = map.random(piece.abilities)
@@ -49,8 +46,8 @@ function random:move_async()
       end
       -- move to random point
       local to = from + Vec:random(Vec.zero-Vec.one, Vec.one)
-      if space:can_move(from, to) then
-        space:move(from, to)
+      if self.space:can_move(from, to) then
+        self.space:move(from, to)
       end
     end
 
@@ -63,10 +60,9 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(random, ':new', env, 'playerid')
-ass.wrap(random, ':move', playerid)
-ass.wrap(random, ':move_async')
+ass.wrap(remote, ':move', playerid)
+ass.wrap(remote, ':move_async')
 
-log:wrap(random, 'move', 'move_async')
+log:wrap(remote, 'move', 'move_async')
 
-return random
+return remote

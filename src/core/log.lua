@@ -32,7 +32,7 @@ end
 -- wrap functions in table t with log
 function log:wrap(T, ...)
   ass.eq(tostring(self), 'log', ' in Log:wrap')
-  ass.table(T, 'first arg is not a table in log.wrap('..tostring(T)..')')
+  ass.tab(T, 'first arg is not a table in log.wrap('..tostring(T)..')')
   local names = {...} -- list of function names to wrap
   for i=1, #names do -- wrap each function
     -- function name
@@ -96,8 +96,8 @@ function log:wrap_fn(t, fn_name, arg_info, name, static)
   else
     t[fn_name] = function(...)
       local args = {...}
-      table.remove(args, 1)
-      local depth = log:trace(name..':'..fn_name..'('..arguments(arg_info, args)..')'):enter()
+      local self = table.remove(args, 1)
+      local depth = log:trace(tostring(self)..':'..fn_name..'('..arguments(arg_info, args)..')'):enter()
       local result = fn(...)
       log:exit(depth)
       return result

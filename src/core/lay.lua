@@ -12,9 +12,9 @@ opts:
   vy    defaults to 0
 -------------------------------------------------------------------------------]]
 local function render(target, obj, opts)
-  ass.table(target, "target")
-  ass.table(obj, "object")
-  ass.table(opts, "opts")
+  ass.tab(target, "target")
+  ass.tab(obj, "object")
+  ass.tab(opts, "opts")
 
   target = target.view or target
   child = obj.view or obj
@@ -65,7 +65,7 @@ opts:
   vy    defaults to 0
 -----------------------------------------------------------------------------]]--
 function lay.image(group, opts, path)
-  ass.table(opts, "invalid opts")
+  ass.tab(opts, "invalid opts")
 
   path = path or opts.path
   ass.str(path, 'path')
@@ -97,7 +97,7 @@ opts:
   fontSize
 -----------------------------------------------------------------------------]]--
 function lay.text(group, opts)
-  ass.table(opts, "opts")
+  ass.tab(opts, "opts")
 
   if opts.font == nil then
     opts.font = cfg.font                    -- select default font

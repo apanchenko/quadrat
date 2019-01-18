@@ -13,9 +13,9 @@ local Space = obj:extend('Space')
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-function Space:new(cols, rows)
-  ass.natural(cols)
-  ass.natural(rows)
+function Space:new(cols, rows, seed)
+  ass.nat(cols)
+  ass.nat(rows)
   self = obj.new(self,
   {
     cols  = cols,    -- width

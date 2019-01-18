@@ -14,14 +14,14 @@ local MAX_SENDCOUNT = 5
 local net = obj:extend('net')
 
 -- net constructor
-function net:new(on_join_room)
+function net:new()
   this = obj.new(self,
   {
     serverAddress = "ns.exitgames.com:5058",
     appId         = "a5aaee83-7690-404e-b43c-d7c2de4646fe",
     appVersion    = "0.0.1",
   })
-  
+
   -- create photon client
   local client = Client.new(this.serverAddress, this.appId, this.appVersion,
   {
@@ -39,53 +39,74 @@ function net:new(on_join_room)
     end
   })
 
+  -- callback on error
+  function client:onError(code, msg)
+    if this.on_error then
+      this.on_error()
+    end
+  end
+  log:wrap_fn(client, 'onError', {
+    {name='code', tostring=function(code) return map.key(Client.PeerErrorCode, code) end},
+    {name='msg'}}, 'client')
+
+  -- react to state change
+  function client:onStateChange(state)
+  end    
+  log:wrap_fn(client, 'onStateChange', {{name='state', tostring=Client.StateToName}}, 'client')
+
+  function client:onOperationResponse(errCode, errMsg, code, content)
+  end
+  log:wrap_fn(client, 'onOperationResponse', {
+    {name='errCode'},
+    {name='errMsg'},
+    {name='code', tostring=function(code) return map.key(const.OperationCode, code) end},
+    {name='content', tostring=map.tostring}}, 'client')
+
   client.logger:setLevel(photon.common.Logger.Level.WARN)
   client.sent_count = 0
   client.receive_count = 0
+ 
+  this.client = client
+  return this
+end
+
+-- find worthy opponent
+function net:find_opponent(on_opponent, on_error)
+  self.on_error = on_error
+  local client = self.client
 
   function client:onRoomList(rooms) -- {roomName: loadbalancing.RoomInfo}
     if map.any(rooms, function(room) return room.isOpen end) then
       log:trace('join random room')
       self:joinRandomRoom()
     else
-      local name = tostring(math.random(10000, 99999))
-      log:trace('create room '.. name)
-      self:createRoom(name)
-    end
-  end
-
-  function client:onStateChange(state)
-    if state == Client.State.JoinedLobby then
-      --log:trace('joinRandomRoom')
-      --self:joinRandomRoom()
-      local name = tostring(math.random(10000, 99999))
-      --log:trace('create room '.. name)
-      --self:createRoom(name)
+      local room_name = tostring(math.random(10000, 99999))
+      log:trace('create room '.. room_name)
+      self:createRoom(room_name)
     end
   end
 
   function client:onJoinRoom(createdByMe)
-    log:trace('room name '.. self:myRoom().name)
+    local room = self:myRoom()
+    local room_name = room.name
+    log:trace('room name '..room_name)
+
+    -- i am second, can play here
+    if room.playerCount == 2 then
+      local room_id = tonumber(room_name)
+      on_opponent(room_id, createdByMe)
+    end
   end
 
-  function client:onOperationResponse(errCode, errMsg, code, content)
---[[  if errCode ~= 0 then
-      if code == const.OperationCode.JoinRandomGame then  -- master random room fail - try create
-        log:trace("createRoom")
-        self:createRoom("helloworld")
-      else
-        log:error(errCode, errMsg)
-      end
-    end --]]
+  function client:onActorJoin(actor)
+    local room = self:myRoom()
+    if room.playerCount == 2 then
+      local room_id = tonumber(room.name)
+      on_opponent(room_id, createdByMe)
+    end
   end
-
-  function client:onError(code, msg)
-    local log_depth = log:trace('net:onError('..
-      'code='.. map.key(Client.PeerErrorCode, code)..', '..
-      'msg='..msg..')'):enter()
-    self.last_error = msg;
-    log:exit(log_depth)
-  end
+  log:wrap_fn(client, 'onActorJoin', {
+    {name='actor', tostring=function(actor) return tostring(actor.actorNr) end}}, 'client')
 
   function client:sendData()
     if self:isJoinedToRoom() and self.sent_count < MAX_SENDCOUNT then
@@ -106,35 +127,28 @@ function net:new(on_join_room)
     end
   end
 
-  this.client = client
   ass(client:connectToRegionMaster("EU"))
+
   log:wrap_fn(client, 'onRoomList', {
     {name='rooms', tostring=function(v) return arr.tostring(map.keys(v)) end}}, 'client')
   log:wrap_fn(client, 'onJoinRoom', {{name='createdByMe'}}, 'client')
-  log:wrap_fn(client, 'onStateChange', {{name='state', tostring=Client.StateToName}}, 'client')
-  log:wrap_fn(client, 'onOperationResponse', {
-    {name='errCode'},
-    {name='errMsg'},
-    {name='code', tostring=function (code) return map.key(const.OperationCode, code) end},
-    {name='content', tostring=map.tostring}}, 'client')
   log:wrap_fn(client, 'onEvent', {
     {name='code'},
     {name='content', tostring=map.tostring},
     {name='actor'}}, 'client')
 
+
   -- start running
   function client:timer(event)
-    if self.mRunning then
+    if self.is_running then
       --self:sendData()
       self:service()
     else
       timer.cancel(event.source)
     end
-  end  
-  client.mRunning = true
+  end
+  client.is_running = true
   timer.performWithDelay(200, client, 0)
-
-  return this
 end
 
 --
