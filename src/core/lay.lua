@@ -5,7 +5,7 @@ local log = require 'src.core.log'
 lay = {}
 
 --[[-----------------------------------------------------------------------------
-group   display group insert in
+target  display group insert in
 obj     display object to render
 opts:
   vx    defaults to 0
@@ -37,6 +37,14 @@ local function render(target, obj, opts)
   return obj
 end
 lay.render = render
+
+--
+local function to(obj, pos, params)
+  params.x = pos.x
+  params.y = pos.y
+  transition.to(obj.view, params)
+end
+lay.to = to
 
 --[[-----------------------------------------------------------------------------
 -----------------------------------------------------------------------------]]--

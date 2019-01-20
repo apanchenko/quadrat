@@ -20,6 +20,14 @@ cfg.jade          = {w=cfg.cell.w, h=cfg.cell.h, path="src/view/jade.png",
   moves           = 1,          -- drop jades every Nth move
   probability     = 0.2   -- probability that a jade will spawn on a cell
 }
+cfg.stone         =
+{
+  move =
+  {
+    time=500,
+    transition=easing.inOutQuad
+  }
+}
 
 cfg.abilities     = {vx = 5,
   button =

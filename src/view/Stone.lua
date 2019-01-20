@@ -1,4 +1,4 @@
-local arr           = require 'src.core.arr'
+local arr         = require 'src.core.arr'
 local Vec         = require 'src.core.vec'
 local lay         = require 'src.core.lay'
 local ass         = require 'src.core.ass'
@@ -235,7 +235,7 @@ function Stone:update_group_pos()
   if self.isSelected then
     pos.y = pos.y - 10
   end
-  Vec.copy(pos, self.view)
+  lay.to(self, pos, cfg.stone.move)
 end
 
 --MODULE-----------------------------------------------------------------------

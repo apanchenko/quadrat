@@ -56,7 +56,6 @@ end
 function Cell:remove_stone()
   ass(self._stone)
   local stone = self._stone
-  stone:set_pos(nil)
   self._stone = nil
   return stone
 end
