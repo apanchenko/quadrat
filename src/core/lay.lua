@@ -38,16 +38,14 @@ local function render(target, obj, opts)
 end
 lay.render = render
 
---
-local function to(obj, pos, params)
+-- animate coordinates
+function lay.to(obj, pos, params)
   params.x = pos.x
   params.y = pos.y
   transition.to(obj.view, params)
 end
-lay.to = to
 
---[[-----------------------------------------------------------------------------
------------------------------------------------------------------------------]]--
+-- arrange children in column
 local function column(obj, space)
   local view = obj.view or obj
   space = space or 0

@@ -1,13 +1,24 @@
-local function create_typ(name)
-  return setmetatable({}, {__tostring = function() return name end})
-end
-
 return
 {
-  any = create_typ('any'), -- not nil
-  tab = create_typ('tab'),
-  num = create_typ('num'),
-  str = create_typ('str'),
-  fun = create_typ('fun'),
-  ell = create_typ('ell'), -- ellipsis
+  any = {name='any', is = function(v) return v ~= nil end}, -- not nil
+  tab = {name='tab', is = function(v) return type(v) == 'table' end},
+  num = {name='num', is = function(v) return type(v) == 'number' end},
+  str = {name='str', is = function(v) return type(v) == 'string' end},
+  fun = {name='fun', is = function(v) return type(v) == 'function' end},
+
+  meta = function(mt)
+    return
+    {
+      name = tostring(mt),
+      is = function(v) return getmetatable(v) == mt end
+    }
+  end,
+
+  metaname = function(name)
+    return
+    {
+      name = name,
+      is = function(v) return tostring(getmetatable(v)) == name end
+    }
+  end
 }

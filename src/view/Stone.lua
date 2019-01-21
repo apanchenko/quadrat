@@ -6,6 +6,7 @@ local log         = require 'src.core.log'
 local map         = require 'src.core.map'
 local obj         = require 'src.core.obj'
 local typ         = require 'src.core.typ'
+local wrp         = require 'src.core.wrp'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.Config'
@@ -239,19 +240,15 @@ function Stone:update_group_pos()
 end
 
 --MODULE-----------------------------------------------------------------------
----[[
-ass.wrap(Stone, ':select')
-ass.wrap(Stone, ':set_color', 'playerid')
-ass.wrap(Stone, ':color')
-ass.wrap(Stone, ':puton', 'Board', Vec)
-ass.wrap(Stone, ':putoff')
-ass.wrap(Stone, ':select')
-ass.wrap(Stone, ':deselect')
-ass.wrap(Stone, ':pos')
---ass.wrap(Stone, 'set_pos', Vec)
-ass.wrap(Stone, ':set_ability', typ.str, typ.num)
-ass.wrap(Stone, ':add_power', typ.str, typ.num)
+wrp.fn(Stone, 'new', {wrp.arg('pid', typ.metaname('playerid')), wrp.arg('space', typ.metaname('Space'))})
+wrp.fn(Stone, 'select')
+wrp.fn(Stone, 'deselect')
+wrp.fn(Stone, 'set_color', {wrp.arg('playerid')})
+wrp.fn(Stone, 'color')
+wrp.fn(Stone, 'puton', {wrp.arg('Board'), wrp.arg('pos', typ.meta(Vec))})
+wrp.fn(Stone, 'putoff')
+wrp.fn(Stone, 'pos')
+wrp.fn(Stone, 'set_ability', {wrp.arg('id', typ.str), wrp.arg('count', typ.num)})
+wrp.fn(Stone, 'add_power', {wrp.arg('name', typ.str), wrp.arg('result_count', typ.num)})
 
-log:wrap(Stone, 'new', 'select', 'set_ability', 'add_power', 'set_color')
---]]
 return Stone

@@ -14,13 +14,12 @@ local function boo(v)     return type(v) == 'boolean' end
 local function fun(v)     return type(v) == 'function' end
 -- check 'v' has meta T
 local function is(v, t)   return getmetatable(v) == t
-    --or (t == nil and v == nil)
+    or (t == nil and v == nil)
     or (t == typ.any and v ~= nil)
     or (t == typ.tab and tab(v))
     or (t == typ.num and num(v))
     or (t == typ.str and str(v))
     or (t == typ.fun and fun(v))
-    or (t == typ.ell and false)
     or (str(t) and tostring(getmetatable(v)) == t)
     or (v == t)
 end

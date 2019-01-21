@@ -54,7 +54,7 @@ function Spot:move_piece(from)
   -- consume jade
   if self.jade then
     self.jade = false 
-    self.space.on_change:call('remove_jade', self.pos) -- notify
+    self.space:notify('remove_jade', self.pos) -- notify
     self.piece:add_ability()
   end
 end
