@@ -1,6 +1,7 @@
 local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
 local obj     = require 'src.core.obj'
+local wrp     = require 'src.core.wrp'
 
 -- base power
 local power = obj:extend('power')
@@ -33,10 +34,10 @@ function power:move_before(cell_from, cell_to) end
 function power:move(cell_from, cell_to) end
 function power:move_after(cell_from, cell_to) end
 
---
-ass.wrap(power, ':new', 'Piece')
-ass.wrap(power, ':apply')
-
-log:wrap(power, 'new', 'apply')
+-- module
+function power.wrap()
+  wrp.fn(power, 'new', {{'Piece'}})
+  wrp.fn(power, 'apply', {})
+end
 
 return power

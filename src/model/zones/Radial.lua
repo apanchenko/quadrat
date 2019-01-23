@@ -3,6 +3,7 @@ local vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
 local log       = require 'src.core.log'
 local arr         = require 'src.core.arr'
+local wrp         = require 'src.core.wrp'
 
 local Radial = obj:extend('Radial')
 
@@ -37,9 +38,9 @@ function Radial.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Radial, ':new', vec)
-ass.wrap(Radial, ':filter', vec)
-
-log:wrap(Radial)
+function Radial.wrap()
+  wrp.fn(Radial, 'new', {{'pos', vec}})
+  wrp.fn(Radial, 'filter', {{'pos', vec}})
+end
 
 return Radial

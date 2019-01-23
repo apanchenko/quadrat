@@ -4,6 +4,7 @@ local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local ass   = require "src.core.ass"
 local obj   = require "src.core.obj"
+local wrp   = require 'src.core.wrp'
 local Spot  = require 'src.model.Spot'
 
 local Cell = obj:extend('Cell')
@@ -61,9 +62,9 @@ function Cell:remove_stone()
 end
 
 -- MODULE-----------------------------------------------------------------------
-ass.wrap(Cell, ':set_stone', 'Stone')
-ass.wrap(Cell, ':stone')
-ass.wrap(Cell, ':remove_stone')
+wrp.fn(Cell, 'set_stone', {{'Stone'}})
+wrp.fn(Cell, 'stone')
+wrp.fn(Cell, 'remove_stone')
 
 log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
 return Cell

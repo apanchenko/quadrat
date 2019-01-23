@@ -5,6 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 print(_VERSION)
+--[[
 require('src.core.obj').test()
 require('src.core.chk').test()
 require('src.core.ass').test()
@@ -18,6 +19,10 @@ require('src.model.zones.Zones').test()
 require('src.model.power.destroy').test()
 require('src.scenes.scenes').test()
 require('src.net').test()
+--]]
+local pkg = require('src.core.pkg')
+pkg.cor:wrap()
+pkg.cor:test()
 
 
 local composer = require 'composer'

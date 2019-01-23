@@ -10,6 +10,7 @@ local ass      = require 'src.core.ass'
 local log      = require 'src.core.log'
 local typ      = require 'src.core.typ'
 local evt      = require 'src.core.evt'
+local wrp      = require 'src.core.wrp'
 
 local Board = obj:extend('Board')
 
@@ -110,11 +111,8 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
----[[
-ass.wrap(Board, ':set_ability', Vec, typ.str, typ.num)
-ass.wrap(Board, ':add_power', Vec, typ.str, typ.num)
-ass.wrap(Board, ':set_color', Vec, 'playerid')
+wrp.fn(Board, 'set_ability', {{'pos', Vec}, {'id', typ.str}, {'count', typ.num}})
+wrp.fn(Board, 'add_power', {{'pos', Vec}, {'name', typ.str}, {'count', typ.num}})
+wrp.fn(Board, 'set_color', {{'pos', Vec}, {'pid', 'playerid'}})
 
-log:wrap(Board, 'set_ability', 'add_power')
---]]
 return Board

@@ -2,6 +2,7 @@ local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 local typ = require 'src.core.typ'
 local obj = require 'src.core.obj'
+local wrp   = require 'src.core.wrp'
 
 local evt = obj:extend('evt')
 
@@ -45,9 +46,9 @@ function evt:call(name, ...)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(evt, ':add', typ.tab)
-ass.wrap(evt, ':remove', typ.tab)
-
-log:wrap(evt, 'call')
+function evt.wrap()
+  wrp.fn(evt, 'add', {{'listener', typ.tab}})
+  wrp.fn(evt, 'remove', {{'listener', typ.tab}})
+end
 
 return evt

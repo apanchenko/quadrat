@@ -239,16 +239,18 @@ function Stone:update_group_pos()
   lay.to(self, pos, cfg.stone.move)
 end
 
---MODULE-----------------------------------------------------------------------
-wrp.fn(Stone, 'new', {wrp.arg('pid', typ.metaname('playerid')), wrp.arg('space', typ.metaname('Space'))})
-wrp.fn(Stone, 'select')
-wrp.fn(Stone, 'deselect')
-wrp.fn(Stone, 'set_color', {wrp.arg('playerid')})
-wrp.fn(Stone, 'color')
-wrp.fn(Stone, 'puton', {wrp.arg('Board'), wrp.arg('pos', typ.meta(Vec))})
-wrp.fn(Stone, 'putoff')
-wrp.fn(Stone, 'pos')
-wrp.fn(Stone, 'set_ability', {wrp.arg('id', typ.str), wrp.arg('count', typ.num)})
-wrp.fn(Stone, 'add_power', {wrp.arg('name', typ.str), wrp.arg('result_count', typ.num)})
+--
+function Stone.wrap()
+  wrp.fn(Stone, 'new', {{'pid', 'playerid'}, {'Space'}})
+  wrp.fn(Stone, 'select')
+  wrp.fn(Stone, 'deselect')
+  wrp.fn(Stone, 'set_color', {{'playerid'}})
+  wrp.fn(Stone, 'color')
+  wrp.fn(Stone, 'puton', {{'Board'}, {'pos', typ.meta(Vec)}})
+  wrp.fn(Stone, 'putoff')
+  wrp.fn(Stone, 'pos')
+  wrp.fn(Stone, 'set_ability', {{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(Stone, 'add_power', {{'name', typ.str}, {'result_count', typ.num}})
+end
 
 return Stone

@@ -8,6 +8,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
+local wrp       = require 'src.core.wrp'
 
 local Space = obj:extend('Space')
 
@@ -179,24 +180,22 @@ function Space:use(pos, ability_name)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Space, ':setup')
-ass.wrap(Space, ':pos', typ.num)
-ass.wrap(Space, ':width')
-ass.wrap(Space, ':height')
-ass.wrap(Space, ':row', typ.num)
-ass.wrap(Space, ':col', typ.num)
-ass.wrap(Space, ':pos', typ.num)
-ass.wrap(Space, ':index', Vec)
-ass.wrap(Space, ':spots')
-ass.wrap(Space, ':spot', Vec)
-ass.wrap(Space, ':count_pieces')
-ass.wrap(Space, ':piece', Vec)
-ass.wrap(Space, ':who_move')
-ass.wrap(Space, ':can_move', Vec, Vec)
-ass.wrap(Space, ':move', Vec, Vec)
-ass.wrap(Space, ':use', Vec, typ.str)
-
-log:wrap(Space, 'setup', 'move', 'use')
+wrp.fn(Space, 'setup', {})
+wrp.fn(Space, 'pos', {{'index', typ.num}})
+wrp.fn(Space, 'width', {})
+wrp.fn(Space, 'height', {})
+wrp.fn(Space, 'row', {{'place', typ.num}})
+wrp.fn(Space, 'col', {{'place', typ.num}})
+wrp.fn(Space, 'pos', {{'index', typ.num}})
+wrp.fn(Space, 'index', {{'vec', Vec}})
+--wrp.fn(Space, 'spots', {})
+wrp.fn(Space, 'spot', {{'pos', Vec}})
+wrp.fn(Space, 'count_pieces', {})
+wrp.fn(Space, 'piece', {{'pos', Vec}})
+wrp.fn(Space, 'who_move', {})
+wrp.fn(Space, 'can_move', {{'from', Vec}, {'to', Vec}})
+wrp.fn(Space, 'move', {{'from', Vec}, {'to', Vec}})
+wrp.fn(Space, 'use', {{'pos', Vec}, {'ability_name', typ.str}})
 
 -- return module
 return Space

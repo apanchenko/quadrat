@@ -4,6 +4,8 @@ local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
 local env       = require 'src.core.env'
+local wrp       = require 'src.core.wrp'
+local typ       = require 'src.core.typ'
 local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
@@ -66,9 +68,9 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(random, ':new', env, 'playerid')
-ass.wrap(random, ':move', playerid)
-ass.wrap(random, ':move_async')
+wrp.fn(random, 'new', {{'env', typ.any}, {'playerid'}}) -- env?
+wrp.fn(random, 'move', {{'playerid'}})
+wrp.fn(random, 'move_async')
 
 log:wrap(random, 'move', 'move_async')
 

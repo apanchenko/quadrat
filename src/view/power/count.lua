@@ -2,6 +2,7 @@ local obj         = require 'src.core.obj'
 local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
+local wrp         = require 'src.core.wrp'
 local cfg         = require 'src.Config'
 
 -- power draws a counter ------------------------------------------------------
@@ -28,9 +29,7 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-ass.wrap(count, ':new', 'Stone', typ.str, typ.num)
-ass.wrap(count, ':set_count', typ.num)
-
-log:wrap(count, 'new', 'set_count')
+wrp.fn(count, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
+wrp.fn(count, 'set_count', typ.num)
 
 return count

@@ -1,6 +1,7 @@
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local obj       = require 'src.core.obj'
+local wrp       = require 'src.core.wrp'
 
 --
 local user = obj:extend('user')
@@ -30,7 +31,7 @@ function user:on_spawn_stone(stone)
 end
 
 -- MODULE ---------------------------------------------------------------------
-log:wrap_fn(user, 'new', {{name='env'}, {name='pid'}})
-log:wrap_fn(user, 'on_spawn_stone', {{name='stone'}})
+log:wrap_fn(user, 'new', {{'env'}, {'pid', 'playerid'}})
+log:wrap_fn(user, 'on_spawn_stone', {{'Stone'}})
 
 return user

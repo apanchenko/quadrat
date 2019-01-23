@@ -2,6 +2,7 @@ local ass       = require 'src.core.ass'
 local obj       = require 'src.core.obj'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
+local wrp     = require 'src.core.wrp'
 
 local Row = obj:extend('Row')
 
@@ -23,8 +24,10 @@ function Row.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Row, ':filter', vec)
+function Row.wrap()
+  wrp.fn(Row, 'new', {{'pos', vec}})
+  wrp.fn(Row, 'filter', {{'pos', vec}})
+end
 
-log:wrap(Row)
 
 return Row

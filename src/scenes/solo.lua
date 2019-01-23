@@ -4,6 +4,7 @@ local playerid      = require 'src.model.playerid'
 local cfg           = require 'src.Config'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
+local typ           = require 'src.core.typ'
 local env           = require 'src.core.env'
 local players       = require 'src.model.players.players'
 

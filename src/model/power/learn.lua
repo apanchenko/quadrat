@@ -1,4 +1,5 @@
 local ass       = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local learn = areal:extend('Learn')
@@ -15,6 +16,8 @@ function learn:apply_to_spot(spot)
 end
 
 --
-ass.wrap(learn, ':apply_to_spot', 'Spot')
+function learn.wrap()
+  wrp.fn(learn, 'apply_to_spot', {{'Spot'}})
+end
 
 return learn

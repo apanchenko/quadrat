@@ -32,53 +32,8 @@ function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > ' ..
 function ass.gt(a, b, msg)  return a >  b or error(msg or tostring(a).. ' <= '.. tostring(b)) end
 function ass.ge(a, b, msg)  return a >= b or error(msg or tostring(a).. ' > ' .. tostring(b)) end
 
--- wrap function of T
--- ellipsis not supported
-function ass.wrap(t, name, ...)
-  local tstr = tostring(tostring(t))
-  ass.tab(t, 'first arg is not a table in ass.wrap(?, '..tostring(name)..')')
-  --ass.tab(t, 'first arg is not a table in ass.wrap('..tstr..', '..tostring(name)..')')
-  ass.str(name)
-
-  local arg_types = {...}
-  local sep = string.sub(name, 1, 1)
-  local fname = string.sub(name, 2)
-  local method = tstr..name
-  local fun = t[fname]
-
-  --print('ass.wrap ('..tstr..", '"..name.."'). Sep "..sep)
-  ass(sep == '.' or sep == ':', 'ass.wrap('..tstr..", '"..name.."') use . or : before function name")
-  ass.fun(fun, tostring(t)..' has no function '..name)
-
-  local check_arguments = function(arg_types, ...)
-    --print('  check args - expected '..#arg_typ..', found '..#args)
-    ass(#arg == #arg_types, method..' expected '..#arg_types..' args, found '..#arg)
-    for i=1, #arg do
-      ass.is(arg[i], arg_types[i], "expect '"..tostring(arg_types[i]).."' as "..i..' argument in '..method..
-      ", found '"..tostring(arg[i]).."'")
-    end
-  end
-
-  -- define a new function
-  if sep == '.' then
-    t[fname] = function(...)
-      --print('wrapped '..name)
-      check_arguments(arg_types, ...)
-      return fun(...) -- call original function
-    end
-  else
-    t[fname] = function(s, ...)
-      --print('call wrapped '..name..'('..tostring(s)..', ' ..tostring(({...})[1]) )
-      --ass.is(s, t, name.." called via .") -- check self
-      check_arguments(arg_types, ...)
-      return fun(s, ...) -- call original function
-    end    
-  end
-end
-
 --
 function ass.test()
-  print('test ass..')
   ass(true)
   ass.nul(x)
   ass.num(8.8)

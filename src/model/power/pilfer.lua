@@ -1,4 +1,5 @@
 local ass       = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local pilfer = areal:extend('Pilfer')
@@ -16,6 +17,8 @@ function pilfer:apply_to_spot(spot)
 end
 
 --
-ass.wrap(pilfer, ':apply_to_spot', 'Spot')
+function pilfer.wrap()
+  wrp.fn(pilfer, 'apply_to_spot', {{'Spot'}})
+end
 
 return pilfer

@@ -7,6 +7,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
+local wrp       = require 'src.core.wrp'
 
 local StoneAbilities = obj:extend('StoneAbilities')
 
@@ -92,14 +93,14 @@ function StoneAbilities:hide()
   end
 end
 
---MODEULE----------------------------------------------------------------------
 --
-ass.wrap(StoneAbilities, ':new', 'Stone', 'Space')
-ass.wrap(StoneAbilities, ':set_count', typ.str, typ.num)
-ass.wrap(StoneAbilities, ':is_empty')
-ass.wrap(StoneAbilities, ':show')
-ass.wrap(StoneAbilities, ':hide')
+function StoneAbilities.wrap()
+  wrp.fn(StoneAbilities, 'new', {{'Stone'}, {'Space'}})
+  wrp.fn(StoneAbilities, 'set_count', {{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(StoneAbilities, 'is_empty')
+  wrp.fn(StoneAbilities, 'show')
+  wrp.fn(StoneAbilities, 'hide')
+end
 
-log:wrap(StoneAbilities, 'set_count', 'show', 'hide')
---]]
+--
 return StoneAbilities

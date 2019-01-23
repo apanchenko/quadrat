@@ -2,6 +2,8 @@
 
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
+local wrp   = require 'src.core.wrp'
+local log   = require 'src.core.log'
 
 local arr = {}
 
@@ -9,7 +11,7 @@ function arr.is_empty(t)
   return next(t) == nil
 end
 --
-function arr.add(t, v)
+function arr.push(t, v)
   t[#t + 1] = v
 end
 --
@@ -181,11 +183,6 @@ function arr.flatten(array)
   return all
 end
 --
-function arr.push(array, item)
-  table.insert(array, item)
-  return array
-end
---
 function arr.pop(array)
   return table.remove(array)
 end
@@ -221,15 +218,16 @@ function arr.tostring(t, sep)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(arr, '.add', typ.tab, typ.any)
-ass.wrap(arr, '.all', typ.tab, typ.fun)
-ass.wrap(arr, '.each', typ.tab, typ.fun)
-ass.wrap(arr, '.random', typ.tab)
+function arr.wrap()
+  wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, 'arr', true)
+  wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, 'arr', true)
+  wrp.fn(arr, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, 'arr', true)
+  wrp.fn(arr, 'random', {{'t', typ.tab}}, 'arr', true)
+end
 
 --
 function arr.test()
   local t = { 'semana', 'mes', 'ano' }
-
   ass.eq(arr.tostring(t), 'semana, mes, ano')
 end
 

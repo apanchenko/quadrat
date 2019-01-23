@@ -6,6 +6,7 @@ local cfg           = require 'src.Config'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
+local wrp           = require 'src.core.wrp'
 
 -- battle scene
 local battle = composer.newScene()
@@ -86,6 +87,6 @@ battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
 
-ass.wrap(battle, ':move', 'playerid')
+wrp.fn(battle, 'move', {{'playerid'}})
 
 return battle

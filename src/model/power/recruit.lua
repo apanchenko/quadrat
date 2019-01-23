@@ -1,4 +1,5 @@
 local ass       = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local recruit = areal:extend('Recruit')
@@ -14,6 +15,8 @@ function recruit:apply_to_spot(spot)
 end
 
 --
-ass.wrap(recruit, ':apply_to_spot', 'Spot')
+function recruit.wrap()
+  wrp.fn(recruit, 'apply_to_spot', {{'Spot'}})
+end
 
 return recruit

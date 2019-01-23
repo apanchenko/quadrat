@@ -5,6 +5,7 @@ local obj          = require 'src.core.obj'
 local typ          = require 'src.core.typ'
 local log          = require 'src.core.log'
 local arr          = require 'src.core.arr'
+local wrp          = require 'src.core.wrp'
 
 -- Ability has a potential to become certain power.
 local Ability = obj:extend('Ability')
@@ -72,11 +73,11 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Ability, ':new')
-ass.wrap(Ability, ':add_to', typ.tab)
-ass.wrap(Ability, ':decrease', typ.tab, typ.num)
-ass.wrap(Ability, ':create_power', 'Piece')
-
-log:wrap(Ability)
+function Ability.wrap()
+  wrp.fn(Ability, 'new', {})
+  wrp.fn(Ability, 'add_to', {{'abilities', typ.tab}})
+  wrp.fn(Ability, 'decrease', {{'abilities', typ.tab}, {'count', typ.num}})
+  wrp.fn(Ability, 'create_power', {{'Piece'}})
+end
 
 return Ability

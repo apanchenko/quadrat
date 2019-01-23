@@ -1,6 +1,8 @@
 local ass = require 'src.core.ass'
 local obj = require 'src.core.obj'
 local log = require 'src.core.log'
+local wrp = require 'src.core.wrp'
+local typ = require 'src.core.typ'
 
 local playerid = obj:extend('playerid')
 
@@ -26,16 +28,14 @@ function playerid.select(is_white)
   return B
 end
 
-
---
-ass.wrap(playerid, ':swap')
-
-log:wrap_fn(playerid, 'swap', {})
-log:wrap_fn(playerid, 'select', {{name='is_white'}}, nil, true)
+-- module
+function playerid.wrap()
+  wrp.fn(playerid, 'swap', {})
+  wrp.fn(playerid, 'select', {{'is_white', typ.boo}}, nil, true)
+end
 
 --
 function playerid.test()
-  print('test playerid')
   ass.eq(playerid.white, playerid.white)
   ass.eq(playerid.black, playerid.black)
   ass.ne(playerid.white, playerid.black)

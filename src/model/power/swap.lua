@@ -1,4 +1,5 @@
 local ass       = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local swap = areal:extend('Swap')
@@ -13,6 +14,8 @@ function swap:apply_to_spot(spot)
 end
 
 --
-ass.wrap(swap, ':apply_to_spot', 'Spot')
+function swap.wrap()
+  wrp.fn(swap, 'apply_to_spot', {{'Spot'}})
+end
 
 return swap

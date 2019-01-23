@@ -1,6 +1,7 @@
 local ass   = require 'src.core.ass'
 local log   = require 'src.core.log'
 local typ   = require 'src.core.typ'
+local wrp   = require 'src.core.wrp'
 
 -------------------------------------------------------------------------------
 local obj = setmetatable({}, {__tostring = function() return 'obj' end})
@@ -27,9 +28,11 @@ function obj:new(def)
   return def
 end
 
--- selftest -------------------------------------------------------------------
-ass.wrap(obj, ':extend', typ.str)
---ass.wrap(obj, ':new')
+-- module -------------------------------------------------------------------
+function obj.wrap()
+  wrp.fn(obj, 'extend', {{'name', typ.str}})
+  --wrp.fn(obj, ':new')
+end
 
 --
 function obj.test()

@@ -3,6 +3,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
+local wrp       = require 'src.core.wrp'
 local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
@@ -60,9 +61,7 @@ function remote:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(remote, ':move', playerid)
-ass.wrap(remote, ':move_async')
-
-log:wrap(remote, 'move', 'move_async')
+wrp.fn(remote, 'move', {{'playerid'}})
+wrp.fn(remote, 'move_async', {})
 
 return remote

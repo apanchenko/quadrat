@@ -1,5 +1,6 @@
-local ass       = require 'src.core.ass'
-local counted   = require 'src.model.power.counted'
+local ass     = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
+local counted = require 'src.model.power.counted'
 
 local multiply = counted:extend('multiply')
 
@@ -12,6 +13,8 @@ function multiply:move_after(from, to)
 end
 
 --
-ass.wrap(multiply, ':move_after', 'Spot', 'Spot')
+function multiply.wrap()
+  wrp.fn(multiply, 'move_after', {{'Spot'}})
+end
 
 return multiply

@@ -1,5 +1,6 @@
 local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
+local wrp     = require 'src.core.wrp'
 local power   = require 'src.model.power.power'
 
 -- power with counter
@@ -39,12 +40,12 @@ function counted:get_count()
 end
 
 --
-ass.wrap(counted, ':new', 'Piece')
-ass.wrap(counted, ':apply')
-ass.wrap(counted, ':increase')
-ass.wrap(counted, ':decrease')
-ass.wrap(counted, ':get_count')
-
-log:wrap(counted, 'new', 'apply', 'increase', 'decrease')
+function counted:wrap()
+  wrp.fn(counted, 'new', {{'Piece'}})
+  wrp.fn(counted, 'apply', {})
+  wrp.fn(counted, 'increase', {})
+  wrp.fn(counted, 'decrease', {})
+  wrp.fn(counted, 'get_count', {})
+end
 
 return counted

@@ -3,6 +3,7 @@ local Vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
+local wrp       = require 'src.core.wrp'
 local Config    = require 'src.model.Config'
 local Piece     = require 'src.model.Piece'
 
@@ -91,11 +92,9 @@ function Spot:remove_jade()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Spot, ':new', typ.num, typ.num, 'Space')
-ass.wrap(Spot, ':spawn_piece', 'playerid')
-ass.wrap(Spot, ':move_piece', Spot)
-ass.wrap(Spot, ':spawn_jade')
-
-log:wrap(Spot, 'spawn_piece', 'move_piece')
+wrp.fn(Spot, 'new', {{'x', typ.num}, {'y', typ.num}, {'Space'}})
+wrp.fn(Spot, 'spawn_piece', {{'playerid'}})
+wrp.fn(Spot, 'move_piece', {{'from', Spot}})
+wrp.fn(Spot, 'spawn_jade', {})
 
 return Spot

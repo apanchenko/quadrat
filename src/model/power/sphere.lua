@@ -1,4 +1,5 @@
 local ass     = require 'src.core.ass'
+local wrp     = require 'src.core.wrp'
 local power   = require 'src.model.power.power'
 
 local sphere = power:extend('sphere')
@@ -11,7 +12,9 @@ function sphere:can_move(from, to)
 end
 
 --
-ass.wrap(sphere, ':can_move', 'vec', 'vec')
+function sphere.wrap()
+  wrp.fn(sphere, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
+end
 
 --
 return sphere

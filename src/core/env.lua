@@ -1,4 +1,3 @@
-local log   = require 'src.core.log'
 local ass   = require 'src.core.ass'
 local map   = require 'src.core.map'
 local chk   = require 'src.core.chk'
@@ -30,9 +29,12 @@ function mt.__newindex(self, key, value)
   rawset(self, key, value)
 end
 
+function mt:__tostring()
+  return 'env'
+end
+
 -- self test
 function mt.test()
-  log:trace('env.test')
   -- create local test environment
   local env = setmetatable({}, mt)
   -- sideeffect of changing environment

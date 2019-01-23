@@ -1,6 +1,7 @@
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local typ     = require 'src.core.typ'
+local wrp     = require 'src.core.wrp'
 local power     = require 'src.model.power.power'
 
 -- areal power
@@ -29,8 +30,9 @@ function areal:apply()
 end
 
 --
-ass.wrap(areal, ':new', 'Piece', typ.tab)
-ass.wrap(areal, ':apply')
-log:wrap(areal, 'apply')
+function areal.wrap()
+  wrp.fn(areal, 'new', {{'Piece'}, {'zone', typ.tab}})
+  wrp.fn(areal, 'apply', {})
+end
 
 return areal

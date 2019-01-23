@@ -37,7 +37,6 @@ local chk =
 
 --
 function chk.test()
-  print('check.test..')
   assert(chk.nat(1))
   assert(chk.num(2.7))
   assert(chk.tab({}))

@@ -1,4 +1,3 @@
-local arr = require 'src.core.arr'
 local ass = require 'src.core.ass'
 
 -- create log instance
@@ -18,7 +17,9 @@ function log:info(...)    return self:out('I ', ...) end
 
 function log:out(prefix, ...)
   local str = prefix.. string.rep('  ', self.depth)
-  str = arr.reduce(arg, str, function(mem, a) return mem.. tostring(a).. ' ' end)
+  for i = 1, #arg do
+    str = str.. tostring(arg[i]).. ' '
+  end
   print(str)
   return self
 end
@@ -31,6 +32,7 @@ end
 
 -- wrap functions in table t with log
 function log:wrap(T, ...)
+  --[[
   ass.eq(tostring(self), 'log', ' in Log:wrap')
   ass.tab(T, 'first arg is not a table in log.wrap('..tostring(T)..')')
   local names = {...} -- list of function names to wrap
@@ -51,22 +53,7 @@ function log:wrap(T, ...)
       return result
     end
   end
-end
-
--- @param arg_info - array of argument descriptions {name, tostring}, may be nil
--- @param args - array of arguments
--- @return string representation of arguments
-local function arguments(arg_info, args)
-  local merged = args
-  if arg_info then
-    ass.eq(#arg_info, #args)
-    for i = 1, #args do
-      local info = arg_info[i];
-      local tostr = info.tostring or tostring
-      merged[i] = info.name.. '='.. tostr(args[i])
-    end
-  end
-  return arr.tostring(merged)
+  --]]
 end
 
 -- wrap function in t
@@ -74,6 +61,7 @@ end
 --    string  name - name for t
 --    boolean static - is function static (called via .)
 function log:wrap_fn(t, fn_name, arg_info, name, static)
+  --[[
   name = name or tostring(t)
   local call = 'log:wrap_fn('..name..', fn_name='..fn_name..')'
 
@@ -103,12 +91,12 @@ function log:wrap_fn(t, fn_name, arg_info, name, static)
       return result
     end
   end
+  ]]
 end
 
 function log.test()
-  print('test log..')
   ass(tostring(log) == 'log', 'log test')
-  ass(log:enter() == 1)
+  ass.eq(log:enter(), 1)
   log:exit(1)
 end
 

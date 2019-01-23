@@ -1,6 +1,7 @@
-local obj  = require 'src.core.obj'
+local obj   = require 'src.core.obj'
 local typ   = require 'src.core.typ'
-local ass     = require 'src.core.ass'
+local ass   = require 'src.core.ass'
+local wrp   = require 'src.core.wrp'
 
 -- 2d vector
 local vec = obj:extend('vec')
@@ -68,9 +69,20 @@ end
 vec.zero = vec(0, 0)
 vec.one = vec(1, 1)
 
+function vec.wrap()
+  wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, 'vec', true)
+  wrp.fn(vec, 'center', {{'obj', typ.tab}}, 'vec', true)
+  wrp.fn(vec, 'new', {{'x', typ.num}, {'y', typ.num}})
+  wrp.fn(vec, 'random', {{'min', vec}, {'max', vec}})
+  wrp.fn(vec, 'from', {{'obj', typ.tab}})
+  wrp.fn(vec, 'length2', {})
+  wrp.fn(vec, 'round', {})
+  wrp.fn(vec, 'to', {{'obj', typ.tab}})
+  wrp.fn(vec, 'abs', {})
+end
+
 -- selftest
 function vec.test()
-  print('vec.test..')
   assert(tostring(vec.one) == '[1,1]')
   
   local a = vec(2, 2)
@@ -85,16 +97,6 @@ function vec.test()
   local d = vec(-1.5, -0.5)
   ass(d:abs().x == 1.5)
 end
-
-ass.wrap(vec, '.copy', typ.tab, typ.tab)
-ass.wrap(vec, '.center', typ.tab)
-ass.wrap(vec, ':new', typ.num, typ.num)
-ass.wrap(vec, ':random', vec, vec)
-ass.wrap(vec, ':from', typ.tab)
-ass.wrap(vec, ':length2')
-ass.wrap(vec, ':round')
-ass.wrap(vec, ':to', typ.tab)
-ass.wrap(vec, ':abs')
 
 -- return module
 return vec

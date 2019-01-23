@@ -1,9 +1,10 @@
 local ass   = require 'src.core.ass'
-local typ = require 'src.core.typ'
+local typ   = require 'src.core.typ'
 local log   = require 'src.core.log'
+local wrp   = require 'src.core.wrp'
 
 -- name to value
-local map = setmetatable({}, {__tostring = function() return 'map' end})
+local map = {}
 
 -- or
 function map.any(t, fn)
@@ -102,18 +103,15 @@ function map.tostring(t, sep)
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(map, '.all', typ.tab, typ.fun)
-ass.wrap(map, '.each', typ.tab, typ.fun)
-ass.wrap(map, '.count', typ.tab)
-ass.wrap(map, '.random', typ.tab)
-
-log:wrap(map)
+function map.wrap()
+  wrp.fn(map, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, 'map', true)
+  wrp.fn(map, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, 'map', true)
+  wrp.fn(map, 'count', {{'t', typ.tab}}, 'map', true)
+  wrp.fn(map, 'random', {{'t', typ.tab}}, 'map', true)
+end
 
 --
 function map.test()
-  log:trace("map.test")
-
-  ass(tostring(map) == 'map')
   local t = { week='semana', month='mes', year='ano' }
 
   --ass(map.each(t, function(v) log:trace(v) end))

@@ -2,6 +2,7 @@ local obj       = require 'src.core.obj'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
+local wrp       = require 'src.core.wrp'
 
 local Col       = obj:extend('Col')
 
@@ -24,8 +25,8 @@ function Col.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Col, ':filter', vec)
-
---log:wrap(Col, 'filter')
+function Col.wrap()
+  wrp.fn(Col, ':filter', {{'pos', vec}})
+end
 
 return Col

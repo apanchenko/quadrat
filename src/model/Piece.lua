@@ -4,6 +4,7 @@ local typ       = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
+local wrp       = require 'src.core.wrp'
 local playerid  = require 'src.model.playerid'
 local Ability   = require 'src.model.Ability'
 
@@ -118,17 +119,17 @@ function Piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-ass.wrap(Piece, ':new', 'Space', 'playerid')
-ass.wrap(Piece, ':set_pos', Vec)
-ass.wrap(Piece, ':can_move', Vec, Vec)
-ass.wrap(Piece, ':set_color', 'playerid')
-ass.wrap(Piece, ':add_ability')
-ass.wrap(Piece, ':learn_ability', Ability)
-ass.wrap(Piece, ':use_ability', typ.str)
-ass.wrap(Piece, ':consume_ability', typ.str, typ.num)
-ass.wrap(Piece, ':add_power', Ability)
-ass.wrap(Piece, ':decrease_power', typ.str)
-
-log:wrap(Piece, 'set_pos', 'set_color', 'add_ability', 'learn_ability', 'use_ability', 'add_power', 'decrease_power')
+function Piece.wrap()
+  wrp.fn(Piece, 'new', {{'Space'}, {'playerid'}})
+  wrp.fn(Piece, 'set_pos', {{'pos', Vec}})
+  wrp.fn(Piece, 'can_move', {{'from', Vec}, {'to', Vec}})
+  wrp.fn(Piece, 'set_color', {{'playerid'}})
+  wrp.fn(Piece, 'add_ability', {})
+  wrp.fn(Piece, 'learn_ability', {{'abty', Ability}})
+  wrp.fn(Piece, 'use_ability', {{'name', typ.str}})
+  wrp.fn(Piece, 'consume_ability', {{'name', typ.str}, {'count', typ.num}})
+  wrp.fn(Piece, 'add_power', {{'abty', Ability}})
+  wrp.fn(Piece, 'decrease_power', {{'name', typ.str}})
+end
 
 return Piece
