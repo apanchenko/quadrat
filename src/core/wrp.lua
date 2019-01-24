@@ -4,40 +4,36 @@ local ass   = require 'src.core.ass'
 
 
 -- wrap
-local wrp = {}
-
--- duplicate arr.tostring
-local function arr_tostring(t)
-  if #t == 0 then
-    return ''
-  end
-  local res = tostring(t[1])
-  for i = 2, #t do
-    res = res.. ', '.. tostring(t[i])
-  end
-  return res
-end
+local wrp =
+{
+  severity = log.severity
+}
 
 -- wrap function t.fn_name
 -- @param arg_info - array of argument descriptions {name, type, tstr}
 -- @param t_name - name of t
 -- @param static - is function fn static (called via .)
-function wrp.fn(t, fn_name, arg_infos, t_name, static)
-  t_name = t_name or tostring(t)
+function wrp.fn(t, fn_name, arg_infos, opts)
+  opts = opts or {}
+  local t_name = opts.name or tostring(t)
+  local log_fn = opts.severity or wrp.severity.trc
   local call = 'wrp.fn('..t_name..', '..fn_name..')'
 
   ass.tab(t, 'first arg is not a table in '.. call)
   ass.str(fn_name, 'fn_name is not a string in '.. call)
+  ass.fun(log_fn)
 
   -- prepare arg_infos array
   arg_infos = arg_infos or {}
   for i = 1, #arg_infos do
     local info = arg_infos[i]
 
-    info.name = info[1] -- first is name of the argument
+    -- first is name of the argument
+    info.name = info[1]
     ass.str(info.name)
 
-    info.type = (function(type)-- second typ.child
+    -- second typ.child
+    info.type = (function(type) -- use anonymous function to get rid of elses
       if typ.is_simple(type) then
         return type
       end
@@ -50,7 +46,8 @@ function wrp.fn(t, fn_name, arg_infos, t_name, static)
     ass.str(info.type.name)
     ass.fun(info.type.is)
 
-    info.tostring = info[3] or tostring -- third is tostring function
+    -- third is tostring function
+    info.tostring = info[3] or tostring 
     ass.fun(info.tostring)
   end
 
@@ -61,22 +58,29 @@ function wrp.fn(t, fn_name, arg_infos, t_name, static)
   -- 
   local function arguments(call, args)
     local merged = args
-    ass.eq(#arg_infos, #args, fn_name..' expected '..#arg_infos..' arguments, found '..#args..' in '..call)
-    for i = 1, #args do
-      local arg = args[i]
-      local info = arg_infos[i];
+    ass.eq(#arg_infos, #args, ' expected '..#arg_infos..' arguments, found '..#args..' in '..call)
+    if #args == 0 then
+      return ''
+    end    
+
+    local function merge(arg, info)
       local argstr = info.tostring(arg)
       ass(info.type.is(arg), info.name..'='..argstr..' is not '..info.type.name.." in "..call)
-      merged[i] = info.name.. '='.. argstr
+      return info.name.. '='.. argstr
     end
-    return arr_tostring(merged)
+
+    local res = merge(args[1], arg_infos[1])
+    for i = 2, #args do
+      res = res.. ', '.. merge(args[i], arg_infos[i])
+    end
+    return res
   end
 
   -- define a new function
-  if static then
+  if opts.static then
     t[fn_name] = function(...)
       local call = t_name..'.'..fn_name
-      local depth = log:trace(call..'('..arguments(call, {...})..')'):enter()
+      local depth = log_fn(log, call..'('..arguments(call, {...})..')'):enter()
       local result = fn(...)
       log:exit(depth)
       return result
@@ -86,7 +90,7 @@ function wrp.fn(t, fn_name, arg_infos, t_name, static)
       local args = {...}
       local self = table.remove(args, 1)
       local call = tostring(self)..':'..fn_name
-      local depth = log:trace(call..'('..arguments(call, args)..')'):enter()
+      local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
       local result = fn(...)
       log:exit(depth)
       return result

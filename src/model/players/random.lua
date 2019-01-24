@@ -72,6 +72,4 @@ wrp.fn(random, 'new', {{'env', typ.any}, {'playerid'}}) -- env?
 wrp.fn(random, 'move', {{'playerid'}})
 wrp.fn(random, 'move_async')
 
-log:wrap(random, 'move', 'move_async')
-
 return random

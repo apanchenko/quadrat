@@ -209,10 +209,16 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function arr.wrap()
-  wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, 'arr', true)
-  wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, 'arr', true)
-  wrp.fn(arr, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, 'arr', true)
-  wrp.fn(arr, 'random', {{'t', typ.tab}}, 'arr', true)
+  local opts =
+  {
+    name = 'arr',
+    static = true,
+    severity = wrp.severity.inf
+  }
+  wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, opts)
+  wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
+  wrp.fn(arr, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
+  wrp.fn(arr, 'random', {{'t', typ.tab}}, opts)
 end
 
 --

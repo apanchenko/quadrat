@@ -8,6 +8,8 @@ local cfg           = require 'src.Config'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
+local wrp           = require 'src.core.wrp'
+local typ           = require 'src.core.typ'
 local net           = require 'src.net'
 local players       = require 'src.model.players.players'
 
@@ -55,8 +57,8 @@ lobby:addEventListener("hide", lobby)
 lobby:addEventListener("destroy", lobby)
 
 --
-log:wrap_fn(lobby, 'on_opponent', {{name='room_id'}, {name='createdByMe'}}, 'lobby')
-log:wrap_fn(lobby, 'on_opponent_error', {{name='msg'}}, 'lobby')
+wrp.fn(lobby, 'on_opponent', {{'room_id', typ.num}, {'createdByMe', typ.boo}}, 'lobby')
+wrp.fn(lobby, 'on_opponent_error', {{'msg', typ.str}}, 'lobby')
 
 function lobby.test()
   print('test lobby..')

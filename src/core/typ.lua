@@ -25,7 +25,7 @@ return
     return
     {
       name = tostring(mt),
-      is = function(v) print('typ.meta.is '..tostring(v)) return getmetatable(v) == mt end
+      is = function(v) return getmetatable(v) == mt end
     }
   end,
 

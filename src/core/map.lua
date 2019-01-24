@@ -104,10 +104,16 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function map.wrap()
-  wrp.fn(map, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, 'map', true)
-  wrp.fn(map, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, 'map', true)
-  wrp.fn(map, 'count', {{'t', typ.tab}}, 'map', true)
-  wrp.fn(map, 'random', {{'t', typ.tab}}, 'map', true)
+  local opts =
+  {
+    name = 'map',
+    static = true,
+    severity = wrp.severity.inf
+  }
+  wrp.fn(map, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
+  wrp.fn(map, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
+  wrp.fn(map, 'count', {{'t', typ.tab}}, opts)
+  wrp.fn(map, 'random', {{'t', typ.tab}}, opts)
 end
 
 --

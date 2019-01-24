@@ -70,15 +70,21 @@ vec.zero = vec(0, 0)
 vec.one = vec(1, 1)
 
 function vec.wrap()
-  wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, 'vec', true)
-  wrp.fn(vec, 'center', {{'obj', typ.tab}}, 'vec', true)
-  wrp.fn(vec, 'new', {{'x', typ.num}, {'y', typ.num}})
-  wrp.fn(vec, 'random', {{'min', vec}, {'max', vec}})
-  wrp.fn(vec, 'from', {{'obj', typ.tab}})
-  wrp.fn(vec, 'length2', {})
-  wrp.fn(vec, 'round', {})
-  wrp.fn(vec, 'to', {{'obj', typ.tab}})
-  wrp.fn(vec, 'abs', {})
+  local opts =
+  {
+    static = true,
+    severity = wrp.severity.inf
+  }
+  wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, opts)
+  wrp.fn(vec, 'center', {{'obj', typ.tab}}, opts)
+  opts.static = false
+  wrp.fn(vec, 'new', {{'x', typ.num}, {'y', typ.num}}, opts)
+  wrp.fn(vec, 'random', {{'min', vec}, {'max', vec}}, opts)
+  wrp.fn(vec, 'from', {{'obj', typ.tab}}, opts)
+  wrp.fn(vec, 'length2', {}, opts)
+  wrp.fn(vec, 'round', {}, opts)
+  wrp.fn(vec, 'to', {{'obj', typ.tab}}, opts)
+  wrp.fn(vec, 'abs', {}, opts)
 end
 
 -- selftest

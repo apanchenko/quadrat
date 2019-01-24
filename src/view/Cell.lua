@@ -66,5 +66,4 @@ wrp.fn(Cell, 'set_stone', {{'Stone'}})
 wrp.fn(Cell, 'stone')
 wrp.fn(Cell, 'remove_stone')
 
-log:wrap(Cell, 'set_jade', 'remove_jade', 'remove_stone', 'set_stone')
 return Cell

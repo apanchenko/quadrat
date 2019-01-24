@@ -4,6 +4,7 @@ local typ       = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local map       = require 'src.core.map'
 local arr       = require 'src.core.arr'
+local wrp       = require 'src.core.wrp'
 
 local photon    = require 'plugin.photon'
 local Client    = photon.loadbalancing.LoadBalancingClient
@@ -45,22 +46,22 @@ function net:new()
       this.on_error()
     end
   end
-  log:wrap_fn(client, 'onError', {
-    {name='code', tostring=function(code) return map.key(Client.PeerErrorCode, code) end},
-    {name='msg'}}, 'client')
+  wrp.fn(client, 'onError', {
+    {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
+    {'msg', typ.str}}, 'client')
 
   -- react to state change
   function client:onStateChange(state)
   end    
-  log:wrap_fn(client, 'onStateChange', {{name='state', tostring=Client.StateToName}}, 'client')
+  wrp.fn(client, 'onStateChange', {{'state', typ.num, Client.StateToName}}, 'client')
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  log:wrap_fn(client, 'onOperationResponse', {
-    {name='errCode'},
-    {name='errMsg'},
-    {name='code', tostring=function(code) return map.key(const.OperationCode, code) end},
-    {name='content', tostring=map.tostring}}, 'client')
+  wrap_fn(client, 'onOperationResponse', {
+    {'errCode', typ.num},
+    {'errMsg', typ.str},
+    {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
+    {'content', typ.tab, map.tostring}}, 'client')
 
   client.logger:setLevel(photon.common.Logger.Level.WARN)
   client.sent_count = 0
@@ -105,8 +106,8 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  log:wrap_fn(client, 'onActorJoin', {
-    {name='actor', tostring=function(actor) return tostring(actor.actorNr) end}}, 'client')
+  wrp.fn(client, 'onActorJoin', {
+    {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end}}, 'client')
 
   function client:sendData()
     if self:isJoinedToRoom() and self.sent_count < MAX_SENDCOUNT then
@@ -129,13 +130,13 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  log:wrap_fn(client, 'onRoomList', {
-    {name='rooms', tostring=function(v) return arr.tostring(map.keys(v)) end}}, 'client')
-  log:wrap_fn(client, 'onJoinRoom', {{name='createdByMe'}}, 'client')
-  log:wrap_fn(client, 'onEvent', {
-    {name='code'},
-    {name='content', tostring=map.tostring},
-    {name='actor'}}, 'client')
+  wrp.fn(client, 'onRoomList', {
+    {'rooms', typ.tab, function(v) return arr.tostring(map.keys(v)) end}}, 'client')
+  wrp.fn(client, 'onJoinRoom', {{'createdByMe', typ.boo}}, 'client')
+  wrp.fn(client, 'onEvent', {
+    {'code', typ.num},
+    {'content', typ.tab, map.tostring},
+    {'actor', typ.tab}}, 'client')
 
 
   -- start running
@@ -152,7 +153,7 @@ function net:find_opponent(on_opponent, on_error)
 end
 
 --
-log:wrap(net, 'new')
+wrp.fn(net, 'new')
 
 function net.test()
   print('test net..')
