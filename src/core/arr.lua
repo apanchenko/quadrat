@@ -3,17 +3,20 @@
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
-local log   = require 'src.core.log'
 
 local arr = {}
 
-function arr.is_empty(t)
-  return next(t) == nil
-end
---
-function arr.push(t, v)
-  t[#t + 1] = v
-end
+-- check if array t is empty
+function arr.is_empty(t)        return next(t) == nil end
+-- add v at the end of array t
+function arr.push(t, v)         t[#t + 1] = v end
+-- remove and return last element of array t
+function arr.pop(t)             return table.remove(t) end
+-- remove and return first element of array t
+function arr.shift(t)           return table.remove(t, 1) end
+-- insert v at the front of array t
+function arr.unshift(t, v)      table.insert(t, 1, v) end
+
 --
 function arr.each(t, fn)
   for i = 1, #t do
@@ -139,23 +142,23 @@ function arr.reverse(t)
   return reversed
 end
 --
-function arr.first(array, n)
+function arr.first(t, n)
   if n == nil then
-    return array[1]
+    return t[1]
   end
   local first = {}
-  n = math.min(n, #array)
+  n = math.min(n, #t)
   for i = 1, n do
-    first[i] = array[i]
+    first[i] = t[i]
   end
   return first
 end
 --
-function arr.rest(array, index)
+function arr.rest(t, index)
   index = index or 2
   local rest = {}
-  for i = index, #array do
-    rest[#rest + 1] = array[i]
+  for i = index, #t do
+    rest[#rest + 1] = t[i]
   end
   return rest
 end
@@ -181,19 +184,6 @@ function arr.flatten(array)
     end
   end
   return all
-end
---
-function arr.pop(array)
-  return table.remove(array)
-end
---
-function arr.shift(array)
-  return table.remove(array, 1)
-end
---
-function arr.unshift(array, item)
-  table.insert(array, 1, item)
-  return array
 end
 --
 function arr.join(array, separator)
