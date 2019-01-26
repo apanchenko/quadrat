@@ -1,5 +1,4 @@
 local ass   = require 'src.core.ass'
-local log   = require 'src.core.log'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
 

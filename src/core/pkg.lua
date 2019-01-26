@@ -3,6 +3,15 @@ local obj         = require 'src.core.obj'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 
+-- Core dependency graph:
+-- typ                     bld
+-- chk
+-- ass
+-- log
+-- wrp                 lay
+-- map arr obj
+-- env     evt pkg vec
+
 --
 local pkg = obj:extend('pkg')
 

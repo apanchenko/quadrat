@@ -3,7 +3,7 @@ local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
-local cfg         = require 'src.Config'
+local cfg         = require 'src.cfg'
 
 local image = obj:extend('view.power.image')
 

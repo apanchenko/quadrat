@@ -1,26 +1,14 @@
------------------------------------------------------------------------------------------
---
--- main.lua
---
------------------------------------------------------------------------------------------
-
 print(_VERSION)
---[[
-require('src.core.obj').test()
-require('src.core.chk').test()
-require('src.core.ass').test()
-require('src.core.arr').test()
-require('src.core.map').test()
-require('src.core.log').test()
-require('src.core.vec').test()
-require('src.core.env').test()
-require('src.model.playerid').test()
-require('src.model.zones.Zones').test()
-require('src.model.power.destroy').test()
-require('src.scenes.scenes').test()
-require('src.net').test()
---]]
-local pkg = require('src.core.pkg')
+
+local env = require 'src.core.env'
+local log = require 'src.core.log'
+local cfg = require 'src.cfg'
+
+env.log = log
+env.cfg = cfg
+
+local pkg = require 'src.core.pkg'
+
 pkg.cor:wrap()
 pkg.cor:test()
 

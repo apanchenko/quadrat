@@ -1,7 +1,7 @@
 local composer      = require "composer"
 local Space         = require 'src.model.Space'
 local playerid      = require 'src.model.playerid'
-local cfg           = require 'src.Config'
+local cfg           = require 'src.cfg'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
 local typ           = require 'src.core.typ'

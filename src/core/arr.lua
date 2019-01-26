@@ -3,6 +3,7 @@
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
+local log   = require 'src.core.log'
 
 local arr = {}
 
@@ -213,7 +214,7 @@ function arr.wrap()
   {
     name = 'arr',
     static = true,
-    severity = wrp.severity.inf
+    log_fn = log.info
   }
   wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, opts)
   wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)

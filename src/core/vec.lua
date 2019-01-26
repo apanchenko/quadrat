@@ -2,6 +2,7 @@ local obj   = require 'src.core.obj'
 local typ   = require 'src.core.typ'
 local ass   = require 'src.core.ass'
 local wrp   = require 'src.core.wrp'
+local log   = require 'src.core.log'
 
 -- 2d vector
 local vec = obj:extend('vec')
@@ -47,15 +48,15 @@ end
 function vec:__tostring()
   return '['.. self.x.. ",".. self.y.. ']'
 end
---
+-- square length
 function vec:length2()
   return (self.x * self.x) + (self.y * self.y)
 end
---
+-- round x,y to closest integer values
 function vec:round()
   return vec:new(math.floor(self.x + 0.5), math.floor(self.y + 0.5))
 end
---
+-- copy x,y into obj
 function vec:to(obj)
   obj.x = self.x
   obj.y = self.y
@@ -69,12 +70,10 @@ end
 vec.zero = vec(0, 0)
 vec.one = vec(1, 1)
 
+-- module ---------------------------------------------------------------------
+-- wrap vec functions
 function vec.wrap()
-  local opts =
-  {
-    static = true,
-    severity = wrp.severity.inf
-  }
+  local opts = { static = true, log_fn = log.info }
   wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, opts)
   wrp.fn(vec, 'center', {{'obj', typ.tab}}, opts)
   opts.static = false

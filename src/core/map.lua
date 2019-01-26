@@ -1,7 +1,7 @@
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
-local log   = require 'src.core.log'
 local wrp   = require 'src.core.wrp'
+local log   = require 'src.core.wrp'
 
 -- name to value
 local map = {}
@@ -108,7 +108,7 @@ function map.wrap()
   {
     name = 'map',
     static = true,
-    severity = wrp.severity.inf
+    log_fn = log.info
   }
   wrp.fn(map, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
   wrp.fn(map, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
@@ -120,7 +120,6 @@ end
 function map.test()
   local t = { week='semana', month='mes', year='ano' }
 
-  --ass(map.each(t, function(v) log:trace(v) end))
   ass(map.any(t, function(v) return #v > 3 end))
   ass(map.all(t, function(v) return #v > 2 end))
   ass.eq(map.count(t), 3)

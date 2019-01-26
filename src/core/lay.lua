@@ -1,4 +1,4 @@
-local cfg = require 'src.Config'
+local cfg = require 'src.cfg'
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 
@@ -94,19 +94,15 @@ function lay.image(group, opts, path)
   return img
 end
 
---[[-----------------------------------------------------------------------------
-group   display group insert in
-opts:
-  text  text to render
-  vx    optional, defaults to 0
-  vy    optional, defaults to 0
-  fontSize
------------------------------------------------------------------------------]]--
+-- Display text
+-- @param group   display group insert in
+-- @param opts = {text, vx, vy, x, y, width, height, font, fontSize}
+-- @see https://docs.coronalabs.com/api/library/display/newText.html
 function lay.text(group, opts)
   ass.tab(opts, "opts")
 
   if opts.font == nil then
-    opts.font = cfg.font                    -- select default font
+    opts.font = cfg.font -- select default font
   end
 
   if opts.w then

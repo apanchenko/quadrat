@@ -1,8 +1,7 @@
 local ass = require 'src.core.ass'
 local bld = require 'src.core.bld'
-local cfg = require 'src.cfg'
 
--- create log instance
+-- Create log.
 local log = { depth = 0 }
 
 --
@@ -14,24 +13,19 @@ local function out(severity, ...)
   print(str)
 end
 
--- chained
-function log:error(...)   out('err ', ...) return self end
-function log:warning(...) out('wrn ', ...) return self end
-function log:trace(...)   out('trc ', ...) return self end
-
-if cfg.build == bld.debug then
-  log.info = function(self, ...) out('inf ', ...) return self end
-else
-  log.info = function(self) return self end
+-- configure log
+function log:on_cfg(cfg)
+  if cfg.build == bld.debug then
+    self.info  = function(me, ...) out('inf ', ...) return me end
+    self.trace = function(me, ...) out('trc ', ...) return me end
+  else
+    self.info  = function(me)                       return me end
+    self.trace = function(me)                       return me end
+  end
+  self.error   = function(me, ...) out('err ', ...) return me end
+  self.warning = function(me, ...) out('wrn ', ...) return me end
+  self:trace('log:on_cfg '..cfg.build.name)
 end
-
-log.severity =
-{
-  err = log.error,
-  wrn = log.warning,
-  trc = log.trace,
-  inf = log.info
-}
 
 -- increase stack depth
 function log:enter()

@@ -1,5 +1,6 @@
+-- build configurations
 return 
 {
-  release = 1,
-  debug = 2
+  release = {name='release'},
+  debug   = {name='debug'}
 }

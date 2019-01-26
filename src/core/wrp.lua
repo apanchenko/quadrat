@@ -4,10 +4,7 @@ local ass   = require 'src.core.ass'
 
 
 -- wrap
-local wrp =
-{
-  severity = log.severity
-}
+local wrp = {}
 
 -- wrap function t.fn_name
 -- @param arg_info - array of argument descriptions {name, type, tstr}
@@ -16,7 +13,7 @@ local wrp =
 function wrp.fn(t, fn_name, arg_infos, opts)
   opts = opts or {}
   local t_name = opts.name or tostring(t)
-  local log_fn = opts.severity or wrp.severity.trc
+  local log_fn = opts.log_fn or log.trace
   local call = 'wrp.fn('..t_name..', '..fn_name..')'
 
   ass.tab(t, 'first arg is not a table in '.. call)

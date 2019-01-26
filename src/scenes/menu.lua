@@ -2,7 +2,7 @@ local widget    = require 'widget'
 local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
-local cfg       = require 'src.Config'
+local cfg       = require 'src.cfg'
 local scene     = require 'src.scenes.scenes'
 
 local menu = composer.newScene()
@@ -46,6 +46,10 @@ function menu:create(event)
   end
 
   lay.column(buttons, 5)
+
+  -- draw version
+  lay.text(self, {text=cfg.version, x=0, vy=90})
+
   lay.render(self, buttons, {vy=15})
 end
 

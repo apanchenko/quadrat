@@ -2,7 +2,7 @@ local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 local typ = require 'src.core.typ'
 local obj = require 'src.core.obj'
-local wrp   = require 'src.core.wrp'
+local wrp = require 'src.core.wrp'
 
 local evt = obj:extend('evt')
 

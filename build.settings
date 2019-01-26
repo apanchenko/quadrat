@@ -7,10 +7,8 @@ settings =
 {
 	orientation =
 	{
-		-- Supported values for orientation:
-		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 		default = "portrait",
-		supported = { "portrait", "portraitUpsideDown" },
+		supported = { "portrait", "portraitUpsideDown", "landscapeLeft", "landscapeRight" },
 	},
 
 	android =
@@ -33,24 +31,28 @@ settings =
 
 	win32 =
 	{
-			-- Settings for Win32 apps go here
+		singleInstance = false,
 	},
 	window =
 	{
-			defaultViewWidth = 640,
-			defaultViewHeight = 960,
-			titleText = {
-				default = "Window Title Test",
-				["en‐us"] = "Window Title Test (English‐USA)",
-				["en‐gb"] = "Window Title Test (English‐UK)",
-				["en"] = "Window Title Test (English)",
-				["fr"] = "Window Title Test (French)",
-				["es"] = "Window Title Test (Spanish)",
+		defaultViewWidth = 640,
+		defaultViewHeight = 960,
+		titleText = {
+			default = "Quadrat",
+			["en‐us"] = "Quadrat",
+			["en‐gb"] = "Quadrat",
+			["en"] = "Quadrat",
+			["fr"] = "Quadrat",
+			["es"] = "Quadrat",
 		},
+		resizable = true,
+		enableCloseButton = true,
+		enableMinimizeButton = true,
+		enableMaximizeButton = true,
 	},  
 	excludeFiles =
 	{
-			all = { "res/*.*" },
+		all = { "res/*.*" },
 	},
 
 	plugins =
@@ -63,7 +65,6 @@ settings =
 
 	excludeFiles =
 	{
-		-- Exclude unnecessary files for each platform
 		all = { "Icon.png", "Icon-*dpi.png", "Images.xcassets", },
 		android = { "LaunchScreen.storyboardc", },
 	},

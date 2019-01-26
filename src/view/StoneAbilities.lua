@@ -1,7 +1,7 @@
 local widget    = require 'widget'
 local arr       = require 'src.core.arr'
 local vec       = require "src.core.vec"
-local cfg       = require 'src.Config'
+local cfg       = require 'src.cfg'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'

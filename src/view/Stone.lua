@@ -9,7 +9,7 @@ local typ         = require 'src.core.typ'
 local wrp         = require 'src.core.wrp'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
-local cfg         = require 'src.Config'
+local cfg         = require 'src.cfg'
 local Player      = require 'src.Player'
 local powers      = require 'src.view.power.powers'
 
