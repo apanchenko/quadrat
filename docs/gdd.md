@@ -1,7 +1,7 @@
 # Thesaurus
-- quadrat - name of the game
-- field - one square element of the board
-- jade - randomly spawns on free fields, and holds one augment
+- quadrat - the name of the game
+- field   - one square element of the board
+- jade    - randomly spawns on free fields
 
 # Keywords
 chekers, board, powerups, quadradius
@@ -9,14 +9,31 @@ chekers, board, powerups, quadradius
 # Short description
 Checkers with powerups.
 
-# Description
-The Quadrat is a 8x8 squares board. Two players each starting with 16 similar stones placed on first two lines like in chess. Each turn player uses any amount of abilities, then moves a stone one square. To win, a player must destroy all enemy stones. The easiest way to destroy a stone is to move a stone on top it.
-Quadrat most interesting feature is augments. As a game goes on, jades will occasionally spawn on top of random free spaces on board. Landing on an jade will cause that piece to acquire an augment. A player can use any amount of augments on their turn, as long as they only move once. Each piece has its own inventory of augments it has collected. 
+# Core game description
+The Quadrat is a 8x8 squares board. Two players each starting with 16 similar stones placed on first two lines like in chess.
+Each turn a player may
+1. use any amount of jades her stones have
+2. then move any stone one square in any nondiagonal direction to:
+   - eigher an empty field
+   - or field with jade, acquiring it
+   - or field taken by opponent stone, killing it.
 
-# Augments
+As a game goes on new jades will spawn on free fields. Players normally cannot see spawned jades qualities. When a jade is acquired, depending on its type, it:
+- immediately modifyes owner stone
+- or stored in owner stone to be used later.
+
+To win, a player must destroy all enemy stones. The easiest way to destroy a stone is to move a stone on top it.
+
+Quadrat most interesting feature is jades. It is important to
+
+# Meta game description
+Player starts first battle with a set of free jades. Every time she eats a new jade, the jade becomes available immediately or in jade shop.
+A player has a box of selected jades to be used in battle.
+
+# Jades
 - may be Radial, Row or Column
 
-| Name            | Effect                                     | Members Only |
+| Name            | Effect                                     | Free         |
 |----------------:|-------------------------------------------:|-------------:|
 | Multiply        | Creates a new piece. Can be placed anywhere adjacent to the piece that used the ability.                                   | No           |
 | Jade Rehash     | Removes all current Power Orbs and randomly places new ones onto the board.                                                | No           |
