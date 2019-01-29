@@ -1,9 +1,9 @@
 local Spot      = require 'src.model.Spot'
 local Piece     = require 'src.model.Piece'
 local playerid  = require 'src.model.playerid'
-local Config    = require 'src.model.Config'
+local cfg       = require 'src.cfg'
 local evt       = require 'src.core.evt'
-local Vec       = require 'src.core.vec'
+local vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local obj       = require 'src.core.obj'
@@ -21,7 +21,7 @@ function Space:new(cols, rows, seed)
   {
     cols  = cols,    -- width
     rows  = rows,    -- height
-    size  = Vec(cols, rows),
+    size  = vec(cols, rows),
     grid  = {},      -- cells
     pid   = playerid.white, -- who moves now
     move_count = 0, -- number of moves from start
@@ -57,13 +57,15 @@ end
 -- initial pieces placement
 function Space:setup()
   for x = 0, self.cols - 1 do
-    self.grid[x * self.cols]:spawn_piece(playerid.white)
-    self.grid[x * self.cols + self.rows - 1]:spawn_piece(playerid.black)
+    self:spot(vec(x, 0            )):spawn_piece(playerid.white)
+    self:spot(vec(x, 1            )):spawn_piece(playerid.white)
+    self:spot(vec(x, self.rows - 1)):spawn_piece(playerid.black)
+    self:spot(vec(x, self.rows - 2)):spawn_piece(playerid.black)
   end
   self:notify('move', self.pid) -- notify color to move
 end
 -- position vector from grid index
-function Space:pos(index)   return Vec(self:col(index), self:row(index)) end
+function Space:pos(index)   return vec(self:col(index), self:row(index)) end
 -- index of cell and piece, private
 function Space:index(vec)   return vec.x * self.cols + vec.y end
 -- iterate cells
@@ -114,7 +116,7 @@ function Space:who_move()   return self.pid end
 
 -- check if piece can move from one position to another
 function Space:can_move(fr, to)
-  if not (fr < self.size and to < self.size and Vec.zero <= fr and Vec.zero <= to) then
+  if not (fr < self.size and to < self.size and vec.zero <= fr and vec.zero <= to) then
     return false;
   end
 
@@ -155,7 +157,7 @@ function Space:move(fr, to)
   self.move_count = self.move_count + 1 -- increment moves count
 
   -- randomly spawn jades
-  if (self.move_count % Config.jade.moves) == 0 then
+  if (self.move_count % cfg.jade.moves) == 0 then
     for i = 0, #self.grid do -- pics is not dense, so use # on grid
       self.grid[i]:spawn_jade()
     end
@@ -187,15 +189,15 @@ wrp.fn(Space, 'height', {})
 wrp.fn(Space, 'row', {{'place', typ.num}})
 wrp.fn(Space, 'col', {{'place', typ.num}})
 wrp.fn(Space, 'pos', {{'index', typ.num}})
-wrp.fn(Space, 'index', {{'vec', Vec}})
+wrp.fn(Space, 'index', {{'vec', vec}})
 --wrp.fn(Space, 'spots', {})
-wrp.fn(Space, 'spot', {{'pos', Vec}})
+wrp.fn(Space, 'spot', {{'pos', vec}})
 wrp.fn(Space, 'count_pieces', {})
-wrp.fn(Space, 'piece', {{'pos', Vec}})
+wrp.fn(Space, 'piece', {{'pos', vec}})
 wrp.fn(Space, 'who_move', {})
-wrp.fn(Space, 'can_move', {{'from', Vec}, {'to', Vec}})
-wrp.fn(Space, 'move', {{'from', Vec}, {'to', Vec}})
-wrp.fn(Space, 'use', {{'pos', Vec}, {'ability_name', typ.str}})
+wrp.fn(Space, 'can_move', {{'from', vec}, {'to', vec}})
+wrp.fn(Space, 'move', {{'from', vec}, {'to', vec}})
+wrp.fn(Space, 'use', {{'pos', vec}, {'ability_name', typ.str}})
 
 -- return module
 return Space

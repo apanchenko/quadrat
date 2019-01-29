@@ -4,7 +4,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
 local wrp       = require 'src.core.wrp'
-local Config    = require 'src.model.Config'
+local cfg       = require 'src.cfg'
 local Piece     = require 'src.model.Piece'
 
 local Spot = obj:extend('Spot')
@@ -69,7 +69,7 @@ function Spot:spawn_jade()
   if self.piece then
     return
   end
-  if math.random() > Config.jade.probability then
+  if math.random() > cfg.jade.probability then
     return
   end
   self.jade = true
