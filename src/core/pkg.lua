@@ -65,7 +65,10 @@ end
 
 -- get random module
 function pkg:random(pred)
-  return arr.random(map.select(self.modules, pred))
+  if pred then
+    return arr.random(map.select(self.modules, pred))
+  end
+  return map.random(self.modules)
 end
 
 -- test modules

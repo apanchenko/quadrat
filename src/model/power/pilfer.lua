@@ -4,6 +4,11 @@ local areal     = require 'src.model.power.areal'
 
 local pilfer = areal:extend('Pilfer')
 
+-- can spawn in jade
+function pilfer:can_spawn()
+  return true
+end
+
 -- implement pure virtual areal:apply_to_spot
 -- teach other pieces in zone
 function pilfer:apply_to_spot(spot)

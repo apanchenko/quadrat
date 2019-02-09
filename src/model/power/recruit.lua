@@ -4,6 +4,11 @@ local areal     = require 'src.model.power.areal'
 
 local recruit = areal:extend('Recruit')
 
+-- can spawn in jade
+function recruit:can_spawn()
+  return true
+end
+
 -- implement pure virtual areal:apply_to_spot
 -- change color of enemy pieces in zone
 function recruit:apply_to_spot(spot)

@@ -4,6 +4,11 @@ local areal     = require 'src.model.power.areal'
 
 local learn = areal:extend('Learn')
 
+-- can spawn in jade
+function learn:can_spawn()
+  return true
+end
+
 -- implement pure virtual areal:apply_to_spot
 -- teach other pieces in zone
 function learn:apply_to_spot(spot)
