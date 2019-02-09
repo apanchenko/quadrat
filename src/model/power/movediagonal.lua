@@ -3,11 +3,6 @@ local power   = require 'src.model.power.power'
 
 local movediagonal = power:extend('movediagonal')
 
--- constructor
-function movediagonal:new(piece)
-  return power.new(self, piece)
-end
-
 -- can spawn in jade
 function movediagonal:can_spawn()
   return true

@@ -3,6 +3,11 @@ local ass   = require 'src.core.ass'
 
 local rehash = power:extend('rehash')
 
+-- can spawn in jade
+function rehash:can_spawn()
+  return true
+end
+
 -- use
 function rehash:apply()
   -- get empty spots to rehash

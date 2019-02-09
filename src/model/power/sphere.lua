@@ -4,6 +4,11 @@ local power   = require 'src.model.power.power'
 
 local sphere = power:extend('sphere')
 
+-- can spawn in jade
+function sphere:can_spawn()
+  return true
+end
+
 function sphere:can_move(from, to)
   local w = self.piece.space:width()
   local h = self.piece.space:height()

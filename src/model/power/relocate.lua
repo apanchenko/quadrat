@@ -4,6 +4,11 @@ local arr = require 'src.core.arr'
 
 local relocate = power:extend('Relocate')
 
+-- can spawn in jade
+function relocate:can_spawn()
+  return true
+end
+
 -- apply power
 function relocate:apply()
   local space = self.piece.space

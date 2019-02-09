@@ -5,11 +5,6 @@ local counted = require 'src.model.power.counted'
 
 local multiply = counted:extend('multiply')
 
--- constructor
-function multiply:new(piece)
-  return counted.new(self, piece)
-end
-
 -- can spawn in jade
 function multiply:can_spawn()
   return true
@@ -30,7 +25,6 @@ end
 
 --
 function multiply.wrap()
-  wrp.fn(multiply, 'new',         {{'Piece'}})
   wrp.fn(multiply, 'move_after',  {{'vec'}, {'vec'}})
 end
 

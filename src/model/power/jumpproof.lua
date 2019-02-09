@@ -4,6 +4,11 @@ local power   = require 'src.model.power.power'
 
 local jumpproof = power:extend('jumpproof')
 
+-- can spawn in jade
+function jumpproof:can_spawn()
+  return true
+end
+
 jumpproof.is_jump_protected = true
 
 
