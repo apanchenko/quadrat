@@ -25,14 +25,38 @@ function areal:apply()
   local spots = self.piece.space:select_spots(function(spot) return area:filter(spot.pos) end)
   -- apply to each selected spot
   for i = 1, #spots do
-    self:apply_to_spot(spots[i])
+    local spot = spots[i]
+    self:apply_to_spot(spot)
+
+    local piece = spot.piece
+    if piece == self.piece then
+      self:apply_to_self()
+    end
+
+    if piece and piece.pid ~= self.piece.pid then
+      self:apply_to_enemy(piece)
+    end
   end
+end
+
+--
+function areal:apply_to_spot(spot)
+end
+
+--
+function areal:apply_to_self()
+end
+
+--
+function areal:apply_to_enemy(piece)
 end
 
 --
 function areal.wrap()
   wrp.fn(areal, 'new', {{'Piece'}, {'zone', typ.tab}})
   wrp.fn(areal, 'apply', {})
+  wrp.fn(areal, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(areal, 'apply_to_enemy', {{'Piece'}})
 end
 
 return areal

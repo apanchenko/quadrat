@@ -1,5 +1,5 @@
 local ass       = require 'src.core.ass'
-local wrp     = require 'src.core.wrp'
+local wrp       = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local learn = areal:extend('Learn')
@@ -9,9 +9,9 @@ local learn = areal:extend('Learn')
 function learn:apply_to_spot(spot)
   local piece = spot.piece
   if piece and piece.pos ~= self.piece.pos and piece.pid == self.piece.pid then
-    for name, ability in pairs(piece.abilities) do
-      self.piece:learn_ability(ability)
-    end --abilities
+    for id, jade in pairs(piece.jades) do
+      self.piece:add_jade(jade:copy())
+    end
   end
 end
 

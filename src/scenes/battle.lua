@@ -2,7 +2,7 @@ local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
 local Board         = require 'src.view.Board'
 local Player        = require 'src.Player'
-local cfg           = require 'src.cfg'
+local cfg           = require 'src.model.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
@@ -46,21 +46,25 @@ end
 
 --
 function battle:move(pid)
-  local red, bla = self.space:count_pieces()
+  log:trace('-----------------------------------------------')
+
+  local counts = self.space:count_pieces()
+  local white = counts[tostring(playerid.white)]
+  local black = counts[tostring(playerid.black)]
 
   -- check if black wins
-  if red == 0 then
+  if white == 0 then
     self:win "Black wins!!!"
     return
   end
 
   -- check if red wins
-  if bla == 0 then
-    self:win "Red wins!!!"
+  if black == 0 then
+    self:win "White wins!!!"
     return
   end
 
-  log:trace(tostring(self.players[pid]), " is going to move. Red: ", red, ". Black: ", bla)
+  log:trace(tostring(self.players[pid]), 'is going to move.', white, black)
 
   -- move pointer
   transition.moveTo(self.move_pointer, {y=self.players[pid].view.y, time=500})
@@ -69,13 +73,6 @@ end
 --
 function battle:win(message)
   lay.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
-end
-
-
---
-function battle.test()
-  print('test battle..')
-  ass(true)
 end
 
 function battle:show(event) end
@@ -87,6 +84,18 @@ battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
 
-wrp.fn(battle, 'move', {{'playerid'}})
+
+-- MODULE-----------------------------------------------------------------------
+-- wrap vec functions
+function battle.wrap()
+  wrp.fn(battle, 'move', {{'playerid'}}, {log = log.info})
+end
+
+--
+function battle.test()
+  print('test battle..')
+  ass(true)
+end
+
 
 return battle

@@ -1,5 +1,5 @@
 local vec = require 'src.core.vec'
-local cfg = require 'src.cfg'
+local cfg = require 'src.model.cfg'
 local lay = require 'src.core.lay'
 local ass = require 'src.core.ass'
 local obj = require 'src.core.obj'

@@ -3,7 +3,7 @@ local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
-local cfg         = require 'src.cfg'
+local cfg         = require 'src.model.cfg'
 
 local image = obj:extend('view.power.image')
 
@@ -25,7 +25,9 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-wrp.fn(image, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
-wrp.fn(image, 'set_count', {{'count', typ.num}})
+function image.wrap()
+  wrp.fn(image, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
+  wrp.fn(image, 'set_count', {{'count', typ.num}})
+end
 
 return image

@@ -1,7 +1,7 @@
--- package
-return
-{
-  random    = require 'src.model.players.random',
-  remote    = require 'src.model.players.remote',
-  user      = require 'src.model.players.user'
-}
+local pkg = require 'src.core.pkg'
+
+local players = pkg:new('src.model.players')
+
+players:load('random', 'remote', 'user')
+
+return players

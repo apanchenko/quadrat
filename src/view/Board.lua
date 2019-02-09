@@ -3,7 +3,7 @@ local Stone    = require 'src.view.Stone'
 local Vec      = require 'src.core.vec'
 local Player   = require 'src.Player'
 local Piece    = require 'src.model.Piece'
-local cfg      = require 'src.cfg'
+local cfg      = require 'src.model.cfg'
 local obj      = require 'src.core.obj'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
@@ -55,7 +55,7 @@ function Board:stone(pos)
   return self:cell(pos):stone()
 end
 
--- MOVE------------------------------------------------------------------------
+-- JADE -----------------------------------------------------------------------
 -- model listener
 function Board:spawn_jade(pos)
   self:cell(pos):set_jade()
@@ -64,11 +64,12 @@ end
 function Board:remove_jade(pos)
   self:cell(pos):remove_jade()
 end
+
 -- PIECE -----------------------------------------------------------------------
 function Board:spawn_piece(color, pos)
   local stone = Stone:new(color, self.model) -- create a new stone
+  stone:puton(self) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
-  stone:puton(self, pos) -- put piece on board
   self.on_change:call('on_spawn_stone', stone)
 end
 --
@@ -111,8 +112,10 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(Board, 'set_ability', {{'pos', Vec}, {'id', typ.str}, {'count', typ.num}})
-wrp.fn(Board, 'add_power', {{'pos', Vec}, {'name', typ.str}, {'count', typ.num}})
-wrp.fn(Board, 'set_color', {{'pos', Vec}, {'pid', 'playerid'}})
+function Board.wrap()
+  wrp.fn(Board, 'set_ability',  {{'pos', Vec}, {'id', typ.str}, {'count', typ.num}})
+  wrp.fn(Board, 'add_power',    {{'pos', Vec}, {'name', typ.str}, {'count', typ.num}})
+  wrp.fn(Board, 'set_color',    {{'pos', Vec}, {'pid', 'playerid'}})
+end
 
 return Board

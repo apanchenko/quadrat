@@ -3,7 +3,7 @@ local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
-local cfg         = require 'src.cfg'
+local cfg         = require 'src.model.cfg'
 
 -- power draws a counter ------------------------------------------------------
 local count = obj:extend('view.power.count')
@@ -29,7 +29,9 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-wrp.fn(count, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
-wrp.fn(count, 'set_count', typ.num)
+function count.wrap()
+  wrp.fn(count, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
+  wrp.fn(count, 'set_count', typ.num)
+end
 
 return count

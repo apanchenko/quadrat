@@ -5,7 +5,6 @@ local Vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
 local wrp       = require 'src.core.wrp'
 local playerid  = require 'src.model.playerid'
-local Ability   = require 'src.model.Ability'
 
 --
 local remote = obj:extend('remote')
@@ -41,9 +40,9 @@ function remote:move_async()
     local piece = self.space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
-      local ability = map.random(piece.abilities)
-      if ability then
-        piece:use_ability(tostring(ability))
+      local jade = map.random(piece.jades)
+      if jade then
+        piece:use_jade(jade.id)
       end
       -- move to random point
       local to = from + Vec:random(Vec.zero-Vec.one, Vec.one)
@@ -61,7 +60,10 @@ function remote:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(remote, 'move', {{'playerid'}})
-wrp.fn(remote, 'move_async', {})
+--
+function remote:wrap()
+  wrp.fn(remote, 'move', {{'playerid'}})
+  wrp.fn(remote, 'move_async', {})
+end
 
 return remote

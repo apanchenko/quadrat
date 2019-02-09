@@ -1,13 +1,7 @@
-local scenes =
-{
-  solo    = require 'src.scenes.solo',
-  lobby   = require 'src.scenes.lobby',
-  battle  = require 'src.scenes.battle',
-  exit    = function() native.requestExit() end
-}
+local pkg = require 'src.core.pkg'
 
-function scenes.test()
-  scenes.battle.test()
-end
+local scenes = pkg:new('src.scenes')
+
+scenes:load('menu', 'solo', 'lobby', 'battle', 'exit')
 
 return scenes

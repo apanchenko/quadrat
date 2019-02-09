@@ -9,7 +9,7 @@ local typ         = require 'src.core.typ'
 local wrp         = require 'src.core.wrp'
 local Abilities   = require 'src.view.StoneAbilities'
 local power_image = require 'src.view.power.image'
-local cfg         = require 'src.cfg'
+local cfg         = require 'src.model.cfg'
 local Player      = require 'src.Player'
 local powers      = require 'src.view.power.powers'
 
@@ -33,11 +33,11 @@ end
 --
 function Stone:__tostring() 
   local s = "stone["
+  if self._pos then
+    s = s.. self._pos.x.. ','.. self._pos.y.. ','
+  end
   if self.pid ~= nil then
     s = s.. tostring(self.pid)
-  end
-  if self._pos then
-    s = s.. " ".. tostring(self._pos)
   end
   if self.powers then
     for k in pairs(self.powers) do
@@ -67,13 +67,10 @@ function Stone:color()
 end
 
 -- insert Stone into group, with scale for dragging
-function Stone:puton(board, pos)
+function Stone:puton(board)
   ass.is(board, 'Board')
-  ass.is(pos, Vec)
   board.view:insert(self.view)
   self.board = board
-  self._pos = pos
-  self:update_group_pos()
 end
 
 -- remove Stone from board
@@ -94,8 +91,7 @@ function Stone:set_pos(pos)
   if pos ~= nil then
     ass.is(pos, Vec)
   end
-  self._pos = pos
-  self:update_group_pos()
+  self:update_group_pos(pos)
 end
 --
 function Stone:pos()
@@ -187,7 +183,7 @@ end
 function Stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
-  self:update_group_pos()                  -- adjust group position
+  self:update_group_pos(self._pos)                  -- adjust group position
   self._abilities:show()
 end
 -- to be called from Board
@@ -195,7 +191,7 @@ function Stone:deselect()
   if self.isSelected then
     local depth = log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
-      self:update_group_pos()                  -- adgjust group position
+      self:update_group_pos(self._pos)                  -- adgjust group position
       self._abilities:hide()
     log:exit(depth)
   end
@@ -225,32 +221,45 @@ function Stone:set_drag(eventId)
     self.board.view:insert(self.view)
   end
 end
+
 --
-function Stone:update_group_pos()
-  if self._pos == nil then
+function Stone:update_group_pos(pos)
+  -- remove from board
+  if pos == nil then
+    self._pos = nil
     self.view.x = 0
     self.view.y = 0
     return
   end
-  local pos = self._pos * cfg.cell.size
+
+  -- calculate new view position
+  local view_pos = pos * cfg.cell.size
   if self.isSelected then
-    pos.y = pos.y - 10
+    view_pos.y = view_pos.y - 10
   end
-  lay.to(self, pos, cfg.stone.move)
+
+  if self._pos then
+    -- animate to view position
+    lay.to(self, view_pos, cfg.stone.move)
+  else
+    -- instant set view position
+    view_pos:to(self.view)
+  end
+  self._pos = pos
 end
 
 --
 function Stone.wrap()
-  wrp.fn(Stone, 'new', {{'pid', 'playerid'}, {'Space'}})
+  wrp.fn(Stone, 'new',          {{'pid', 'playerid'}, {'Space'}})
   wrp.fn(Stone, 'select')
-  wrp.fn(Stone, 'deselect')
-  wrp.fn(Stone, 'set_color', {{'playerid'}})
-  wrp.fn(Stone, 'color')
-  wrp.fn(Stone, 'puton', {{'Board'}, {'pos', typ.meta(Vec)}})
+  wrp.fn(Stone, 'deselect',     {}, {log=log.info})
+  wrp.fn(Stone, 'set_color',    {{'playerid'}})
+  wrp.fn(Stone, 'color',        {}, {log=log.info})
+  wrp.fn(Stone, 'puton',        {{'Board'}})
   wrp.fn(Stone, 'putoff')
   wrp.fn(Stone, 'pos')
-  wrp.fn(Stone, 'set_ability', {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(Stone, 'add_power', {{'name', typ.str}, {'result_count', typ.num}})
+  wrp.fn(Stone, 'set_ability',  {{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(Stone, 'add_power',    {{'name', typ.str}, {'result_count', typ.num}})
 end
 
 return Stone

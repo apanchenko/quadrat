@@ -66,38 +66,22 @@ A player has a box of selected jades to be used in battle.
 | Relocate        | Teleports this piece to a random unoccupied location on the board.                                                         | No           |
 | Hotspot         | Any of your pieces can now permanently move to this tile, no matter where they are, as long as one of your pieces isn't already on the tile.                                                          | No           |
 | Switcheroo      | You can switch this piece with any other allied piece.                                                                     | Yes          |
-| Centerpult      | Your piece can catapult itself into the vacant center of any four, symmetric pieces, as long as occupying the empty, center tile will complete either a plus sign or an 'x' shaped pattern. | Yes          |
-| Invisible | Your opponent can no longer see your piece. It can still be destroyed, however. | Yes |
-| Jump Proof | This piece can no longer be defeated by being jump on by an enemy piece. | No |
-| Scramble * | Randomly moves around every piece in the same radial as yours. | No |
-| Swap * | Your piece and all surrounding pieces swap ownership with your opponent. | No |
-| Spyware * | You can see any powers that the opponent's surrounding pieces have. This stays permanently on the pieces, letting you see new powers they acquire as well. | No |
-| Orb Spy * | Bugs every tile surrounding your piece. You can view the power of any orb that spawns on these tiles. | Yes |
-| Refurb * | Resets every tile surrounding your piece. | Yes |
-Bankrupt *
-Resets every enemy piece that comes into contact with a tile in this radial.
-Yes
-Purify *
-Removes any disabilities on your pieces in the same radial as your piece, and removes any benefits your opponent's pieces have as well.
-No
-Tripwire *
-If any enemy piece within the same radial as your piece moves off of its tile, it will be destroyed.
-No
-Inhibit *
-Your opponent's pieces in the same radial as your piece can no longer acquire power ups from Power Orbs.
-No
-Kamikaze *
-Destroys all pieces in the same radial as your piece, including the piece activating the ability, and any of your pieces within range.
-No
-Destroy *
-Destroys any surrounding enemy pieces.
-No
-Acidic *
-Destroys any surrounding enemy pieces. Their tiles become completely uninhabitable.
-No
-Recruit *
-Steal any enemy pieces surrounding your piece.
-No
+| Centerpult      | Your piece can catapult itself into the vacant center of any four, symmetric pieces, as long as occupying the empty, center tile will complete either a plus sign or an 'x' shaped pattern.          | Yes          |
+| Invisible       | Your opponent can no longer see your piece. It can still be destroyed, however.                                            | Yes          |
+| Jump Proof      | This piece can no longer be defeated by being jump on by an enemy piece.                                                   | No           |
+| Scramble *      | Randomly moves around every piece in the same radial as yours.                                                         | No           |
+| Swap *          | Your piece and all surrounding pieces swap ownership with your opponent.                                                 | No           |
+| Spyware *       | You can see any powers that the opponent's surrounding pieces have. This stays permanently on the pieces, letting you see new powers they acquire as well.                                          | No           |
+| Orb Spy *       | Bugs every tile surrounding your piece. You can view the power of any orb that spawns on these tiles.                   | Yes          |
+| Refurb *        | Resets every tile surrounding your piece.  | Yes          |
+| Bankrupt *      | Resets every enemy piece that comes into contact with a tile in this radial.                                           | Yes          |
+| Purify *        | Removes any disabilities on your pieces in the same radial as your piece, and removes any benefits your opponent's pieces have as well.                                                                   | No           |
+| Tripwire *      | If any enemy piece within the same radial as your piece moves off of its tile, it will be destroyed.                   | No           |
+| Inhibit *       | Your opponent's pieces in the same radial as your piece can no longer acquire power ups from Power Orbs.                   | No           |
+| Kamikaze *      | Destroys all pieces in the same radial as your piece, including the piece activating the ability, and any of your pieces within range.                                                         | No           |
+| Destroy *       | Destroys any surrounding enemy pieces.     | No           |
+| Acidic *        | Destroys any surrounding enemy pieces. Their tiles become completely uninhabitable.                                      | No           |
+| Recruit *       | Steal any enemy pieces surrounding your piece.                                                                             | No           |
 
 Quadradius:
 https://steamcommunity.com/sharedfiles/filedetails/?id=187949734

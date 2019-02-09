@@ -214,7 +214,7 @@ function arr.wrap()
   {
     name = 'arr',
     static = true,
-    log_fn = log.info
+    log = log.info
   }
   wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, opts)
   wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)

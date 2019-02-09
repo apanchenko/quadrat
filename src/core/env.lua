@@ -1,5 +1,4 @@
 local ass   = require 'src.core.ass'
-local map   = require 'src.core.map'
 local chk   = require 'src.core.chk'
 
 local mt = {}
@@ -7,7 +6,7 @@ mt.__index = mt
 
 -- add new citizen
 function mt.__newindex(self, key, value)
-  map.each(self, function(v, k)
+  for k, v in pairs(self) do
     -- notify existing citizens about a new one
     if chk.tab(v) then
       local cb = v['on_'..key]
@@ -23,7 +22,7 @@ function mt.__newindex(self, key, value)
         cb(value, v)
       end
     end
-  end)
+  end
 
   -- settle new citizen
   rawset(self, key, value)

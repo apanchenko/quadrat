@@ -1,7 +1,7 @@
 local widget    = require 'widget'
 local arr       = require 'src.core.arr'
 local vec       = require "src.core.vec"
-local cfg       = require 'src.cfg'
+local cfg       = require 'src.model.cfg'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
@@ -97,7 +97,7 @@ end
 function StoneAbilities.wrap()
   wrp.fn(StoneAbilities, 'new', {{'Stone'}, {'Space'}})
   wrp.fn(StoneAbilities, 'set_count', {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(StoneAbilities, 'is_empty')
+  wrp.fn(StoneAbilities, 'is_empty', {log=log.info})
   wrp.fn(StoneAbilities, 'show')
   wrp.fn(StoneAbilities, 'hide')
 end

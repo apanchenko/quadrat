@@ -15,15 +15,27 @@ end
 
 -- configure log
 function log:on_cfg(cfg)
-  if cfg.build == bld.debug then
+  -- dumb is always silent
+  self.dumb = function(me) return me end
+
+  -- info for debug configuration only
+  if cfg.build.id <= bld.debug.id then
     self.info  = function(me, ...) out('inf ', ...) return me end
+  else
+    self.info  = self.dumb
+  end
+
+  -- trace for debug and develop configurations
+  if cfg.build.id <= bld.develop.id then
     self.trace = function(me, ...) out('trc ', ...) return me end
   else
-    self.info  = function(me)                       return me end
-    self.trace = function(me)                       return me end
+    self.trace = self.dumb
   end
+
+  -- error and warning for all configurations
   self.error   = function(me, ...) out('err ', ...) return me end
   self.warning = function(me, ...) out('wrn ', ...) return me end
+
   self:trace('log:on_cfg '..cfg.build.name)
 end
 
@@ -35,14 +47,12 @@ end
 
 -- decrease stack depth
 function log:exit(depth)
-  assert(self.depth == depth)
+  ass.eq(self.depth, depth)
   self.depth = depth - 1
 end
 
 --
 function log.test()
-  ass.eq(log:enter(), 1)
-  log:exit(1)
 end
 
 return log

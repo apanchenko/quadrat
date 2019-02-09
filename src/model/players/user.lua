@@ -32,7 +32,10 @@ function user:on_spawn_stone(stone)
 end
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(user, 'new', {{'env', typ.tab}, {'pid', 'playerid'}})
-wrp.fn(user, 'on_spawn_stone', {{'Stone'}})
+--
+function user:wrap()
+  wrp.fn(user, 'new', {{'env', typ.tab}, {'pid', 'playerid'}})
+  wrp.fn(user, 'on_spawn_stone', {{'Stone'}})
+end
 
 return user

@@ -9,9 +9,9 @@ local teach = areal:extend('Teach')
 function teach:apply_to_spot(spot)
   local piece = spot.piece
   if piece and piece.pos ~= self.piece.pos and piece.pid == self.piece.pid then
-    for name, ability in pairs(self.piece.abilities) do
-      piece:learn_ability(ability)
-    end --abilities
+    for id, jade in pairs(self.piece.jades) do
+      piece:add_jade(jade)
+    end
   end
 end
 

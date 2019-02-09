@@ -2,8 +2,11 @@ local widget    = require 'widget'
 local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
-local cfg       = require 'src.cfg'
-local scene     = require 'src.scenes.scenes'
+local app_cfg   = require 'src.cfg'
+local cfg       = require 'src.model.cfg'
+local lobby     = require 'src.scenes.lobby'
+local solo      = require 'src.scenes.solo'
+local exit      = require 'src.scenes.exit'
 
 local menu = composer.newScene()
 local platform = system.getInfo('platform')
@@ -38,17 +41,17 @@ function menu:create(event)
 
   local buttons = display.newGroup()
 
-  buttons:insert(new_button('lobby', 'Play', scene.lobby))
-  buttons:insert(new_button('battle', 'Solo', scene.solo))
+  buttons:insert(new_button('lobby', 'Play', lobby))
+  buttons:insert(new_button('battle', 'Solo', solo))
 
   if (platform ~= 'ios' and platform ~= 'tvos') then
-    buttons:insert(new_button('exit', 'Exit', scene.exit))
+    buttons:insert(new_button('exit', 'Exit', exit))
   end
 
   lay.column(buttons, 5)
 
   -- draw version
-  lay.text(self, {text=cfg.version, x=0, vy=90})
+  lay.text(self, {text=app_cfg.version, x=0, vy=90})
 
   lay.render(self, buttons, {vy=15})
 end

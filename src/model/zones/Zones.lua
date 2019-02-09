@@ -1,14 +1,7 @@
-local Row = require 'src.model.zones.Row'
-local Col = require 'src.model.zones.Col'
-local Rad = require 'src.model.zones.Radial'
+local pkg = require 'src.core.pkg'
 
-local Zones = {Row, Col, Rad}
+local zones = pkg:new('src.model.zones')
 
--- selftest
-function Zones.test()
-  for i = 1, #Zones do
-    Zones[i].Test()
-  end
-end
+zones:load('Row', 'Col', 'Radial')
 
-return Zones
+return zones

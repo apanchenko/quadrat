@@ -6,5 +6,6 @@ local jumpproof = power:extend('jumpproof')
 
 jumpproof.is_jump_protected = true
 
+
 --
 return jumpproof

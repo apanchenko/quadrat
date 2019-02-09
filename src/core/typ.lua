@@ -1,10 +1,21 @@
 -- simple types
 local any = {name='any', is = function(v) return v ~= nil end} -- not nil
+local nul = {name='nul', is = function(v) return v == nul end}
 local boo = {name='boo', is = function(v) return type(v) == 'boolean' end}
 local tab = {name='tab', is = function(v) return type(v) == 'table' end}
 local num = {name='num', is = function(v) return type(v) == 'number' end}
 local str = {name='str', is = function(v) return type(v) == 'string' end}
 local fun = {name='fun', is = function(v) return type(v) == 'function' end}
+
+-- tab or smth
+function tab.__add(l, r)
+  return
+  {
+    name = l.name..'|'..r.name,
+    is = function(v) return l.is(v) or r.is(v) end
+  }
+end
+
 
 return
 {
@@ -25,7 +36,14 @@ return
     return
     {
       name = tostring(mt),
-      is = function(v) return getmetatable(v) == mt end
+      is = function(v)
+        repeat v = getmetatable(v)
+          if v == nil then
+            return false
+          end
+        until v ~= mt
+        return true
+      end
     }
   end,
 

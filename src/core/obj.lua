@@ -1,6 +1,7 @@
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
+local log   = require 'src.core.log'
 
 -------------------------------------------------------------------------------
 local obj = setmetatable({}, {__tostring = function() return 'obj' end})
@@ -9,28 +10,34 @@ local obj = setmetatable({}, {__tostring = function() return 'obj' end})
 function obj.__call(cls, ...)
   return cls:new(...)
 end
+
 --
 function obj:__tostring()
-  return self._typename
+  return self._type
 end
+
 --
-function obj:extend(typename)
-  local sub = setmetatable({_typename=typename}, self)
+function obj:extend(type)
+  local sub = setmetatable({_type=type}, self)
   self.__index = self
-  function sub:__tostring() return self._typename end
+  function sub:__tostring() return self._type end
   return sub
 end
+
 --
 function obj:new(def)
+  --log:trace('obj:new ', self._type)
   def = setmetatable(def or {}, self)
   self.__index = self
   return def
 end
 
+
 -- module -------------------------------------------------------------------
+--
 function obj.wrap()
-  wrp.fn(obj, 'extend', {{'name', typ.str}})
-  --wrp.fn(obj, ':new')
+  wrp.fn(obj, 'extend', {{'name', typ.str}}, {log = log.info})
+  --wrp.fn(obj, 'new',    {{'def', typ.any}})
 end
 
 --

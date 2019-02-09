@@ -1,5 +1,5 @@
 local vec   = require "src.core.vec"
-local cfg   = require "src.cfg"
+local cfg   = require "src.model.cfg"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local ass   = require "src.core.ass"
@@ -62,8 +62,12 @@ function Cell:remove_stone()
 end
 
 -- MODULE-----------------------------------------------------------------------
-wrp.fn(Cell, 'set_stone', {{'Stone'}})
-wrp.fn(Cell, 'stone')
-wrp.fn(Cell, 'remove_stone')
+function Cell.wrap()
+  ass(log.info)
+  local info = {log = log.info}
+  wrp.fn(Cell, 'set_stone',   {{'Stone'}})
+  wrp.fn(Cell, 'stone',       {}, info)
+  wrp.fn(Cell, 'remove_stone')
+end
 
 return Cell

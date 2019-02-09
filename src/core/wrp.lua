@@ -13,7 +13,8 @@ local wrp = {}
 function wrp.fn(t, fn_name, arg_infos, opts)
   opts = opts or {}
   local t_name = opts.name or tostring(t)
-  local log_fn = opts.log_fn or log.trace
+  local log_fn = opts.log or log.trace
+
   local call = 'wrp.fn('..t_name..', '..fn_name..')'
 
   ass.tab(t, 'first arg is not a table in '.. call)
@@ -38,7 +39,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
         return typ.metaname(type)
       end
       return typ.meta(type)
-    end)(info[2] or info.name)
+    end)(info[2])
     ass.tab(info.type)
     ass.str(info.type.name)
     ass.fun(info.type.is)
@@ -75,18 +76,21 @@ function wrp.fn(t, fn_name, arg_infos, opts)
 
   -- define a new function
   if opts.static then
+    local type_fn = t_name..'.'..fn_name
     t[fn_name] = function(...)
-      local call = t_name..'.'..fn_name
-      local depth = log_fn(log, call..'('..arguments(call, {...})..')'):enter()
+      local depth = log_fn(log, type_fn..'('..arguments(type_fn, {...})..')'):enter()
       local result = fn(...)
       log:exit(depth)
       return result
     end
   else
+    local type_fn = t_name..':'..fn_name
+    log:trace('wrp.fn('..type_fn..')')
     t[fn_name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
-      local call = tostring(self)..':'..fn_name
+      ass(typ.meta(t).is(self), 'self is not '..t_name..' in '..type_fn)
+      local call = tostring(self)..':['..t_name..']'..fn_name
       local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
       local result = fn(...)
       log:exit(depth)

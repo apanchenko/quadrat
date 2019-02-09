@@ -1,16 +1,19 @@
 local arr         = require 'src.core.arr'
+local map         = require 'src.core.map'
 local obj         = require 'src.core.obj'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 
 -- Core dependency graph:
--- typ                     bld
+-- typ bld
 -- chk
 -- ass
 -- log
--- wrp                 lay
--- map arr obj
--- env     evt pkg vec
+-- wrp lay
+-- arr
+-- map
+-- obj
+-- env evt pkg vec
 
 --
 local pkg = obj:extend('pkg')
@@ -35,24 +38,50 @@ function pkg:load(...)
   end)
 end
 
+--
+function pkg:get(name)
+  return self.modules[name]
+end
+
+-- deprecated
+pkg.find = pkg.get
+
 -- wrap modules
 function pkg:wrap()
-  for name, mod in pairs(self.modules) do
-    if mod.wrap then
-      log:trace(name..'.wrap')
-      mod.wrap()
+  -- cannot wrap the wrapper so do logging manually
+  local depth = log:trace(self.path..':[pkg]wrap'):enter()
+  -- for all modules
+  for id, module in pairs(self.modules) do
+    -- call wrap from this module strictly
+    local mod_wrap = rawget(module, 'wrap')
+    if mod_wrap then
+      local depth = log:trace(id..'.wrap'):enter()
+      mod_wrap()
+      log:exit(depth)
     end
   end
+  log:exit(depth)
+end
+
+-- get random module
+function pkg:random(pred)
+  return arr.random(map.select(self.modules, pred))
 end
 
 -- test modules
 function pkg:test()
-  for name, mod in pairs(self.modules) do
-    if mod.test then
-      log:trace(name..'.test')
-      mod.test()
+  -- cannot wrap the wrapper so do logging manually
+  local depth = log:trace(self.path..':[pkg]test'):enter()
+  for id, module in pairs(self.modules) do
+    -- call test from this module strictly
+    local mod_test = rawget(module, 'test')
+    if mod_test then
+      local depth = log:trace(id..'.test'):enter()
+      mod_test()
+      log:exit(depth)
     end
   end
+  log:exit(depth)
 end
 
 -- core package

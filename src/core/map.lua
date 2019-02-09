@@ -1,7 +1,7 @@
 local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
-local log   = require 'src.core.wrp'
+local log   = require 'src.core.log'
 
 -- name to value
 local map = {}
@@ -31,6 +31,17 @@ function map.each(t, fn)
   for k, v in pairs(t) do
     fn(v, k)
   end
+end
+
+-- return array of values selected by predicate function
+function map.select(t, pred)
+  local arr = {}
+  for k, v in pairs(t) do
+    if pred(v, k) then
+      arr[#arr + 1] = v
+    end
+  end
+  return arr
 end
 
 -- number of elements
@@ -104,16 +115,13 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function map.wrap()
-  local opts =
-  {
-    name = 'map',
-    static = true,
-    log_fn = log.info
-  }
-  wrp.fn(map, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
-  wrp.fn(map, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
-  wrp.fn(map, 'count', {{'t', typ.tab}}, opts)
-  wrp.fn(map, 'random', {{'t', typ.tab}}, opts)
+  local opts = { name = 'map', static = true, log = log.info }
+
+  wrp.fn(map, 'all',    {{'t', typ.tab}, {'fn', typ.fun}},  opts)
+  wrp.fn(map, 'each',   {{'t', typ.tab}, {'fn', typ.fun}},  opts)
+  wrp.fn(map, 'select', {{'t', typ.tab}, {'pred', typ.fun}},  opts)
+  wrp.fn(map, 'count',  {{'t', typ.tab}},                   opts)
+  wrp.fn(map, 'random', {{'t', typ.tab}},                   opts)
 end
 
 --

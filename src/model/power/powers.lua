@@ -1,26 +1,23 @@
-local powers =
-{
-  require 'src.model.power.movediagonal',
-  require 'src.model.power.multiply',
-  require 'src.model.power.rehash',
-  require 'src.model.power.relocate',
-  require 'src.model.power.recruit',
-  require 'src.model.power.swap',
-  require 'src.model.power.sphere',
-  require 'src.model.power.jumpproof',
-  require 'src.model.power.teach',
-  require 'src.model.power.learn',
-  require 'src.model.power.destroy',
-  require 'src.model.power.pilfer'
-}
+local pkg = require 'src.core.pkg'
 
---
-function powers.find(name)
-  for k,v in ipairs(powers) do
-    if tostring(v) == name then
-      return v
-    end
-  end
-end
+local powers = pkg:new('src.model.power')
+
+powers:load(
+  'power',
+  'areal',
+  'counted',
+  'movediagonal',
+  'multiply',
+  'rehash',
+  'relocate',
+  'recruit',
+  'swap',
+  'sphere',
+  'jumpproof',
+  'teach',
+  'learn',
+  'destroy',
+  'pilfer'
+)
 
 return powers

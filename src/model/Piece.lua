@@ -6,7 +6,6 @@ local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 local wrp       = require 'src.core.wrp'
 local playerid  = require 'src.model.playerid'
-local Ability   = require 'src.model.Ability'
 
 --
 local Piece = obj:extend('Piece')
@@ -17,8 +16,8 @@ function Piece:new(space, pid)
   {
     space = space,
     pid = pid,
-    abilities = {}, -- list of abilities
-    powers = {}
+    jades = {}, -- map of jades
+    powers = {} -- map of powers
   })
 end
 --
@@ -66,43 +65,44 @@ function Piece:move_after(fr, to)
 end
 
 
--- ABILITY---------------------------------------------------------------------
--- add random ability with initial count
-function Piece:add_ability()
-  self:learn_ability(Ability:new())
+-- JADE -----------------------------------------------------------------------
+-- add jade
+function Piece:add_jade(jade)
+  local res_count = jade:add_to(self.jades)
+  -- TODO: change event name to 'add_jade'
+  self.space:notify('set_ability', self.pos, jade.id, res_count)
 end
---
-function Piece:use_ability(name)
-  self:add_power(self:consume_ability(name, 1)) -- increase power
+
+-- split jade and return removed part
+function Piece:remove_jade(id, count)
+  local jade = self.jades[id]
+  ass(jade) -- TODO: to wrap prereq
+
+  self.jades[id] = jade:split(count)
+  if self.jades[id] then
+    self.space:notify('set_ability', self.pos, id, self.jades[id].count)
+  else
+    self.space:notify('set_ability', self.pos, id, 0)
+  end
+
+  return jade
 end
--- add ability
-function Piece:learn_ability(abty)
-  local count = abty:add_to(self.abilities)
-  self.space:notify('set_ability', self.pos, abty:get_id(), count) -- notify
+
+-- convert jade to power
+function Piece:use_jade(id)
+  local jade = self:remove_jade(id, 1) -- consume one jade
+  local power = jade:use(self) -- convert jade consumed into power
+  if power then
+    self:add_power(power) -- increase power
+  end
 end
--- remove
-function Piece:consume_ability(id, count)
-  local abty = self.abilities[id]
-  ass(abty)
-  local count = abty:decrease(self.abilities, count)
-  self.space:notify('set_ability', self.pos, id, count) -- notify
-  return abty
-end
+
 
 -- POWER ----------------------------------------------------------------------
-function Piece:add_power(ability)
-  local name = tostring(ability)
-  local power = self.powers[name]
-  if power then
-    power:increase()
-  else
-    power = ability:create_power(self)
-    self.powers[name] = power
-  end
-
-  if power then
-    self.space:notify('add_power', self.pos, name, power:get_count()) -- notify
-  end
+--
+function Piece:add_power(power)
+  power:add_to(self.powers)
+  self.space:notify('add_power', self.pos, power.id, power:get_count()) -- notify
 end
 --
 function Piece:decrease_power(name)
@@ -120,15 +120,16 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function Piece.wrap()
-  wrp.fn(Piece, 'new', {{'Space'}, {'playerid'}})
-  wrp.fn(Piece, 'set_pos', {{'pos', Vec}})
-  wrp.fn(Piece, 'can_move', {{'from', Vec}, {'to', Vec}})
-  wrp.fn(Piece, 'set_color', {{'playerid'}})
-  wrp.fn(Piece, 'add_ability', {})
-  wrp.fn(Piece, 'learn_ability', {{'abty', Ability}})
-  wrp.fn(Piece, 'use_ability', {{'name', typ.str}})
-  wrp.fn(Piece, 'consume_ability', {{'name', typ.str}, {'count', typ.num}})
-  wrp.fn(Piece, 'add_power', {{'abty', Ability}})
+  wrp.fn(Piece, 'new',        {{'Space'}, {'playerid'}},    {log=log.info})
+  wrp.fn(Piece, 'set_pos',    {{'pos', Vec}})
+  wrp.fn(Piece, 'can_move',   {{'from', Vec}, {'to', Vec}}, {log=log.info})
+  wrp.fn(Piece, 'set_color',  {{'playerid'}})
+  
+  wrp.fn(Piece, 'add_jade',   {{'jade'}})
+  wrp.fn(Piece, 'remove_jade',{{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(Piece, 'use_jade',   {{'id', typ.str}})
+
+  wrp.fn(Piece, 'add_power',  {{'power'}})
   wrp.fn(Piece, 'decrease_power', {{'name', typ.str}})
 end
 

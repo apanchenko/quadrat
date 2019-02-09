@@ -7,7 +7,6 @@ local env       = require 'src.core.env'
 local wrp       = require 'src.core.wrp'
 local typ       = require 'src.core.typ'
 local playerid  = require 'src.model.playerid'
-local Ability   = require 'src.model.Ability'
 
 --
 local random = obj:extend('random')
@@ -29,12 +28,12 @@ function random:on_space(space)
 end
 --
 function random:__tostring()
-  return 'player.random['..tostring(self.pid)..']'
+  return 'random_player['..tostring(self.pid)..']'
 end
 --
 function random:move(pid)
   if pid == self.pid then
-    timer.performWithDelay(100, function() self:move_async() end)
+    timer.performWithDelay(20, function() self:move_async() end)
   end
 end
 --
@@ -48,9 +47,9 @@ function random:move_async()
     local piece = space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
-      local ability = map.random(piece.abilities)
-      if ability then
-        piece:use_ability(tostring(ability))
+      local jade = map.random(piece.jades)
+      if jade then
+        piece:use_jade(jade.id)
       end
       -- move to random point
       local to = from + Vec:random(Vec.zero-Vec.one, Vec.one)
@@ -68,8 +67,11 @@ function random:move_async()
 end
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(random, 'new', {{'env', typ.any}, {'playerid'}}) -- env?
-wrp.fn(random, 'move', {{'playerid'}})
-wrp.fn(random, 'move_async')
+--
+function random:wrap()
+  wrp.fn(random, 'new',     {{'env', typ.any}, {'playerid'}}) -- env?
+  wrp.fn(random, 'move',    {{'playerid'}}, {log=log.info})
+  wrp.fn(random, 'move_async')
+end
 
 return random

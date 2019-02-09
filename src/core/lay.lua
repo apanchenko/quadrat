@@ -1,4 +1,4 @@
-local cfg = require 'src.cfg'
+local cfg = require 'src.model.cfg'
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 
