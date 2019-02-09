@@ -19,11 +19,14 @@
 
 ## Infrastructure
 - refactor: lowercase source files
+- add core.cnt container for countables and non-countables
 - build for android
 - build for iphone
 - build for web
 - build for win32
+- add core.prf profiler
 - backend
+- separate core project
 
 ## Marketing
 - vk page
