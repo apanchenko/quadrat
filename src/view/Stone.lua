@@ -105,12 +105,12 @@ end
 
 
 -- POWER ----------------------------------------------------------------------
-function Stone:add_power(name, result_count)
-  local power = self.powers[name]
+function Stone:add_power(id, result_count)
+  local power = self.powers[id]
   if power == nil then
-    self.powers[name] = powers[name]:new(self, name, result_count)
+    self.powers[id] = powers[id]:new(self, id, result_count)
   else
-    self.powers[name] = power:set_count(result_count)
+    self.powers[id] = power:set_count(result_count)
   end
 end
 

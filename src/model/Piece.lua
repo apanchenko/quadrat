@@ -101,16 +101,19 @@ end
 -- POWER ----------------------------------------------------------------------
 --
 function Piece:add_power(power)
-  power:add_to(self.powers)
-  self.space:notify('add_power', self.pos, power.id, power:get_count()) -- notify
+  local count = power:add_to(self.powers)
+  self.space:notify('add_power', self.pos, power.id, count) -- notify
 end
+
 --
-function Piece:decrease_power(name)
-  local power = self.powers[name]
+function Piece:decrease_power(id)
+  local power = self.powers[id]:decrease()
+  self.powers[id] = power
   if power then
-    self.powers[name] = power:decrease()
+    self.space:notify('add_power', self.pos, id, power:get_count()) -- notify
+  else
+    self.space:notify('add_power', self.pos, id, 0) -- notify
   end
-  self.space:notify('add_power', self.pos, name, power:get_count()) -- notify
 end
 
 -- TRAITS ---------------------------------------------------------------------

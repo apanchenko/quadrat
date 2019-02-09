@@ -24,8 +24,14 @@ end
 
 -- add to powers map
 function power:add_to(powers)
-  log:trace('add power '.. self.id)
+  local other = powers[self.id]
+  if other then
+    other.count = other.count + self.count
+    return other.count
+  end
+
   powers[self.id] = self
+  return self.count
 end
 
 -- use
