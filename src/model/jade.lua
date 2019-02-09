@@ -15,12 +15,12 @@ function jade:new()
   self = obj.new(self)
   self.power = powers:random(function(p) return p:can_spawn() end)
   ass(self.power)
-  self.id = tostring(self.power)
+  self.id = self.power.type
   self.count = 1
 
   if self.power.is_areal then
     self.zone = zones:random()
-    self.id = self.id.. ' '.. tostring(self.zone)
+    self.id = self.id.. ' '.. self.zone.type
   end
   return self
 end

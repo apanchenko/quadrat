@@ -4,16 +4,15 @@ local obj     = require 'src.core.obj'
 local wrp     = require 'src.core.wrp'
 local typ     = require 'src.core.typ'
 
--- base power
+-- base non-additive power
 local power = obj:extend('power')
 
 -- constructor
 -- @param piece - apply power to this piece
-function power:new(piece, id)
+function power:new(piece)
   return obj.new(self,
   {
-    piece = piece,
-    id = id
+    piece = piece
   })
 end
 
@@ -22,16 +21,10 @@ function power:can_spawn()
   return false
 end
 
--- add to powers map
+-- add to powers map, non-additive
 function power:add_to(powers)
-  local other = powers[self.id]
-  if other then
-    other.count = other.count + self.count
-    return other.count
-  end
-
-  powers[self.id] = self
-  return self.count
+  powers[self.type] = self
+  return 1
 end
 
 -- use
@@ -59,7 +52,7 @@ function power:move_after(cell_from, cell_to) end
 
 -- module
 function power.wrap()
-  wrp.fn(power, 'new',      {{'Piece'}, {'id', typ.str}})
+  wrp.fn(power, 'new',      {{'Piece'}})
   wrp.fn(power, 'add_to',   {{'powers', typ.tab}})
   wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
   wrp.fn(power, 'apply',    {})

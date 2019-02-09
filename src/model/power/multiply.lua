@@ -7,9 +7,7 @@ local multiply = counted:extend('multiply')
 
 -- constructor
 function multiply:new(piece)
-  self = counted.new(self, piece, 'multiply')
-  self.count = 1
-  return self
+  return counted.new(self, piece)
 end
 
 -- can spawn in jade
@@ -27,7 +25,7 @@ end
 function multiply:move_after(from, to)
   local piece = self.piece
   from:spawn_piece(piece.pid)
-  piece:decrease_power(self.id) -- decrease
+  piece:decrease_power(self.type) -- decrease
 end
 
 --

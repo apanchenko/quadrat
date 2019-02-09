@@ -50,6 +50,7 @@ function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 function Space:notify(method, ...)
   ass.is(self, Space)
   ass.is(method, typ.str)
+  log:info('Space:notify', method, ...)
   -- break the stack
   --timer.performWithDelay(0, function() self.on_change:call(method, unpack(arg)) end)
   self.on_change:call(method, ...)

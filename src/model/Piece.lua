@@ -102,7 +102,8 @@ end
 --
 function Piece:add_power(power)
   local count = power:add_to(self.powers)
-  self.space:notify('add_power', self.pos, power.id, count) -- notify
+  log:info(self, 'add_power', self.pos, power.type, count)
+  self.space:notify('add_power', self.pos, power.type, count) -- notify
 end
 
 --
@@ -134,6 +135,10 @@ function Piece.wrap()
 
   wrp.fn(Piece, 'add_power',  {{'power'}})
   wrp.fn(Piece, 'decrease_power', {{'name', typ.str}})
+end
+
+function Piece.test()
+  ass.eq(typ.str.is(nil), false)
 end
 
 return Piece

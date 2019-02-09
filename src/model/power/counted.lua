@@ -9,10 +9,22 @@ local counted = power:extend('counted')
 
 -- constructor
 -- @param piece - apply power to this piece
-function counted:new(piece, id)
-  self = power.new(self, piece, id)
+function counted:new(piece)
+  self = power.new(self, piece)
   self.count = 1
   return self
+end
+
+-- add to powers map
+function counted:add_to(powers)
+  local other = powers[self.type]
+  if other then
+    other.count = other.count + self.count
+    return other.count
+  end
+
+  powers[self.type] = self
+  return self.count
 end
 
 --
@@ -42,7 +54,7 @@ end
 
 --
 function counted:wrap()
-  wrp.fn(counted, 'new',        {{'Piece'}, {'id', typ.str}})
+  wrp.fn(counted, 'new',        {{'Piece'}})
   wrp.fn(counted, 'apply')
   wrp.fn(counted, 'increase')
   wrp.fn(counted, 'decrease')

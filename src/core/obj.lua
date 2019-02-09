@@ -13,14 +13,14 @@ end
 
 --
 function obj:__tostring()
-  return self._type
+  return self.type
 end
 
 --
 function obj:extend(type)
-  local sub = setmetatable({_type=type}, self)
+  local sub = setmetatable({type=type}, self)
   self.__index = self
-  function sub:__tostring() return self._type end
+  function sub:__tostring() return self.type end
   return sub
 end
 
