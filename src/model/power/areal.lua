@@ -14,13 +14,9 @@ areal.is_areal = true
 function areal:new(piece, zone)
   self = power.new(self, piece)
   self.zone = zone
-  return self
-end
 
--- use and consume power
-function areal:apply()
   -- specify spell area rooted from piece
-  local area = self.zone:new(self.piece.pos)
+  local area = zone:new(self.piece.pos)
   -- select spots in area
   local spots = self.piece.space:select_spots(function(spot) return area:filter(spot.pos) end)
   -- apply to each selected spot
@@ -28,13 +24,13 @@ function areal:apply()
     local spot = spots[i]
     self:apply_to_spot(spot)
 
-    local piece = spot.piece
-    if piece == self.piece then
+    local spot_piece = spot.piece
+    if spot_piece == self.piece then
       self:apply_to_self()
     end
 
-    if piece and piece.pid ~= self.piece.pid then
-      self:apply_to_enemy(piece)
+    if spot_piece and spot_piece.pid ~= self.piece.pid then
+      self:apply_to_enemy(spot_piece)
     end
   end
 end
@@ -54,7 +50,6 @@ end
 --
 function areal.wrap()
   wrp.fn(areal, 'new', {{'Piece'}, {'zone', typ.tab}})
-  wrp.fn(areal, 'apply', {})
   wrp.fn(areal, 'apply_to_spot', {{'Spot'}})
   wrp.fn(areal, 'apply_to_enemy', {{'Piece'}})
 end

@@ -32,10 +32,6 @@ end
 --  return power.__tostring(self).. "[".. self.count.. "]"
 --end
 
--- use
-function counted:apply()
-  return self
-end
 --
 function counted:increase()
   self.count = self.count + 1
@@ -55,7 +51,6 @@ end
 --
 function counted:wrap()
   wrp.fn(counted, 'new',        {{'Piece'}})
-  wrp.fn(counted, 'apply')
   wrp.fn(counted, 'increase')
   wrp.fn(counted, 'decrease')
   wrp.fn(counted, 'get_count',  {}, {log=log.info})

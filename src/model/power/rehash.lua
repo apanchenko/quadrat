@@ -9,9 +9,9 @@ function rehash:can_spawn()
 end
 
 -- use
-function rehash:apply()
+function rehash:new(piece)
   -- get empty spots to rehash
-  local spots = self.piece.space:select_spots(function(c) return c.piece == nil end)
+  local spots = piece.space:select_spots(function(c) return c.piece == nil end)
 
   -- count and remove jades
   local count = 0

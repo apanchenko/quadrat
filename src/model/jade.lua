@@ -63,8 +63,7 @@ end
 -- produce power from this jade
 -- normally jade shoud be destroyed after this
 function jade:use(piece)
-  local power = self.power:new(piece, self.zone)
-  return power:apply()
+  return self.power:new(piece, self.zone)
 end
 
 -- module

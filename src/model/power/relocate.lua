@@ -10,9 +10,9 @@ function relocate:can_spawn()
 end
 
 -- apply power
-function relocate:apply()
-  local space = self.piece.space
-  local from_spot = space:spot(self.piece.pos)
+function relocate:new(piece)
+  local space = piece.space
+  local from_spot = space:spot(piece.pos)
   -- select all empty spots
   local spots = space:select_spots(function(c) return c.piece == nil end)
   -- choose random target spot

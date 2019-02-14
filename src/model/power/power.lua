@@ -27,10 +27,6 @@ function power:add_to(powers)
   return 1
 end
 
--- use
-function power:apply()
-  return self
-end
 --
 function power:increase()
 end
@@ -55,7 +51,6 @@ function power.wrap()
   wrp.fn(power, 'new',      {{'Piece'}})
   wrp.fn(power, 'add_to',   {{'powers', typ.tab}})
   wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
-  wrp.fn(power, 'apply',    {})
 end
 
 return power
