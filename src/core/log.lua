@@ -6,7 +6,7 @@ local log = { depth = 0 }
 
 --
 local function out(severity, ...)
-  local str = severity.. string.rep('  ', log.depth)
+  local str = severity.. string.rep('. ', log.depth)
   for i = 1, #arg do
     str = str.. tostring(arg[i]).. ' '
   end

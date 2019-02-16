@@ -17,6 +17,8 @@ powers:load(
   'teach',
   'learn',
   'destroy',
+  'parasite',
+  'parasite_host',
   'pilfer'
 )
 

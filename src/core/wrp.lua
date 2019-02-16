@@ -94,6 +94,9 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
       local result = fn(...)
       log:exit(depth)
+      if result then
+        log_fn(log, '->', result)
+      end
       return result
     end
   end

@@ -28,11 +28,11 @@ end
 
 --
 function Spot:__tostring()
-  local res = 'spot['.. self.pos.x.. ",".. self.pos.y
+  local res = 'spot{'.. self.pos.x.. ",".. self.pos.y
   if self.jade then
-    res = res .. ', jade'
+    res = res .. ',jade'
   end
-  return res.. ']'
+  return res.. '}'
 end
 
 

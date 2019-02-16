@@ -1,5 +1,5 @@
 local ass       = require 'src.core.ass'
-local wrp     = require 'src.core.wrp'
+local wrp       = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
 local swap = areal:extend('Swap')

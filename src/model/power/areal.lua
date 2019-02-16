@@ -1,7 +1,7 @@
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local typ     = require 'src.core.typ'
-local wrp     = require 'src.core.wrp'
+local typ       = require 'src.core.typ'
+local wrp       = require 'src.core.wrp'
 local power     = require 'src.model.power.power'
 
 -- areal power
@@ -11,9 +11,9 @@ areal.is_areal = true
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
-function areal:new(piece, zone)
-  self = power.new(self, piece)
-  self.zone = zone
+function areal:new(piece, def, zone)
+  def.zone = zone
+  self = power.new(self, piece, def)
 
   -- specify spell area rooted from piece
   local area = zone:new(self.piece.pos)
@@ -33,6 +33,7 @@ function areal:new(piece, zone)
       self:apply_to_enemy(spot_piece)
     end
   end
+  -- return nothing
 end
 
 --
@@ -49,8 +50,9 @@ end
 
 --
 function areal.wrap()
-  wrp.fn(areal, 'new', {{'Piece'}, {'zone', typ.tab}})
+  wrp.fn(areal, 'new', {{'Piece'}, {'def', typ.tab}, {'zone', typ.tab}})
   wrp.fn(areal, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(areal, 'apply_to_self', {})
   wrp.fn(areal, 'apply_to_enemy', {{'Piece'}})
 end
 

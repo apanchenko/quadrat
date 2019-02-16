@@ -25,6 +25,11 @@ function jade:new()
   return self
 end
 
+--
+function jade:__tostring()
+  return self.type.. '{'.. self.id.. '}'
+end
+
 -- construct another identical jade
 function jade:copy()
   return obj.new(jade, {
@@ -63,7 +68,7 @@ end
 -- produce power from this jade
 -- normally jade shoud be destroyed after this
 function jade:use(piece)
-  return self.power:new(piece, self.zone)
+  return self.power:new(piece, {}, self.zone)
 end
 
 -- module

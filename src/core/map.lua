@@ -9,7 +9,7 @@ local map = {}
 -- or
 function map.any(t, fn)
   for k, v in pairs(t) do
-    if fn(v) then
+    if fn(v, k) then
       return true
     end
   end

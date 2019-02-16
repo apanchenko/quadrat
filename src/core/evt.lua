@@ -26,17 +26,7 @@ function evt:remove(listener)
 end
 
 --
-function evt:__call(...)
-  local depth = log:trace(self, ":call", ...):enter()
-  for k,v in ipairs(self.list) do
-    v[self.name](v, ...)
-  end
-  log:exit(depth)
-end
-
---
 function evt:call(name, ...)
-  name = name or self.name
   ass.str(name)
   for k,v in ipairs(self.list) do
     if v[name] then
@@ -49,6 +39,7 @@ end
 function evt.wrap()
   wrp.fn(evt, 'add', {{'listener', typ.tab}})
   wrp.fn(evt, 'remove', {{'listener', typ.tab}})
+  --TODO ellipsis wrp.fn(evt, 'call', {{'name'}})
 end
 
 return evt

@@ -9,10 +9,9 @@ local counted = power:extend('counted')
 
 -- constructor
 -- @param piece - apply power to this piece
-function counted:new(piece)
-  self = power.new(self, piece)
-  self.count = 1
-  return self
+function counted:new(piece, def)
+  def.count = 1
+  return power.new(self, piece, def)
 end
 
 -- add to powers map
@@ -50,7 +49,7 @@ end
 
 --
 function counted:wrap()
-  wrp.fn(counted, 'new',        {{'Piece'}})
+  wrp.fn(counted, 'new',        {{'Piece'}, {'def', typ.tab}})
   wrp.fn(counted, 'increase')
   wrp.fn(counted, 'decrease')
   wrp.fn(counted, 'get_count',  {}, {log=log.info})

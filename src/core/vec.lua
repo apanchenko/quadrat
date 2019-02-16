@@ -46,7 +46,7 @@ end
 -- methods ---------------------------------------------------------------------
 --
 function vec:__tostring()
-  return '['.. self.x.. ",".. self.y.. ']'
+  return '{'.. self.x.. ",".. self.y.. '}'
 end
 -- square length
 function vec:length2()
@@ -88,7 +88,7 @@ end
 
 -- selftest
 function vec.test()
-  assert(tostring(vec.one) == '[1,1]')
+  assert(tostring(vec.one) == '{1,1}')
   
   local a = vec(2, 2)
   local b = vec(3, 4)

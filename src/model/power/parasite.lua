@@ -1,7 +1,6 @@
 local ass       = require 'src.core.ass'
 local wrp       = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
-local vermin    = require 'src.model.power.parasite_vermin'
 local host      = require 'src.model.power.parasite_host'
 
 -- Leeches onto any surrounding enemy pieces. Any new powers they acquire your piece will also acquire.
@@ -13,13 +12,13 @@ function parasite:can_spawn()
 end
 
 --
-function areal:apply_to_self()
+function parasite:apply_to_self()
   self.piece:add_power(self)
 end
 
 --
 function parasite:apply_to_enemy(piece)
-  piece:add_power(host:new())
+  piece:add_power(host:new(piece, {}))
 end
 
 --

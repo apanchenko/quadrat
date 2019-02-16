@@ -12,7 +12,7 @@ end
 
 --
 function multiply:__tostring()
-  return tostring(multiply).. '['.. self.count.. ']'
+  return self.type.. '{'.. self.count.. '}'
 end
 
 -- implement pure virtual areal:apply_to_spot

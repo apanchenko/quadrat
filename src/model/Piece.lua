@@ -71,6 +71,8 @@ function Piece:add_jade(jade)
   local res_count = jade:add_to(self.jades)
   -- TODO: change event name to 'add_jade'
   self.space:notify('set_ability', self.pos, jade.id, res_count)
+  -- TODO: optimize - make listening powers
+  map.each(self.powers, function(p) p:on_add_jade(jade) end)
 end
 
 -- split jade and return removed part
@@ -115,6 +117,11 @@ function Piece:decrease_power(id)
   else
     self.space:notify('add_power', self.pos, id, 0) -- notify
   end
+end
+
+--
+function Piece:any_power(fn)
+  map.any(self.powers, fn)
 end
 
 -- TRAITS ---------------------------------------------------------------------

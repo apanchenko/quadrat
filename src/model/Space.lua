@@ -85,6 +85,15 @@ function Space:select_spots(filter)
 	end
   return selected
 end
+--
+function Space:each_piece(fn)
+  for k, spot in ipairs(self.grid) do
+    local piece = spot.piece
+    if piece then
+      fn(piece)
+    end
+	end
+end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
@@ -188,21 +197,22 @@ end
 function Space.wrap()
   local info = {log = log.info}
   --wrp.fn(Space, 'notify',   {{'method', typ.str}, {}})
-  wrp.fn(Space, 'setup',    {})
-  wrp.fn(Space, 'pos',      {{'index', typ.num}})
-  wrp.fn(Space, 'width',    {},                           info)
-  wrp.fn(Space, 'height',   {})
-  wrp.fn(Space, 'row',      {{'place', typ.num}})
-  wrp.fn(Space, 'col',      {{'place', typ.num}})
-  wrp.fn(Space, 'pos',      {{'index', typ.num}})
-  wrp.fn(Space, 'index',    {{'vec', vec}},               info)
-  wrp.fn(Space, 'spot',     {{'pos', vec}},               info)
-  wrp.fn(Space, 'count_pieces', {},                       info)
-  wrp.fn(Space, 'piece',    {{'pos', vec}},               info)
-  wrp.fn(Space, 'who_move', {}, info)
-  wrp.fn(Space, 'can_move', {{'from', vec}, {'to', vec}}, info)
-  wrp.fn(Space, 'move',     {{'from', vec}, {'to', vec}})
-  wrp.fn(Space, 'use',      {{'pos', vec}, {'ability_name', typ.str}})
+  wrp.fn(Space, 'setup',      {})
+  wrp.fn(Space, 'pos',        {{'index', typ.num}})
+  wrp.fn(Space, 'width',      {},                           info)
+  wrp.fn(Space, 'height',     {})
+  wrp.fn(Space, 'row',        {{'place', typ.num}})
+  wrp.fn(Space, 'col',        {{'place', typ.num}})
+  wrp.fn(Space, 'pos',        {{'index', typ.num}})
+  wrp.fn(Space, 'index',      {{'vec', vec}},               info)
+  wrp.fn(Space, 'spot',       {{'pos', vec}},               info)
+  wrp.fn(Space, 'each_piece', {{'fn', typ.fun}},            info)
+  wrp.fn(Space, 'count_pieces', {},                         info)
+  wrp.fn(Space, 'piece',      {{'pos', vec}},               info)
+  wrp.fn(Space, 'who_move',   {}, info)
+  wrp.fn(Space, 'can_move',   {{'from', vec}, {'to', vec}}, info)
+  wrp.fn(Space, 'move',       {{'from', vec}, {'to', vec}})
+  wrp.fn(Space, 'use',        {{'pos', vec}, {'ability_name', typ.str}})
 end
 
 -- return module
