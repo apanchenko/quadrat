@@ -1,5 +1,5 @@
 local composer      = require "composer"
-local Space         = require 'src.model.Space'
+local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
 local cfg           = require 'src.model.cfg'
 local log           = require 'src.core.log'
@@ -9,7 +9,7 @@ local env           = require 'src.core.env'
 local players       = require 'src.model.players.players'
 
 return function()
-  env.space = Space:new(cfg.board.cols, cfg.board.rows, 1)
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   env.player_white = players:get('random'):new(env, playerid.white)
   env.player_black = players:get('random'):new(env, playerid.black)
 

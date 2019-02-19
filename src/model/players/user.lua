@@ -35,7 +35,7 @@ end
 --
 function user:wrap()
   wrp.fn(user, 'new', {{'env', typ.tab}, {'pid', 'playerid'}})
-  wrp.fn(user, 'on_spawn_stone', {{'Stone'}})
+  wrp.fn(user, 'on_spawn_stone', {{'stone'}})
 end
 
 return user

@@ -9,10 +9,10 @@ local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
 local wrp       = require 'src.core.wrp'
 
-local StoneAbilities = obj:extend('StoneAbilities')
+local stoneAbilities = obj:extend('stoneAbilities')
 
 -- A set of abilities a piece have.
-function StoneAbilities:new(stone, model)
+function stoneAbilities:new(stone, model)
   return obj.new(self,
   {
     _list = {}, -- list of abilities
@@ -22,13 +22,13 @@ function StoneAbilities:new(stone, model)
   })
 end
 --
-function StoneAbilities:__tostring() 
+function stoneAbilities:__tostring() 
   return "abilities"
 end
 
 -------------------------------------------------------------------------------
 -- add ability
-function StoneAbilities:set_count(id, count)
+function stoneAbilities:set_count(id, count)
   ass.ge(count, 0)
 
   if count == 0 then
@@ -58,12 +58,12 @@ function StoneAbilities:set_count(id, count)
 end
 
 -- return true if empty
-function StoneAbilities:is_empty()
+function stoneAbilities:is_empty()
   return arr.is_empty(self._list)
 end
 
 -- show on board
-function StoneAbilities:show()
+function stoneAbilities:show()
   assert(self.view == nil)                 -- check is hidden now
   self._view = display.newGroup()
 
@@ -86,7 +86,7 @@ function StoneAbilities:show()
 end
 
 -- hide from board when piece deselected
-function StoneAbilities:hide()
+function stoneAbilities:hide()
   if self._view then -- check shown
     self._view:removeSelf()
     self._view = nil
@@ -94,13 +94,13 @@ function StoneAbilities:hide()
 end
 
 --
-function StoneAbilities.wrap()
-  wrp.fn(StoneAbilities, 'new', {{'Stone'}, {'Space'}})
-  wrp.fn(StoneAbilities, 'set_count', {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(StoneAbilities, 'is_empty', {log=log.info})
-  wrp.fn(StoneAbilities, 'show')
-  wrp.fn(StoneAbilities, 'hide')
+function stoneAbilities.wrap()
+  wrp.fn(stoneAbilities, 'new', {{'stone'}, {'space'}})
+  wrp.fn(stoneAbilities, 'set_count', {{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(stoneAbilities, 'is_empty', {log=log.info})
+  wrp.fn(stoneAbilities, 'show')
+  wrp.fn(stoneAbilities, 'hide')
 end
 
 --
-return StoneAbilities
+return stoneAbilities

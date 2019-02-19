@@ -23,7 +23,7 @@ end
 
 --
 function pilfer.wrap()
-  wrp.fn(pilfer, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(pilfer, 'apply_to_spot', {{'spot'}})
 end
 
 return pilfer

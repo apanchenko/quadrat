@@ -30,7 +30,7 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function count.wrap()
-  wrp.fn(count, 'new', {{'Stone'}, {'name', typ.str}, {'count', typ.num}})
+  wrp.fn(count, 'new', {{'stone'}, {'name', typ.str}, {'count', typ.num}})
   wrp.fn(count, 'set_count', typ.num)
 end
 

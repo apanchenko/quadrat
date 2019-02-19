@@ -1,8 +1,8 @@
 local composer      = require "composer"
-local Space         = require 'src.model.Space'
+local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
 local player        = require 'src.model.players.random'
-local Board         = require "src.view.Board"
+local board         = require "src.view.board"
 local Player        = require "src.Player"
 local cfg           = require 'src.model.cfg'
 local lay           = require 'src.core.lay'
@@ -32,7 +32,7 @@ end
 function lobby:on_opponent(room_id, createdByMe)
   --local params = { net = self.net }
 
-  local space = Space:new(cfg.board.cols, cfg.board.rows, room_id)
+  local space = space:new(cfg.board.cols, cfg.board.rows, room_id)
   local p1 = players.random:new(space, playerid.select(createdByMe))
   local p2 = players.user:new(space, playerid.select(not createdByMe))
 

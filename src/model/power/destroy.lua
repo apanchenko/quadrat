@@ -26,7 +26,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function destroy.wrap()
-  wrp.fn(destroy, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(destroy, 'apply_to_spot', {{'spot'}})
 end
 
 function destroy.test()

@@ -47,7 +47,7 @@ function power:on_add_jade(jade) end
 
 -- module
 function power.wrap()
-  wrp.fn(power, 'new',      {{'Piece'}, {'def', typ.tab}})
+  wrp.fn(power, 'new',      {{'piece'}, {'def', typ.tab}})
   wrp.fn(power, 'add_to',   {{'powers', typ.tab}})
   wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
 end

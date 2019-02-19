@@ -1,5 +1,5 @@
-local Spot      = require 'src.model.Spot'
-local Piece     = require 'src.model.Piece'
+local spot      = require 'src.model.spot'
+local piece     = require 'src.model.piece'
 local playerid  = require 'src.model.playerid'
 local cfg       = require 'src.model.cfg'
 local evt       = require 'src.core.evt'
@@ -10,11 +10,11 @@ local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
 local wrp       = require 'src.core.wrp'
 
-local Space = obj:extend('Space')
+local space = obj:extend('space')
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-function Space:new(cols, rows, seed)
+function space:new(cols, rows, seed)
   ass.nat(cols)
   ass.nat(rows)
   self = obj.new(self,
@@ -31,26 +31,26 @@ function Space:new(cols, rows, seed)
   -- fill grid
   for x = 0, cols - 1 do
     for y = 0, rows - 1 do
-      self.grid[x * cols + y] = Spot:new(x, y, self)
+      self.grid[x * cols + y] = spot:new(x, y, self)
     end
   end
 
   return self
 end
 --
-function Space:width()      return self.cols end
+function space:width()      return self.cols end
 --
-function Space:height()     return self.rows end
+function space:height()     return self.rows end
 --
-function Space:row(place)   return place % self.cols end
+function space:row(place)   return place % self.cols end
 -- place // self.cols
-function Space:col(place)   return (place - (place % self.cols)) / self.cols end
+function space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 --
-function Space:notify(method, ...)
-  ass.is(self, Space)
+function space:notify(method, ...)
+  ass.is(self, space)
   ass.is(method, typ.str)
-  log:info('Space:notify', method, ...)
+  log:info('space:notify', method, ...)
   -- break the stack
   --timer.performWithDelay(0, function() self.on_change:call(method, unpack(arg)) end)
   self.on_change:call(method, ...)
@@ -58,7 +58,7 @@ end
 
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
-function Space:setup()
+function space:setup()
   for x = 0, self.cols - 1 do
     self:spot(vec(x, 0            )):spawn_piece(playerid.white)
     self:spot(vec(x, 1            )):spawn_piece(playerid.white)
@@ -68,15 +68,15 @@ function Space:setup()
   self:notify('move', self.pid) -- notify color to move
 end
 -- position vector from grid index
-function Space:pos(index)   return vec(self:col(index), self:row(index)) end
+function space:pos(index)   return vec(self:col(index), self:row(index)) end
 -- index of cell and piece, private
-function Space:index(vec)   return vec.x * self.cols + vec.y end
+function space:index(vec)   return vec.x * self.cols + vec.y end
 -- iterate cells
-function Space:spots()      return pairs(self.grid) end
+function space:spots()      return pairs(self.grid) end
 -- get spot by position vector
-function Space:spot(vec)    return self.grid[self:index(vec)] end
+function space:spot(vec)    return self.grid[self:index(vec)] end
 --
-function Space:select_spots(filter)
+function space:select_spots(filter)
   local selected = {}
   for k, spot in ipairs(self.grid) do
     if filter(spot) then
@@ -86,7 +86,7 @@ function Space:select_spots(filter)
   return selected
 end
 --
-function Space:each_piece(fn)
+function space:each_piece(fn)
   for k, spot in ipairs(self.grid) do
     local piece = spot.piece
     if piece then
@@ -97,7 +97,7 @@ end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
-function Space:piece(vec)
+function space:piece(vec)
   local spot = self:spot(vec)
   if spot then
     return spot.piece
@@ -105,7 +105,7 @@ function Space:piece(vec)
   return nil
 end
 -- number of red pieces, number of black pieces
-function Space:count_pieces()
+function space:count_pieces()
   local res = {}
   res[tostring(playerid.white)] = 0
   res[tostring(playerid.black)] = 0
@@ -123,10 +123,10 @@ end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
-function Space:who_move()   return self.pid end
+function space:who_move()   return self.pid end
 
 -- check if piece can move from one position to another
-function Space:can_move(fr, to)
+function space:can_move(fr, to)
   if not (fr < self.size and to < self.size and vec.zero <= fr and vec.zero <= to) then
     return false;
   end
@@ -157,7 +157,7 @@ function Space:can_move(fr, to)
 end
 
 -- do move
-function Space:move(fr, to)
+function space:move(fr, to)
   ass(self:can_move(fr, to))
 
   -- change piece position
@@ -178,7 +178,7 @@ function Space:move(fr, to)
 end
 
 -- use ability
-function Space:use(pos, ability_name)
+function space:use(pos, ability_name)
   -- check rights
   local piece = self:piece(pos)        -- peek piece at from position
   if piece == nil then                      -- check if it exists
@@ -194,26 +194,26 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap vec functions
-function Space.wrap()
+function space.wrap()
   local info = {log = log.info}
-  --wrp.fn(Space, 'notify',   {{'method', typ.str}, {}})
-  wrp.fn(Space, 'setup',      {})
-  wrp.fn(Space, 'pos',        {{'index', typ.num}})
-  wrp.fn(Space, 'width',      {},                           info)
-  wrp.fn(Space, 'height',     {})
-  wrp.fn(Space, 'row',        {{'place', typ.num}})
-  wrp.fn(Space, 'col',        {{'place', typ.num}})
-  wrp.fn(Space, 'pos',        {{'index', typ.num}})
-  wrp.fn(Space, 'index',      {{'vec', vec}},               info)
-  wrp.fn(Space, 'spot',       {{'pos', vec}},               info)
-  wrp.fn(Space, 'each_piece', {{'fn', typ.fun}},            info)
-  wrp.fn(Space, 'count_pieces', {},                         info)
-  wrp.fn(Space, 'piece',      {{'pos', vec}},               info)
-  wrp.fn(Space, 'who_move',   {}, info)
-  wrp.fn(Space, 'can_move',   {{'from', vec}, {'to', vec}}, info)
-  wrp.fn(Space, 'move',       {{'from', vec}, {'to', vec}})
-  wrp.fn(Space, 'use',        {{'pos', vec}, {'ability_name', typ.str}})
+  --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
+  wrp.fn(space, 'setup',      {})
+  wrp.fn(space, 'pos',        {{'index', typ.num}})
+  wrp.fn(space, 'width',      {},                           info)
+  wrp.fn(space, 'height',     {})
+  wrp.fn(space, 'row',        {{'place', typ.num}})
+  wrp.fn(space, 'col',        {{'place', typ.num}})
+  wrp.fn(space, 'pos',        {{'index', typ.num}})
+  wrp.fn(space, 'index',      {{'vec', vec}},               info)
+  wrp.fn(space, 'spot',       {{'pos', vec}},               info)
+  wrp.fn(space, 'each_piece', {{'fn', typ.fun}},            info)
+  wrp.fn(space, 'count_pieces', {},                         info)
+  wrp.fn(space, 'piece',      {{'pos', vec}},               info)
+  wrp.fn(space, 'who_move',   {}, info)
+  wrp.fn(space, 'can_move',   {{'from', vec}, {'to', vec}}, info)
+  wrp.fn(space, 'move',       {{'from', vec}, {'to', vec}})
+  wrp.fn(space, 'use',        {{'pos', vec}, {'ability_name', typ.str}})
 end
 
 -- return module
-return Space
+return space

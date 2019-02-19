@@ -20,7 +20,7 @@ end
 
 --
 function swap.wrap()
-  wrp.fn(swap, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(swap, 'apply_to_spot', {{'spot'}})
 end
 
 return swap

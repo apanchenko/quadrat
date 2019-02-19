@@ -4,7 +4,7 @@ local obj     = require 'src.core.obj'
 local wrp     = require 'src.core.wrp'
 local typ     = require 'src.core.typ'
 local powers  = require 'src.model.power.powers'
-local zones   = require 'src.model.zones.Zones'
+local zones   = require 'src.model.zones.zones'
 
 -- jade
 local jade = obj:extend('jade')
@@ -75,7 +75,7 @@ end
 function jade.wrap()
   wrp.fn(jade, 'new',    {}, {log=log.info})
   wrp.fn(jade, 'add_to', {{'jades', typ.tab}})
-  wrp.fn(jade, 'use',    {{'Piece'}})
+  wrp.fn(jade, 'use',    {{'piece'}})
 end
 
 return jade

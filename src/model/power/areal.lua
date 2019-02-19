@@ -50,10 +50,10 @@ end
 
 --
 function areal.wrap()
-  wrp.fn(areal, 'new', {{'Piece'}, {'def', typ.tab}, {'zone', typ.tab}})
-  wrp.fn(areal, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(areal, 'new', {{'piece'}, {'def', typ.tab}, {'zone', typ.tab}})
+  wrp.fn(areal, 'apply_to_spot', {{'spot'}})
   wrp.fn(areal, 'apply_to_self', {})
-  wrp.fn(areal, 'apply_to_enemy', {{'Piece'}})
+  wrp.fn(areal, 'apply_to_enemy', {{'piece'}})
 end
 
 return areal

@@ -24,7 +24,7 @@ end
 --
 function parasite.wrap()
   wrp.fn(parasite, 'apply_to_self', {})
-  wrp.fn(parasite, 'apply_to_enemy', {{'Piece'}})
+  wrp.fn(parasite, 'apply_to_enemy', {{'piece'}})
 end
 
 return parasite

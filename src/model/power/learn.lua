@@ -22,7 +22,7 @@ end
 
 --
 function learn.wrap()
-  wrp.fn(learn, 'apply_to_spot', {{'Spot'}})
+  wrp.fn(learn, 'apply_to_spot', {{'spot'}})
 end
 
 return learn

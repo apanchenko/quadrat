@@ -49,7 +49,7 @@ end
 
 --
 function counted:wrap()
-  wrp.fn(counted, 'new',        {{'Piece'}, {'def', typ.tab}})
+  wrp.fn(counted, 'new',        {{'piece'}, {'def', typ.tab}})
   wrp.fn(counted, 'increase')
   wrp.fn(counted, 'decrease')
   wrp.fn(counted, 'get_count',  {}, {log=log.info})

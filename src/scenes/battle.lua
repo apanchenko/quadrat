@@ -1,6 +1,6 @@
 local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
-local Board         = require 'src.view.Board'
+local board         = require 'src.view.board'
 local Player        = require 'src.Player'
 local cfg           = require 'src.model.cfg'
 local lay           = require 'src.core.lay'
@@ -38,7 +38,7 @@ function battle:create(event)
   self.space = self.env.space
   self.space.on_change:add(self)
 
-  self.env.board = Board:new(self, self.space)
+  self.env.board = board:new(self, self.space)
   self.board = self.env.board
 
   self.space:setup() -- start playing

@@ -12,7 +12,7 @@ local cbo       = require 'src.core.cbo'
 
 return function(space, owner, zone)
   ass.is(space, 'Space')
-  ass.is(owner, 'Piece')
+  ass.is(owner, 'piece')
   ass.is(zone, typ.tab)
 
   local self = cbo()

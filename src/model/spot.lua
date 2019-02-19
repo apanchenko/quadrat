@@ -5,10 +5,10 @@ local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
 local wrp       = require 'src.core.wrp'
 local cfg       = require 'src.model.cfg'
-local Piece     = require 'src.model.Piece'
+local piece     = require 'src.model.piece'
 local jade      = require 'src.model.jade'
 
-local Spot = obj:extend('Spot')
+local spot = obj:extend('spot')
 
 -- flags
 local pit      = 1
@@ -17,7 +17,7 @@ local high     = 16
 local peak     = 17
 
 -- create empty cell
-function Spot:new(x, y, space)
+function spot:new(x, y, space)
   return obj.new(self,
   {
     space = space, -- duplicate
@@ -27,7 +27,7 @@ function Spot:new(x, y, space)
 end
 
 --
-function Spot:__tostring()
+function spot:__tostring()
   local res = 'spot{'.. self.pos.x.. ",".. self.pos.y
   if self.jade then
     res = res .. ',jade'
@@ -39,15 +39,15 @@ end
 -- PIECE ----------------------------------------------------------------------
 
 -- create a new piece on this spot
-function Spot:spawn_piece(color)
+function spot:spawn_piece(color)
   ass.nul(self.piece)
-  self.piece = Piece:new(self.space, color)
+  self.piece = piece:new(self.space, color)
   self.piece:set_pos(self.pos)
   self.space:notify('spawn_piece', color, self.pos) -- notify
 end
 
 -- move piece from another spot to this
-function Spot:move_piece(from)
+function spot:move_piece(from)
   -- kill target piece
   if self.piece then
     self.piece.die()
@@ -72,8 +72,8 @@ end
 -- JADE -----------------------------------------------------------------------
 
 -- take chance to spawn a new jade if can
-function Spot:spawn_jade()
-  ass.is(self, Spot)
+function spot:spawn_jade()
+  ass.is(self, spot)
   if self.jade then -- already used by jade
     return
   end
@@ -88,14 +88,14 @@ function Spot:spawn_jade()
 end
 
 -- take chance to spawn a new jade if can
-function Spot:set_jade()
+function spot:set_jade()
   self.jade = jade:new()
   self.space:notify('spawn_jade', self.pos) -- notify that a new jade set
 end
 
 -- take chance to spawn a new jade if can
-function Spot:remove_jade()
-  ass.is(self, Spot)
+function spot:remove_jade()
+  ass.is(self, spot)
   if self.jade then -- already used by jade
     self.jade = nil
     self.space.on_change:call('remove_jade', self.pos) -- notify that a new jade set
@@ -103,9 +103,9 @@ function Spot:remove_jade()
 end
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(Spot, 'new', {{'x', typ.num}, {'y', typ.num}, {'Space'}})
-wrp.fn(Spot, 'spawn_piece', {{'playerid'}})
-wrp.fn(Spot, 'move_piece', {{'from', Spot}})
-wrp.fn(Spot, 'spawn_jade', {}, {log = log.info})
+wrp.fn(spot, 'new', {{'x', typ.num}, {'y', typ.num}, {'space'}})
+wrp.fn(spot, 'spawn_piece', {{'playerid'}})
+wrp.fn(spot, 'move_piece', {{'from', spot}})
+wrp.fn(spot, 'spawn_jade', {}, {log = log.info})
 
-return Spot
+return spot

@@ -2,31 +2,31 @@ local ass       = require 'src.core.ass'
 local vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
 local log       = require 'src.core.log'
-local arr         = require 'src.core.arr'
-local wrp         = require 'src.core.wrp'
+local arr       = require 'src.core.arr'
+local wrp       = require 'src.core.wrp'
 
-local Radial = obj:extend('Radial')
+local radial = obj:extend('radial')
 
 -------------------------------------------------------------------------------
-function Radial:new(pos)
+function radial:new(pos)
   return obj.new(self, {pos = pos})
 end
 
 --
-function Radial:__tostring()
+function radial:__tostring()
   return 'radial'.. tostring(self.pos)
 end
 
 --
-function Radial:filter(pos)
+function radial:filter(pos)
   return (pos - self.pos):length2() < 3
 end
 
 -- selftest
-function Radial.Test()
-  print('test Radial..')
+function radial.Test()
+  print('test radial..')
 
-  ass(tostring(Radial) == 'Radial')
+  ass(tostring(radial) == 'radial')
   local radial = Radial:new(vec(3, 3))
 
   local trues = {vec(2,2), vec(3,2), vec(4,2),
@@ -38,9 +38,9 @@ function Radial.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function Radial.wrap()
-  wrp.fn(Radial, 'new', {{'pos', vec}})
-  wrp.fn(Radial, 'filter', {{'pos', vec}})
+function radial.wrap()
+  wrp.fn(radial, 'new', {{'pos', vec}})
+  wrp.fn(radial, 'filter', {{'pos', vec}})
 end
 
-return Radial
+return radial

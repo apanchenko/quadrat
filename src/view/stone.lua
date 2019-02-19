@@ -7,16 +7,16 @@ local map         = require 'src.core.map'
 local obj         = require 'src.core.obj'
 local typ         = require 'src.core.typ'
 local wrp         = require 'src.core.wrp'
-local Abilities   = require 'src.view.StoneAbilities'
+local Abilities   = require 'src.view.stoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.model.cfg'
 local Player      = require 'src.Player'
 local powers      = require 'src.view.power.powers'
 
-local Stone = obj:extend('Stone')
+local stone = obj:extend('stone')
 
 --INIT-------------------------------------------------------------------------
-function Stone:new(pid, model)
+function stone:new(pid, model)
   self = obj.new(self,
   {
     _model = model,
@@ -31,7 +31,7 @@ function Stone:new(pid, model)
   return self
 end
 --
-function Stone:__tostring() 
+function stone:__tostring() 
   local s = "stone["
   if self._pos then
     s = s.. self._pos.x.. ','.. self._pos.y.. ','
@@ -47,7 +47,7 @@ function Stone:__tostring()
   return s.. "]"
 end
 --
-function Stone:set_color(pid)
+function stone:set_color(pid)
   -- nothing to change
   if pid ~= self.pid then
     self.pid = pid
@@ -62,19 +62,19 @@ function Stone:set_color(pid)
   end
 end
 --
-function Stone:color()
+function stone:color()
   return self.pid
 end
 
--- insert Stone into group, with scale for dragging
-function Stone:puton(board)
-  ass.is(board, 'Board')
+-- insert stone into group, with scale for dragging
+function stone:puton(board)
+  ass.is(board, 'board')
   board.view:insert(self.view)
   self.board = board
 end
 
--- remove Stone from board
-function Stone:putoff()
+-- remove stone from board
+function stone:putoff()
   ass(self.board)
   self.view:removeSelf()
   self.view = nil
@@ -87,25 +87,25 @@ end
 
 -- POSITION -------------------------------------------------------------------
 -- set stone position
-function Stone:set_pos(pos)
+function stone:set_pos(pos)
   if pos ~= nil then
     ass.is(pos, Vec)
   end
   self:update_group_pos(pos)
 end
 --
-function Stone:pos()
+function stone:pos()
   return self._pos
 end
 
 -- ABILITY --------------------------------------------------------------------
-function Stone:set_ability(id, count)
+function stone:set_ability(id, count)
   self._abilities:set_count(id, count)
 end
 
 
 -- POWER ----------------------------------------------------------------------
-function Stone:add_power(id, result_count)
+function stone:add_power(id, result_count)
   local power = self.powers[id]
   if power == nil then
     self.powers[id] = powers[id]:new(self, id, result_count)
@@ -116,7 +116,7 @@ end
 
 -- TOUCH-----------------------------------------------------------------------
 -- touch listener function
-function Stone:touch(event)
+function stone:touch(event)
   -- do not touch opponent stones
   if self.board.model:who_move() ~= self.pid then
     log:trace('not my move')
@@ -161,14 +161,14 @@ function Stone:touch(event)
   return true
 end
 --
-function Stone:touch_began(event)
+function stone:touch_began(event)
   if self.isSelected == false then
-    self.board:select(nil)                -- deselect another Stone
+    self.board:select(nil)                -- deselect another stone
   end
   self:set_drag(event.id)
 end
 --
-function Stone:touch_moved(event)
+function stone:touch_moved(event)
   local start = Vec(event.xStart, event.yStart)
   local xScale = self.board.view.xScale
   local shift = Vec:from(event)
@@ -179,15 +179,15 @@ function Stone:touch_moved(event)
   Vec.copy(shift, self.view)
   return proj;
 end
--- to be called from Board
-function Stone:select()
+-- to be called from board
+function stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
   self:update_group_pos(self._pos)                  -- adjust group position
   self._abilities:show()
 end
--- to be called from Board
-function Stone:deselect()
+-- to be called from board
+function stone:deselect()
   if self.isSelected then
     local depth = log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
@@ -197,7 +197,7 @@ function Stone:deselect()
   end
 end
 --
-function Stone:create_project(proj)
+function stone:create_project(proj)
   if not self.project then
     local path = "src/view/stone_"..tostring(self.pid).."_project.png"
     self.project = lay.image(self.board, cfg.cell, path)
@@ -206,7 +206,7 @@ function Stone:create_project(proj)
   Vec.copy(proj * cfg.cell.size, self.project)
 end
 --
-function Stone:remove_project()
+function stone:remove_project()
   if self.project then
     self.project:removeSelf()
     self.project = nil
@@ -214,7 +214,7 @@ function Stone:remove_project()
   self.proj = nil
 end
 --
-function Stone:set_drag(eventId)
+function stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
@@ -223,7 +223,7 @@ function Stone:set_drag(eventId)
 end
 
 --
-function Stone:update_group_pos(pos)
+function stone:update_group_pos(pos)
   -- remove from board
   if pos == nil then
     self._pos = nil
@@ -249,17 +249,17 @@ function Stone:update_group_pos(pos)
 end
 
 --
-function Stone.wrap()
-  wrp.fn(Stone, 'new',          {{'pid', 'playerid'}, {'Space'}})
-  wrp.fn(Stone, 'select')
-  wrp.fn(Stone, 'deselect',     {}, {log=log.info})
-  wrp.fn(Stone, 'set_color',    {{'playerid'}})
-  wrp.fn(Stone, 'color',        {}, {log=log.info})
-  wrp.fn(Stone, 'puton',        {{'Board'}})
-  wrp.fn(Stone, 'putoff')
-  wrp.fn(Stone, 'pos')
-  wrp.fn(Stone, 'set_ability',  {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(Stone, 'add_power',    {{'name', typ.str}, {'result_count', typ.num}})
+function stone.wrap()
+  wrp.fn(stone, 'new',          {{'pid', 'playerid'}, {'space'}})
+  wrp.fn(stone, 'select')
+  wrp.fn(stone, 'deselect',     {}, {log=log.info})
+  wrp.fn(stone, 'set_color',    {{'playerid'}})
+  wrp.fn(stone, 'color',        {}, {log=log.info})
+  wrp.fn(stone, 'puton',        {{'board'}})
+  wrp.fn(stone, 'putoff')
+  wrp.fn(stone, 'pos')
+  wrp.fn(stone, 'set_ability',  {{'id', typ.str}, {'count', typ.num}})
+  wrp.fn(stone, 'add_power',    {{'name', typ.str}, {'result_count', typ.num}})
 end
 
-return Stone
+return stone
