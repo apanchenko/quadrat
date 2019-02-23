@@ -57,7 +57,8 @@ function stone:set_color(pid)
       self.img:removeSelf()
     end
     cfg.cell.order = 1
-    self.img = lay.image(self, cfg.cell, "src/view/stone_"..tostring(self.pid)..".png")
+    cfg.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
+    self.img = lay.image(self, cfg.cell)
     cfg.cell.order = nil
   end
 end
@@ -69,7 +70,7 @@ end
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
   ass.is(board, 'board')
-  board.view:insert(self.view)
+  lay.render(board, self, {vx=0, vy=0})
   self.board = board
 end
 
@@ -179,6 +180,7 @@ function stone:touch_moved(event)
   Vec.copy(shift, self.view)
   return proj;
 end
+
 -- to be called from board
 function stone:select()
   assert(self.isSelected == false)
@@ -186,6 +188,7 @@ function stone:select()
   self:update_group_pos(self._pos)                  -- adjust group position
   self._abilities:show()
 end
+
 -- to be called from board
 function stone:deselect()
   if self.isSelected then
@@ -199,8 +202,8 @@ end
 --
 function stone:create_project(proj)
   if not self.project then
-    local path = "src/view/stone_"..tostring(self.pid).."_project.png"
-    self.project = lay.image(self.board, cfg.cell, path)
+    cfg.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
+    self.project = lay.image(self.board, cfg.cell)
   end
   self.proj = proj
   Vec.copy(proj * cfg.cell.size, self.project)
@@ -218,7 +221,7 @@ function stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
-    self.board.view:insert(self.view)
+    lay.render(self.board, self, {x=self.view.x, y=self.view.y})
   end
 end
 
@@ -239,10 +242,10 @@ function stone:update_group_pos(pos)
   end
 
   if self._pos then
-    -- animate to view position
+    log:info('animate to view position', view_pos)
     lay.to(self, view_pos, cfg.stone.move)
   else
-    -- instant set view position
+    log:info('instant set view position', view_pos)
     view_pos:to(self.view)
   end
   self._pos = pos

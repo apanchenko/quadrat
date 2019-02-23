@@ -38,7 +38,9 @@ function stoneAbilities:set_count(id, count)
   end
 
   if count > 0 and self._mark == nil then
-    self._mark = lay.image(self._stone, cfg.cell, "src/view/ability_"..tostring(self._stone:color())..".png")
+    cfg.cell.path = "src/view/ability_"..tostring(self._stone:color())..".png"
+    cfg.cell.order = 1
+    self._mark = lay.image(self._stone, cfg.cell)
   end
 
   local reshow = self._view ~= nil
@@ -78,10 +80,10 @@ function stoneAbilities:show()
       self._model:use(self._stone:pos(), event.target.id)
       return true
     end
-    log:trace(opts.label)
-    lay.render(self._view, widget.newButton(opts), {})
+    --log:trace(opts.label)
+    lay.render(self._view, widget.newButton(opts), cfg.origin)
   end
-  lay.column(self._view)
+  lay.column(self._view, 0)
   lay.render(self._stone.board.battle, self._view, cfg.abilities)
 end
 

@@ -5,8 +5,8 @@ local bld = require 'src.core.bld'
 local log = { depth = 0 }
 
 --
-local function out(severity, ...)
-  local str = severity.. string.rep('. ', log.depth)
+local function out(...)
+  local str = string.rep('. ', log.depth)
   for i = 1, #arg do
     str = str.. tostring(arg[i]).. ' '
   end
@@ -20,21 +20,21 @@ function log:on_cfg(cfg)
 
   -- info for debug configuration only
   if cfg.build.id <= bld.debug.id then
-    self.info  = function(me, ...) out('inf ', ...) return me end
+    self.info  = function(me, ...) out(...) return me end
   else
     self.info  = self.dumb
   end
 
   -- trace for debug and develop configurations
   if cfg.build.id <= bld.develop.id then
-    self.trace = function(me, ...) out('trc ', ...) return me end
+    self.trace = function(me, ...) out(...) return me end
   else
     self.trace = self.dumb
   end
 
   -- error and warning for all configurations
-  self.error   = function(me, ...) out('err ', ...) return me end
-  self.warning = function(me, ...) out('wrn ', ...) return me end
+  self.error   = function(me, ...) out('Error', ...) return me end
+  self.warning = function(me, ...) out('Warning', ...) return me end
 
   self:trace('log:on_cfg '..cfg.build.name)
 end

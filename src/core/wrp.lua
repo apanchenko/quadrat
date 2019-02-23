@@ -51,19 +51,19 @@ function wrp.fn(t, fn_name, arg_infos, opts)
 
     -- original function
   local fn = t[fn_name]
-  ass.fun(fn, 'no such function in '.. call)
+  ass.fun(fn, call..' - no such function')
 
   -- 
   local function arguments(call, args)
     local merged = args
-    ass.eq(#arg_infos, #args, ' expected '..#arg_infos..' arguments, found '..#args..' in '..call)
+    ass.eq(#arg_infos, #args, call..' expected '..#arg_infos..' arguments, found '..#args)
     if #args == 0 then
       return ''
     end    
 
     local function merge(arg, info)
       local argstr = info.tostring(arg)
-      ass(info.type.is(arg), info.name..'='..argstr..' is not '..info.type.name.." in "..call)
+      ass(info.type.is(arg), call..' '..info.name..'='..argstr..' is not '..info.type.name)
       return info.name.. '='.. argstr
     end
 

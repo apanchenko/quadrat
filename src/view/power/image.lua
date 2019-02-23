@@ -3,6 +3,7 @@ local typ       = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
+local lay         = require 'src.core.lay'
 local cfg         = require 'src.model.cfg'
 
 local image = obj:extend('view.power.image')
@@ -11,7 +12,9 @@ local image = obj:extend('view.power.image')
 -- create image with initial one count
 function image:new(stone, name)
   self = obj.new(self)
-  self.image = lay.image(stone, cfg.cell, 'src/view/power/'..name..'.png')
+  cfg.cell.path = 'src/view/power/'..name..'.png'
+  cfg.cell.order = 10
+  self.image = lay.image(stone, cfg.cell)
   return self
 end
 
@@ -26,8 +29,8 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function image.wrap()
-  wrp.fn(image, 'new', {{'stone'}, {'name', typ.str}, {'count', typ.num}})
-  wrp.fn(image, 'set_count', {{'count', typ.num}})
+  wrp.fn(image, 'new',        {{'stone'}, {'name', typ.str}, {'count', typ.num}})
+  wrp.fn(image, 'set_count',  {{'count', typ.num}})
 end
 
 return image

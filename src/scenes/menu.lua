@@ -51,9 +51,9 @@ function menu:create(event)
   lay.column(buttons, 5)
 
   -- draw version
-  lay.text(self, {text=app_cfg.version, x=0, vy=90})
+  lay.text(self, {text=app_cfg.version, vx=0, vy=90})
 
-  lay.render(self, buttons, {vy=15})
+  lay.render(self, buttons, {vx=0, vy=15})
 end
 
 -------------------------------------------------------------------------------

@@ -4,30 +4,30 @@ local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 local wrp     = require 'src.core.wrp'
 
-local Row = obj:extend('Row')
+local row = obj:extend('row')
 
 --
-function Row:new(pos)
+function row:new(pos)
   return obj.new(self, {pos = pos})
 end
 
 --
-function Row:filter(pos)
+function row:filter(pos)
   return pos.y == self.pos.y
 end
 
 -- selftest
-function Row.Test()
-  print('test Row..')
+function row.Test()
+  print('test row..')
 
-  assert(tostring(Row) == 'Row')
+  assert(tostring(row) == 'row')
 end
 
 -- MODULE ---------------------------------------------------------------------
-function Row.wrap()
-  wrp.fn(Row, 'new', {{'pos', vec}})
-  wrp.fn(Row, 'filter', {{'pos', vec}})
+function row.wrap()
+  wrp.fn(row, 'new', {{'pos', vec}})
+  wrp.fn(row, 'filter', {{'pos', vec}})
 end
 
 
-return Row
+return row

@@ -22,10 +22,11 @@ function Player:new(pid, name)
   })
 
   -- piece image
-  lay.image(self, cfg.player, "src/view/stone_"..tostring(self.pid)..".png")
+  cfg.player.path = "src/view/stone_"..tostring(self.pid)..".png"
+  lay.image(self, cfg.player)
 
   -- player name
-  lay.text(self, {text=self.name, vx=8})
+  lay.text(self, {text=self.name, vx=8, vy=0})
 
   print(tostring(self))
   return self

@@ -12,7 +12,7 @@ function ass.nul(v, msg)    return v == nil or error(msg or tostring(v)..' is no
 -- 'v' is not nil
 function ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
 -- 'v' is a number
-function ass.num(v)         return check.num(v) or error(tostring(v)..' is not a number') end
+function ass.num(v, msg)    return check.num(v) or error(msg or tostring(v)..' is not a number') end
 -- 'n' is natural number
 function ass.nat(v)         return ass.num(v) and ass(v >= 0) end
 -- 'v' is a table

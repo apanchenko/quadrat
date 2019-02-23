@@ -1,45 +1,52 @@
 local cfg = require 'src.model.cfg'
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
+local typ = require 'src.core.typ'
+local arr = require 'src.core.arr'
+local wrp = require 'src.core.wrp'
+local map = require 'src.core.map'
 
-lay = {}
 
---[[-----------------------------------------------------------------------------
-target  display group insert in
-obj     display object to render
-opts:
-  vx    defaults to 0
-  vy    defaults to 0
--------------------------------------------------------------------------------]]
+-- @param target          display group insert in
+-- @param obj             object to render
+-- @param opts.w          width in pixels
+-- @param opts.vw         or width in vw
+-- @param opts.h          height in pixels
+-- @param opts.hw         or height in vh
+-- @param opts.ratio      or height relative to width
+-- @param opts.vx         defaults to 0
+-- @param opts.vy         defaults to 0
+-- @param opts.order      render order, 1 renders first, larger renders later
 local function render(target, obj, opts)
-  ass.tab(target, "target")
-  ass.tab(obj, "object")
-  ass.tab(opts, "opts")
-
+  ass(opts.x or opts.vx, 'lay.render - set opts x or vx')
+  ass(opts.y or opts.vy, 'lay.render - set opts y or vy')
   target = target.view or target
   child = obj.view or obj
   child.anchorX = opts.anchorX or 0
   child.anchorY = opts.anchorY or 0
-  child.x = opts.x or (cfg.vw * (opts.vx or 0))
-  child.y = opts.y or (cfg.vh * (opts.vy or 0))
+  child.x = opts.x or (cfg.vw * opts.vx)
+  child.y = opts.y or (cfg.vh * opts.vy)
 
   if opts.vw then
     local scale = cfg.vw * opts.vw / obj.width
     child:scale(scale, scale)
   end
 
-  if opts.order == nil then
-    target:insert(child)
-  else
-    target:insert(opts.order, child)
-  end
-
+  -- calculate group index by order
+  local next = target.numChildren + 1
+  child.order = opts.order or next
+  local index = arr.bsearch_range(target, 1, next, child, function(a, b)
+    ass.num(a.order, 'order not set in '..tostring(a))
+    ass.num(b.order, 'order not set in '..tostring(b))
+    return a.order < b.order
+  end)
+  ass.num(index)
+  target:insert(index, child)
   return obj
 end
-lay.render = render
 
 -- animate coordinates
-function lay.to(obj, pos, params)
+local function to(obj, pos, params)
   params.x = pos.x
   params.y = pos.y
   transition.to(obj.view, params)
@@ -48,7 +55,6 @@ end
 -- arrange children in column
 local function column(obj, space)
   local view = obj.view or obj
-  space = space or 0
   local y = 0
   for i = 1, view.numChildren do
     local child = view[i]
@@ -56,26 +62,14 @@ local function column(obj, space)
     y = y + child.height + space
   end
 end 
-lay.column = column
 
---[[-----------------------------------------------------------------------------
-group   display group insert in
-path    path to image resource
-opts:
-  w     width in px
-  vw    or width in vw
-  h     height in px
-  hw    or height in vh
-  ratio or height relative to width
-  vx    defaults to 0
-  vy    defaults to 0
------------------------------------------------------------------------------]]--
-function lay.image(group, opts, path)
+-- group      display group insert in
+-- opts       @see render
+-- path       path to image resource
+local function image(group, opts)
   ass.tab(opts, "invalid opts")
 
-  path = path or opts.path
-  ass.str(path, 'path')
-  --log:trace("lay.image ".. path)
+  ass.str(opts.path, 'path')
 
   local w = opts.w or (cfg.vw * opts.vw)
 
@@ -88,8 +82,7 @@ function lay.image(group, opts, path)
     h = w / (opts.ratio or 1)
   end
 
-  local img = display.newImageRect(path, w, h)
-  
+  local img = display.newImageRect(opts.path, w, h)
   render(group, img, opts)
   return img
 end
@@ -98,9 +91,7 @@ end
 -- @param group   display group insert in
 -- @param opts = {text, vx, vy, x, y, width, height, font, fontSize}
 -- @see https://docs.coronalabs.com/api/library/display/newText.html
-function lay.text(group, opts)
-  ass.tab(opts, "opts")
-
+local function text(group, opts)
   if opts.font == nil then
     opts.font = cfg.font -- select default font
   end
@@ -112,13 +103,12 @@ function lay.text(group, opts)
   end
 
   local text = display.newText(opts)
-  
   render(group, text, opts)
   return text
 end
 
 -------------------------------------------------------------------------------
-function lay.sheet(group, sheet, frame, opts)
+local function sheet(group, sheet, frame, opts)
   assert(sheet)
   assert(frame)
   assert(opts.w and opts.h)
@@ -127,5 +117,37 @@ function lay.sheet(group, sheet, frame, opts)
   return img
 end
 
+
+local lay =
+{
+  render = render,
+  to = to,
+  column = column,
+  image = image,
+  text = text,
+  sheet = sheet
+}
+
+-- MODULE ---------------------------------------------------------------------
+function lay.wrap()
+  local wrap = function(fn, ...)
+    wrp.fn(lay, fn, {...}, {name='lay', static=true, log=log.info})
+  end
+
+  local target = {'target', typ.tab}
+  local obj    = {'object', typ.tab}
+  local opts   = {'opts', typ.tab, map.tostring}
+
+  wrap('render', target, obj, opts)
+  wrap('to',     obj, {'pos', typ.tab}, opts)
+  wrap('column', obj, {'space', typ.num})
+  wrap('image',  target, opts)
+  --wrpfn('text',   {'t', typ.tab})
+  --wrpfn('sheet',  {'t', typ.tab})
+end
+
+--
+function lay.test()
+end
 
 return lay

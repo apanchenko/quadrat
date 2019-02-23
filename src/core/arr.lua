@@ -24,6 +24,7 @@ function arr.each(t, fn)
     fn(t[i])
   end
 end
+
 --
 function arr.map(t, fn)
   local mapped = {}
@@ -32,6 +33,7 @@ function arr.map(t, fn)
   end
   return mapped
 end
+
 --
 function arr.reduce(t, memo, fn)
   for i = 1, #t do
@@ -39,6 +41,7 @@ function arr.reduce(t, memo, fn)
   end
   return memo
 end
+
 --
 function arr.detect(t, fn)
   for i = 1, #t do
@@ -47,6 +50,7 @@ function arr.detect(t, fn)
     end
   end
 end
+
 --
 function arr.select(t, fn)
   local selected = {}
@@ -57,6 +61,7 @@ function arr.select(t, fn)
   end
   return selected
 end
+
 --
 function arr.reject(t, fn)
   local selected = {}
@@ -67,6 +72,7 @@ function arr.reject(t, fn)
   end
   return selected
 end
+
 --
 function arr.all(t, fn)
   for i = 1, #t do
@@ -76,6 +82,7 @@ function arr.all(t, fn)
   end
   return true
 end
+
 --
 function arr.any(t, fn)
   for i = 1, #t do
@@ -85,6 +92,7 @@ function arr.any(t, fn)
   end
   return false
 end
+
 --
 function arr.include(t, value)
   for i = 1, #t do
@@ -93,15 +101,18 @@ function arr.include(t, value)
   end
   return false
 end
+
 --
 function arr.invoke(t, fn_name, ...)
   local args = {...}
   arr.each(t, function(x) x[fn_name](unpack(args)) end)
 end
+
 --
 function arr.pluck(t, name)
   return arr.map(t, function(x) return x[name] end)
 end
+
 --
 function arr.min(t, fn)
   return arr.reduce(t, {}, function(min, x) 
@@ -118,6 +129,7 @@ function arr.min(t, fn)
     return min
   end).item
 end
+
 --
 function arr.max(t, fn)
   return arr.reduce(t, {}, function(min, x) 
@@ -134,6 +146,7 @@ function arr.max(t, fn)
     return min
   end).item
 end
+
 --
 function arr.reverse(t)
   local reversed = {}
@@ -208,24 +221,51 @@ function arr.tostring(t, sep)
   return res
 end
 
+-- Binary search for index of element in sorted array
+-- @param t        array to search
+-- @param low      min search range bound
+-- @param high     max search range bound
+-- @param object   find place for this object
+-- @param is_lower compare function (a, b) returns a < b
+function arr.bsearch_range(t, low, high, object, is_lower)
+  ass.le(1, low)
+  ass.le(low, high)
+  while low < high do
+    local mid = math.floor((low + high) * 0.5)
+    if is_lower(t[mid], object) then
+      low = mid + 1
+    else
+      if is_lower(object, t[mid]) then
+        high = mid - 1
+      else
+        return mid
+      end
+    end
+  end
+  return high
+end
+
 -- MODULE ---------------------------------------------------------------------
 function arr.wrap()
-  local opts =
-  {
-    name = 'arr',
-    static = true,
-    log = log.info
-  }
-  wrp.fn(arr, 'push', {{'t', typ.tab}, {'v', typ.any}}, opts)
-  wrp.fn(arr, 'all', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
-  wrp.fn(arr, 'each', {{'t', typ.tab}, {'fn', typ.fun}}, opts)
-  wrp.fn(arr, 'random', {{'t', typ.tab}}, opts)
+  local wrap = function(fn_name, ...)
+    wrp.fn(arr, fn_name, {...}, {name='arr', static=true,  log=log.info})
+  end
+
+  wrap('push',          {'t', typ.tab},   {'v', typ.any})
+  wrap('all',           {'t', typ.tab},   {'fn', typ.fun})
+  wrap('each',          {'t', typ.tab},   {'fn', typ.fun})
+  wrap('random',        {'t', typ.tab})
+  wrap('bsearch_range', {'t', typ.tab},   {'low', typ.num}, {'high', typ.num},
+                        {'obj', typ.any}, {'is_lower', typ.fun})
 end
 
 --
 function arr.test()
-  local t = { 'semana', 'mes', 'ano' }
-  ass.eq(arr.tostring(t), 'semana, mes, ano')
+  ass.eq(arr.tostring({'semana','mes','ano'}), 'semana, mes, ano')
+
+  local compare = function(a, b) return a < b end
+  ass.eq(arr.bsearch_range({1,2,3}, 1, 4, 2, compare), 2, 'test bsearch_range - simple')
+  ass.eq(arr.bsearch_range({},      1, 1, 9, compare), 1, 'test bsearch_range - empty array')
 end
 
 return arr

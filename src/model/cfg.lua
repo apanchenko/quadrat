@@ -7,14 +7,17 @@ cfg.vw            = display.contentWidth / 100
 cfg.vh            = display.contentHeight / 100
 cfg.font          = native.systemFont
 
+cfg.origin        = {vx=0, vy=0}
 cfg.battle        = {}
-cfg.battle.bg     = {vw=100, vh=100, path="src/background.png"}
+cfg.battle.bg     = {vx=0, vy=0, vw=100, vh=100, path="src/background.png"}
 cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/view/arrow.png"}
-cfg.cell          = {w=64, h=64, size=vec(64, 64)}
-cfg.board         = {vx=0, vw=100, vy=15, cols=8, rows=8}
+cfg.cell          = {vx=0, vy=0, w=64, h=64, size=vec(64, 64)}
+cfg.board         = {vx=0, vy=15, vw=100, cols=8, rows=8}
 
 cfg.player =
 {
+  vx = 0,
+  vy = 0,
   vw = 6,
   ratio = 1,
   red             = {vx=18, vy=4},
@@ -23,6 +26,7 @@ cfg.player =
 
 cfg.jade =
 {
+  vx = 0, vy = 0,
   w                 = cfg.cell.w,
   h                 = cfg.cell.h,
   path              = "src/view/jade.png", 

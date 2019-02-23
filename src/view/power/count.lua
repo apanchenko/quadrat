@@ -1,8 +1,9 @@
 local obj         = require 'src.core.obj'
-local typ       = require 'src.core.typ'
+local typ         = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
+local lay         = require 'src.core.lay'
 local cfg         = require 'src.model.cfg'
 
 -- power draws a counter ------------------------------------------------------
