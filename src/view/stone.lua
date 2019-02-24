@@ -10,7 +10,6 @@ local wrp         = require 'src.core.wrp'
 local Abilities   = require 'src.view.stoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.model.cfg'
-local Player      = require 'src.Player'
 local powers      = require 'src.view.power.powers'
 
 local stone = obj:extend('stone')

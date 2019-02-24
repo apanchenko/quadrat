@@ -1,9 +1,6 @@
-local composer      = require "composer"
+local composer      = require 'composer'
 local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
-local player        = require 'src.model.players.random'
-local board         = require "src.view.board"
-local Player        = require "src.Player"
 local cfg           = require 'src.model.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'

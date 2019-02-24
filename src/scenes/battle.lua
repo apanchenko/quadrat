@@ -1,7 +1,7 @@
 local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
 local board         = require 'src.view.board'
-local Player        = require 'src.Player'
+local player        = require 'src.view.player'
 local cfg           = require 'src.model.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
@@ -25,11 +25,11 @@ function battle:create(event)
   self.players = {}
 
   local white = playerid.white
-  self.players[white] = Player(white, "Salvador")
+  self.players[white] = player(white, "Salvador")
   lay.render(self, self.players[white], cfg.player.red)
 
   local black = playerid.black
-  self.players[black] = Player(black, "Gala")
+  self.players[black] = player(black, "Gala")
   lay.render(self, self.players[black], cfg.player.black)
 
   self.env = event.params

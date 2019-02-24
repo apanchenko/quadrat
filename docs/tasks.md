@@ -18,12 +18,13 @@
 - jade box configurator
 
 ## Infrastructure
-- refactor: lowercase source files
 - add core.cnt container for countables and non-countables
 - build for android
 - build for iphone
 - build for web
 - build for win32
+- wrp - check function arguments and output consistency
+- add core.cnt container for counted objects like jades and powers
 - add core.prf profiler
 - backend
 - separate core project
@@ -39,6 +40,7 @@
 - open API, so that people may create bots
 
 # Done:
+- refactor: lowercase source files
 - separate model and view
 - jump proof
 - relocate, diagonal, sphere

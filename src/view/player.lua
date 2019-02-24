@@ -5,13 +5,13 @@ local ass = require 'src.core.ass'
 local obj = require 'src.core.obj'
 
 -------------------------------------------------------------------------------
-local Player = obj:extend('Player')
+local player = obj:extend('player')
 
 -------------------------------------------------------------------------------
 -- @param color of the pieces to play
 -- @param name
 -- @param (optional) display group to render
-function Player:new(pid, name)
+function player:new(pid, name)
   ass.str(name)
 
   self = obj.new(self,
@@ -33,8 +33,8 @@ function Player:new(pid, name)
 end
 
 --
-function Player:__tostring() 
+function player:__tostring() 
   return self.name .. ": " .. tostring(self.pid)
 end
 
-return Player
+return player

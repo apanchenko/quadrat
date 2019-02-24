@@ -1,7 +1,6 @@
 local cell     = require 'src.view.cell'
 local stone    = require 'src.view.stone'
 local Vec      = require 'src.core.vec'
-local Player   = require 'src.Player'
 local piece    = require 'src.model.piece'
 local cfg      = require 'src.model.cfg'
 local obj      = require 'src.core.obj'

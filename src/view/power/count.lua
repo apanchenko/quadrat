@@ -13,7 +13,7 @@ local count = obj:extend('view.power.count')
 function count:new(stone, name, count)
   self = obj.new(self)
   self.count = count
-  self.text = lay.text(stone, {text=tostring(count), fontSize=22})
+  self.text = lay.text(stone, {x=0, y=0, text=tostring(count), fontSize=22})
   return self
 end
 
