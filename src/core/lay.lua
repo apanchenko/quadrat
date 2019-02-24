@@ -6,6 +6,7 @@ local arr = require 'src.core.arr'
 local wrp = require 'src.core.wrp'
 local map = require 'src.core.map'
 
+local lay = {}
 
 -- @param target          display group insert in
 -- @param obj             object to render
@@ -17,7 +18,7 @@ local map = require 'src.core.map'
 -- @param opts.vx         defaults to 0
 -- @param opts.vy         defaults to 0
 -- @param opts.order      render order, 1 renders first, larger renders later
-local function render(target, obj, opts)
+function lay.render(target, obj, opts)
   ass(opts.x or opts.vx, 'lay.render - set opts x or vx')
   ass(opts.y or opts.vy, 'lay.render - set opts y or vy')
   target = target.view or target
@@ -46,14 +47,14 @@ local function render(target, obj, opts)
 end
 
 -- animate coordinates
-local function to(obj, pos, params)
+function lay.to(obj, pos, params)
   params.x = pos.x
   params.y = pos.y
   transition.to(obj.view, params)
 end
 
 -- arrange children in column
-local function column(obj, space)
+function lay.column(obj, space)
   local view = obj.view or obj
   local y = 0
   for i = 1, view.numChildren do
@@ -66,7 +67,7 @@ end
 -- group      display group insert in
 -- opts       @see render
 -- path       path to image resource
-local function image(group, opts)
+function lay.image(group, opts)
   ass.tab(opts, "invalid opts")
 
   ass.str(opts.path, 'path')
@@ -83,7 +84,7 @@ local function image(group, opts)
   end
 
   local img = display.newImageRect(opts.path, w, h)
-  render(group, img, opts)
+  lay.render(group, img, opts)
   return img
 end
 
@@ -91,7 +92,7 @@ end
 -- @param group   display group insert in
 -- @param opts = {text, vx, vy, x, y, width, height, font, fontSize}
 -- @see https://docs.coronalabs.com/api/library/display/newText.html
-local function text(group, opts)
+function lay.text(group, opts)
   if opts.font == nil then
     opts.font = cfg.font -- select default font
   end
@@ -103,30 +104,19 @@ local function text(group, opts)
   end
 
   local text = display.newText(opts)
-  render(group, text, opts)
+  lay.render(group, text, opts)
   return text
 end
 
 -------------------------------------------------------------------------------
-local function sheet(group, sheet, frame, opts)
+function lay.sheet(group, sheet, frame, opts)
   assert(sheet)
   assert(frame)
   assert(opts.w and opts.h)
   local img = display.newImageRect(sheet, frame, opts.w, opts.h)
-  render(group, img, opts)
+  lay.render(group, img, opts)
   return img
 end
-
-
-local lay =
-{
-  render = render,
-  to = to,
-  column = column,
-  image = image,
-  text = text,
-  sheet = sheet
-}
 
 -- MODULE ---------------------------------------------------------------------
 function lay.wrap()

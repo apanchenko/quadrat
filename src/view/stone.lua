@@ -58,7 +58,6 @@ function stone:set_color(pid)
     cfg.cell.order = 1
     cfg.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
     self.img = lay.image(self, cfg.cell)
-    cfg.cell.order = nil
   end
 end
 --
@@ -252,16 +251,22 @@ end
 
 --
 function stone.wrap()
+  local event = {'event', typ.tab, map.tostring}
+  local info = {log = log.info}
+
   wrp.fn(stone, 'new',          {{'pid', 'playerid'}, {'space'}})
   wrp.fn(stone, 'select')
-  wrp.fn(stone, 'deselect',     {}, {log=log.info})
+  wrp.fn(stone, 'deselect',     {}, info)
   wrp.fn(stone, 'set_color',    {{'playerid'}})
-  wrp.fn(stone, 'color',        {}, {log=log.info})
+  wrp.fn(stone, 'color',        {}, info)
   wrp.fn(stone, 'puton',        {{'board'}})
   wrp.fn(stone, 'putoff')
   wrp.fn(stone, 'pos')
   wrp.fn(stone, 'set_ability',  {{'id', typ.str}, {'count', typ.num}})
   wrp.fn(stone, 'add_power',    {{'name', typ.str}, {'result_count', typ.num}})
+  wrp.fn(stone, 'touch',        {event}, info)
+  wrp.fn(stone, 'touch_began',  {event}, info)
+  wrp.fn(stone, 'touch_moved',  {event}, info)
 end
 
 return stone

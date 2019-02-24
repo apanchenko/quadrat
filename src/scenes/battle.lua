@@ -72,7 +72,7 @@ end
 
 --
 function battle:win(message)
-  lay.text(self.view, {text=message, vw=100, fontSize=38, align="center", vy = 50})
+  lay.text(self.view, {x=0, vy=50, vw=100, text=message, fontSize=38, align="center"})
 end
 
 function battle:show(event) end

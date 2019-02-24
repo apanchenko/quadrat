@@ -91,7 +91,9 @@ function board:add_power(pos, name, count)
 end
 --
 function board:set_color(pos, color)
-  self:stone(pos):set_color(color)
+  local stone = self:stone(pos)
+  stone:set_color(color)
+  self.on_change:call('on_stone_color_changed', stone)
 end
 
 -------------------------------------------------------------------------------
