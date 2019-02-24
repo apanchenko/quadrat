@@ -12,6 +12,7 @@
 - attack powers:     bombs, kamikadze, destroy, acidic
 - orb mods:          orbspy
 - overall visual style
+- smarter bot
 
 ## Meta
 - jade shop

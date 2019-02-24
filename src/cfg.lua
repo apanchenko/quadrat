@@ -2,7 +2,7 @@ local bld = require 'src.core.bld'
 
 local cfg =
 {
-  build   = bld.debug,
+  build   = bld.develop,
   version = '0.0.1'
 }
 

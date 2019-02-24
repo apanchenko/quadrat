@@ -34,14 +34,14 @@ function lay.render(target, obj, opts)
   end
 
   -- calculate group index by order
+  ass.num(target.numChildren)
   local next = target.numChildren + 1
   child.order = opts.order or next
-  local index = arr.bsearch_range(target, 1, next, child, function(a, b)
+  local index = arr.find_index(target, 1, next, child, function(a, b)
     ass.num(a.order, 'order not set in '..tostring(a))
     ass.num(b.order, 'order not set in '..tostring(b))
     return a.order < b.order
   end)
-  ass.num(index)
   target:insert(index, child)
   return obj
 end
