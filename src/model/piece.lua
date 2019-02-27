@@ -5,6 +5,7 @@ local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local Vec       = require 'src.core.vec'
 local wrp       = require 'src.core.wrp'
+local cnt       = require 'src.core.cnt'
 local playerid  = require 'src.model.playerid'
 
 --
@@ -16,8 +17,8 @@ function piece:new(space, pid)
   {
     space = space,
     pid = pid,
-    jades = {}, -- map of jades
-    powers = {} -- map of powers
+    jades = {}, -- container for jades
+    powers = {} -- container for powers
   })
 end
 --
@@ -68,7 +69,7 @@ end
 -- JADE -----------------------------------------------------------------------
 -- add jade
 function piece:add_jade(jade)
-  local res_count = jade:add_to(self.jades)
+  local res_count = cnt.push(self.jades, jade)
   -- TODO: change event name to 'add_jade'
   self.space:notify('set_ability', self.pos, jade.id, res_count)
   -- TODO: optimize - make listening powers
@@ -77,16 +78,9 @@ end
 
 -- split jade and return removed part
 function piece:remove_jade(id, count)
-  local jade = self.jades[id]
+  local jade = cnt.pull(self.jades, id, count)
   ass(jade) -- TODO: to wrap prereq
-
-  self.jades[id] = jade:split(count)
-  if self.jades[id] then
-    self.space:notify('set_ability', self.pos, id, self.jades[id].count)
-  else
-    self.space:notify('set_ability', self.pos, id, 0)
-  end
-
+  self.space:notify('set_ability', self.pos, id, cnt.count(self.jades, id))
   return jade
 end
 
@@ -103,20 +97,14 @@ end
 -- POWER ----------------------------------------------------------------------
 --
 function piece:add_power(power)
-  local count = power:add_to(self.powers)
-  log:info(self, 'add_power', self.pos, power.type, count)
-  self.space:notify('add_power', self.pos, power.type, count) -- notify
+  local count = cnt.push(self.powers, power)
+  self.space:notify('add_power', self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
-  local power = self.powers[id]:decrease()
-  self.powers[id] = power
-  if power then
-    self.space:notify('add_power', self.pos, id, power:get_count()) -- notify
-  else
-    self.space:notify('add_power', self.pos, id, 0) -- notify
-  end
+  cnt.pull(self.powers, id, 1)
+  self.space:notify('add_power', self.pos, id, cnt.count(self.powers, id)) -- notify
 end
 
 --

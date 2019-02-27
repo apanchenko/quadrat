@@ -16,6 +16,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
   local log_fn = opts.log or log.trace
 
   local call = 'wrp.fn('..t_name..', '..fn_name..')'
+  local depth = log:info(call):enter()
 
   ass.tab(t, 'first arg is not a table in '.. call)
   ass.str(fn_name, 'fn_name is not a string in '.. call)
@@ -43,6 +44,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     ass.tab(info.type)
     ass.str(info.type.name)
     ass.fun(info.type.is)
+    log:info(info.name..':'..info.type.name)
 
     -- third is tostring function
     info.tostring = info[3] or tostring 
@@ -103,6 +105,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       return result
     end
   end
+  log:exit(depth)
 end
 
 return wrp

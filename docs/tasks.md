@@ -8,7 +8,7 @@
 - ground mods:       refurb, power plant, 
 - piece mods:        bankrupt, network, spyware, invis, rat tail, purify, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire, scrable
-- ability powers:    learn, pilfer, parasite, 2x, benefactor, scavenger
+- ability powers:    2x, benefactor, scavenger
 - attack powers:     bombs, kamikadze, destroy, acidic
 - orb mods:          orbspy
 - overall visual style
@@ -19,13 +19,11 @@
 - jade box configurator
 
 ## Infrastructure
-- add core.cnt container for countables and non-countables
 - build for android
 - build for iphone
 - build for web
 - build for win32
 - wrp - check function arguments and output consistency
-- add core.cnt container for counted objects like jades and powers
 - add core.prf profiler
 - backend
 - separate core project
@@ -41,6 +39,8 @@
 - open API, so that people may create bots
 
 # Done:
+- add core.cnt container for countables and non-countables
+- learn, pilfer, parasite
 - refactor: lowercase source files
 - separate model and view
 - jump proof

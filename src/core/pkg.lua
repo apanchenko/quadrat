@@ -89,7 +89,7 @@ end
 
 -- core package
 pkg.cor = pkg:new('src.core')
-pkg.cor:load('arr', 'ass', 'chk', 'env', 'evt', 'lay', 'log', 'map', 'obj', 'typ', 'vec', 'wrp')
+pkg.cor:load('arr', 'ass', 'chk', 'cnt', 'env', 'evt', 'lay', 'log', 'map', 'obj', 'typ', 'vec', 'wrp')
 
 -- module
 return pkg
