@@ -5,6 +5,7 @@ local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
 local wrp       = require 'src.core.wrp'
 local cfg       = require 'src.model.cfg'
+local cnt       = require 'src.core.cnt'
 local piece     = require 'src.model.piece'
 local jade      = require 'src.model.jade'
 
@@ -23,6 +24,7 @@ function spot:new(x, y, space)
     space = space, -- duplicate
     pos = Vec(x, y), -- duplicate
     jade = nil, -- store
+    comps = {} -- container for powers
   })
 end
 
@@ -102,10 +104,18 @@ function spot:remove_jade()
     end
 end
 
+-- POWER ----------------------------------------------------------------------
+--
+function spot:add_comp(comp)
+  local count = cnt.push(self.comps, comp)
+  self.space:notify('add_spot_comp', self.pos, comp.id, count) -- notify
+end
+
 -- MODULE ---------------------------------------------------------------------
 wrp.fn(spot, 'new', {{'x', typ.num}, {'y', typ.num}, {'space'}})
 wrp.fn(spot, 'spawn_piece', {{'playerid'}})
-wrp.fn(spot, 'move_piece', {{'from', spot}})
-wrp.fn(spot, 'spawn_jade', {}, {log = log.info})
+wrp.fn(spot, 'move_piece',  {{'from', spot}})
+wrp.fn(spot, 'spawn_jade',  {}, {log = log.info})
+wrp.fn(spot, 'add_comp',    {{'comp'}}, {log = log.info})
 
 return spot

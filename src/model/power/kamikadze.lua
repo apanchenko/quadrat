@@ -13,8 +13,9 @@ end
 -- POWER ----------------------------------------------------------------------
 --
 function kamikadze:apply_to_spot(spot)
+  -- kill any piece
   if spot.piece then
-    spot.piece.die() -- enemy piece
+    spot.piece.die()
     spot.piece = nil
     self.piece.space:notify('remove_piece', spot.pos) -- notify
   end

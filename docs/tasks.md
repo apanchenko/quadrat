@@ -13,6 +13,7 @@
 - orb mods:          orbspy
 - overall visual style
 - smarter bot
+- single owner
 
 ## Meta
 - jade shop

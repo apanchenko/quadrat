@@ -5,7 +5,7 @@ local log   = require "src.core.log"
 local ass   = require "src.core.ass"
 local obj   = require "src.core.obj"
 local wrp   = require 'src.core.wrp'
-local spot  = require 'src.model.spot'
+local spot  = require 'src.model.spot.spot'
 
 local cell = obj:extend('cell')
 
@@ -13,7 +13,7 @@ function cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
 cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 1}
-cell.sheet = graphics.newImageSheet("src/view/cell_1_s.png", cell.sheet_opt)
+cell.sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", cell.sheet_opt)
 
 --
 function cell:new(spot)
@@ -25,6 +25,14 @@ function cell:new(spot)
   })
   self.img = lay.sheet(self.view, cell.sheet, frame, cfg.cell)
   return self
+end
+
+-- COMP------------------------------------------------------------------------
+--
+function cell:add_comp(id, count)
+  if id == 'spot_acidic' then
+    lay.image(self.view, {x=0, y=0, w=cfg.cell.w, h=cfg.cell.h, path='src/view/power/jumpproof.png'})
+  end
 end
 
 -- JADE------------------------------------------------------------------------

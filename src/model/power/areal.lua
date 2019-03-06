@@ -30,9 +30,9 @@ function areal:new(piece, def, zone)
         self:apply_to_self()
       else
         if spot_piece.pid == self.piece.pid then
-          self:apply_to_friend(spot_piece)
+          self:apply_to_friend(spot)
         else
-          self:apply_to_enemy(spot_piece)
+          self:apply_to_enemy(spot)
         end
       end
     end
@@ -43,17 +43,18 @@ end
 --
 function areal:apply_to_spot(spot) end
 function areal:apply_to_self() end
-function areal:apply_to_friend(piece) end
-function areal:apply_to_enemy(piece) end
+function areal:apply_to_friend(spot) end
+function areal:apply_to_enemy(spot) end
 
 --
 function areal.wrap()
   local piece = {'piece'}
+  local spot = {'spot'}
   wrp.fn(areal, 'new', {piece, {'def', typ.tab}, {'zone', typ.tab}})
-  wrp.fn(areal, 'apply_to_spot', {{'spot'}})
+  wrp.fn(areal, 'apply_to_spot', {spot})
   wrp.fn(areal, 'apply_to_self')
-  wrp.fn(areal, 'apply_to_friend', {piece})
-  wrp.fn(areal, 'apply_to_enemy', {piece})
+  wrp.fn(areal, 'apply_to_friend', {spot})
+  wrp.fn(areal, 'apply_to_enemy', {spot})
 end
 
 return areal

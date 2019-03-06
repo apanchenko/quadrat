@@ -17,14 +17,14 @@ function parasite:apply_to_self()
 end
 
 --
-function parasite:apply_to_enemy(piece)
-  piece:add_power(host:new(piece, {}))
+function parasite:apply_to_enemy(spot)
+  spot.piece:add_power(host:new(soit.piece, {}))
 end
 
 --
 function parasite.wrap()
   wrp.fn(parasite, 'apply_to_self', {})
-  wrp.fn(parasite, 'apply_to_enemy', {{'piece'}})
+  wrp.fn(parasite, 'apply_to_enemy', {{'spot'}})
 end
 
 return parasite

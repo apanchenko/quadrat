@@ -1,4 +1,4 @@
-local cell     = require 'src.view.cell'
+local cell     = require 'src.view.spot.cell'
 local stone    = require 'src.view.stone'
 local Vec      = require 'src.core.vec'
 local piece    = require 'src.model.piece'
@@ -95,6 +95,11 @@ function board:set_color(pos, color)
   stone:set_color(color)
   self.on_change:call('on_stone_color_changed', stone)
 end
+--
+function board:add_spot_comp(pos, id, count)
+  local cell = self:cell(pos)
+  cell:add_comp(id, count)
+end
 
 -------------------------------------------------------------------------------
 -- select piece
@@ -114,9 +119,13 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function board.wrap()
-  wrp.fn(board, 'set_ability',  {{'pos', Vec}, {'id', typ.str}, {'count', typ.num}})
-  wrp.fn(board, 'add_power',    {{'pos', Vec}, {'name', typ.str}, {'count', typ.num}})
-  wrp.fn(board, 'set_color',    {{'pos', Vec}, {'pid', 'playerid'}})
+  local pos = {'pos', Vec}
+  local id = {'id', typ.str}
+  local count = {'count', typ.num}
+  wrp.fn(board, 'set_ability',   {pos, id, count})
+  wrp.fn(board, 'add_power',     {pos, {'name', typ.str}, count})
+  wrp.fn(board, 'set_color',     {pos, {'pid', 'playerid'}})
+  wrp.fn(board, 'add_spot_comp', {pos, id, count})
 end
 
 return board
