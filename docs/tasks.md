@@ -9,7 +9,7 @@
 - piece mods:        bankrupt, network, spyware, invis, rat tail, purify, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire, scrable
 - ability powers:    2x, benefactor, scavenger
-- attack powers:     bombs, kamikadze, destroy, acidic
+- attack powers:     bombs, acidic
 - orb mods:          orbspy
 - overall visual style
 - smarter bot
@@ -39,6 +39,8 @@
 - open API, so that people may create bots
 
 # Done:
+- kamikadze
+- destroy
 - add core.cnt container for countables and non-countables
 - learn, pilfer, parasite
 - refactor: lowercase source files
