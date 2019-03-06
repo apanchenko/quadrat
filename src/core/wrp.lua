@@ -1,6 +1,7 @@
 local log   = require 'src.core.log'
 local typ   = require 'src.core.typ'
 local ass   = require 'src.core.ass'
+local arr   = require 'src.core.impl.arr'
 
 
 -- wrap
@@ -58,7 +59,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
   -- 
   local function arguments(call, args)
     local merged = args
-    ass.eq(#arg_infos, #args, call..' expected '..#arg_infos..' arguments, found '..#args)
+    ass.eq(#arg_infos, #args, call..' expected '..#arg_infos..' arguments, found '..#args..' - ['..arr.tostring(args)..']')
     if #args == 0 then
       return ''
     end    
