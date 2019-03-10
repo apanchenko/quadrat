@@ -1,7 +1,7 @@
 local map       = require 'src.core.map'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local Vec       = require 'src.core.vec'
+local vec       = require 'src.core.vec'
 local obj       = require 'src.core.obj'
 local env       = require 'src.core.env'
 local wrp       = require 'src.core.wrp'
@@ -43,7 +43,7 @@ function random:move_async()
   -- do something until can move
   while space:who_move() == self.pid do
     -- select random piece of my color
-    local from = Vec:random(Vec.zero, space.size - Vec.one)
+    local from = vec:random(vec.zero, space.size - vec.one)
     local piece = space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
@@ -52,7 +52,7 @@ function random:move_async()
         piece:use_jade(jade.id)
       end
       -- move to random point
-      local to = from + Vec:random(Vec.zero-Vec.one, Vec.one)
+      local to = from + vec:random(vec.zero-vec.one, vec.one)
       if space:can_move(from, to) then
         space:move(from, to)
       end

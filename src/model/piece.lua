@@ -3,7 +3,7 @@ local obj       = require 'src.core.obj'
 local typ       = require 'src.core.typ'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
-local Vec       = require 'src.core.vec'
+local vec       = require 'src.core.vec'
 local wrp       = require 'src.core.wrp'
 local cnt       = require 'src.core.cnt'
 local playerid  = require 'src.model.playerid'
@@ -120,8 +120,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 function piece.wrap()
   wrp.fn(piece, 'new',        {{'space'}, {'playerid'}},    {log=log.info})
-  wrp.fn(piece, 'set_pos',    {{'pos', Vec}})
-  wrp.fn(piece, 'can_move',   {{'from', Vec}, {'to', Vec}}, {log=log.info})
+  wrp.fn(piece, 'set_pos',    {{'pos', vec}})
+  wrp.fn(piece, 'can_move',   {{'from', vec}, {'to', vec}}, {log=log.info})
   wrp.fn(piece, 'set_color',  {{'playerid'}})
   
   wrp.fn(piece, 'add_jade',   {{'jade'}})

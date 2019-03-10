@@ -63,5 +63,5 @@ function lobby.test()
 end
 
 return function()
-  composer.gotoScene('src.lobby', {effect = 'fade', time = 600})
+  composer.gotoScene('src.scenes.lobby', {effect = 'fade', time = 600})
 end

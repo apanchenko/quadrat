@@ -1,5 +1,5 @@
 local arr         = require 'src.core.arr'
-local Vec         = require 'src.core.vec'
+local vec         = require 'src.core.vec'
 local lay         = require 'src.core.lay'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
@@ -88,7 +88,7 @@ end
 -- set stone position
 function stone:set_pos(pos)
   if pos ~= nil then
-    ass.is(pos, Vec)
+    ass.is(pos, vec)
   end
   self:update_group_pos(pos)
 end
@@ -168,14 +168,14 @@ function stone:touch_began(event)
 end
 --
 function stone:touch_moved(event)
-  local start = Vec(event.xStart, event.yStart)
+  local start = vec(event.xStart, event.yStart)
   local xScale = self.board.view.xScale
-  local shift = Vec:from(event)
+  local shift = vec:from(event)
   shift = shift - start
-  shift = shift / Vec(xScale, xScale)
+  shift = shift / vec(xScale, xScale)
   shift = shift + (self._pos * cfg.cell.size)
   local proj = (shift / cfg.cell.size):round()
-  Vec.copy(shift, self.view)
+  vec.copy(shift, self.view)
   return proj;
 end
 
@@ -204,7 +204,7 @@ function stone:create_project(proj)
     self.project = lay.image(self.board, cfg.cell)
   end
   self.proj = proj
-  Vec.copy(proj * cfg.cell.size, self.project)
+  vec.copy(proj * cfg.cell.size, self.project)
 end
 --
 function stone:remove_project()

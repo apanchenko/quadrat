@@ -1,6 +1,6 @@
 local cell     = require 'src.view.spot.cell'
 local stone    = require 'src.view.stone'
-local Vec      = require 'src.core.vec'
+local vec      = require 'src.core.vec'
 local piece    = require 'src.model.piece'
 local cfg      = require 'src.model.cfg'
 local obj      = require 'src.core.obj'
@@ -119,7 +119,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function board.wrap()
-  local pos = {'pos', Vec}
+  local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}
   wrp.fn(board, 'set_ability',   {pos, id, count})

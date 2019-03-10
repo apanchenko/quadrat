@@ -1,5 +1,5 @@
 local obj       = require 'src.core.obj'
-local Vec       = require 'src.core.vec'
+local vec       = require 'src.core.vec'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
@@ -22,7 +22,7 @@ function spot:new(x, y, space)
   return obj.new(self,
   {
     space = space, -- duplicate
-    pos = Vec(x, y), -- duplicate
+    pos = vec(x, y), -- duplicate
     jade = nil, -- store
     comps = {} -- container for powers
   })
