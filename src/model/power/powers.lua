@@ -7,6 +7,7 @@ powers:load(
   'areal',
   'counted',
   --'destroy',
+  'invisible',
   --'jumpproof',
   --'kamikadze',
   --'learn',
@@ -18,9 +19,9 @@ powers:load(
   'power',
   --'recruit',
   --'rehash',
-  'relocate',
-  'sphere',
-  'swap',
+  --'relocate',
+  --'sphere',
+  --'swap',
   'teach'
 )
 

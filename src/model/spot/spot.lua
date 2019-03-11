@@ -1,5 +1,6 @@
 local obj       = require 'src.core.obj'
 local vec       = require 'src.core.vec'
+local map       = require 'src.core.map'
 local ass       = require 'src.core.ass'
 local log       = require 'src.core.log'
 local typ       = require 'src.core.typ'
@@ -40,6 +41,11 @@ end
 
 -- PIECE ----------------------------------------------------------------------
 
+-- return true if cell is able to receive (spawn or move) piece
+function spot:can_set_piece()
+  return map.all(self.comps, function(comp) return comp:can_set_piece() end)
+end
+
 -- create a new piece on this spot
 function spot:spawn_piece(color)
   ass.nul(self.piece)
@@ -76,10 +82,16 @@ end
 -- take chance to spawn a new jade if can
 function spot:spawn_jade()
   ass.is(self, spot)
-  if self.jade then -- already used by jade
+  -- already used by jade
+  if self.jade then
     return
   end
+  -- already used by piece
   if self.piece then
+    return
+  end
+  -- something prevents
+  if not map.all(self.comps, function(comp) return comp:can_set_jade() end) then
     return
   end
   if math.random() > cfg.jade.probability then
@@ -104,7 +116,7 @@ function spot:remove_jade()
     end
 end
 
--- POWER ----------------------------------------------------------------------
+-- COMPONENTS -----------------------------------------------------------------
 --
 function spot:add_comp(comp)
   local count = cnt.push(self.comps, comp)

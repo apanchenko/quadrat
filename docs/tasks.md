@@ -1,6 +1,9 @@
-# Todo
+# Quadrat
 
-## Core
+## Todo
+
+### Core
+
 - spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
@@ -15,11 +18,13 @@
 - smarter bot
 - single owner
 
-## Meta
+### Meta
+
 - jade shop
 - jade box configurator
 
-## Infrastructure
+### Infrastructure
+
 - build for android
 - build for iphone
 - build for web
@@ -29,17 +34,20 @@
 - backend
 - separate core project
 
-## Marketing
+### Marketing
+
 - vk page
 - twitter page
 - facebook page
 - steam
 
-# Ideas / proposals
+## Ideas / proposals
+
 - power Ethereal - can pass through other pieces, not killing them. Cannot be killed eighter. But still can cast abilities.
 - open API, so that people may create bots
 
-# Done:
+## Done
+
 - kamikadze
 - destroy
 - add core.cnt container for countables and non-countables

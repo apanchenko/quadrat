@@ -10,6 +10,16 @@ function acidic:new()
   return obj.new(self, {id = self.type})
 end
 
+-- spot with acidic cannot receive pieces
+function acidic:can_set_piece()
+  return false
+end
+
+-- spot with acidic cannot receive jades
+function acidic:can_set_jade()
+  return false
+end
+
 -- MODULE ---------------------------------------------------------------------
 function acidic.wrap()
 end

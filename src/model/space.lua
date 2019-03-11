@@ -143,6 +143,9 @@ function space:can_move(fr, to)
   end
 
   -- check move ability
+  if not self:spot(to):can_set_piece() then
+    return false
+  end
   if not actor:can_move(fr, to) then
     return false
   end
