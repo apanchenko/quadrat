@@ -57,7 +57,7 @@ function net:new()
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrap_fn(client, 'onOperationResponse', {
+  wrp.fn(client, 'onOperationResponse', {
     {'errCode', typ.num},
     {'errMsg', typ.str},
     {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
@@ -152,8 +152,11 @@ function net:find_opponent(on_opponent, on_error)
   timer.performWithDelay(200, client, 0)
 end
 
---
-wrp.fn(net, 'new')
+-- MODULE ---------------------------------------------------------------------
+-- wrap functions
+function net.wrap()
+  wrp.fn(net, 'new')
+end
 
 function net.test()
   print('test net..')

@@ -13,6 +13,8 @@ local players       = require 'src.model.players.players'
 -- variables
 local lobby = composer.newScene()
 
+lobby.options = {effect = 'fade', time = 600}
+
 -------------------------------------------------------------------------------
 function lobby:create(event)
   lay.image(self, cfg.battle.bg)
@@ -62,6 +64,4 @@ function lobby.test()
   ass(true)
 end
 
-return function()
-  composer.gotoScene('src.scenes.lobby', {effect = 'fade', time = 600})
-end
+return lobby

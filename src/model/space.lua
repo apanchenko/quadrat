@@ -196,7 +196,7 @@ function space:use(pos, ability_name)
 end
 
 -- MODULE ---------------------------------------------------------------------
--- wrap vec functions
+-- wrap functions
 function space.wrap()
   local info = {log = log.info}
   --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
