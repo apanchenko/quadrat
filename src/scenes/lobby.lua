@@ -7,7 +7,7 @@ local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
 local wrp           = require 'src.core.wrp'
 local typ           = require 'src.core.typ'
-local net           = require 'src.net'
+local net           = require 'src.model.players.photon.net'
 local players       = require 'src.model.players.players'
 
 -- variables
