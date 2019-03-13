@@ -36,6 +36,7 @@ function pkg:load(...)
     ass.nul(self.modules[name], 'module '.. name.. ' already loaded')
     self.modules[name] =  module
   end)
+  return self
 end
 
 --
