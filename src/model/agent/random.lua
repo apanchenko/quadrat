@@ -24,7 +24,7 @@ function random:new(env, pid)
 end
 -- listen space
 function random:on_space(space)
-  space.on_change:add(self)
+  space.own_evt:add(self)
 end
 --
 function random:__tostring()

@@ -35,7 +35,7 @@ end
 --
 function piece:set_color(color)
   self.pid = color
-  self.space:notify('set_color', self.pos, color) -- notify
+  self.space:yell('set_color', self.pos, color) -- notify
 end
 
 -- POSITION & MOVE ------------------------------------------------------------
@@ -61,7 +61,7 @@ function piece:move(fr, to)
 end
 --
 function piece:move_after(fr, to)
-  self.space:notify('move_piece', to.pos, fr.pos) -- notify
+  self.space:yell('move_piece', to.pos, fr.pos) -- notify
   map.each(self.powers, function(p) return p:move_after(fr, to) end)
 end
 
@@ -71,7 +71,8 @@ end
 function piece:add_jade(jade)
   local res_count = cnt.push(self.jades, jade)
   -- TODO: change event name to 'add_jade'
-  self.space:notify('set_ability', self.pos, jade.id, res_count)
+  self.space:whisper('set_ability', self.pos, jade.id, res_count)
+  self.space:yell('piece_has_jade', self.pos, true)
   -- TODO: optimize - make listening powers
   map.each(self.powers, function(p) p:on_add_jade(jade) end)
 end
@@ -80,7 +81,12 @@ end
 function piece:remove_jade(id, count)
   local jade = cnt.pull(self.jades, id, count)
   ass(jade) -- TODO: to wrap prereq
-  self.space:notify('set_ability', self.pos, id, cnt.count(self.jades, id))
+  -- whisper new jade count
+  self.space:whisper('set_ability', self.pos, id, cnt.count(self.jades, id))
+  -- yell piece has no jades
+  if cnt.is_empty(self.jades) then
+    self.space:yell('piece_has_jade', self.pos, false)
+  end
   return jade
 end
 
@@ -98,13 +104,13 @@ end
 --
 function piece:add_power(power)
   local count = cnt.push(self.powers, power)
-  self.space:notify('add_power', self.pos, power.id, count) -- notify
+  self.space:yell('add_power', self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
   cnt.pull(self.powers, id, 1)
-  self.space:notify('add_power', self.pos, id, cnt.count(self.powers, id)) -- notify
+  self.space:yell('add_power', self.pos, id, cnt.count(self.powers, id)) -- notify
 end
 
 --

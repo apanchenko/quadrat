@@ -51,7 +51,7 @@ function spot:spawn_piece(color)
   ass.nul(self.piece)
   self.piece = piece:new(self.space, color)
   self.piece:set_pos(self.pos)
-  self.space:notify('spawn_piece', color, self.pos) -- notify
+  self.space:yell('spawn_piece', color, self.pos) -- notify
 end
 
 -- move piece from another spot to this
@@ -59,7 +59,7 @@ function spot:move_piece(from)
   -- kill target piece
   if self.piece then
     self.piece.die()
-    self.space:notify('remove_piece', self.pos) -- notify
+    self.space:yell('remove_piece', self.pos) -- notify
   end
   -- change piece position
   from.piece:move_before(from, self)
@@ -71,7 +71,7 @@ function spot:move_piece(from)
   local jade = self.jade
   if jade then
     self.jade = nil 
-    self.space:notify('remove_jade', self.pos) -- notify
+    self.space:yell('remove_jade', self.pos) -- notify
     self.piece:add_jade(jade)
   end
 end
@@ -98,13 +98,13 @@ function spot:spawn_jade()
     return
   end
   self.jade = jade:new()
-  self.space:notify('spawn_jade', self.pos) -- notify that a new jade set
+  self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
 end
 
 -- take chance to spawn a new jade if can
 function spot:set_jade()
   self.jade = jade:new()
-  self.space:notify('spawn_jade', self.pos) -- notify that a new jade set
+  self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
 end
 
 -- take chance to spawn a new jade if can
@@ -120,7 +120,7 @@ end
 --
 function spot:add_comp(comp)
   local count = cnt.push(self.comps, comp)
-  self.space:notify('add_spot_comp', self.pos, comp.id, count) -- notify
+  self.space:yell('add_spot_comp', self.pos, comp.id, count) -- notify
 end
 
 -- MODULE ---------------------------------------------------------------------

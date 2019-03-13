@@ -25,7 +25,8 @@ function space:new(cols, rows, seed)
     grid  = {},      -- cells
     pid   = playerid.white, -- who moves now
     move_count = 0, -- number of moves from start
-    on_change = evt:new()
+    own_evt = evt:new(), -- owner events - full information
+    opp_evt = evt:new() -- events from opponent - hidden information
   })
 
   -- fill grid
@@ -46,14 +47,21 @@ function space:row(place)   return place % self.cols end
 -- place // self.cols
 function space:col(place)   return (place - (place % self.cols)) / self.cols end
 
---
-function space:notify(method, ...)
+-- send private event
+function space:whisper(event, ...)
   ass.is(self, space)
-  ass.is(method, typ.str)
-  log:info('space:notify', method, ...)
-  -- break the stack
-  --timer.performWithDelay(0, function() self.on_change:call(method, unpack(arg)) end)
-  self.on_change:call(method, ...)
+  ass.is(event, typ.str)
+  log:info('space:notify_own', event, ...)
+  self.own_evt:call(event, ...)
+end
+
+-- send public event
+function space:yell(event, ...)
+  ass.is(self, space)
+  ass.is(event, typ.str)
+  log:info('space:notify_opp', event, ...)
+  self.own_evt:call(event, ...)
+  self.opp_evt:call(event, ...)
 end
 
 -- GRID------------------------------------------------------------------------
@@ -65,7 +73,7 @@ function space:setup()
     self:spot(vec(x, self.rows - 1)):spawn_piece(playerid.black)
     self:spot(vec(x, self.rows - 2)):spawn_piece(playerid.black)
   end
-  self:notify('move', self.pid) -- notify color to move
+  self:yell('move', self.pid) -- notify color to move
 end
 -- position vector from grid index
 function space:pos(index)   return vec(self:col(index), self:row(index)) end
@@ -177,7 +185,7 @@ function space:move(fr, to)
     end
   end
 
-  self:notify('move', self.pid) -- notify color to move
+  self:yell('move', self.pid) -- notify color to move
 end
 
 -- use ability

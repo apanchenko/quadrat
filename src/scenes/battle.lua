@@ -36,7 +36,7 @@ function battle:create(event)
   self.env.battle = self
   
   self.space = self.env.space
-  self.space.on_change:add(self)
+  self.space.own_evt:add(self)
 
   self.env.board = board:new(self, self.space)
   self.board = self.env.board

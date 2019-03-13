@@ -35,8 +35,8 @@ function lobby:on_opponent(room_id, createdByMe)
   local p1 = players.random:new(space, playerid.select(createdByMe))
   local p2 = players.user:new(space, playerid.select(not createdByMe))
 
-  space.on_change:add(p1)
-  space.on_change:add(p2)
+  space.own_evt:add(p1)
+  space.own_evt:add(p2)
 
   composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = space})
 end

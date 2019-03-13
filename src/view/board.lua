@@ -28,7 +28,7 @@ function board:new(battle, space)
     model = space,
     on_change = evt:new()
   })
-  self.model.on_change:add(self)
+  self.model.own_evt:add(self)
   self.view = display.newGroup()
 
   self.grid = {}

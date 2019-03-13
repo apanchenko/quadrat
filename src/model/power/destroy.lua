@@ -16,7 +16,7 @@ function destroy:apply_to_spot(spot)
   if spot.piece and spot.piece.pid ~= self.piece.pid then
     spot.piece.die() -- enemy piece
     spot.piece = nil
-    self.piece.space:notify('remove_piece', spot.pos) -- notify
+    self.piece.space:yell('remove_piece', spot.pos) -- notify
   end
 end
 --

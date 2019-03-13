@@ -10,6 +10,12 @@ local log   = require 'src.core.log'
 --   :copy()    - create a copy of the object
 local cnt = {}
 
+-- Test if container has no objects
+-- @param t     - container
+function cnt.is_empty(t)
+  return next(t) == nil
+end
+
 -- Add object to container
 -- @param t     - container
 -- @param obj   - object to add
@@ -66,6 +72,7 @@ function cnt.wrap()
   end
   local t = {'t', typ.tab}
   local id = {'id', typ.any}
+  wrap('is_empty', t)
   wrap('push',  t, {'obj', typ.tab})
   wrap('pull',  t, id, {'count', typ.nat})
   wrap('count', t, id)
@@ -74,6 +81,8 @@ end
 --
 function cnt.test()
   local t = {}
+  ass(cnt.is_empty(t))
+
   local copy = function(self)
     return {id=self.id, count=self.count, copy=self.copy}
   end
