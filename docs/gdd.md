@@ -75,7 +75,7 @@ A player has a box of selected jades to be used in battle.
 | Orb Spy *       | Bugs every tile surrounding your piece. You can view the power of any orb that spawns on these tiles.                   | Yes          |
 | Refurb *        | Resets every tile surrounding your piece.  | Yes          |
 | Bankrupt *      | Resets every enemy piece that comes into contact with a tile in this radial.                                           | Yes          |
-| Purify *        | Removes any disabilities on your pieces in the same radial as your piece, and removes any benefits your opponent's pieces have as well.                                                                   | No           |
+| Purify *        | Removes any disabilities on your pieces, and removes any benefits your opponent's pieces have as well.                                                                   | No           |
 | Tripwire *      | If any enemy piece within the same radial as your piece moves off of its tile, it will be destroyed.                   | No           |
 | Inhibit *       | Your opponent's pieces in the same radial as your piece can no longer acquire power ups from Power Orbs.                   | No           |
 | Kamikaze *      | Destroys all pieces in the same radial as your piece, including the piece activating the ability, and any of your pieces within range.                                                         | No           |

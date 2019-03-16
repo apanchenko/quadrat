@@ -15,6 +15,11 @@ function power:new(piece, def)
   return obj.new(self, def)
 end
 
+-- is it desired or undesired power
+function power:is_positive()
+  return true
+end
+
 -- can spawn in jade
 function power:can_spawn()
   return false
@@ -48,9 +53,11 @@ function power:on_add_jade(jade) end
 
 -- module
 function power.wrap()
+  local info = {log = log.info}
+
   wrp.fn(power, 'new',      {{'piece'}, {'def', typ.tab}})
   wrp.fn(power, 'add_to',   {{'powers', typ.tab}})
-  wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
+  wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}}, info)
 end
 
 return power

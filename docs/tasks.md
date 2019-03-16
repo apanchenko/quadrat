@@ -9,7 +9,7 @@
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
 - ground mods:       refurb, power plant, 
-- piece mods:        bankrupt, network, spyware, invis, rat tail, purify, inhibit
+- piece mods:        bankrupt, network, spyware, invis, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire, scrable
 - ability powers:    2x, benefactor, scavenger
 - attack powers:     bombs, acidic
@@ -48,6 +48,7 @@
 
 ## Done
 
+- purify
 - kamikadze
 - destroy
 - add core.cnt container for countables and non-countables

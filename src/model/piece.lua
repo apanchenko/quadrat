@@ -99,7 +99,6 @@ function piece:use_jade(id)
   end
 end
 
-
 -- POWER ----------------------------------------------------------------------
 --
 function piece:add_power(power)
@@ -113,10 +112,23 @@ function piece:decrease_power(id)
   self.space:yell('add_power', self.pos, id, cnt.count(self.powers, id)) -- notify
 end
 
+-- Completely remove power by id
+function piece:remove_power(id)
+  cnt.remove(self.powers, id)
+  self.space:yell('remove_power', self.pos, id) -- notify
+end
+
 --
 function piece:any_power(fn)
   map.any(self.powers, fn)
 end
+
+-- iterate powers
+-- @param fn - callback (power, id)
+function piece:each_power(fn)
+  map.each(self.powers, fn) 
+end
+
 
 -- TRAITS ---------------------------------------------------------------------
 function piece:is_jump_protected()
@@ -125,16 +137,19 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function piece.wrap()
+  local id = {'id', typ.str}
+
   wrp.fn(piece, 'new',        {{'space'}, {'playerid'}},    {log=log.info})
   wrp.fn(piece, 'set_pos',    {{'pos', vec}})
   wrp.fn(piece, 'can_move',   {{'from', vec}, {'to', vec}}, {log=log.info})
   wrp.fn(piece, 'set_color',  {{'playerid'}})
   
   wrp.fn(piece, 'add_jade',   {{'jade'}})
-  wrp.fn(piece, 'remove_jade',{{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(piece, 'use_jade',   {{'id', typ.str}})
+  wrp.fn(piece, 'remove_jade',{id, {'count', typ.num}})
+  wrp.fn(piece, 'use_jade',   {id})
 
   wrp.fn(piece, 'add_power',  {{'power'}})
+  wrp.fn(piece, 'remove_power', {id})
   wrp.fn(piece, 'decrease_power', {{'name', typ.str}})
 end
 

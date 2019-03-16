@@ -53,6 +53,16 @@ function cnt.pull(t, id, count)
   return copy
 end
 
+-- Completely remove object by id
+-- @param t     - container
+-- @param id    - object identifier
+-- @return      - object removed
+function cnt.remove(t, id)
+  local my = t[id] -- identify existing object in container
+  t[id] = nil -- wipe out
+  return my -- give up all
+end
+
 -- Get number of objects by id
 -- @param t     - container
 -- @param id    - object identifier
@@ -73,8 +83,9 @@ function cnt.wrap()
   local t = {'t', typ.tab}
   local id = {'id', typ.any}
   wrap('is_empty', t)
-  wrap('push',  t, {'obj', typ.tab})
-  wrap('pull',  t, id, {'count', typ.nat})
+  wrap('push', t, {'obj', typ.tab})
+  wrap('pull', t, id, {'count', typ.nat})
+  wrap('remove', t, id)
   wrap('count', t, id)
 end
 

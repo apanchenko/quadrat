@@ -5,6 +5,12 @@ local power     = require 'src.model.power.power'
 -- @see parasite
 local parasite_host = power:extend('parasite_host')
 
+-- is it desired or undesired power
+-- @override
+function power:is_positive()
+  return false
+end
+
 function parasite_host:on_add_jade(jade)
   local space = self.piece.space
   -- find enemy pieces with parasite
