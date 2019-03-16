@@ -9,6 +9,7 @@ local user = obj:extend('user')
 
 -- create
 function user:new(env, pid)
+  ass.eq(tostring(env), 'env')
   return obj.new(self,
   {
     env = env,
@@ -48,7 +49,7 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  wrp.fn(user, 'new', {{'env', typ.tab}, {'pid', 'playerid'}})
+  wrp.fn(user, 'new', {{'env'}, {'pid', 'playerid'}})
   wrp.fn(user, 'on_spawn_stone', {{'stone'}})
 end
 
