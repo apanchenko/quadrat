@@ -4,13 +4,15 @@
 
 ### Core
 
+- rename view.* similar to model.*
+- move wrp arguments check into _before function for better flexibility
 - spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
-- ground mods:       refurb, power plant, 
+- ground mods:       refurb, power plant
 - piece mods:        bankrupt, network, spyware, invis, rat tail, inhibit
-- move powers:       hotspot, switcheroo, centerpult, tripwire, scramble
+- move powers:       hotspot, switcheroo, centerpult, tripwire
 - ability powers:    2x, benefactor, scavenger
 - attack powers:     bombs, acidic
 - orb mods:          orbspy
@@ -45,9 +47,11 @@
 
 - power Ethereal - can pass through other pieces, not killing them. Cannot be killed eighter. But still can cast abilities.
 - open API, so that people may create bots
+- power Lenta - similar to Scramble but pieces move together in one direction
 
 ## Done
 
+- scramble
 - purify
 - kamikadze
 - destroy
