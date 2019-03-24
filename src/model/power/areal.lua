@@ -8,6 +8,22 @@ local power     = require 'src.model.power.power'
 local areal = power:extend('areal')
 areal.is_areal = true
 
+--
+function areal.wrap()
+  local piece = {'piece'}
+  local spot  = {'spot'}
+  local def   = {'def', typ.tab}
+  local zone  = {'zone', typ.tab}
+  local wrap  = function(name, ...) wrp.fn(areal, name, {...}) end
+
+  wrap('new',             piece, def, zone)
+  wrap('apply_to_spot',   spot            )
+  wrap('apply_to_self'                    )
+  wrap('apply_to_friend', spot            )
+  wrap('apply_to_enemy',  spot            )
+  wrap('apply_finish'                     )
+end
+
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
@@ -37,6 +53,8 @@ function areal:new(piece, def, zone)
       end
     end
   end
+
+  self:apply_finish()
   -- return nothing
 end
 
@@ -45,16 +63,6 @@ function areal:apply_to_spot(spot) end
 function areal:apply_to_self() end
 function areal:apply_to_friend(spot) end
 function areal:apply_to_enemy(spot) end
-
---
-function areal.wrap()
-  local piece = {'piece'}
-  local spot = {'spot'}
-  wrp.fn(areal, 'new', {piece, {'def', typ.tab}, {'zone', typ.tab}})
-  wrp.fn(areal, 'apply_to_spot', {spot})
-  wrp.fn(areal, 'apply_to_self')
-  wrp.fn(areal, 'apply_to_friend', {spot})
-  wrp.fn(areal, 'apply_to_enemy', {spot})
-end
+function areal:apply_finish() end
 
 return areal

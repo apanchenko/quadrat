@@ -90,6 +90,17 @@ function board:add_power(pos, name, count)
   self:stone(pos):add_power(name, count)
 end
 --
+function board:stash_piece(pos)
+  if self.stash == nil then
+    self.stash = {}
+  end
+  self:cell(pos):stash_piece(self.stash)
+end
+--
+function board:unstash_piece(pos)
+  self:cell(pos):unstash_piece(self.stash)
+end
+--
 function board:set_color(pos, color)
   local stone = self:stone(pos)
   stone:set_color(color)

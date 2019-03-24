@@ -195,13 +195,21 @@ function arr.flatten(array)
   end
   return all
 end
+
 --
 function arr.join(array, separator)
   return table.concat(array, separator)
 end
+
 -- return random element of table
 function arr.random(t)
   return t[math.random(#t)]
+end
+
+-- remove and return random element
+function arr.remove_random(t)
+  local i = math.random(#t)
+  return table.remove(t, i)
 end
 
 -- to string

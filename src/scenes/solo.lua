@@ -10,7 +10,7 @@ local agent         = require 'src.model.agent.agent'
 
 return function()
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  env.player_white = agent:get('random'):new(env, playerid.white)
+  env.player_white = agent:get('user'):new(env, playerid.white)
   env.player_black = agent:get('random'):new(env, playerid.black)
 
   composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = env})

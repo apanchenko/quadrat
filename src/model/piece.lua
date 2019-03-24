@@ -11,6 +11,40 @@ local playerid  = require 'src.model.playerid'
 --
 local piece = obj:extend('piece')
 
+-- interfrace
+function piece.wrap()
+  local opts  = {log=log.info}
+  local space = {'space'}
+  local pid   = {'playerid'}
+  local jade  = {'jade'}
+  local from  = {'from', vec}
+  local to    = {'to', vec}
+  local id    = {'id', typ.str}
+  local count = {'count', typ.num}
+  local power = {'power'}
+  local name  = {'name', typ.str}
+
+  -- piece
+  wrp.fn(piece, 'set_color',      {pid            }      )
+  wrp.fn(piece, 'die',            {               }      )
+
+  -- position
+  wrp.fn(piece, 'new',            {space, pid     }, opts)
+  wrp.fn(piece, 'set_pos',        {to             }      )
+  wrp.fn(piece, 'can_move',       {from,  to      }, opts)
+  
+  -- jades
+  wrp.fn(piece, 'add_jade',       {jade,  count   }      )
+  wrp.fn(piece, 'remove_jade ',   {id,    count   }      )
+  wrp.fn(piece, 'use_jade',       {id             }      )
+
+  -- powers
+  wrp.fn(piece, 'add_power',      {power          }      )
+  wrp.fn(piece, 'remove_power',   {id             }      )
+  wrp.fn(piece, 'decrease_power', {name           }      )
+end
+
+
 -- create a piece
 function piece:new(space, pid)
   return obj.new(self,
@@ -136,23 +170,6 @@ function piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function piece.wrap()
-  local id = {'id', typ.str}
-
-  wrp.fn(piece, 'new',        {{'space'}, {'playerid'}},    {log=log.info})
-  wrp.fn(piece, 'set_pos',    {{'pos', vec}})
-  wrp.fn(piece, 'can_move',   {{'from', vec}, {'to', vec}}, {log=log.info})
-  wrp.fn(piece, 'set_color',  {{'playerid'}})
-  
-  wrp.fn(piece, 'add_jade',   {{'jade'}})
-  wrp.fn(piece, 'remove_jade',{id, {'count', typ.num}})
-  wrp.fn(piece, 'use_jade',   {id})
-
-  wrp.fn(piece, 'add_power',  {{'power'}})
-  wrp.fn(piece, 'remove_power', {id})
-  wrp.fn(piece, 'decrease_power', {{'name', typ.str}})
-end
-
 function piece.test()
   ass.eq(typ.str.is(nil), false)
 end

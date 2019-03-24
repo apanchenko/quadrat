@@ -1,4 +1,5 @@
-local vec   = require "src.core.vec"
+local vec   = require 'src.core.vec'
+local arr   = require 'src.core.arr'
 local cfg   = require "src.model.cfg"
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
@@ -66,6 +67,37 @@ function cell:remove_stone()
   local stone = self._stone
   self._stone = nil
   return stone
+end
+
+-- put piece into special hidden place for a short time
+-- caller is responsible for stash
+-- stash is a FILO stack
+function cell:stash_piece_before()
+  ass(self._stone)
+end
+function cell:stash_piece(stash)
+  local piece = self._stone
+  self._stone = nil
+  piece:set_pos(nil)
+  arr.push(stash, piece)
+end
+function cell:stash_piece_after()
+  ass.nul(self._stone)
+end
+
+-- get piece from stash
+-- caller is responsible for stash
+-- stash is a FILO stack
+function cell:unstash_piece_before()
+  ass.nul(self._stone)
+  ass.nul(self._jade)
+end
+function cell:unstash_piece(stash)
+  self._stone = arr.pop(stash)
+  self._stone:set_pos(self.pos)
+end
+function cell:unstash_piece_after()
+  ass(self._stone)
 end
 
 -- MODULE-----------------------------------------------------------------------

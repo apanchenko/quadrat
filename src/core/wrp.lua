@@ -98,11 +98,25 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       ass(typ.meta(t).is(self), 'self is not '..t_name..' in '..type_fn)
       local call = tostring(self)..':['..t_name..']'..fn_name
       local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
+
+      -- check self state before call
+      local before = self[fn_name .. '_before']
+      if before then
+        before(self)
+      end
+
       local result = fn(...)
       log:exit(depth)
       if result then -- log function output
         log_fn(log, fn_name..' ->', result)
       end
+
+      -- check self state and result after call
+      local after = self[fn_name .. '_after']
+      if after then
+        after(self, result)
+      end
+
       return result
     end
   end

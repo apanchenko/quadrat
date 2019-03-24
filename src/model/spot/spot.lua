@@ -1,4 +1,5 @@
 local obj       = require 'src.core.obj'
+local arr       = require 'src.core.arr'
 local vec       = require 'src.core.vec'
 local map       = require 'src.core.map'
 local ass       = require 'src.core.ass'
@@ -12,11 +13,38 @@ local jade      = require 'src.model.jade'
 
 local spot = obj:extend('spot')
 
--- flags
-local pit      = 1
-local low      = 4
-local high     = 16
-local peak     = 17
+-- interface
+function piece.wrap()
+  local otps  = {log = log.info}
+  local x     = {'x', typ.num}
+  local y     = {'y', typ.num}
+  local space = {'space'}
+  local pid   = {'playerid'}
+  local piece = {'piece'}
+  local from  = {'from', spot}
+  local comp  = {'comp'}
+  local stash = {'stash', typ.tab}
+
+  -- spot
+  wrp.fn(spot, 'new',           { x,   y,  space  })
+
+  -- piece
+  wrp.fn(spot, 'can_set_piece', {                 }, opts)
+  wrp.fn(spot, 'spawn_piece',   { pid             }) -- create a new piece
+  wrp.fn(spot, 'move_piece',    { from            })
+  wrp.fn(spot, 'stash_piece',   { stash           }) -- put piece into special hidden place for a short time
+  wrp.fn(spot, 'unstash_piece', { stash           }) -- get piece from a stash
+
+  -- jades
+  wrp.fn(spot, 'spawn_jade',    {                 }, opts)
+  wrp.fn(spot, 'set_jade',      {                 }, opts)
+  wrp.fn(spot, 'remove_jade',   {                 }, opts)
+
+  -- component
+  wrp.fn(spot, 'add_comp',      { comp            }, opts)
+end
+
+
 
 -- create empty cell
 function spot:new(x, y, space)
@@ -76,6 +104,40 @@ function spot:move_piece(from)
   end
 end
 
+-- put piece into special hidden place for a short time
+-- caller is responsible for stash
+-- stash is a FILO stack
+function spot:stash_piece_before()
+  ass(self.piece)
+end
+function spot:stash_piece(stash)
+  local piece = self.piece
+  self.piece = nil
+  piece:set_pos(nil)
+  arr.push(stash, piece)
+  self.space:yell('stash_piece', self.pos) -- notify
+end
+function spot:stash_piece_after()
+  ass(self.piece == nil)
+end
+
+-- get piece from stash
+-- caller is responsible for stash
+-- stash is a FILO stack
+function spot:unstash_piece_before()
+  ass.nul(self.piece)
+  ass(self:can_set_piece())
+  ass.nul(self.jade)
+end
+function spot:unstash_piece(stash)
+  self.piece = arr.pop(stash)
+  self.piece:set_pos(self.pos)
+  self.space:yell('unstash_piece', self.pos) -- notify
+end
+function spot:unstash_piece_after()
+  ass(self.piece)
+end
+
 
 -- JADE -----------------------------------------------------------------------
 
@@ -124,10 +186,4 @@ function spot:add_comp(comp)
 end
 
 -- MODULE ---------------------------------------------------------------------
-wrp.fn(spot, 'new', {{'x', typ.num}, {'y', typ.num}, {'space'}})
-wrp.fn(spot, 'spawn_piece', {{'playerid'}})
-wrp.fn(spot, 'move_piece',  {{'from', spot}})
-wrp.fn(spot, 'spawn_jade',  {}, {log = log.info})
-wrp.fn(spot, 'add_comp',    {{'comp'}}, {log = log.info})
-
 return spot
