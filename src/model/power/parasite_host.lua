@@ -3,7 +3,7 @@ local wrp       = require 'src.core.wrp'
 local power     = require 'src.model.power.power'
 
 -- @see parasite
-local parasite_host = power:extend('parasite_host')
+local parasite_host = power:extend('Parasite_host')
 
 -- is it desired or undesired power
 -- @override

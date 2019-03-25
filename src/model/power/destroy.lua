@@ -3,7 +3,7 @@ local log       = require 'src.core.log'
 local wrp     = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
-local destroy = areal:extend('destroy')
+local destroy = areal:extend('Destroy')
 
 -- can spawn in jade
 function destroy:can_spawn()
@@ -30,7 +30,7 @@ function destroy.wrap()
 end
 
 function destroy.test()
-  ass.eq(tostring(destroy), 'destroy')
+  ass.eq(tostring(destroy), 'Destroy')
 end
 
 return destroy

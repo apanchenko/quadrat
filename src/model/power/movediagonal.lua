@@ -1,7 +1,7 @@
 local wrp     = require 'src.core.wrp'
 local power   = require 'src.model.power.power'
 
-local movediagonal = power:extend('movediagonal')
+local movediagonal = power:extend('Movediagonal')
 
 -- can spawn in jade
 function movediagonal:can_spawn()

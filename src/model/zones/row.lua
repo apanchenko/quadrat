@@ -4,7 +4,7 @@ local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 local wrp     = require 'src.core.wrp'
 
-local row = obj:extend('row')
+local row = obj:extend('Row')
 
 --
 function row:new(pos)
@@ -20,7 +20,7 @@ end
 function row.Test()
   print('test row..')
 
-  assert(tostring(row) == 'row')
+  assert(tostring(row) == 'Row')
 end
 
 -- MODULE ---------------------------------------------------------------------

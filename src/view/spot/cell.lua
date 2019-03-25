@@ -50,6 +50,33 @@ function cell:remove_jade()
   self._jade = nil
 end
 
+-- put jade into special hidden place for a short time
+function cell:stash_jade_before()
+  ass(self._jade)
+end
+function cell:stash_jade(stash)
+  local jade = self._jade
+  self._jade = nil
+  --jade:set_pos(nil)
+  arr.push(stash, jade)
+end
+function cell:stash_jade_after()
+  ass.nul(self._jade)
+end
+
+-- get jade from stash
+function cell:unstash_jade_before()
+  ass.nul(self._stone)
+  ass.nul(self._jade)
+end
+function cell:unstash_jade(stash)
+  self._jade = arr.pop(stash)
+  --self._jade:set_pos(self.pos)
+end
+function cell:unstash_jade_after()
+  ass(self._jade)
+end
+
 -- STONE-----------------------------------------------------------------------
 --
 function cell:set_stone(stone)

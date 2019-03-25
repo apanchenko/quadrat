@@ -43,22 +43,32 @@ cfg.stone         =
   }
 }
 
-cfg.abilities     = {vx = 5,
+cfg.abilities =
+{
+  vx = 9,
+  y = (cfg.vh * cfg.board.vy) + (cfg.vw * cfg.board.vw) + cfg.vh,
   button =
   {
+    x = 0,
+    y = 0,
+    vw = 40,
+    height = 16,
     emboss = false,
     font = cfg.font,
-    fontSize = 17,
-    width = 250,
-    height = 32,
+    fontSize = 14,
     shape = "roundedRect",
-    cornerRadius = 9,
-    fillColor   = { default = {0.6, 0.7, 0.8, 1}, over = {0.6, 0.7, 0.8, 0.8} },
-    labelColor  = { default = {1.0, 1.0, 1.0, 1}, over = {1.0, 1.0, 1.0, 1.0} },
-    strokeColor = { default = {1.0, 0.4, 0.0, 1}, over = {0.8, 0.8, 1.0, 1.0} },
+    cornerRadius = 3,
+    fillColor   = { default = {0.3, 0.4, 0.5, 1.0}, over = {0.6, 0.7, 0.8, 0.8} },
+    labelColor  = { default = {1.0, 1.0, 1.0, 1.0}, over = {1.0, 1.0, 1.0, 1.0} },
+    strokeColor = { default = {0.3, 0.4, 0.5, 0.5}, over = {0.8, 0.8, 1.0, 1.0} },
     strokeWidth = 1
+  },
+  rows =
+  {
+    length = 2,
+    space_px = 2,
+    space_py = 1
   }
 }
-cfg.abilities.y = (cfg.vh * cfg.board.vy) + (cfg.vw * cfg.board.vw) + cfg.vh
 
 return cfg

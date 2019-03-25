@@ -4,7 +4,7 @@ local areal     = require 'src.model.power.areal'
 local host      = require 'src.model.power.parasite_host'
 
 -- Leeches onto any surrounding enemy pieces. Any new powers they acquire your piece will also acquire.
-local parasite = areal:extend('parasite')
+local parasite = areal:extend('Parasite')
 
 -- can spawn in jade
 function parasite:can_spawn()

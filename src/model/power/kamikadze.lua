@@ -3,7 +3,7 @@ local log       = require 'src.core.log'
 local wrp       = require 'src.core.wrp'
 local areal     = require 'src.model.power.areal'
 
-local kamikadze = areal:extend('kamikadze')
+local kamikadze = areal:extend('Kamikadze')
 
 -- can spawn in jade
 function kamikadze:can_spawn()

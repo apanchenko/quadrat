@@ -90,8 +90,14 @@ function space:select_spots(filter)
     if filter(spot) then
       selected[#selected + 1] = spot
     end
-	end
+  end
   return selected
+end
+--
+function space:each_spot(fn)
+  for k, spot in ipairs(self.grid) do
+    fn(spot)
+  end
 end
 --
 function space:each_piece(fn)
@@ -218,6 +224,7 @@ function space.wrap()
   wrp.fn(space, 'index',      {{'vec', vec}},               info)
   wrp.fn(space, 'spot',       {{'pos', vec}},               info)
   wrp.fn(space, 'each_piece', {{'fn', typ.fun}},            info)
+  wrp.fn(space, 'each_spot',  {{'fn', typ.fun}},            info)
   wrp.fn(space, 'count_pieces', {},                         info)
   wrp.fn(space, 'piece',      {{'pos', vec}},               info)
   wrp.fn(space, 'who_move',   {}, info)

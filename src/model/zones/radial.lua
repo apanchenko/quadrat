@@ -26,7 +26,7 @@ end
 function radial.Test()
   print('test radial..')
 
-  ass(tostring(radial) == 'radial')
+  ass(tostring(radial) == 'Radial')
   local radial = Radial:new(vec(3, 3))
 
   local trues = {vec(2,2), vec(3,2), vec(4,2),

@@ -15,7 +15,7 @@ local spot = obj:extend('spot')
 
 -- interface
 function piece.wrap()
-  local otps  = {log = log.info}
+  local opts  = {log = log.info}
   local x     = {'x', typ.num}
   local y     = {'y', typ.num}
   local space = {'space'}
@@ -66,6 +66,43 @@ function spot:__tostring()
   return res.. '}'
 end
 
+-- Add stash/unstash methods for 'name'
+local function support_stash(name)
+  -- put 'name' into special hidden place for a short time
+  -- caller is responsible for stash
+  -- stash is a FILO stack
+  spot['stash_'..name..'_before'] = function(self)
+    ass(self[name])
+  end
+
+  spot['stash_'..name] = function(self, stash)
+    local obj = self[name]
+    self[name] = nil
+    obj:set_pos(nil)
+    arr.push(stash, obj)
+    self.space:yell('stash_'..name, self.pos) -- notify
+  end
+
+  spot['stash_'..name..'_after'] = function(self)
+    ass.nul(self[name])
+  end
+
+  -- get 'name' from stash
+  spot['unstash_'..name..'_before'] = function(self)
+    ass.nul(self[name])
+    ass(self['can_set_'..name](self))
+  end
+
+  spot['unstash_'..name] = function(self, stash)
+    self[name] = arr.pop(stash)
+    self[name]:set_pos(self.pos)
+    self.space:yell('unstash_'..name, self.pos) -- notify
+  end
+
+  spot['unstash_'..name..'_after'] = function(self)
+    ass(self[name])
+  end
+end
 
 -- PIECE ----------------------------------------------------------------------
 
@@ -104,42 +141,15 @@ function spot:move_piece(from)
   end
 end
 
--- put piece into special hidden place for a short time
--- caller is responsible for stash
--- stash is a FILO stack
-function spot:stash_piece_before()
-  ass(self.piece)
-end
-function spot:stash_piece(stash)
-  local piece = self.piece
-  self.piece = nil
-  piece:set_pos(nil)
-  arr.push(stash, piece)
-  self.space:yell('stash_piece', self.pos) -- notify
-end
-function spot:stash_piece_after()
-  ass(self.piece == nil)
-end
-
--- get piece from stash
--- caller is responsible for stash
--- stash is a FILO stack
-function spot:unstash_piece_before()
-  ass.nul(self.piece)
-  ass(self:can_set_piece())
-  ass.nul(self.jade)
-end
-function spot:unstash_piece(stash)
-  self.piece = arr.pop(stash)
-  self.piece:set_pos(self.pos)
-  self.space:yell('unstash_piece', self.pos) -- notify
-end
-function spot:unstash_piece_after()
-  ass(self.piece)
-end
-
+-- add stash_piece/unstash_piece functions
+support_stash('piece')
 
 -- JADE -----------------------------------------------------------------------
+
+-- return true if cell is able to receive a jade
+function spot:can_set_jade()
+  return map.all(self.comps, function(comp) return comp:can_set_jade() end)
+end
 
 -- take chance to spawn a new jade if can
 function spot:spawn_jade()
@@ -169,14 +179,23 @@ function spot:set_jade()
   self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
 end
 
--- take chance to spawn a new jade if can
-function spot:remove_jade()
-  ass.is(self, spot)
-  if self.jade then -- already used by jade
-    self.jade = nil
-    self.space.on_change:call('remove_jade', self.pos) -- notify that a new jade set
-    end
+-- Remove and return jade
+function spot:remove_jade_before()
+  ass(self.jade)
 end
+function spot:remove_jade()
+  local jade = self.jade
+  self.jade = nil
+  self.space:yell('remove_jade', self.pos) -- notify that a new jade set
+  return jade
+end
+function spot:remove_jade_after(jade)
+  ass.nul(self.jade)
+  ass(jade)
+end
+
+-- add stash_jade/unstash_jade functions
+support_stash('jade')
 
 -- COMPONENTS -----------------------------------------------------------------
 --

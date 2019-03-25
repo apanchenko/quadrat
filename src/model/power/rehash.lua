@@ -1,7 +1,8 @@
 local power = require 'src.model.power.power'
 local ass   = require 'src.core.ass'
+local arr   = require 'src.core.arr'
 
-local rehash = power:extend('rehash')
+local rehash = power:extend('Rehash')
 
 -- can spawn in jade
 function rehash:can_spawn()
@@ -10,25 +11,23 @@ end
 
 -- use
 function rehash:new(piece)
-  -- get empty spots to rehash
-  local spots = piece.space:select_spots(function(c) return c.piece == nil end)
+  local jades = {}
+  local spots = {}
 
-  -- count and remove jades
-  local count = 0
-  for i = 1, #spots do
-    if spots[i].jade then
-      count = count + 1
-      spots[i]:remove_jade()
+  -- gather jades and free spots
+  piece.space:each_spot(function(spot)
+    if spot.jade then
+      spot:stash_jade(jades)
     end
-  end
-  ass.le(count, #spots)
+    if spot:can_set_jade() then
+      arr.push(spots, spot)
+    end
+  end)
 
-  -- select 'count' rendom empty cells
-  for i = 1, count do
-    local j = math.random(#spots)
-    spots[j]:set_jade()
-    spots[j] = spots[#spots]
-    spots[#spots] = nil
+  -- randomize jaders over spots gathered
+  while not arr.is_empty(jades) do
+    local spot = arr.remove_random(spots)
+    spot:unstash_jade(jades)
   end
 end
 

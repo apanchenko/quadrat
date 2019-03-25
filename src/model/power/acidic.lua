@@ -4,7 +4,7 @@ local wrp         = require 'src.core.wrp'
 local areal       = require 'src.model.power.areal'
 local spot_acidic = require 'src.model.spot.comp.acidic'
 
-local acidic = areal:extend('acidic')
+local acidic = areal:extend('Acidic')
 
 -- can spawn in jade
 function acidic:can_spawn()

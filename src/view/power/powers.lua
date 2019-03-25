@@ -4,12 +4,12 @@ local invisible   = require 'src.view.power.invisible'
 
 local powers = {}
 
-powers['multiply'] = count
-powers['movediagonal'] = image
-powers['jumpproof'] = image
-powers['sphere'] = image
-powers['parasite'] = image
-powers['parasite_host'] = image
-powers['invisible'] = invisible
+powers['Multiply'] = count
+powers['Movediagonal'] = image
+powers['Jumpproof'] = image
+powers['Sphere'] = image
+powers['Parasite'] = image
+powers['Parasite_host'] = image
+powers['Invisible'] = invisible
 
 return powers

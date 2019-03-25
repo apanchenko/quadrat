@@ -2,7 +2,7 @@ local ass     = require 'src.core.ass'
 local wrp     = require 'src.core.wrp'
 local power   = require 'src.model.power.power'
 
-local sphere = power:extend('sphere')
+local sphere = power:extend('Sphere')
 
 -- can spawn in jade
 function sphere:can_spawn()

@@ -2,7 +2,7 @@ local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
 local power   = require 'src.model.power.power'
 
-local jumpproof = power:extend('jumpproof')
+local jumpproof = power:extend('Jumpproof')
 
 -- can spawn in jade
 function jumpproof:can_spawn()

@@ -5,6 +5,7 @@ local lay       = require 'src.core.lay'
 local app_cfg   = require 'src.cfg'
 local cfg       = require 'src.model.cfg'
 local solo      = require 'src.scenes.solo'
+local robots    = require 'src.scenes.robots'
 
 local menu = composer.newScene()
 local platform = system.getInfo('platform')
@@ -43,6 +44,7 @@ function menu:create(event)
 
   buttons:insert(new_button('lobby', 'Play', function() composer.gotoScene('src.scenes.lobby', options) end))
   buttons:insert(new_button('battle', 'Solo', solo))
+  buttons:insert(new_button('robots', 'Robots Arena', robots))
 
   if (platform ~= 'ios' and platform ~= 'tvos') then
     buttons:insert(new_button('exit', 'Exit', function() native.requestExit() end))

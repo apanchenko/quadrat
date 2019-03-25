@@ -1,5 +1,6 @@
 local ass     = require 'src.core.ass'
 local log     = require 'src.core.log'
+local vec     = require 'src.core.vec'
 local obj     = require 'src.core.obj'
 local wrp     = require 'src.core.wrp'
 local typ     = require 'src.core.typ'
@@ -28,6 +29,11 @@ end
 --
 function jade:__tostring()
   return self.type.. '{'.. self.id.. '}'
+end
+
+--
+function jade:set_pos(pos)
+  -- skip
 end
 
 -- construct another identical jade
@@ -76,6 +82,7 @@ function jade.wrap()
   wrp.fn(jade, 'new',    {}, {log=log.info})
   wrp.fn(jade, 'add_to', {{'jades', typ.tab}})
   wrp.fn(jade, 'use',    {{'piece'}})
+  --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 
 return jade

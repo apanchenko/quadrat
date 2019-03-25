@@ -3,7 +3,7 @@ local wrp     = require 'src.core.wrp'
 local typ     = require 'src.core.typ'
 local counted = require 'src.model.power.counted'
 
-local multiply = counted:extend('multiply')
+local multiply = counted:extend('Multiply')
 
 -- can spawn in jade
 function multiply:can_spawn()

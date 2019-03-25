@@ -1,6 +1,6 @@
 local widget    = require 'widget'
 local arr       = require 'src.core.arr'
-local vec       = require "src.core.vec"
+local vec       = require 'src.core.vec'
 local cfg       = require 'src.model.cfg'
 local lay       = require 'src.core.lay'
 local ass       = require 'src.core.ass'
@@ -81,9 +81,11 @@ function stoneAbilities:show()
       return true
     end
     --log:trace(opts.label)
-    lay.render(self._view, widget.newButton(opts), cfg.origin)
+    --lay.render(self._view, widget.newButton(opts), cfg.origin)
+    lay.button(self._view, opts)
   end
-  lay.column(self._view, 0)
+  --lay.column(self._view, 3)
+  lay.rows(self._view, cfg.abilities.rows)
   lay.render(self._stone.board.battle, self._view, cfg.abilities)
 end
 
