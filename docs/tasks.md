@@ -5,7 +5,6 @@
 ### Core
 
 - rename view.* similar to model.*
-- move wrp arguments check into _before function for better flexibility
 - spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
