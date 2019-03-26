@@ -133,11 +133,10 @@ function spot:move_piece(from)
   from.piece = nil
   self.piece:move_after(from, self)
   -- consume jade
-  local jade = self.jade
-  if jade then
+  if self.jade then
+    self.piece:add_jade(self.jade)
     self.jade = nil 
     self.space:yell('remove_jade', self.pos) -- notify
-    self.piece:add_jade(jade)
   end
 end
 
@@ -148,22 +147,14 @@ support_stash('piece')
 
 -- return true if cell is able to receive a jade
 function spot:can_set_jade()
-  return map.all(self.comps, function(comp) return comp:can_set_jade() end)
+  return self.piece == nil
+     and self.jade == nil
+     and map.all(self.comps, function(comp) return comp:can_set_jade() end)
 end
 
 -- take chance to spawn a new jade if can
 function spot:spawn_jade()
-  ass.is(self, spot)
-  -- already used by jade
-  if self.jade then
-    return
-  end
-  -- already used by piece
-  if self.piece then
-    return
-  end
-  -- something prevents
-  if not map.all(self.comps, function(comp) return comp:can_set_jade() end) then
+  if not self:can_set_jade() then
     return
   end
   if math.random() > cfg.jade.probability then

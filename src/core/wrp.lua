@@ -100,21 +100,24 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
 
       -- check self state before call
-      local before = self[fn_name .. '_before']
-      if before then
-        before(self)
+      local fn_before = self[fn_name .. '_before']
+      if fn_before then
+        fn_before(...)
       end
 
+      -- call original function
       local result = fn(...)
+
+      -- check self state and result after call
+      local fn_after = self[fn_name .. '_after']
+      if fn_after then
+        fn_after(...)
+      end
+
+      -- log result
       log:exit(depth)
       if result then -- log function output
         log_fn(log, fn_name..' ->', result)
-      end
-
-      -- check self state and result after call
-      local after = self[fn_name .. '_after']
-      if after then
-        after(self, result)
       end
 
       return result

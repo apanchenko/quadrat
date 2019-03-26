@@ -20,6 +20,7 @@ function scramble:apply_to_spot(spot)
       self.stash = {}
     end
     spot:stash_piece(self.stash) -- put piece into stash
+    ass(spot:can_set_piece())
   end
 
   -- remember spot
@@ -29,7 +30,8 @@ function scramble:apply_to_spot(spot)
     end
     arr.push(self.spots, spot)
   end
-
+end
+function scramble:apply_to_spot_after(spot)
   if self.stash and self.spots then
     ass.le(#self.stash, #self.spots)
   end

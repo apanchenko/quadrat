@@ -18,13 +18,15 @@ function rehash:new(piece)
   piece.space:each_spot(function(spot)
     if spot.jade then
       spot:stash_jade(jades)
+      ass(spot:can_set_jade()) -- jade just removed, should be able to set it back
     end
     if spot:can_set_jade() then
       arr.push(spots, spot)
     end
   end)
+  ass.le(#jades, #spots)
 
-  -- randomize jaders over spots gathered
+  -- randomize jades over spots gathered
   while not arr.is_empty(jades) do
     local spot = arr.remove_random(spots)
     spot:unstash_jade(jades)

@@ -12,7 +12,9 @@ function acidic:can_spawn()
 end
 
 -- POWER ----------------------------------------------------------------------
---
+function acidic:apply_to_enemy_before(spot)
+  ass.nul(spot.jade)
+end
 function acidic:apply_to_enemy(spot)
   -- kill enemy piece
   spot.piece.die()
@@ -20,6 +22,9 @@ function acidic:apply_to_enemy(spot)
   self.piece.space:yell('remove_piece', spot.pos) -- notify
   -- mark spot as acidic
   spot:add_comp(spot_acidic())
+end
+function acidic:apply_to_enemy_after(spot)
+  ass(not spot:can_set_piece())
 end
 
 --
