@@ -32,7 +32,7 @@ function battle:create(event)
   self.players[black] = player(black, "Gala")
   lay.render(self, self.players[black], cfg.player.black)
 
-  self.env = event.params
+  self.env = event.params.env
   self.env.battle = self
   
   self.space = self.env.space

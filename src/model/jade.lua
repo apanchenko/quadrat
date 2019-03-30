@@ -4,8 +4,8 @@ local vec     = require 'src.core.vec'
 local obj     = require 'src.core.obj'
 local wrp     = require 'src.core.wrp'
 local typ     = require 'src.core.typ'
-local powers  = require 'src.model.power.powers'
-local zones   = require 'src.model.zones.zones'
+local powers  = require 'src.model.power.package'
+local zones   = require 'src.model.zones.package'
 
 -- jade
 local jade = obj:extend('jade')

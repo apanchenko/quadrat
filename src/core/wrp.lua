@@ -45,7 +45,6 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     ass.tab(info.type)
     ass.str(info.type.name)
     ass.fun(info.type.is)
-    log:info(info.name..':'..info.type.name)
 
     -- third is tostring function
     info.tostring = info[3] or tostring 
@@ -91,7 +90,6 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     end
   else
     local type_fn = t_name..':'..fn_name
-    log:trace('wrp.fn('..type_fn..')')
     t[fn_name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)

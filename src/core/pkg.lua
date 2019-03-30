@@ -29,13 +29,16 @@ end
 
 -- load module to package
 function pkg:load(...)
-  arr.each({...}, function(name)
+  local args = {...}
+  local depth = log:info(self.path..':load('..arr.tostring(args)..')'):enter()
+  arr.each(args, function(name)
     local fullname = self.path.. '.'.. name
     local module = require(fullname)
     ass(module, 'failed found module '.. fullname)
     ass.nul(self.modules[name], 'module '.. name.. ' already loaded')
-    self.modules[name] =  module
+    self.modules[name] = module
   end)
+  log:exit(depth)
   return self
 end
 
@@ -50,14 +53,13 @@ pkg.find = pkg.get
 -- wrap modules
 function pkg:wrap()
   -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':[pkg]wrap'):enter()
+  local depth = log:trace(self.path..':wrap'):enter()
   -- for all modules
   for id, module in pairs(self.modules) do
-    -- call wrap from this module strictly
-    local mod_wrap = rawget(module, 'wrap')
+    local mod_wrap = module.wrap
     if mod_wrap then
-      local depth = log:trace(id..'.wrap'):enter()
-      mod_wrap()
+      local depth = log:trace(id..':wrap'):enter()
+      mod_wrap(module)
       log:exit(depth)
     end
   end
@@ -75,22 +77,17 @@ end
 -- test modules
 function pkg:test()
   -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':[pkg]test'):enter()
+  local depth = log:trace(self.path..':test'):enter()
   for id, module in pairs(self.modules) do
-    -- call test from this module strictly
-    local mod_test = rawget(module, 'test')
+    local mod_test = module.test
     if mod_test then
-      local depth = log:trace(id..'.test'):enter()
-      mod_test()
+      local depth = log:trace(id..':test'):enter()
+      mod_test(module)
       log:exit(depth)
     end
   end
   log:exit(depth)
 end
-
--- core package
-pkg.cor = pkg:new('src.core')
-pkg.cor:load('arr', 'ass', 'chk', 'cnt', 'env', 'evt', 'lay', 'log', 'map', 'obj', 'typ', 'vec', 'wrp')
 
 -- module
 return pkg

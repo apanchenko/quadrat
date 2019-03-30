@@ -8,7 +8,7 @@ local ass           = require 'src.core.ass'
 local wrp           = require 'src.core.wrp'
 local typ           = require 'src.core.typ'
 local net           = require 'src.model.agent.photon.net'
-local agent         = require 'src.model.agent.agent'
+local agent         = require 'src.model.agent.package'
 
 -- variables
 local lobby = composer.newScene()

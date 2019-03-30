@@ -1,42 +1,43 @@
-local ass       = require 'src.core.ass'
-local typ       = require 'src.core.typ'
-local wrp       = require 'src.core.wrp'
-local log       = require 'src.core.log'
-local arr_impl  = require 'src.core.impl.arr'
+local impl = require 'src.core.impl.arr'
 
-local arr = {
-  is_empty      = arr_impl.is_empty,
-  push          = arr_impl.push,
-  pop           = arr_impl.pop,
-  shift         = arr_impl.shift,
-  unshift       = arr_impl.unshift,
-  each          = arr_impl.each,
-  tostring      = arr_impl.tostring,
-  map           = arr_impl.map,
-  reduce        = arr_impl.reduce,
-  detect        = arr_impl.detect,
-  select        = arr_impl.select,
-  reject        = arr_impl.reject,
-  all           = arr_impl.all,
-  any           = arr_impl.any,
-  include       = arr_impl.include,
-  invoke        = arr_impl.invoke,
-  pluck         = arr_impl.pluk,
-  min           = arr_impl.min,
-  max           = arr_impl.max,
-  reverse       = arr_impl.reverse,
-  first         = arr_impl.first,
-  rest          = arr_impl.rest,
-  slice         = arr_impl.slice,
-  flatten       = arr_impl.flatten,
-  join          = arr_impl.join,
-  random        = arr_impl.random,
-  remove_random = arr_impl.remove_random, -- remove and return random element
-  find_index    = arr_impl.find_index
+local arr =
+{
+  is_empty      = impl.is_empty,
+  push          = impl.push,
+  pop           = impl.pop,
+  shift         = impl.shift,
+  unshift       = impl.unshift,
+  each          = impl.each,
+  tostring      = impl.tostring,
+  map           = impl.map,
+  reduce        = impl.reduce,
+  detect        = impl.detect,
+  select        = impl.select,
+  reject        = impl.reject,
+  all           = impl.all,
+  any           = impl.any,
+  include       = impl.include,
+  invoke        = impl.invoke,
+  pluck         = impl.pluk,
+  min           = impl.min,
+  max           = impl.max,
+  reverse       = impl.reverse,
+  first         = impl.first,
+  rest          = impl.rest,
+  slice         = impl.slice,
+  flatten       = impl.flatten,
+  join          = impl.join,
+  random        = impl.random,
+  remove_random = impl.remove_random, -- remove and return random element
+  find_index    = impl.find_index
 }
 
 -- MODULE ---------------------------------------------------------------------
 function arr.wrap()
+  local typ   = require 'src.core.typ'
+  local wrp   = require 'src.core.wrp'
+  local log   = require 'src.core.log'
+
   local wrap = function(fn_name, ...)
     wrp.fn(arr, fn_name, {...}, {name='arr', static=true, log=log.info})
   end
@@ -53,6 +54,8 @@ end
 
 --
 function arr.test()
+  local ass   = require 'src.core.ass'
+
   ass.eq(arr.tostring({'semana','mes','ano'}), 'semana, mes, ano')
 
   local compare = function(a, b) return a < b end

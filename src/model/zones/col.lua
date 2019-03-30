@@ -26,7 +26,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function col.wrap()
-  wrp.fn(col, ':filter', {{'pos', vec}})
+  wrp.fn(col, 'filter', {{'pos', vec}})
 end
 
 return col

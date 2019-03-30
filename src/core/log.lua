@@ -16,20 +16,20 @@ end
 -- configure log
 function log:on_cfg(cfg)
   -- dumb is always silent
-  self.dumb = function(me) return me end
+  dumb = function(me) return me end
 
   -- info for debug configuration only
   if cfg.build.id <= bld.debug.id then
     self.info  = function(me, ...) out(...) return me end
   else
-    self.info  = self.dumb
+    self.info  = dumb
   end
 
   -- trace for debug and develop configurations
   if cfg.build.id <= bld.develop.id then
     self.trace = function(me, ...) out(...) return me end
   else
-    self.trace = self.dumb
+    self.trace = dumb
   end
 
   -- error and warning for all configurations
