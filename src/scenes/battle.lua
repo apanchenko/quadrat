@@ -2,11 +2,14 @@ local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
 local board         = require 'src.view.board'
 local player        = require 'src.view.player'
-local cfg           = require 'src.model.cfg'
+local cfg           = require 'src.view.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
 local wrp           = require 'src.core.wrp'
+local env           = require 'src.core.env'
+local space         = require 'src.model.space'
+local agent         = require 'src.model.agent.package'
 
 -- battle scene
 local battle = composer.newScene()
@@ -84,6 +87,23 @@ battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
 
+--
+function battle.goto_robots()
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+  env.player_white = agent:get('random'):new(env, playerid.white)
+  env.player_black = agent:get('random'):new(env, playerid.black)
+  composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = {env=env}})
+  return true
+end
+
+--
+function battle.goto_solo()
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+  env.player_white = agent:get('user'):new(env, playerid.white)
+  env.player_black = agent:get('random'):new(env, playerid.black)
+  composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = {env=env}})
+  return true
+end
 
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions

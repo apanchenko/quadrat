@@ -9,7 +9,7 @@ cfg.font          = native.systemFont
 
 cfg.origin        = {vx=0, vy=0}
 cfg.battle        = {}
-cfg.battle.bg     = {vx=0, vy=0, vw=100, vh=100, path="src/background.png"}
+--cfg.battle.bg     = {vx=0, vy=0, vw=100, vh=100, path="src/background.png"}
 cfg.battle.arrow  = {vx=4, vy=4, vw=12, ratio=2, path="src/view/arrow.png"}
 cfg.cell          = {vx=0, vy=0, w=64, h=64, size=vec(64, 64)}
 cfg.board         = {vx=0, vy=15, vw=100, cols=7, rows=7}

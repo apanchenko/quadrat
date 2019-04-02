@@ -3,9 +3,9 @@ local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
 local app_cfg   = require 'src.cfg'
-local cfg       = require 'src.model.cfg'
-local solo      = require 'src.scenes.solo'
-local robots    = require 'src.scenes.robots'
+local cfg       = require 'src.view.cfg'
+local battle    = require 'src.scenes.battle'
+local lobby     = require 'src.scenes.lobby'
 
 local menu = composer.newScene()
 local platform = system.getInfo('platform')
@@ -20,7 +20,7 @@ local function new_button(id, label, onPress)
     y = 0,
     id = id,
     label = label,
-    onPress = function(event) onPress() return true end,
+    onPress = onPress,
     emboss = false,
     font = native.systemFont,
     fontSize = 17,
@@ -42,9 +42,9 @@ function menu:create(event)
 
   local buttons = display.newGroup()
 
-  buttons:insert(new_button('lobby', 'Play', function() composer.gotoScene('src.scenes.lobby', options) end))
-  buttons:insert(new_button('battle', 'Solo', solo))
-  buttons:insert(new_button('robots', 'Robots Arena', robots))
+  buttons:insert(new_button('lobby', 'Play', lobby.goto_lobby))
+  buttons:insert(new_button('battle', 'Solo', battle.goto_solo))
+  buttons:insert(new_button('robots', 'Robots Arena', battle.goto_robots))
 
   if (platform ~= 'ios' and platform ~= 'tvos') then
     buttons:insert(new_button('exit', 'Exit', function() native.requestExit() end))

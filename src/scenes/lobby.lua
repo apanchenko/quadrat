@@ -1,7 +1,7 @@
 local composer      = require 'composer'
 local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
-local cfg           = require 'src.model.cfg'
+local cfg           = require 'src.view.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
@@ -54,6 +54,12 @@ lobby:addEventListener("create", lobby)
 lobby:addEventListener("show", lobby)
 lobby:addEventListener("hide", lobby)
 lobby:addEventListener("destroy", lobby)
+
+--
+function lobby.goto_lobby()
+  composer.gotoScene('src.scenes.lobby', {effect = 'fade', time = 600, params = {env=env}})
+  return true
+end
 
 --
 wrp.fn(lobby, 'on_opponent', {{'room_id', typ.num}, {'createdByMe', typ.boo}}, 'lobby')
