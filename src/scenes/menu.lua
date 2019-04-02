@@ -2,8 +2,7 @@ local widget    = require 'widget'
 local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
-local app_cfg   = require 'src.cfg'
-local cfg       = require 'src.view.cfg'
+local cfg       = require 'src.cfg'
 local battle    = require 'src.scenes.battle'
 local lobby     = require 'src.scenes.lobby'
 
@@ -38,7 +37,7 @@ end
 -------------------------------------------------------------------------------
 function menu:create(event)
   print('menu:new')
-  lay.image(self.view, cfg.battle.bg)
+  lay.image(self.view, cfg.view.battle.bg)
 
   local buttons = display.newGroup()
 
@@ -53,7 +52,7 @@ function menu:create(event)
   lay.column(buttons, 5)
 
   -- draw version
-  lay.text(self, {text=app_cfg.version, vx=0, vy=90})
+  lay.text(self, {text = cfg.version, vx=0, vy=90})
 
   lay.render(self, buttons, {vx=0, vy=15})
 end

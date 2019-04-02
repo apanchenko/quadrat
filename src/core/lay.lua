@@ -1,4 +1,4 @@
-local cfg = require 'src.model.cfg'
+local cfg = require 'src.cfg'
 local ass = require 'src.core.ass'
 local log = require 'src.core.log'
 local typ = require 'src.core.typ'
@@ -45,11 +45,11 @@ function lay.render(target, obj, opts)
   child = obj.view or obj
   child.anchorX = opts.anchorX or 0
   child.anchorY = opts.anchorY or 0
-  child.x = opts.x or (cfg.vw * opts.vx)
-  child.y = opts.y or (cfg.vh * opts.vy)
+  child.x = opts.x or (cfg.view.vw * opts.vx)
+  child.y = opts.y or (cfg.view.vh * opts.vy)
 
   if opts.vw then
-    local scale = cfg.vw * opts.vw / obj.width
+    local scale = cfg.view.vw * opts.vw / obj.width
     child:scale(scale, scale)
   end
 
@@ -91,8 +91,8 @@ end
 --    space_y       vertical space between rows
 function lay.rows(obj, opts)
   local view = obj.view or obj
-  local space_x = opts.space_x or (cfg.vw * opts.space_px)
-  local space_y = opts.space_y or (cfg.vw * opts.space_py)
+  local space_x = opts.space_x or (cfg.view.vw * opts.space_px)
+  local space_y = opts.space_y or (cfg.view.vw * opts.space_py)
   local x = 0
   local y = 0
   local count = 0
@@ -119,13 +119,13 @@ function lay.image(group, opts)
 
   ass.str(opts.path, 'path')
 
-  local w = opts.w or (cfg.vw * opts.vw)
+  local w = opts.w or (cfg.view.vw * opts.vw)
 
   local h;
   if opts.h then
     h = opts.h
   elseif opts.vh then
-    h = cfg.vh * opts.vh
+    h = cfg.view.vh * opts.vh
   else
     h = w / (opts.ratio or 1)
   end
@@ -147,7 +147,7 @@ function lay.text(group, opts)
   if opts.w then
     opts.width = opts.w
   elseif opts.vw then
-    opts.width = opts.vw * cfg.vw
+    opts.width = opts.vw * cfg.view.vw
   end
 
   local text = display.newText(opts)
@@ -193,12 +193,12 @@ end
 --                    all other shapes. {-20, -25, 40, 0, -20, 25}
 function lay.button(group, opts)
   if opts.width == nil then
-    opts.width = cfg.vw * opts.vw
+    opts.width = cfg.view.vw * opts.vw
   end
 
   if opts.height == nil then
     if opts.vh then
-      opts.height = cfg.vh * opts.vh
+      opts.height = cfg.view.vh * opts.vh
     else
       opts.height = w / (opts.ratio or 1)
     end

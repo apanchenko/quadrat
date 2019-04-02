@@ -4,7 +4,7 @@ local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
 local lay         = require 'src.core.lay'
-local cfg         = require 'src.model.cfg'
+local cfg         = require 'src.cfg'
 
 local image = obj:extend('view.power.image')
 
@@ -12,9 +12,9 @@ local image = obj:extend('view.power.image')
 -- create image with initial one count
 function image:new(stone, name)
   self = obj.new(self)
-  cfg.cell.path = 'src/view/power/'..name..'.png'
-  cfg.cell.order = 10
-  self.image = lay.image(stone, cfg.cell)
+  cfg.view.cell.path = 'src/view/power/'..name..'.png'
+  cfg.view.cell.order = 10
+  self.image = lay.image(stone, cfg.view.cell)
   return self
 end
 

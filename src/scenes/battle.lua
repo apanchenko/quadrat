@@ -2,7 +2,7 @@ local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
 local board         = require 'src.view.board'
 local player        = require 'src.view.player'
-local cfg           = require 'src.view.cfg'
+local cfg           = require 'src.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
@@ -14,44 +14,50 @@ local agent         = require 'src.model.agent.package'
 -- battle scene
 local battle = composer.newScene()
 
--------------------------------------------------------------------------------
+--
+function battle.goto_robots()
+  env.player_white = agent:get('random'):new(env, playerid.white)
+  env.player_black = agent:get('random'):new(env, playerid.black)
+  composer.gotoScene('src.scenes.battle', cfg.scenes.switching)
+  return true
+end
+
+--
+function battle.goto_solo()
+  env.player_white = agent:get('user'):new(env, playerid.white)
+  env.player_black = agent:get('random'):new(env, playerid.black)
+  composer.gotoScene('src.scenes.battle', cfg.scenes.switching)
+  return true
+end
+
+--
 function battle:create(event)
-  log:trace("cfg vw:", cfg.vw, ", wh:", cfg.vh)
+  lay.image(self, cfg.view.battle.bg)
 
-  -- background
-  lay.image(self, cfg.battle.bg)
+  self.move_pointer = lay.image(self.view, cfg.view.battle.arrow)
 
-  -- move pointer
-  self.move_pointer = lay.image(self.view, cfg.battle.arrow)
-
-  -- players
   self.players = {}
 
   local white = playerid.white
   self.players[white] = player(white, "Salvador")
-  lay.render(self, self.players[white], cfg.player.red)
+  lay.render(self, self.players[white], cfg.view.player.red)
 
   local black = playerid.black
   self.players[black] = player(black, "Gala")
-  lay.render(self, self.players[black], cfg.player.black)
+  lay.render(self, self.players[black], cfg.view.player.black)
 
-  self.env = event.params.env
-  self.env.battle = self
-  
-  self.space = self.env.space
-  self.space.own_evt:add(self)
-
-  self.env.board = board:new(self, self.space)
-  self.board = self.env.board
-
-  self.space:setup() -- start playing
+  env.space = space:new(cfg.view.board.cols, cfg.view.board.rows, 1)
+  env.space.own_evt:add(self)
+  env.battle = self
+  env.board = board:new()
+  env.space:setup() -- start playing
 end
 
 --
 function battle:move(pid)
   log:trace('-----------------------------------------------')
 
-  local counts = self.space:count_pieces()
+  local counts = env.space:count_pieces()
   local white = counts[tostring(playerid.white)]
   local black = counts[tostring(playerid.black)]
 
@@ -86,24 +92,6 @@ battle:addEventListener("create", battle)
 battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
-
---
-function battle.goto_robots()
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  env.player_white = agent:get('random'):new(env, playerid.white)
-  env.player_black = agent:get('random'):new(env, playerid.black)
-  composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = {env=env}})
-  return true
-end
-
---
-function battle.goto_solo()
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  env.player_white = agent:get('user'):new(env, playerid.white)
-  env.player_black = agent:get('random'):new(env, playerid.black)
-  composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = {env=env}})
-  return true
-end
 
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions

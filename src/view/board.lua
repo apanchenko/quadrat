@@ -2,7 +2,7 @@ local cell     = require 'src.view.spot.cell'
 local stone    = require 'src.view.stone'
 local vec      = require 'src.core.vec'
 local piece    = require 'src.model.piece'
-local cfg      = require 'src.model.cfg'
+local cfg      = require 'src.cfg'
 local obj      = require 'src.core.obj'
 local lay      = require 'src.core.lay'
 local ass      = require 'src.core.ass'
@@ -10,6 +10,7 @@ local log      = require 'src.core.log'
 local typ      = require 'src.core.typ'
 local evt      = require 'src.core.evt'
 local wrp      = require 'src.core.wrp'
+local env      = require 'src.core.env'
 
 local board = obj:extend('board')
 
@@ -21,25 +22,23 @@ local board = obj:extend('board')
   player color who moves now
   selected piece
 -----------------------------------------------------------------------------]]--
-function board:new(battle, space)
+function board:new()
   self = obj.new(self,
   {
-    battle = battle,
-    model = space,
     on_change = evt:new()
   })
-  self.model.own_evt:add(self)
+  env.space.own_evt:add(self)
   self.view = display.newGroup()
 
   self.grid = {}
-  for k, spot in space:spots() do
+  for k, spot in env.space:spots() do
     local cell = cell:new(spot)
-    lay.render(self, cell, cell.pos * cfg.cell.size)
+    lay.render(self, cell, cell.pos * cfg.view.cell.size)
     self.grid[k] = cell
   end
 
   self.view.anchorChildren = true          -- center on screen
-  lay.render(self.battle, self.view, cfg.board)
+  lay.render(env.battle, self.view, cfg.view.board)
   return self
 end
 
@@ -47,7 +46,7 @@ end
 -- POSITION--------------------------------------------------------------------
 -- peek piece from cell by position
 function board:cell(pos)
-  return self.grid[pos.x * self.model:width() + pos.y]            
+  return self.grid[pos.x * env.space:width() + pos.y]            
 end
 --
 function board:stone(pos)
@@ -77,7 +76,7 @@ end
 
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
-  local stone = stone:new(color, self.model) -- create a new stone
+  local stone = stone:new(color) -- create a new stone
   stone:puton(self) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)

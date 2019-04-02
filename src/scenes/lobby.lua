@@ -1,7 +1,7 @@
 local composer      = require 'composer'
 local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
-local cfg           = require 'src.view.cfg'
+local cfg           = require 'src.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
@@ -17,7 +17,7 @@ lobby.options = {effect = 'fade', time = 600}
 
 -------------------------------------------------------------------------------
 function lobby:create(event)
-  lay.image(self, cfg.battle.bg)
+  lay.image(self, cfg.view.battle.bg)
 
   self.net = net:new()
 
@@ -31,7 +31,7 @@ end
 function lobby:on_opponent(room_id, createdByMe)
   --local params = { net = self.net }
 
-  local space = space:new(cfg.board.cols, cfg.board.rows, room_id)
+  local space = space:new(cfg.view.board.cols, cfg.view.board.rows, room_id)
   local p1 = players.random:new(space, playerid.select(createdByMe))
   local p2 = players.user:new(space, playerid.select(not createdByMe))
 

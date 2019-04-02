@@ -9,23 +9,23 @@ local typ         = require 'src.core.typ'
 local wrp         = require 'src.core.wrp'
 local Abilities   = require 'src.view.stoneAbilities'
 local power_image = require 'src.view.power.image'
-local cfg         = require 'src.model.cfg'
+local cfg         = require 'src.cfg'
 local powers      = require 'src.view.power.powers'
+local env         = require 'src.core.env'
 
 local stone = obj:extend('stone')
 
 --INIT-------------------------------------------------------------------------
-function stone:new(pid, model)
+function stone:new(pid)
   self = obj.new(self,
   {
-    _model = model,
     view = display.newGroup(),
     scale = 1,
     powers = {},
     isSelected = false,
     is_drag = false
   })
-  self._abilities = Abilities:new(self, model)
+  self._abilities = Abilities:new(self)
   self:set_color(pid)
   return self
 end
@@ -55,9 +55,9 @@ function stone:set_color(pid)
     if self.img then
       self.img:removeSelf()
     end
-    cfg.cell.order = 1
-    cfg.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
-    self.img = lay.image(self, cfg.cell)
+    cfg.view.cell.order = 1
+    cfg.view.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
+    self.img = lay.image(self, cfg.view.cell)
   end
 end
 --
@@ -117,7 +117,7 @@ end
 -- touch listener function
 function stone:touch(event)
   -- do not touch opponent stones
-  if self.board.model:who_move() ~= self.pid then
+  if env.space:who_move() ~= self.pid then
     log:trace('not my move')
     return true
   end
@@ -134,7 +134,7 @@ function stone:touch(event)
   if event.phase == "moved" then
     local proj = self:touch_moved(event)
 
-    if self.board.model:can_move(self._pos, proj) then
+    if env.space:can_move(self._pos, proj) then
       self:create_project(proj)
     else
       self:remove_project()
@@ -145,7 +145,7 @@ function stone:touch(event)
   if event.phase == "ended" or event.phase == "cancelled" then
     self:set_drag(nil)
     if self.proj then
-      self.board.model:move(self._pos, self.proj)
+      env.space:move(self._pos, self.proj)
       self.board:select(nil) -- deselect any
     else
       if self.isSelected then
@@ -173,8 +173,8 @@ function stone:touch_moved(event)
   local shift = vec:from(event)
   shift = shift - start
   shift = shift / vec(xScale, xScale)
-  shift = shift + (self._pos * cfg.cell.size)
-  local proj = (shift / cfg.cell.size):round()
+  shift = shift + (self._pos * cfg.view.cell.size)
+  local proj = (shift / cfg.view.cell.size):round()
   vec.copy(shift, self.view)
   return proj;
 end
@@ -200,11 +200,11 @@ end
 --
 function stone:create_project(proj)
   if not self.project then
-    cfg.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
-    self.project = lay.image(self.board, cfg.cell)
+    cfg.view.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
+    self.project = lay.image(self.board, cfg.view.cell)
   end
   self.proj = proj
-  vec.copy(proj * cfg.cell.size, self.project)
+  vec.copy(proj * cfg.view.cell.size, self.project)
 end
 --
 function stone:remove_project()
@@ -234,14 +234,14 @@ function stone:update_group_pos(pos)
   end
 
   -- calculate new view position
-  local view_pos = pos * cfg.cell.size
+  local view_pos = pos * cfg.view.cell.size
   if self.isSelected then
     view_pos.y = view_pos.y - 10
   end
 
   if self._pos then
     log:info('animate to view position', view_pos)
-    lay.to(self, view_pos, cfg.stone.move)
+    lay.to(self, view_pos, cfg.view.stone.move)
   else
     log:info('instant set view position', view_pos)
     view_pos:to(self.view)
@@ -254,7 +254,7 @@ function stone.wrap()
   local event = {'event', typ.tab, map.tostring}
   local info = {log = log.info}
 
-  wrp.fn(stone, 'new',          {{'pid', 'playerid'}, {'space'}})
+  wrp.fn(stone, 'new',          {{'pid', 'playerid'}})
   wrp.fn(stone, 'select')
   wrp.fn(stone, 'deselect',     {}, info)
   wrp.fn(stone, 'set_color',    {{'playerid'}})

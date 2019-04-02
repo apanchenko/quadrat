@@ -1,6 +1,6 @@
 local vec   = require 'src.core.vec'
 local arr   = require 'src.core.arr'
-local cfg   = require "src.model.cfg"
+local cfg   = require 'src.cfg'
 local lay   = require "src.core.lay"
 local log   = require "src.core.log"
 local ass   = require "src.core.ass"
@@ -13,7 +13,7 @@ local cell = obj:extend('cell')
 function cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
-cell.sheet_opt = {width = cfg.cell.w, height = cfg.cell.h, numFrames = 1}
+cell.sheet_opt = {width = cfg.view.cell.w, height = cfg.view.cell.h, numFrames = 1}
 cell.sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", cell.sheet_opt)
 
 --
@@ -24,7 +24,7 @@ function cell:new(spot)
     pos = spot.pos,
     view = display.newGroup(),
   })
-  self.img = lay.sheet(self.view, cell.sheet, frame, cfg.cell)
+  self.img = lay.sheet(self.view, cell.sheet, frame, cfg.view.cell)
   return self
 end
 
@@ -32,7 +32,7 @@ end
 --
 function cell:add_comp(id, count)
   if id == 'spot_acidic' then
-    lay.image(self.view, {x=0, y=0, w=cfg.cell.w, h=cfg.cell.h, path='src/view/power/jumpproof.png'})
+    lay.image(self.view, {x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/power/jumpproof.png'})
   end
 end
 
@@ -41,7 +41,7 @@ end
 function cell:set_jade()
   ass.nul(self._jade)
   ass.nul(self._stone)
-  self._jade = lay.image(self.view, cfg.jade)
+  self._jade = lay.image(self.view, cfg.view.jade)
 end
 --
 function cell:remove_jade()

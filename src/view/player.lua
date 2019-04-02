@@ -1,5 +1,5 @@
 local vec = require 'src.core.vec'
-local cfg = require 'src.model.cfg'
+local cfg = require 'src.cfg'
 local lay = require 'src.core.lay'
 local ass = require 'src.core.ass'
 local obj = require 'src.core.obj'
@@ -22,8 +22,8 @@ function player:new(pid, name)
   })
 
   -- piece image
-  cfg.player.path = "src/view/stone_"..tostring(self.pid)..".png"
-  lay.image(self, cfg.player)
+  cfg.view.player.path = "src/view/stone_"..tostring(self.pid)..".png"
+  lay.image(self, cfg.view.player)
 
   -- player name
   lay.text(self, {text=self.name, vx=8, vy=0})

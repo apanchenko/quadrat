@@ -4,7 +4,7 @@ local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
 local lay         = require 'src.core.lay'
-local cfg         = require 'src.model.cfg'
+local cfg         = require 'src.cfg'
 
 local invisible = obj:extend('view.power.invisible')
 
