@@ -3,8 +3,8 @@ local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
 local cfg       = require 'src.cfg'
-local battle    = require 'src.scenes.battle'
-local lobby     = require 'src.scenes.lobby'
+local battle    = require 'src.scene.battle'
+local lobby     = require 'src.scene.lobby'
 
 local menu = composer.newScene()
 local platform = system.getInfo('platform')

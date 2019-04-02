@@ -38,7 +38,7 @@ function lobby:on_opponent(room_id, createdByMe)
   space.own_evt:add(p1)
   space.own_evt:add(p2)
 
-  composer.gotoScene('src.scenes.battle', {effect = 'fade', time = 600, params = space})
+  composer.gotoScene('src.scene.battle', {effect = 'fade', time = 600, params = space})
 end
 
 --
@@ -57,7 +57,7 @@ lobby:addEventListener("destroy", lobby)
 
 --
 function lobby.goto_lobby()
-  composer.gotoScene('src.scenes.lobby', {effect = 'fade', time = 600, params = {env=env}})
+  composer.gotoScene('src.scene.lobby', {effect = 'fade', time = 600, params = {env=env}})
   return true
 end
 

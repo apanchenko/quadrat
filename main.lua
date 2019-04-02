@@ -10,4 +10,4 @@ package:wrap()
 package:test()
 
 local composer = require 'composer'
-composer.gotoScene('src.scenes.menu')
+composer.gotoScene('src.scene.menu')
