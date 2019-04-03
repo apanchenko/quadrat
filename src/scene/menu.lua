@@ -2,7 +2,7 @@ local widget    = require 'widget'
 local composer  = require 'composer'
 local log       = require 'src.core.log'
 local lay       = require 'src.core.lay'
-local cfg       = require 'src.cfg'
+local cfg       = require 'src.scene.cfg'
 local battle    = require 'src.scene.battle'
 local lobby     = require 'src.scene.lobby'
 
@@ -36,11 +36,9 @@ end
 
 -------------------------------------------------------------------------------
 function menu:create(event)
-  print('menu:new')
-  lay.image(self.view, cfg.view.battle.bg)
+  lay.image(self.view, cfg.bg)
 
   local buttons = display.newGroup()
-
   buttons:insert(new_button('lobby', 'Play', lobby.goto_lobby))
   buttons:insert(new_button('battle', 'Solo', battle.goto_solo))
   buttons:insert(new_button('robots', 'Robots Arena', battle.goto_robots))
@@ -50,19 +48,13 @@ function menu:create(event)
   end
 
   lay.column(buttons, 5)
-
-  -- draw version
-  lay.text(self, {text = cfg.version, vx=0, vy=90})
-
+  lay.text(self, {text = cfg.app.version, vx=0, vy=90})
   lay.render(self, buttons, {vx=0, vy=15})
 end
 
 -------------------------------------------------------------------------------
 function menu:show(event)
-  print('menu:show')
-  local sceneGroup = self.view
   local phase = event.phase
-
   if (phase == 'will') then
     -- Code here runs when the menu is still off screen (but is about to come on screen)
   elseif (phase == 'did') then
@@ -84,7 +76,6 @@ end
 
 -------------------------------------------------------------------------------
 function menu:destroy(event)
-  print('menu:destroy')
 end
 
 menu:addEventListener('create', menu)

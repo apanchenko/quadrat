@@ -4,10 +4,6 @@ local vec = require 'src.core.vec'
 local cfg = {
   build   = bld.develop,
   version = '0.0.1',
-  
-  scenes = {
-    switching = {effect = 'fade', time = 600}
-  },
 }
 
 cfg.view = {
@@ -29,21 +25,19 @@ cfg.view.battle = {
     vh = 100,
     path="src/background.png"
   },
-  arrow = {
-    x = 4,
-    vy = 4,
-    vw = 12,
-    ratio = 2,
-    path="src/view/arrow.png"
-  }
 }
 
 cfg.view.board = {
   vx = 0,
   vy = 15,
   vw = 100,
-  cols = 8,
-  rows = 8
+}
+
+cfg.view.player = {
+  vx = 0,
+  vy = 0,
+  vw = 6,
+  ratio = 1,
 }
 
 cfg.view.cell = {
@@ -52,21 +46,6 @@ cfg.view.cell = {
   w = 64,
   h = 64,
   size = vec(64, 64)
-}
-
-cfg.view.player = {
-  vx = 0,
-  vy = 0,
-  vw = 6,
-  ratio = 1,
-  red = {
-    vx = 18,
-    vy = 4
-  },
-  black = {
-    vx = 18,
-    vy = 9
-  }
 }
 
 cfg.view.jade = {

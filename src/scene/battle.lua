@@ -2,7 +2,7 @@ local composer      = require 'composer'
 local playerid      = require 'src.model.playerid'
 local board         = require 'src.view.board'
 local player        = require 'src.view.player'
-local cfg           = require 'src.cfg'
+local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.core.lay'
 local log           = require 'src.core.log'
 local ass           = require 'src.core.ass'
@@ -18,7 +18,7 @@ local battle = composer.newScene()
 function battle.goto_robots()
   env.player_white = agent:get('random'):new(env, playerid.white)
   env.player_black = agent:get('random'):new(env, playerid.black)
-  composer.gotoScene('src.scene.battle', cfg.scenes.switching)
+  composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
 
@@ -26,27 +26,27 @@ end
 function battle.goto_solo()
   env.player_white = agent:get('user'):new(env, playerid.white)
   env.player_black = agent:get('random'):new(env, playerid.black)
-  composer.gotoScene('src.scene.battle', cfg.scenes.switching)
+  composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
 
 --
 function battle:create(event)
-  lay.image(self, cfg.view.battle.bg)
+  lay.image(self, cfg.bg)
 
-  self.move_pointer = lay.image(self.view, cfg.view.battle.arrow)
+  self.move_pointer = lay.image(self.view, cfg.arrow)
 
   self.players = {}
 
   local white = playerid.white
   self.players[white] = player(white, "Salvador")
-  lay.render(self, self.players[white], cfg.view.player.red)
+  lay.render(self, self.players[white], cfg.player.red)
 
   local black = playerid.black
   self.players[black] = player(black, "Gala")
-  lay.render(self, self.players[black], cfg.view.player.black)
+  lay.render(self, self.players[black], cfg.player.black)
 
-  env.space = space:new(cfg.view.board.cols, cfg.view.board.rows, 1)
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   env.space.own_evt:add(self)
   env.battle = self
   env.board = board:new()
