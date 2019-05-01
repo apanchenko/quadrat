@@ -6,13 +6,14 @@ local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 local wrp       = require 'src.core.wrp'
 local cnt       = require 'src.core.cnt'
+local chk       = require 'src.core.chk'
 local playerid  = require 'src.model.playerid'
 
 --
 local piece = obj:extend('piece')
 
--- interfrace
-function piece.wrap()
+-- interface
+function piece:wrap()
   local opts  = {log=log.info}
   local space = {'space'}
   local pid   = {'playerid'}
@@ -25,17 +26,19 @@ function piece.wrap()
   local name  = {'name', typ.str}
 
   -- piece
+  wrp.fn(piece, 'new',            {space, pid     })
   wrp.fn(piece, 'set_color',      {pid            }      )
   wrp.fn(piece, 'die',            {               }      )
 
+  --local isvec = function(v) return v==nil or chk.is(v, vec) end
+
   -- position
-  wrp.fn(piece, 'new',            {space, pid     }, opts)
-  wrp.fn(piece, 'set_pos',        {to             }      )
-  wrp.fn(piece, 'can_move',       {from,  to      }, opts)
+  --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
+  wrp.fn(piece, 'can_move',       {from,  to      })
   
   -- jades
-  wrp.fn(piece, 'add_jade',       {jade,  count   }      )
-  wrp.fn(piece, 'remove_jade ',   {id,    count   }      )
+  wrp.fn(piece, 'add_jade',       {jade,          }      )
+  wrp.fn(piece, 'remove_jade',    {id,    count   }      )
   wrp.fn(piece, 'use_jade',       {id             }      )
 
   -- powers
@@ -44,15 +47,14 @@ function piece.wrap()
   wrp.fn(piece, 'decrease_power', {name           }      )
 end
 
-
 -- create a piece
 function piece:new(space, pid)
   return obj.new(self,
   {
     space = space,
     pid = pid,
-    jades = {}, -- container for jades
-    powers = {} -- container for powers
+    jades = cnt:new(), -- container for jades
+    powers = cnt:new() -- container for powers
   })
 end
 --
@@ -74,6 +76,9 @@ end
 
 -- POSITION & MOVE ------------------------------------------------------------
 --
+function piece:set_pos_before(pos)
+  ass(pos==nil or chk.is(pos, vec))
+end
 function piece:set_pos(pos)
   self.pos = pos
 end
@@ -82,43 +87,43 @@ function piece:can_move(fr, to)
   if (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 then
     return true
   end
-  return map.any(self.powers, function(p) return p:can_move(fr, to) end)
+  return self.powers:any(function(p) return p:can_move(fr, to) end)
 end
 --
 function piece:move_before(fr, to)
-  map.each(self.powers, function(p) return p:move_before(fr, to) end)
+  self.powers:each(function(p) return p:move_before(fr, to) end)
 end
 --
 function piece:move(fr, to)
   self.pos = to.pos
-  map.each(self.powers, function(p) return p:move(fr, to) end)
+  self.powers:each(function(p) return p:move(fr, to) end)
 end
 --
 function piece:move_after(fr, to)
   self.space:yell('move_piece', to.pos, fr.pos) -- notify
-  map.each(self.powers, function(p) return p:move_after(fr, to) end)
+  self.powers:each(function(p) return p:move_after(fr, to) end)
 end
 
 
 -- JADE -----------------------------------------------------------------------
 -- add jade
 function piece:add_jade(jade)
-  local res_count = cnt.push(self.jades, jade)
+  local res_count = self.jades:push(jade)
   -- TODO: change event name to 'add_jade'
   self.space:whisper('set_ability', self.pos, jade.id, res_count)
   self.space:yell('piece_has_jade', self.pos, true)
   -- TODO: optimize - make listening powers
-  map.each(self.powers, function(p) p:on_add_jade(jade) end)
+  self.powers:each(function(p) p:on_add_jade(jade) end)
 end
 
 -- split jade and return removed part
 function piece:remove_jade(id, count)
-  local jade = cnt.pull(self.jades, id, count)
+  local jade = self.jades:pull(id, count)
   ass(jade) -- TODO: to wrap prereq
   -- whisper new jade count
-  self.space:whisper('set_ability', self.pos, id, cnt.count(self.jades, id))
+  self.space:whisper('set_ability', self.pos, id, self.jades:count(id))
   -- yell piece has no jades
-  if cnt.is_empty(self.jades) then
+  if self.jades:is_empty() then
     self.space:yell('piece_has_jade', self.pos, false)
   end
   return jade
@@ -136,37 +141,37 @@ end
 -- POWER ----------------------------------------------------------------------
 --
 function piece:add_power(power)
-  local count = cnt.push(self.powers, power)
+  local count = self.powers:push(power)
   self.space:yell('add_power', self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
-  cnt.pull(self.powers, id, 1)
-  self.space:yell('add_power', self.pos, id, cnt.count(self.powers, id)) -- notify
+  self.powers:pull(id, 1)
+  self.space:yell('add_power', self.pos, id, self.powers:count(id)) -- notify
 end
 
 -- Completely remove power by id
 function piece:remove_power(id)
-  cnt.remove(self.powers, id)
+  self.powers:remove(id)
   self.space:yell('remove_power', self.pos, id) -- notify
 end
 
 --
 function piece:any_power(fn)
-  map.any(self.powers, fn)
+  self.powers:any(fn)
 end
 
 -- iterate powers
 -- @param fn - callback (power, id)
 function piece:each_power(fn)
-  map.each(self.powers, fn) 
+  self.powers:each(fn) 
 end
 
 
 -- TRAITS ---------------------------------------------------------------------
 function piece:is_jump_protected()
-  return map.any(self.powers, function(p) return p.is_jump_protected == true end)
+  return self.powers:any(function(p) return p.is_jump_protected == true end)
 end
 
 -- MODULE ---------------------------------------------------------------------

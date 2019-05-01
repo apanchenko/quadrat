@@ -24,7 +24,7 @@ function multiply:move_after(from, to)
 end
 
 --
-function multiply.wrap()
+function multiply:wrap()
   wrp.fn(multiply, 'move_after',  {{'vec'}, {'vec'}})
 end
 

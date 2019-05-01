@@ -56,10 +56,9 @@ function pkg:wrap()
   local depth = log:trace(self.path..':wrap'):enter()
   -- for all modules
   for id, module in pairs(self.modules) do
-    local mod_wrap = module.wrap
-    if mod_wrap then
+    if module.wrap then
       local depth = log:trace(id..':wrap'):enter()
-      mod_wrap(module)
+      module:wrap()
       log:exit(depth)
     end
   end

@@ -15,7 +15,7 @@ end
 function kamikadze:apply_to_spot(spot)
   -- kill any piece
   if spot.piece then
-    spot.piece.die()
+    spot.piece:die()
     spot.piece = nil
     self.piece.space:yell('remove_piece', spot.pos) -- notify
   end
@@ -26,7 +26,7 @@ function kamikadze:__tostring()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function kamikadze.wrap()
+function kamikadze:wrap()
   wrp.fn(kamikadze, 'apply_to_spot', {{'spot'}})
 end
 

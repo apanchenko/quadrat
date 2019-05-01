@@ -33,7 +33,7 @@ local arr =
 }
 
 -- MODULE ---------------------------------------------------------------------
-function arr.wrap()
+function arr:wrap()
   local typ   = require 'src.core.typ'
   local wrp   = require 'src.core.wrp'
   local log   = require 'src.core.log'

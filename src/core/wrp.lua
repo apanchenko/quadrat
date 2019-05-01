@@ -33,7 +33,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     ass.str(info.name)
 
     -- second typ.child
-    info.type = (function(type) -- use anonymous function to get rid of elses
+    info.type = info.type or (function(type) -- use anonymous function to get rid of elses
       if typ.is_simple(type) then
         return type
       end

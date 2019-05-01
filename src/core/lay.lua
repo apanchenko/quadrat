@@ -10,7 +10,7 @@ local widget = require 'widget'
 local lay = {}
 
 -- wrap interface
-function lay.wrap()
+function lay:wrap()
   local wrap = function(name, ...)
     wrp.fn(lay, name, {...}, {name='lay', static=true, log=log.info})
   end

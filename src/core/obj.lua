@@ -35,7 +35,7 @@ end
 
 -- module -------------------------------------------------------------------
 --
-function obj.wrap()
+function obj:wrap()
   wrp.fn(obj, 'extend', {{'name', typ.str}}, {log = log.info})
   --wrp.fn(obj, 'new',    {{'def', typ.any}})
 end

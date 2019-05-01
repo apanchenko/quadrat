@@ -15,7 +15,7 @@ function movediagonal:can_move(from, to)
 end
 
 -- module
-function movediagonal.wrap()
+function movediagonal:wrap()
   wrp.fn(movediagonal, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
 end
 

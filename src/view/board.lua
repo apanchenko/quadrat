@@ -139,7 +139,7 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-function board.wrap()
+function board:wrap()
   local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}

@@ -2,6 +2,7 @@ local ass   = require 'src.core.ass'
 local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
 local log   = require 'src.core.log'
+local map   = require 'src.core.map'
 
 -- Map id->object
 -- where object have
@@ -9,19 +10,41 @@ local log   = require 'src.core.log'
 --   .id        - equal ids mean equal objects
 --   :copy()    - create a copy of the object
 local cnt = {}
+cnt.__index = cnt
+
+-- interface
+function cnt:wrap()
+  local info  = {name='cnt', log=log.info}
+  local id    = {'id', typ.any}
+  local obj   = {'obj', typ.tab}
+  local count = {'count', typ.num}
+  local fn    = {'fn', typ.fun}
+  wrp.fn(cnt, 'new',      {         }, info)
+  wrp.fn(cnt, 'is_empty', {         }, info)
+  wrp.fn(cnt, 'push',     {obj      }, info)
+  wrp.fn(cnt, 'pull',     {id, count}, info)
+  wrp.fn(cnt, 'remove',   {id       }, info)
+  wrp.fn(cnt, 'count',    {id       }, info)
+  wrp.fn(cnt, 'any',      {fn       }, info)
+  wrp.fn(cnt, 'each',     {fn       }, info)
+  wrp.fn(cnt, 'random',   {         }, info)
+end
+
+-- Create cnt instance
+function cnt:new()
+  return setmetatable({data={}}, self)
+end
 
 -- Test if container has no objects
--- @param t     - container
-function cnt.is_empty(t)
-  return next(t) == nil
+function cnt:is_empty()
+  return next(self.data) == nil
 end
 
 -- Add object to container
--- @param t     - container
 -- @param obj   - object to add
 -- @return      - resulting number of objects in container
-function cnt.push(t, obj)
-  local my = t[obj.id] -- exisitng object in container
+function cnt:push(obj)
+  local my = self.data[obj.id] -- exisitng object in container
   if my then
     if obj.count then -- if countable
       my.count = my.count + obj.count -- add count
@@ -29,22 +52,21 @@ function cnt.push(t, obj)
     end
     return 1 -- non-countable, always 1
   end
-  t[obj.id] = obj -- add new object to container
+  self.data[obj.id] = obj -- add new object to container
   return obj.count or 1
 end
 
 -- Try return requested count of objects
--- @param t     - container
 -- @param id    - object identifier
 -- @param count - number of objects to return
 -- @return      - object copy with count
-function cnt.pull(t, id, count)
-  local my = t[id] -- identify existing object in container
+function cnt:pull(id, count)
+  local my = self.data[id] -- identify existing object in container
   if my == nil then -- nothing found
     return nil -- so return nothing
   end
   if my.count == nil or my.count <= count then -- non-countable or have few
-    t[id] = nil -- wipe out
+    self.data[id] = nil -- wipe out
     return my -- give up all
   end
   my.count = my.count - count -- have enough to left
@@ -54,69 +76,73 @@ function cnt.pull(t, id, count)
 end
 
 -- Completely remove object by id
--- @param t     - container
 -- @param id    - object identifier
 -- @return      - object removed
-function cnt.remove(t, id)
-  local my = t[id] -- identify existing object in container
-  t[id] = nil -- wipe out
+function cnt:remove(id)
+  local my = self.data[id] -- identify existing object in container
+  self.data[id] = nil -- wipe out
   return my -- give up all
 end
 
 -- Get number of objects by id
--- @param t     - container
 -- @param id    - object identifier
 -- @return      - number of objects in container
-function cnt.count(t, id)
-  local my = t[id]
+function cnt:count(id)
+  local my = self.data[id]
   if my == nil then
     return 0
   end
   return my.count or 1
 end
 
--- MODULE ---------------------------------------------------------------------
-function cnt.wrap()
-  local wrap = function(fn, ...)
-    wrp.fn(cnt, fn, {...}, {name='cnt', static=true, log=log.info})
-  end
-  local t = {'t', typ.tab}
-  local id = {'id', typ.any}
-  wrap('is_empty', t)
-  wrap('push', t, {'obj', typ.tab})
-  wrap('pull', t, id, {'count', typ.nat})
-  wrap('remove', t, id)
-  wrap('count', t, id)
+--
+function cnt:all(fn)
+  return map.all(self.data, fn)
 end
 
 --
-function cnt.test()
-  local t = {}
-  ass(cnt.is_empty(t))
+function cnt:any(fn)
+  return map.any(self.data, fn)
+end
 
+--
+function cnt:each(fn)
+  return map.each(self.data, fn)
+end
+
+--
+function cnt:random()
+  return map.random(self.data)
+end
+
+-- MODULE ---------------------------------------------------------------------
+--
+function cnt.test()
   local copy = function(self)
     return {id=self.id, count=self.count, copy=self.copy}
   end
 
-  local res
-  res = cnt.push(t, {id='a', copy=copy})
-  res = cnt.push(t, {id='a', copy=copy})
-  ass.eq(cnt.count(t, 'a'), 1)
+  local i = cnt:new()
+  ass(i:is_empty())
 
-  res = cnt.push(t, {id='b', count=2, copy=copy})
-  res = cnt.push(t, {id='b', count=3, copy=copy})
+  i:push({id='a', copy=copy})
+  i:push({id='a', copy=copy})
+  ass.eq(i:count('a'), 1)
+
+  res = i:push({id='b', count=2, copy=copy})
+  res = i:push({id='b', count=3, copy=copy})
   ass.eq(res, 5)
 
-  res = cnt.pull(t, 'b', 4)
-  ass.eq(res.count, 4)
-  ass.eq(cnt.count(t, 'b'), 1)
+  b = i:pull('b', 4)
+  ass.eq(b.count, 4)
+  ass.eq(i:count('b'), 1)
 
-  res = cnt.pull(t, 'b', 4)
+  res = i:pull('b', 4)
   ass.eq(res.count, 1)
-  ass.eq(cnt.count(t, 'b'), 0)
+  ass.eq(i:count('b'), 0)
 
-  res = cnt.pull(t, 'a', 1)
-  ass.eq(cnt.count(t, 'a'), 0)
+  res = i:pull('a', 1)
+  ass.eq(i:count('a'), 0)
 end
 
 return cnt

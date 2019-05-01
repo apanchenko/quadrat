@@ -36,7 +36,7 @@ function evt:call(name, ...)
 end
 
 -- MODULE ---------------------------------------------------------------------
-function evt.wrap()
+function evt:wrap()
   wrp.fn(evt, 'add', {{'listener', typ.tab}})
   wrp.fn(evt, 'remove', {{'listener', typ.tab}})
   --TODO ellipsis wrp.fn(evt, 'call', {{'name'}})

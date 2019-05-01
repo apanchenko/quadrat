@@ -19,7 +19,7 @@ function swap:apply_to_spot(spot)
 end
 
 --
-function swap.wrap()
+function swap:wrap()
   wrp.fn(swap, 'apply_to_spot', {{'spot'}})
 end
 

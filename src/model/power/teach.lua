@@ -14,14 +14,14 @@ end
 function teach:apply_to_spot(spot)
   local piece = spot.piece
   if piece and piece.pos ~= self.piece.pos and piece.pid == self.piece.pid then
-    for id, jade in pairs(self.piece.jades) do
+    self.piece.jades:each(function(jade)
       piece:add_jade(jade)
-    end
+    end)
   end
 end
 
 --
-function teach.wrap()
+function teach:wrap()
   wrp.fn(teach, 'apply_to_spot', {{'spot'}})
 end
 

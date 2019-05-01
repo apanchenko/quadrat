@@ -20,7 +20,7 @@ function recruit:apply_to_spot(spot)
 end
 
 --
-function recruit.wrap()
+function recruit:wrap()
   wrp.fn(recruit, 'apply_to_spot', {{'spot'}})
 end
 

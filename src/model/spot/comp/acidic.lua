@@ -21,7 +21,7 @@ function acidic:can_set_jade()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function acidic.wrap()
+function acidic:wrap()
 end
 
 function acidic.test()

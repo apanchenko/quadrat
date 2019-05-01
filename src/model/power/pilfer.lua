@@ -14,15 +14,16 @@ end
 function pilfer:apply_to_spot(spot)
   local piece = spot.piece
   if piece and piece.pos ~= self.piece.pos and piece.pid ~= self.piece.pid then
-    for id, jade in pairs(piece.jades) do
+    --for id, jade in piece.jades:pairs() do
+    piece.jades:each(function(jade, id)
       local removed = piece:remove_jade(id, jade.count) -- consume all
       self.piece:add_jade(removed)
-    end
+    end)
   end
 end
 
 --
-function pilfer.wrap()
+function pilfer:wrap()
   wrp.fn(pilfer, 'apply_to_spot', {{'spot'}})
 end
 

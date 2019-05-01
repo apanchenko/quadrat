@@ -13,15 +13,26 @@ local function boo(v)     return type(v) == 'boolean' end
 -- check 'v' is a function
 local function fun(v)     return type(v) == 'function' end
 -- check 'v' has meta T
-local function is(v, t)   return getmetatable(v) == t
-    or (t == nil and v == nil)
-    or (t == typ.any and v ~= nil)
-    or (t == typ.tab and tab(v))
-    or (t == typ.num and num(v))
-    or (t == typ.str and str(v))
-    or (t == typ.fun and fun(v))
-    or (str(t) and tostring(getmetatable(v)) == t)
-    or (v == t)
+local function is(v, t)   
+    --return getmetatable(v) == t
+    if (t == nil and v == nil)
+        or (t == typ.any and v ~= nil)
+        or (t == typ.tab and tab(v))
+        or (t == typ.num and num(v))
+        or (t == typ.str and str(v))
+        or (t == typ.fun and fun(v))
+        or (str(t) and tostring(getmetatable(v)) == t)
+        or (v == t) then
+      return true
+    end
+
+    while v ~= t do
+      if v == nil then
+        return false
+      end
+      v = getmetatable(v)
+    end
+    return true
 end
 
 local chk =

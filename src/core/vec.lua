@@ -72,7 +72,7 @@ vec.one = vec(1, 1)
 
 -- module ---------------------------------------------------------------------
 -- wrap vec functions
-function vec.wrap()
+function vec:wrap()
   local opts = { static = true, log = log.info }
   wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, opts)
   wrp.fn(vec, 'center', {{'obj', typ.tab}}, opts)

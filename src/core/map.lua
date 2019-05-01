@@ -116,7 +116,7 @@ function map.tostring(t, sep)
 end
 
 -- MODULE ---------------------------------------------------------------------
-function map.wrap()
+function map:wrap()
   local opts = { name = 'map', static = true, log = log.info }
 
   wrp.fn(map, 'all',    {{'t', typ.tab}, {'fn', typ.fun}},  opts)

@@ -38,7 +38,7 @@ function radial.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function radial.wrap()
+function radial:wrap()
   wrp.fn(radial, 'new', {{'pos', vec}})
   wrp.fn(radial, 'filter', {{'pos', vec}})
 end

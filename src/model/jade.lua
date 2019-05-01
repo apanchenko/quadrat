@@ -78,7 +78,7 @@ function jade:use(piece)
 end
 
 -- module
-function jade.wrap()
+function jade:wrap()
   wrp.fn(jade, 'new',    {}, {log=log.info})
   wrp.fn(jade, 'add_to', {{'jades', typ.tab}})
   wrp.fn(jade, 'use',    {{'piece'}})

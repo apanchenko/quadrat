@@ -22,7 +22,7 @@ function parasite:apply_to_enemy(spot)
 end
 
 --
-function parasite.wrap()
+function parasite:wrap()
   wrp.fn(parasite, 'apply_to_self', {})
   wrp.fn(parasite, 'apply_to_enemy', {{'spot'}})
 end

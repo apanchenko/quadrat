@@ -27,7 +27,7 @@ end
 
 
 --MODULE-----------------------------------------------------------------------
-function invisible.wrap()
+function invisible:wrap()
   wrp.fn(image, 'new',        {{'stone'}, {'id', typ.str}, {'count', typ.num}})
   wrp.fn(image, 'set_count',  {{'count', typ.num}})
 end

@@ -17,7 +17,7 @@ function acidic:apply_to_enemy_before(spot)
 end
 function acidic:apply_to_enemy(spot)
   -- kill enemy piece
-  spot.piece.die()
+  spot.piece:die()
   spot.piece = nil
   self.piece.space:yell('remove_piece', spot.pos) -- notify
   -- mark spot as acidic
@@ -33,7 +33,7 @@ function acidic:__tostring()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function acidic.wrap()
+function acidic:wrap()
   wrp.fn(acidic, 'apply_to_enemy', {{'spot'}})
 end
 

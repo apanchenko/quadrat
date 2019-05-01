@@ -52,7 +52,7 @@ function power:move_after (cell_from, cell_to) end
 function power:on_add_jade(jade) end
 
 -- module
-function power.wrap()
+function power:wrap()
   local info = {log = log.info}
 
   wrp.fn(power, 'new',      {{'piece'}, {'def', typ.tab}})

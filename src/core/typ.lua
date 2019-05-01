@@ -41,11 +41,12 @@ return
     {
       name = tostring(mt),
       is = function(v)
-        repeat v = getmetatable(v)
+        while v ~= mt do
           if v == nil then
             return false
           end
-        until v ~= mt
+          v = getmetatable(v)
+        end
         return true
       end
     }

@@ -128,7 +128,7 @@ function cell:unstash_piece_after()
 end
 
 -- MODULE-----------------------------------------------------------------------
-function cell.wrap()
+function cell:wrap()
   ass(log.info)
   local info = {log = log.info}
   wrp.fn(cell, 'new',         {{'spot'}})

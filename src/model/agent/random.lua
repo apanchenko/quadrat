@@ -47,7 +47,7 @@ function random:move_async()
     local piece = space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
-      local jade = map.random(piece.jades)
+      local jade = piece.jades:random()
       if jade then
         piece:use_jade(jade.id)
       end

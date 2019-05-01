@@ -9,7 +9,7 @@ local areal = power:extend('areal')
 areal.is_areal = true
 
 --
-function areal.wrap()
+function areal:wrap()
   local piece = {'piece'}
   local spot  = {'spot'}
   local def   = {'def', typ.tab}

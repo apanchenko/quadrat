@@ -154,7 +154,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
-function net.wrap()
+function net:wrap()
   wrp.fn(net, 'new')
 end
 

@@ -14,7 +14,7 @@ local jade      = require 'src.model.jade'
 local spot = obj:extend('spot')
 
 -- interface
-function piece.wrap()
+function spot:wrap()
   local opts  = {log = log.info}
   local x     = {'x', typ.num}
   local y     = {'y', typ.num}
@@ -53,7 +53,7 @@ function spot:new(x, y, space)
     space = space, -- duplicate
     pos = vec(x, y), -- duplicate
     jade = nil, -- store
-    comps = {} -- container for powers
+    comps = cnt:new() -- container for powers
   })
 end
 
@@ -108,7 +108,7 @@ end
 
 -- return true if cell is able to receive (spawn or move) piece
 function spot:can_set_piece()
-  return map.all(self.comps, function(comp) return comp:can_set_piece() end)
+  return self.comps:all(function(comp) return comp:can_set_piece() end)
 end
 
 -- create a new piece on this spot
@@ -123,7 +123,7 @@ end
 function spot:move_piece(from)
   -- kill target piece
   if self.piece then
-    self.piece.die()
+    self.piece:die()
     self.space:yell('remove_piece', self.pos) -- notify
   end
   -- change piece position
@@ -149,7 +149,7 @@ support_stash('piece')
 function spot:can_set_jade()
   return self.piece == nil
      and self.jade == nil
-     and map.all(self.comps, function(comp) return comp:can_set_jade() end)
+     and self.comps:all(function(comp) return comp:can_set_jade() end)
 end
 
 -- take chance to spawn a new jade if can
@@ -191,7 +191,7 @@ support_stash('jade')
 -- COMPONENTS -----------------------------------------------------------------
 --
 function spot:add_comp(comp)
-  local count = cnt.push(self.comps, comp)
+  local count = self.comps:push(comp)
   self.space:yell('add_spot_comp', self.pos, comp.id, count) -- notify
 end
 

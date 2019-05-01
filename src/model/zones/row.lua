@@ -24,7 +24,7 @@ function row.Test()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function row.wrap()
+function row:wrap()
   wrp.fn(row, 'new', {{'pos', vec}})
   wrp.fn(row, 'filter', {{'pos', vec}})
 end

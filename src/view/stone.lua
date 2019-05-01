@@ -250,7 +250,7 @@ function stone:update_group_pos(pos)
 end
 
 --
-function stone.wrap()
+function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
   local info = {log = log.info}
 

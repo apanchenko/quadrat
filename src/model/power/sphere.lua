@@ -17,7 +17,7 @@ function sphere:can_move(from, to)
 end
 
 --
-function sphere.wrap()
+function sphere:wrap()
   wrp.fn(sphere, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
 end
 

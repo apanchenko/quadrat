@@ -13,7 +13,7 @@
 - piece mods:        bankrupt, network, spyware, invis, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
 - ability powers:    2x, benefactor, scavenger
-- attack powers:     bombs, acidic
+- attack powers:     bombs
 - orb mods:          orbspy
 - overall visual style
 - smarter bot
@@ -49,7 +49,7 @@
 - power Lenta - similar to Scramble but pieces move together in one direction
 
 ## Done
-
+- acidic
 - scramble
 - purify
 - kamikadze

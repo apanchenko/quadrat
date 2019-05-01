@@ -56,9 +56,11 @@ function space:whisper(event, ...)
 end
 
 -- send public event
-function space:yell(event, ...)
+function space:yell_before(event, ...)
   ass.is(self, space)
-  ass.is(event, typ.str)
+  ass.is(typ.str.is(event))
+end
+function space:yell(event, ...)
   log:info('space:notify_opp', event, ...)
   self.own_evt:call(event, ...)
   self.opp_evt:call(event, ...)
@@ -211,7 +213,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
-function space.wrap()
+function space:wrap()
   local info = {log = log.info}
   --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
   wrp.fn(space, 'setup',      {})
