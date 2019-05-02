@@ -7,6 +7,13 @@ local log   = require 'src.core.log'
 local obj = setmetatable({}, {__tostring = function() return 'obj' end})
 
 --
+function obj.create(typename)
+  local t = setmetatable({}, {__tostring = function() return typename end})
+  t.__index = t
+  return t
+end
+
+--
 function obj.__call(cls, ...)
   return cls:new(...)
 end

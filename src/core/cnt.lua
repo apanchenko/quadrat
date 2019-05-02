@@ -3,36 +3,41 @@ local typ   = require 'src.core.typ'
 local wrp   = require 'src.core.wrp'
 local log   = require 'src.core.log'
 local map   = require 'src.core.map'
+local obj   = require 'src.core.obj'
 
 -- Map id->object
 -- where object have
 --   .count     - optional number counts objects with same id
 --   .id        - equal ids mean equal objects
 --   :copy()    - create a copy of the object
-local cnt = {}
-cnt.__index = cnt
+local cnt = obj.create('cnt')
 
 -- interface
 function cnt:wrap()
-  local info  = {name='cnt', log=log.info}
   local id    = {'id', typ.any}
   local obj   = {'obj', typ.tab}
   local count = {'count', typ.num}
   local fn    = {'fn', typ.fun}
-  wrp.fn(cnt, 'new',      {         }, info)
-  wrp.fn(cnt, 'is_empty', {         }, info)
-  wrp.fn(cnt, 'push',     {obj      }, info)
-  wrp.fn(cnt, 'pull',     {id, count}, info)
-  wrp.fn(cnt, 'remove',   {id       }, info)
-  wrp.fn(cnt, 'count',    {id       }, info)
-  wrp.fn(cnt, 'any',      {fn       }, info)
-  wrp.fn(cnt, 'each',     {fn       }, info)
-  wrp.fn(cnt, 'random',   {         }, info)
+
+  wrp.info(cnt, 'new')
+  wrp.info(cnt, 'is_empty')
+  wrp.info(cnt, 'push',     obj)
+  wrp.info(cnt, 'pull',     id, count)
+  wrp.info(cnt, 'remove',   id)
+  wrp.info(cnt, 'count',    id)
+  wrp.info(cnt, 'any',      fn)
+  wrp.info(cnt, 'each',     fn)
+  wrp.info(cnt, 'random')
 end
 
 -- Create cnt instance
 function cnt:new()
   return setmetatable({data={}}, self)
+end
+
+--
+function cnt:__tostring()
+  return 'cnt['.. tostring(map.count(self.data)).. ']'
 end
 
 -- Test if container has no objects
@@ -95,12 +100,12 @@ function cnt:count(id)
   return my.count or 1
 end
 
---
+-- all are true
 function cnt:all(fn)
   return map.all(self.data, fn)
 end
 
---
+-- any
 function cnt:any(fn)
   return map.any(self.data, fn)
 end
@@ -132,6 +137,7 @@ function cnt.test()
   res = i:push({id='b', count=2, copy=copy})
   res = i:push({id='b', count=3, copy=copy})
   ass.eq(res, 5)
+  log:trace('cnttest - '.. tostring(i))
 
   b = i:pull('b', 4)
   ass.eq(b.count, 4)

@@ -177,6 +177,17 @@ end
 -- MODULE ---------------------------------------------------------------------
 function piece.test()
   ass.eq(typ.str.is(nil), false)
+
+  local i = cnt:new()
+  ass(i:is_empty())
+
+  local copy = function(self)
+    return {id=self.id, count=self.count, copy=self.copy}
+  end
+  res = i:push({id='b', count=2, copy=copy})
+  res = i:push({id='b', count=3, copy=copy})
+  ass.eq(res, 5)
+
 end
 
 return piece

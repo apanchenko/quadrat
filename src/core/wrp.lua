@@ -13,6 +13,7 @@ local wrp = {}
 -- @param static - is function fn static (called via .)
 function wrp.fn(t, fn_name, arg_infos, opts)
   opts = opts or {}
+
   local t_name = opts.name or tostring(t)
   local log_fn = opts.log or log.trace
 
@@ -122,6 +123,10 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     end
   end
   log:exit(depth)
+end
+
+function wrp.info(t, fn, ...)
+  wrp.fn(t, fn, {...}, {log = log.info})
 end
 
 return wrp
