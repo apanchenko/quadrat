@@ -31,21 +31,19 @@ function wrp.fn(t, fn_name, arg_infos, opts)
 
     -- first is name of the argument
     info.name = info[1]
-    ass.str(info.name)
+    ass(typ.str(info.name))
 
     -- second typ.child
     info.type = info.type or (function(type) -- use anonymous function to get rid of elses
       if typ.is_simple(type) then
         return type
       end
-      if typ.str.is(type) then
+      if typ.str(type) then
         return typ.metaname(type)
       end
       return typ.meta(type)
     end)(info[2])
-    ass.tab(info.type)
-    ass.str(info.type.name)
-    ass.fun(info.type.is)
+    ass(typ(info.type))
 
     -- third is tostring function
     info.tostring = info[3] or tostring 

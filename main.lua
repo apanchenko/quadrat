@@ -6,6 +6,7 @@ env.log = require 'src.core.log'
 env.cfg = require 'src.cfg'
 
 local package = require 'src.package'
+package:get('core.package'):get('typ').test()
 package:wrap()
 package:test()
 

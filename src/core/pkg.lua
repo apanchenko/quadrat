@@ -23,20 +23,22 @@ function pkg:new(path)
   return obj.new(self,
   {
     path = path,
-    modules = {}
+    names = {}, -- array of module names, keeping order
+    modules = {} -- map id->module
   })
 end
 
 -- load module to package
 function pkg:load(...)
-  local args = {...}
-  local depth = log:info(self.path..':load('..arr.tostring(args)..')'):enter()
-  arr.each(args, function(name)
+  self.names = {...}
+  local depth = log:info(self.path..':load('..arr.tostring(self.names)..')'):enter()
+  arr.each(self.names, function(name)
+    log:info(name)
     local fullname = self.path.. '.'.. name
-    local module = require(fullname)
-    ass(module, 'failed found module '.. fullname)
+    local mod = require(fullname)
+    ass(mod, 'failed found module '.. fullname)
     ass.nul(self.modules[name], 'module '.. name.. ' already loaded')
-    self.modules[name] = module
+    self.modules[name] = mod
   end)
   log:exit(depth)
   return self
@@ -55,13 +57,14 @@ function pkg:wrap()
   -- cannot wrap the wrapper so do logging manually
   local depth = log:trace(self.path..':wrap'):enter()
   -- for all modules
-  for id, module in pairs(self.modules) do
-    if module.wrap then
-      local depth = log:trace(id..':wrap'):enter()
-      module:wrap()
+  arr.each(self.names, function(name)
+    local mod = self.modules[name]
+    if mod.wrap then
+      local depth = log:trace(name..':wrap'):enter()
+      mod:wrap()
       log:exit(depth)
     end
-  end
+  end)
   log:exit(depth)
 end
 
@@ -77,14 +80,14 @@ end
 function pkg:test()
   -- cannot wrap the wrapper so do logging manually
   local depth = log:trace(self.path..':test'):enter()
-  for id, module in pairs(self.modules) do
-    local mod_test = module.test
-    if mod_test then
+  arr.each(self.names, function(name)
+    local mod = self.modules[name]
+    if mod.test then
       local depth = log:trace(id..':test'):enter()
-      mod_test(module)
+      mod:test()
       log:exit(depth)
     end
-  end
+  end)
   log:exit(depth)
 end
 
