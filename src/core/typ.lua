@@ -1,21 +1,25 @@
--- check if value v has metatable mt
-local is = function(v, mt)
-  print('-----   is '.. tostring(v).. ' of '.. tostring(mt))
-  while v ~= mt do
-    if v == nil then
+-- 't' has metatable 'mt'
+local is = function(t, mt)
+  print('-----   is '.. tostring(t).. ' of '.. tostring(mt))
+  while t ~= mt do
+    if t == nil then
       return false
     end
-    v = getmetatable(v)
+    t = getmetatable(t)
   end
   return true
 end
 
--- create typ
-local str = function() return 'typ' end
-local typmt = { __tostring = str }
-typmt = setmetatable(typmt, { __tostring = str })
-typmt.__call = function(t, v) return is(v, typmt) end
-local typ = setmetatable({}, typmt)
+--
+-- * Create typ
+-- 
+
+local mt = { __tostring = function() return 'typ' end }
+mt = setmetatable(mt, { __tostring = mt.__tostring })
+-- typ(x) tells if x is typ
+mt.__call = function(t, v) return is(v, mt) end
+-- finally create typ
+local typ = setmetatable({}, mt)
 
 -- describe type by name and checking fn 
 local make_type = function(name, check_fn)
