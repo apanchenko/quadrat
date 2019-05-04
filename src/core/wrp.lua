@@ -1,7 +1,7 @@
 local log   = require 'src.core.log'
 local typ   = require 'src.core.typ'
 local ass   = require 'src.core.ass'
-local arr   = require 'src.core.impl.arr'
+local arr   = require 'src.core.arr'
 
 
 -- wrap
