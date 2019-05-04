@@ -55,8 +55,9 @@ pkg.find = pkg.get
 -- wrap modules
 function pkg:wrap()
   -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':wrap'):enter()
+  local depth = log:trace(self.path..':wrap '.. arr.tostring(self.names)):enter()
   -- for all modules
+  ass.tab(self.names)
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.wrap then
@@ -83,7 +84,7 @@ function pkg:test()
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.test then
-      local depth = log:trace(id..':test'):enter()
+      local depth = log:trace(name..':test'):enter()
       mod:test()
       log:exit(depth)
     end

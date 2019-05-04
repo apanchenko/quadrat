@@ -31,11 +31,11 @@ function wrp.fn(t, fn_name, arg_infos, opts)
 
     -- first is name of the argument
     info.name = info[1]
-    ass(typ.str(info.name))
+    ass.str(info.name)
 
     -- second typ.child
     info.type = info.type or (function(type) -- use anonymous function to get rid of elses
-      if typ.is_simple(type) then
+      if typ(type) then
         return type
       end
       if typ.str(type) then
@@ -44,6 +44,8 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       return typ.meta(type)
     end)(info[2])
     ass(typ(info.type))
+
+    log:info('arg '.. info.name.. ' of '.. tostring(info.type))
 
     -- third is tostring function
     info.tostring = info[3] or tostring 
@@ -56,21 +58,19 @@ function wrp.fn(t, fn_name, arg_infos, opts)
 
   -- 
   local function arguments(call, args)
-    local merged = args
     ass.eq(#arg_infos, #args, call..' expected '..#arg_infos..' arguments, found '..#args..' - ['..arr.tostring(args)..']')
-    if #args == 0 then
-      return ''
-    end    
-
-    local function merge(arg, info)
+    local res = ''
+    for i = 1, #args do
+      local arg = args[i]
+      local info = arg_infos[i]
       local argstr = info.tostring(arg)
-      ass(info.type.is(arg), call..' '..info.name..'='..argstr..' is not '..info.type.name)
-      return info.name.. '='.. argstr
-    end
-
-    local res = merge(args[1], arg_infos[1])
-    for i = 2, #args do
-      res = res.. ', '.. merge(args[i], arg_infos[i])
+      local argtype = '['..type(arg)..']'
+      log:info(call.. ' check arg '.. tostring(i).. ': '.. info.name..'='..argstr.. ' is of '.. tostring(info.type))
+      ass(info.type(arg), call..' '..info.name..'='..argstr..' is not of '.. tostring(info.type))
+      if #res > 0 then
+        res = res..', '
+      end
+      res = res.. info.name.. '='.. argstr
     end
     return res
   end
