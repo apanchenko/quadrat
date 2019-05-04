@@ -6,7 +6,6 @@ local log       = require 'src.core.log'
 local vec       = require 'src.core.vec'
 local wrp       = require 'src.core.wrp'
 local cnt       = require 'src.core.cnt'
-local chk       = require 'src.core.chk'
 local playerid  = require 'src.model.playerid'
 
 --
@@ -29,8 +28,6 @@ function piece:wrap()
   wrp.fn(piece, 'new',            {space, pid     })
   wrp.fn(piece, 'set_color',      {pid            }      )
   wrp.fn(piece, 'die',            {               }      )
-
-  --local isvec = function(v) return v==nil or chk.is(v, vec) end
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
@@ -77,7 +74,7 @@ end
 -- POSITION & MOVE ------------------------------------------------------------
 --
 function piece:set_pos_before(pos)
-  ass(pos==nil or chk.is(pos, vec))
+  ass(pos==nil or typ.is(pos, vec))
 end
 function piece:set_pos(pos)
   self.pos = pos

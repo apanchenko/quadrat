@@ -6,7 +6,6 @@ local log         = require 'src.core.log'
 
 -- Core dependency graph:
 -- typ bld
--- chk
 -- ass
 -- log
 -- wrp lay
@@ -54,6 +53,7 @@ pkg.find = pkg.get
 
 -- wrap modules
 function pkg:wrap()
+  local core = require 'src.core.package'
   -- cannot wrap the wrapper so do logging manually
   local depth = log:trace(self.path..':wrap '.. arr.tostring(self.names)):enter()
   -- for all modules
@@ -61,8 +61,8 @@ function pkg:wrap()
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.wrap then
-      local depth = log:trace(name..':wrap'):enter()
-      mod:wrap()
+      local depth = log:trace(name..':wrap(core)'):enter()
+      mod:wrap(core)
       log:exit(depth)
     end
   end)
@@ -82,8 +82,8 @@ function pkg:test()
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.test then
-      local depth = log:trace(name..':test()'):enter()
-      mod:test()
+      local depth = log:trace(name..':test(ass)'):enter()
+      mod:test(ass)
       log:exit(depth)
     end
   end)

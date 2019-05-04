@@ -32,4 +32,35 @@ local arr =
   find_index    = impl.find_index
 }
 
+--
+function arr:wrap(core)
+  local typ = core:get('typ')
+  local wrp = core:get('wrp')
+  local log = core:get('log')
+
+  local wrap = function(fn_name, ...)
+    wrp.fn(arr, fn_name, {...}, {name='arr', static=true, log=log.info})
+  end
+  local t = {'t', typ.tab}
+  local v = {'v', typ.any}
+  local f = {'f', typ.fun}
+
+  wrap('push',       t, v)
+  wrap('all',        t, f)
+  wrap('each',       t, f)
+  wrap('random',     t)
+  wrap('find_index', t, {'low', typ.num}, {'high', typ.num}, {'obj', typ.any}, {'is_lower', typ.fun})
+end
+
+--
+function arr:test(ass)
+  ass.eq(arr.tostring({'semana','mes','ano'}), 'semana, mes, ano')
+  local compare = function(a, b) return a < b end
+  ass.eq(arr.find_index({1},     1, 2, 0, compare), 1, 'test find_index - front')
+  ass.eq(arr.find_index({1,3},   1, 3, 2, compare), 2, 'test find_index - middle')
+  ass.eq(arr.find_index({1},     1, 2, 2, compare), 2, 'test find_index - back')
+  ass.eq(arr.find_index({},      1, 1, 9, compare), 1, 'test find_index - empty')
+end
+
+
 return arr

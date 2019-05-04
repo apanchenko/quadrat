@@ -34,6 +34,17 @@ function ass.le(a, b, msg)  return a <= b or error(msg or tostring(a).. ' > ' ..
 function ass.gt(a, b, msg)  return a >  b or error(msg or tostring(a).. ' <= '.. tostring(b)) end
 function ass.ge(a, b, msg)  return a >= b or error(msg or tostring(a).. ' > ' .. tostring(b)) end
 
--- all tests in package
+--
+function ass:test()
+  ass(true)
+  ass.nul(x)
+  ass.num(8.8)
+  ass.nat(9)
+  ass.tab({})
+  ass.str("String")
+  ass.bool(false)
+  ass.fun(function() end)
+end
+
 
 return ass

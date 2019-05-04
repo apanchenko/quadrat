@@ -50,7 +50,7 @@ function space:col(place)   return (place - (place % self.cols)) / self.cols end
 -- send private event
 function space:whisper(event, ...)
   ass.is(self, space)
-  ass.is(event, typ.str)
+  ass(typ.str(event))
   log:info('space:notify_own', event, ...)
   self.own_evt:call(event, ...)
 end

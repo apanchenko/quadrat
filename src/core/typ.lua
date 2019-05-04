@@ -41,7 +41,7 @@ end
 
 -- describe type by name and checking function
 function typ:new(name, check_fn)
-  print('typ:new '..name.. ' check '..tostring(check_fn))
+  --print('typ:new '..name.. ' check '..tostring(check_fn))
   -- create own table, do not modify typ
   local mymt = setmetatable({}, self)
   mymt.__tostring = function() return name end
@@ -94,6 +94,36 @@ function typ.metaname(name)
   return res
 end
 
--- all tests in package
+--
+function typ:test(ass)
+  -- typ
+  ass(tostring(typ)=='typ',  'invalid typ name')
+  ass(typ(typ),              'typ is not typ')
+  ass(typ({})==false,        '{} is typ')
+  -- typ.any
+  ass(tostring(typ.any)=='typ.any', 'invalid any name')
+  ass(typ(typ.any),          'any is not typ')
+  ass(typ.any({}),           '{} is not any')
+  ass(typ.any(nil)==false,   'nil is any')
+  -- typ.boo
+  ass(typ(typ.boo),          'boo is not typ')
+  ass(typ.boo(true),         'true is not bool')
+  ass(typ.boo(false),        'false is not bool')
+  -- typ.tab
+  ass(typ(typ.tab),          'tab is not typ')
+  ass(typ.tab({}),           '{} is not table')
+  -- typ.num
+  ass(typ(typ.num),          'num is not typ')
+  -- typ.str
+  ass(typ(typ.str),          'str is not typ')
+  ass(typ.str(''),           'empty string is not str')
+  ass(typ.str(1)==false,     '1 is not str')
+  ass(typ.str(nil)==false,   'nil is not str')
+
+  ass(typ(typ.fun),          'fun is not typ')
+  ass(typ(typ.nat),          'nat is not typ')
+
+    --and (typ.meta())
+end
 
 return typ
