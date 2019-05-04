@@ -25,7 +25,10 @@ end
 
 --
 function multiply:wrap()
-  wrp.fn(multiply, 'move_after',  {{'vec'}, {'vec'}})
+  local fspot = {'fr', 'spot'}
+  local tspot = {'to', 'spot'}
+
+  wrp.fn(multiply, 'move_after',  {fspot, tspot})
 end
 
 -- selftest

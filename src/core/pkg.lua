@@ -30,7 +30,7 @@ end
 -- load module to package
 function pkg:load(...)
   self.names = {...}
-  local depth = log:info(self.path..':load('..arr.tostring(self.names)..')'):enter()
+  log:info(self.path..':load('..arr.tostring(self.names)..')'):enter()
   arr.each(self.names, function(name)
     log:info(name)
     local fullname = self.path.. '.'.. name
@@ -39,7 +39,7 @@ function pkg:load(...)
     ass.nul(self.modules[name], 'module '.. name.. ' already loaded')
     self.modules[name] = mod
   end)
-  log:exit(depth)
+  log:exit()
   return self
 end
 
@@ -55,18 +55,18 @@ pkg.find = pkg.get
 function pkg:wrap()
   local core = require 'src.core.package'
   -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':wrap '.. arr.tostring(self.names)):enter()
+  log:trace(self.path..':wrap '.. arr.tostring(self.names)):enter()
   -- for all modules
   ass.tab(self.names)
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.wrap then
-      local depth = log:trace(name..':wrap(core)'):enter()
+      log:trace(name..':wrap(core)'):enter()
       mod:wrap(core)
-      log:exit(depth)
+      log:exit()
     end
   end)
-  log:exit(depth)
+  log:exit()
 end
 
 -- get random module
@@ -82,9 +82,9 @@ function pkg:test()
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.test then
-      local depth = log:trace(name..':test(ass)'):enter()
+      log:trace(name..':test(ass)'):enter()
       mod:test(ass)
-      log:exit(depth)
+      log:exit()
     end
   end)
 end

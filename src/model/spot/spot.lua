@@ -171,7 +171,7 @@ function spot:set_jade()
 end
 
 -- Remove and return jade
-function spot:remove_jade_before()
+function spot:remove_jade_wrap_before()
   ass(self.jade)
 end
 function spot:remove_jade()
@@ -180,9 +180,9 @@ function spot:remove_jade()
   self.space:yell('remove_jade', self.pos) -- notify that a new jade set
   return jade
 end
-function spot:remove_jade_after(jade)
+function spot:remove_jade_wrap_after(jade)
   ass.nul(self.jade)
-  ass(jade)
+  ass(typ.isname(jade, 'jade'))
 end
 
 -- add stash_jade/unstash_jade functions

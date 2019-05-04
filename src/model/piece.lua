@@ -23,6 +23,8 @@ function piece:wrap()
   local count = {'count', typ.num}
   local power = {'power'}
   local name  = {'name', typ.str}
+  local fspot = {'fr', 'spot'}
+  local tspot = {'to', 'spot'}
 
   -- piece
   wrp.fn(piece, 'new',            {space, pid     })
@@ -32,6 +34,9 @@ function piece:wrap()
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
   wrp.fn(piece, 'can_move',       {from,  to      })
+  wrp.fn(piece, 'move_before',    {fspot, tspot   })
+  wrp.fn(piece, 'move',           {fspot, tspot   })
+  wrp.fn(piece, 'move_after',     {fspot, tspot   })
   
   -- jades
   wrp.fn(piece, 'add_jade',       {jade,          }      )
@@ -56,11 +61,11 @@ function piece:new(space, pid)
 end
 --
 function piece:__tostring()
-  local str = 'piece'
+  local str = 'piece{'.. tostring(self.pid)
   if self.pos then
-    str = str.. tostring(self.pos)
+    str = str.. ','.. tostring(self.pos)
   end
-  return str
+  return str.. '}'
 end
 --
 function piece:die()
@@ -73,7 +78,7 @@ end
 
 -- POSITION & MOVE ------------------------------------------------------------
 --
-function piece:set_pos_before(pos)
+function piece:set_pos_wrap_before(pos)
   ass(pos==nil or typ.is(pos, vec))
 end
 function piece:set_pos(pos)

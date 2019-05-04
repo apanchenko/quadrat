@@ -46,7 +46,7 @@ end
 -- methods ---------------------------------------------------------------------
 --
 function vec:__tostring()
-  return '{'.. self.x.. ",".. self.y.. '}'
+  return '{'..self.x.. ",".. self.y..'}'
 end
 -- square length
 function vec:length2()

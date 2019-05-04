@@ -190,11 +190,11 @@ end
 -- to be called from board
 function stone:deselect()
   if self.isSelected then
-    local depth = log:trace(self, ":deselect"):enter()
+    log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos(self._pos)                  -- adgjust group position
       self._abilities:hide()
-    log:exit(depth)
+    log:exit()
   end
 end
 --

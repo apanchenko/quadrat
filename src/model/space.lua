@@ -56,9 +56,9 @@ function space:whisper(event, ...)
 end
 
 -- send public event
-function space:yell_before(event, ...)
+function space:yell_wrap_before(event, ...)
   ass.is(self, space)
-  ass.is(typ.str.is(event))
+  ass.is(typ.str(event))
 end
 function space:yell(event, ...)
   log:info('space:notify_opp', event, ...)

@@ -28,7 +28,7 @@ function random:on_space(space)
 end
 --
 function random:__tostring()
-  return 'random_player['..tostring(self.pid)..']'
+  return 'random_player{'..tostring(self.pid)..'}'
 end
 --
 function random:move(pid)

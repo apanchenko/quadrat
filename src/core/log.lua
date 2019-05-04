@@ -42,13 +42,11 @@ end
 -- increase stack depth
 function log:enter()
   self.depth = self.depth + 1
-  return self.depth
 end
 
 -- decrease stack depth
-function log:exit(depth)
-  ass.eq(self.depth, depth)
-  self.depth = depth - 1
+function log:exit()
+  self.depth = self.depth - 1
 end
 
 --
