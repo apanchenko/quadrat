@@ -79,17 +79,14 @@ end
 
 -- test modules
 function pkg:test()
-  -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':test'):enter()
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.test then
-      local depth = log:trace(name..':test'):enter()
+      local depth = log:trace(name..':test()'):enter()
       mod:test()
       log:exit(depth)
     end
   end)
-  log:exit(depth)
 end
 
 -- module

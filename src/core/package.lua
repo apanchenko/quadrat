@@ -33,13 +33,11 @@ function cor:wrap()
 end
 
 --
-function cor.test()
+function cor:test()
   local arr = cor:get('arr')
   local log = cor:get('log')
   local ass = cor:get('ass')
   local typ = cor:get('typ')
-  local depth = log:info('cor.test'):enter()
-
   -- typ
   ass(tostring(typ)=='typ',  'invalid typ name')
   ass(typ(typ),              'typ is not typ')
@@ -86,7 +84,7 @@ function cor.test()
   ass.eq(arr.find_index({},      1, 1, 9, compare), 1, 'test find_index - empty')
 
 
-  log:exit(depth)
+  pkg.test(cor)
 end
 
 return cor

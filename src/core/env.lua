@@ -1,5 +1,5 @@
 local ass   = require 'src.core.ass'
-local chk   = require 'src.core.chk'
+local typ   = require 'src.core.typ'
 
 local mt = {}
 mt.__index = mt
@@ -8,7 +8,7 @@ mt.__index = mt
 function mt.__newindex(self, key, value)
   for k, v in pairs(self) do
     -- notify existing citizens about a new one
-    if chk.tab(v) then
+    if typ.tab(v) then
       local cb = v['on_'..key]
       if cb then
         cb(v, value)
@@ -16,7 +16,7 @@ function mt.__newindex(self, key, value)
     end
 
     -- notify new citizen about existing ones
-    if chk.tab(value) then
+    if typ.tab(value) then
       cb = value['on_'..k]
       if cb then
         cb(value, v)
@@ -36,6 +36,12 @@ end
 function mt.test()
   -- create local test environment
   local env = setmetatable({}, mt)
+
+  -- check type safety
+  --ass(typ.metaname('env')(env))
+  --ass(typ.meta(mt)(env))
+  ass.is(env, mt)
+
   -- sideeffect of changing environment
   local side = 1 
   -- b listens c

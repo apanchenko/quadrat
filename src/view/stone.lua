@@ -67,7 +67,7 @@ end
 
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
-  ass.is(board, 'board')
+  ass.isname(board, 'board')
   lay.render(board, self, {vx=0, vy=0})
   self.board = board
 end

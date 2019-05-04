@@ -34,14 +34,20 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     ass.str(info.name)
 
     -- second typ.child
-    info.type = info.type or (function(type) -- use anonymous function to get rid of elses
-      if typ(type) then
-        return type
+    info.type = (function(v) -- use anonymous function to get rid of elses
+      if typ(v) then
+        return v
       end
-      if typ.str(type) then
-        return typ.metaname(type)
+      if typ.str(v) then
+        return typ.metaname(v)
       end
-      return typ.meta(type)
+      if typ.tab(v) then
+        return typ.meta(v)
+      end
+      if v == nil then
+        return typ.metaname(info.name)
+      end
+      error(call.. ' - invalid type declaration '.. tostring(v))
     end)(info[2])
     ass(typ(info.type))
 
@@ -65,7 +71,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
       local info = arg_infos[i]
       local argstr = info.tostring(arg)
       local argtype = '['..type(arg)..']'
-      log:info(call.. ' check arg '.. tostring(i).. ': '.. info.name..'='..argstr.. ' is of '.. tostring(info.type))
+      --log:info(call.. ' check arg '.. tostring(i).. ': '.. info.name..'='..argstr.. ' is of '.. tostring(info.type))
       ass(info.type(arg), call..' '..info.name..'='..argstr..' is not of '.. tostring(info.type))
       if #res > 0 then
         res = res..', '
@@ -92,7 +98,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     t[fn_name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
-      ass(typ.meta(t).is(self), 'self is not '..t_name..' in '..type_fn)
+      ass(typ.is(self, t), 'self is not '..t_name..' in '..type_fn)
       local call = tostring(self)..':['..t_name..']'..fn_name
       local depth = log_fn(log, call..'('..arguments(call, args)..')'):enter()
 

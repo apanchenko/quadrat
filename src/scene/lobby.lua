@@ -68,7 +68,6 @@ function lobby:wrap()
 end
 
 function lobby.test()
-  print('test lobby..')
   ass(true)
 end
 

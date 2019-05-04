@@ -101,7 +101,6 @@ end
 
 --
 function battle.test()
-  print('test battle..')
   ass(true)
 end
 

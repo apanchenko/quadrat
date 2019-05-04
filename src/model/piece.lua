@@ -176,8 +176,6 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function piece.test()
-  ass.eq(typ.str.is(nil), false)
-
   local i = cnt:new()
   ass(i:is_empty())
 

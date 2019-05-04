@@ -23,8 +23,10 @@ function ass.str(v)         return typ.str(v) or error(tostring(v)..' is not a s
 function ass.bool(v)        return typ.boo(v) or error(tostring(v)..' is not a boolean') end
 -- 'v' is a function
 function ass.fun(v, msg)    return typ.fun(v) or error(msg or tostring(v)..' is not a function') end
--- 'v' is an instance of T
---function ass.is(t, T, msg)  return typ.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
+-- 't' has metatable 'mt'
+function ass.is(t, mt, msg) return typ.is(t, mt) or error(msg or tostring(t)..' is not '..tostring(mt)) end
+-- 't' has metatable with 'name'
+function ass.isname(t, name, msg) return typ.isname(t, name) or error(msg or tostring(t)..' is not '..name) end
 --
 function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
 function ass.ne(a, b, msg)  return a ~= b or error(msg or tostring(a).. ' == '.. tostring(b)) end
