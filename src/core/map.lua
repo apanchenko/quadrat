@@ -4,7 +4,7 @@ local wrp   = require 'src.core.wrp'
 local log   = require 'src.core.log'
 
 -- name to value
-local map = {}
+local map = setmetatable({}, {__tostring=function() return 'map' end})
 
 -- or
 function map.any(t, fn)
@@ -117,17 +117,15 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function map:wrap()
-  local opts = { name = 'map', static = true, log = log.info }
-
-  wrp.fn(map, 'all',    {{'t', typ.tab}, {'fn', typ.fun}},  opts)
-  wrp.fn(map, 'each',   {{'t', typ.tab}, {'fn', typ.fun}},  opts)
-  wrp.fn(map, 'select', {{'t', typ.tab}, {'pred', typ.fun}},  opts)
-  wrp.fn(map, 'count',  {{'t', typ.tab}},                   opts)
-  wrp.fn(map, 'random', {{'t', typ.tab}},                   opts)
+  wrp.wrap_stc_inf(map, 'all',    {'t', typ.tab}, {'fn', typ.fun})
+  wrp.wrap_stc_inf(map, 'each',   {'t', typ.tab}, {'fn', typ.fun})
+  wrp.wrap_stc_inf(map, 'select', {'t', typ.tab}, {'pred', typ.fun})
+  wrp.wrap_stc_inf(map, 'count',  {'t', typ.tab})
+  wrp.wrap_stc_inf(map, 'random', {'t', typ.tab})
 end
 
 --
-function map.test()
+function map:test()
   local t = { week='semana', month='mes', year='ano' }
 
   ass(map.any(t, function(v) return #v > 3 end))

@@ -23,24 +23,24 @@ function radial:filter(pos)
 end
 
 -- selftest
-function radial.Test()
+function radial:test()
   print('test radial..')
 
-  ass(tostring(radial) == 'Radial')
-  local radial = Radial:new(vec(3, 3))
+  ass(tostring(radial) == 'radial')
+  local rad = radial:new(vec(3, 3))
 
   local trues = {vec(2,2), vec(3,2), vec(4,2),
                  vec(2,3), vec(3,3), vec(4,3),
                  vec(2,4), vec(3,4), vec(4,4)}
-  ass(arr.all(trues, function(v) return radial:filter(v) end))
+  ass(arr.all(trues, function(v) return rad:filter(v) end))
 
-  ass(not radial:filter(vec(0, 0)))
+  ass(not rad:filter(vec(0, 0)))
 end
 
 -- MODULE ---------------------------------------------------------------------
 function radial:wrap()
-  wrp.fn(radial, 'new', {{'pos', vec}})
-  wrp.fn(radial, 'filter', {{'pos', vec}})
+  wrp.wrap_tbl_inf(radial, 'new',    {'pos', vec})
+  wrp.wrap_sub_inf(radial, 'filter', {'pos', vec})
 end
 
 return radial

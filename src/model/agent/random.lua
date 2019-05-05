@@ -69,9 +69,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function random:wrap()
-  wrp.fn(random, 'new',     {{'env', typ.any}, {'playerid'}}) -- env?
-  wrp.fn(random, 'move',    {{'playerid'}}, {log=log.info})
-  wrp.fn(random, 'move_async')
+  wrp.wrap_tbl_trc(random, 'new',       {'env', typ.any}, {'playerid'})
+  wrp.wrap_sub_inf(random, 'move',      {'playerid'})
+  wrp.wrap_sub_trc(random, 'move_async')
 end
 
 return random

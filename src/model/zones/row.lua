@@ -17,7 +17,7 @@ function row:filter(pos)
 end
 
 -- selftest
-function row.Test()
+function row:test()
   print('test row..')
 
   assert(tostring(row) == 'Row')

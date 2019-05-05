@@ -30,7 +30,7 @@ function kamikadze:wrap()
   wrp.fn(kamikadze, 'apply_to_spot', {{'spot'}})
 end
 
-function kamikadze.test()
+function kamikadze:test()
 end
 
 return kamikadze

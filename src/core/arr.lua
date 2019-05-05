@@ -1,7 +1,7 @@
 -- thanks to Marcus Irven
 local floor = math.floor
 
-local arr = {}
+local arr = setmetatable({}, { __tostring = function() return 'arr' end})
 
 -- check if array t is empty
 function arr.is_empty(t)        return next(t) == nil end
@@ -254,20 +254,15 @@ end
 function arr:wrap(core)
   local typ = core:get('typ')
   local wrp = core:get('wrp')
-  local log = core:get('log')
+  local t   = {'t', typ.tab}
+  local v   = {'v', typ.any}
+  local f   = {'f', typ.fun}
 
-  local wrap = function(fn_name, ...)
-    wrp.fn(arr, fn_name, {...}, {name='arr', static=true, log=log.info})
-  end
-  local t = {'t', typ.tab}
-  local v = {'v', typ.any}
-  local f = {'f', typ.fun}
-
-  wrap('push',       t, v)
-  wrap('all',        t, f)
-  wrap('each',       t, f)
-  wrap('random',     t)
-  wrap('find_index', t, {'low', typ.num}, {'high', typ.num}, {'obj', typ.any}, {'is_lower', typ.fun})
+  wrp.wrap_stc_inf(arr, 'push',       t, v)
+  wrp.wrap_stc_inf(arr, 'all',        t, f)
+  wrp.wrap_stc_inf(arr, 'each',       t, f)
+  wrp.wrap_stc_inf(arr, 'random',     t)
+  wrp.wrap_stc_inf(arr, 'find_index', t, {'low', typ.num}, {'high', typ.num}, {'obj', typ.any}, {'is_lower', typ.fun})
 end
 
 --

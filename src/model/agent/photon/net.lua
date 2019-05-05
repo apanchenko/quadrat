@@ -158,7 +158,7 @@ function net:wrap()
   wrp.fn(net, 'new')
 end
 
-function net.test()
+function net:test()
   print('test net..')
 end
 

@@ -37,7 +37,7 @@ function acidic:wrap()
   wrp.fn(acidic, 'apply_to_enemy', {{'spot'}})
 end
 
-function acidic.test()
+function acidic:test()
 end
 
 return acidic

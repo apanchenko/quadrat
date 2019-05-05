@@ -177,7 +177,7 @@ function piece:is_jump_protected()
 end
 
 -- MODULE ---------------------------------------------------------------------
-function piece.test()
+function piece:test()
   local i = cnt:new()
   ass(i:is_empty())
 

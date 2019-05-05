@@ -32,7 +32,7 @@ function multiply:wrap()
 end
 
 -- selftest
-function multiply.test()
+function multiply:test()
 end
 
 return multiply

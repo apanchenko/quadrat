@@ -18,10 +18,10 @@ function col:filter(pos)
 end
 
 -- selftest
-function col.Test()
+function col:test()
   print('test Col..')
 
-  assert(tostring(Col) == 'Col')
+  assert(tostring(col) == 'Col')
 end
 
 -- MODULE ---------------------------------------------------------------------

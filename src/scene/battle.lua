@@ -100,7 +100,7 @@ function battle:wrap()
 end
 
 --
-function battle.test()
+function battle:test()
   ass(true)
 end
 

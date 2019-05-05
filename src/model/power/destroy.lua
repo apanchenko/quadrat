@@ -29,7 +29,7 @@ function destroy:wrap()
   wrp.fn(destroy, 'apply_to_spot', {{'spot'}})
 end
 
-function destroy.test()
+function destroy:test()
   ass.eq(tostring(destroy), 'Destroy')
 end
 

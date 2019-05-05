@@ -3,19 +3,30 @@ local typ   = require 'src.core.typ'
 local ass   = require 'src.core.ass'
 local arr   = require 'src.core.arr'
 
-
 -- wrap
 local wrp = {}
 
+-- Function calling conventions. Used in opts.call
+wrp.call_static   = 1 -- library function, called with '.'
+wrp.call_table    = 2 -- class function, called on this table (or subtable) with ':'. (e.g. vec:new)
+wrp.call_subtable = 3 -- instance function, called on subtable with ':', default (e.g. vec:length)
+
+function wrp.wrap_stc_inf(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_static,   log=log.info}) end
+function wrp.wrap_tbl_inf(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_table,    log=log.info}) end
+function wrp.wrap_sub_inf(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_subtable, log=log.info}) end
+function wrp.wrap_stc_trc(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_static,   log=log.trace}) end
+function wrp.wrap_tbl_trc(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_table,    log=log.trace}) end
+function wrp.wrap_sub_trc(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call_subtable, log=log.trace}) end
+
 -- wrap function t.fn_name
 -- @param arg_info - array of argument descriptions {name, type, tstr}
--- @param t_name - name of t
--- @param static - is function fn static (called via .)
+-- @param opts     - {name:str, log:, call}
 function wrp.fn(t, fn_name, arg_infos, opts)
   opts = opts or {}
 
   local t_name = opts.name or tostring(t)
   local log_fn = opts.log or log.trace
+  local callconv = opts.call or wrp.call_subtable
 
   local call = 'wrp.fn('..t_name..', '..fn_name..')'
   log:info(call):enter()
@@ -23,6 +34,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
   ass.tab(t, 'first arg is not a table in '.. call)
   ass.str(fn_name, 'fn_name is not a string in '.. call)
   ass.fun(log_fn)
+  ass.nat(callconv)
 
   -- prepare arg_infos array
   arg_infos = arg_infos or {}
@@ -82,7 +94,7 @@ function wrp.fn(t, fn_name, arg_infos, opts)
   end
 
   -- define a new function
-  if opts.static then
+  if callconv == wrp.call_static then
     local type_fn = t_name..'.'..fn_name
     t[fn_name] = function(...)
       log_fn(log, type_fn..'('..arguments(type_fn, {...})..')'):enter()
@@ -98,7 +110,16 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     t[fn_name] = function(...)
       local args = {...}
       local self = table.remove(args, 1)
-      ass(typ.is(self, t), 'self is not '..t_name..' in '..type_fn)
+
+      -- check calling convention
+      if callconv == wrp.call_table then
+        ass(typ.is(self, t), 'self='..tostring(self)..' is not '..t_name..' in '..type_fn)
+      elseif callconv == wrp.call_subtable then
+        ass(typ.extends(self, t), 'self='..tostring(self)..' is not subtable of '..t_name..' in '..type_fn)
+      else
+        error(call.. ' invalid opts.call '.. tostring(callconv))
+      end
+
       local call = tostring(self)..':['..t_name..']'..fn_name
       log_fn(log, call..'('..arguments(call, args)..')'):enter()
 
@@ -127,10 +148,6 @@ function wrp.fn(t, fn_name, arg_infos, opts)
     end
   end
   log:exit()
-end
-
-function wrp.info(t, fn, ...)
-  wrp.fn(t, fn, {...}, {log = log.info})
 end
 
 return wrp

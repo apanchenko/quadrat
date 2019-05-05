@@ -19,15 +19,15 @@ function cnt:wrap()
   local count = {'count', typ.num}
   local fn    = {'fn', typ.fun}
 
-  wrp.info(cnt, 'new')
-  wrp.info(cnt, 'is_empty')
-  wrp.info(cnt, 'push',     obj)
-  wrp.info(cnt, 'pull',     id, count)
-  wrp.info(cnt, 'remove',   id)
-  wrp.info(cnt, 'count',    id)
-  wrp.info(cnt, 'any',      fn)
-  wrp.info(cnt, 'each',     fn)
-  wrp.info(cnt, 'random')
+  wrp.wrap_tbl_inf(cnt, 'new')
+  wrp.wrap_sub_inf(cnt, 'is_empty')
+  wrp.wrap_sub_inf(cnt, 'push',     obj)
+  wrp.wrap_sub_inf(cnt, 'pull',     id, count)
+  wrp.wrap_sub_inf(cnt, 'remove',   id)
+  wrp.wrap_sub_inf(cnt, 'count',    id)
+  wrp.wrap_sub_inf(cnt, 'any',      fn)
+  wrp.wrap_sub_inf(cnt, 'each',     fn)
+  wrp.wrap_sub_inf(cnt, 'random')
 end
 
 -- Create cnt instance
@@ -122,7 +122,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 --
-function cnt.test()
+function cnt:test()
   local copy = function(self)
     return {id=self.id, count=self.count, copy=self.copy}
   end

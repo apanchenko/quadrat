@@ -7,24 +7,21 @@ local wrp = require 'src.core.wrp'
 local map = require 'src.core.map'
 local widget = require 'widget'
 
-local lay = {}
+local lay = setmetatable({}, { __tostring = function() return 'lay' end})
 
 -- wrap interface
 function lay:wrap()
-  local wrap = function(name, ...)
-    wrp.fn(lay, name, {...}, {name='lay', static=true, log=log.info})
-  end
   local target = {'target', typ.tab}
   local obj    = {'object', typ.tab}
   local opts   = {'opts', typ.tab, map.tostring}
   local pos    = {'pos', typ.tab}
   local space  = {'space', typ.num}
 
-  wrap('render', target,  obj, opts)
-  wrap('to',     obj,     pos, opts)
-  wrap('image',  target,  opts)
-  wrap('column', obj,     space)
-  wrap('rows',   obj,     opts)
+  wrp.wrap_stc_inf(lay, 'render', target,  obj, opts)
+  wrp.wrap_stc_inf(lay, 'to',     obj,     pos, opts)
+  wrp.wrap_stc_inf(lay, 'image',  target,  opts)
+  wrp.wrap_stc_inf(lay, 'column', obj,     space)
+  wrp.wrap_stc_inf(lay, 'rows',   obj,     opts)
 end
 
 
@@ -220,7 +217,7 @@ function lay.sheet(group, sheet, frame, opts)
 end
 
 --
-function lay.test()
+function lay:test()
 end
 
 return lay

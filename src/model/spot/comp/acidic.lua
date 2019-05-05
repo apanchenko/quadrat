@@ -24,7 +24,7 @@ end
 function acidic:wrap()
 end
 
-function acidic.test()
+function acidic:test()
 end
 
 return acidic

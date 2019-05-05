@@ -10,7 +10,7 @@ local ass = setmetatable({}, m)
 -- 'v' is nil
 function ass.nul(v, msg)    return v == nil or error(msg or tostring(v)..' is not nil') end
 -- 'v' is not nil
-function ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
+function ass.any(v, msg)    return v ~= nil or error(msg or 'value is nil') end
 -- 'v' is a number
 function ass.num(v, msg)    return typ.num(v) or error(msg or tostring(v)..' is not a number') end
 -- 'n' is natural number

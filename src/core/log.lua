@@ -1,8 +1,8 @@
 local ass = require 'src.core.ass'
 local bld = require 'src.core.bld'
 
--- Create log.
-local log = { depth = 0 }
+-- Create log
+local log = setmetatable({ depth = 0 }, { __tostring = function() return 'log' end})
 
 --
 local function out(...)
@@ -50,7 +50,7 @@ function log:exit()
 end
 
 --
-function log.test()
+function log:test()
 end
 
 return log

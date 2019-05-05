@@ -14,18 +14,22 @@ end
 -- create typ
 local typ = setmetatable({}, mt)
 
--- check if 't' has metatable 'mt'
-function typ.is(t, mt)
-  if typ.tab(mt) == false then
+-- check if 't' extends 'mt'
+function typ.extends(t, mt)
+  if mt == nil then
     return false
   end
-  while t ~= mt do
-    if t == nil then
-      return false
+  repeat t = getmetatable(t)
+    if t == mt then
+      return true
     end
-    t = getmetatable(t)
-  end
-  return true
+  until t == nil
+  return false
+end
+
+-- check if 't' is or extends 'mt'
+function typ.is(t, mt)
+  return t == mt or typ.extends(t, mt)
 end
 
 -- check if 't' has metatable with 'name'
@@ -105,21 +109,21 @@ function typ:test(ass)
   ass(tostring(typ)=='typ',  'invalid typ name')
   ass(typ(typ),              'typ is not typ')
   ass(typ({})==false,        '{} is typ')
-  -- typ.any
+  -- any
   ass(tostring(typ.any)=='typ.any', 'invalid any name')
   ass(typ(typ.any),          'any is not typ')
   ass(typ.any({}),           '{} is not any')
   ass(typ.any(nil)==false,   'nil is any')
-  -- typ.boo
+  -- boo
   ass(typ(typ.boo),          'boo is not typ')
   ass(typ.boo(true),         'true is not bool')
   ass(typ.boo(false),        'false is not bool')
-  -- typ.tab
+  -- tab
   ass(typ(typ.tab),          'tab is not typ')
   ass(typ.tab({}),           '{} is not table')
-  -- typ.num
+  -- num
   ass(typ(typ.num),          'num is not typ')
-  -- typ.str
+  -- str
   ass(typ(typ.str),          'str is not typ')
   ass(typ.str(''),           'empty string is not str')
   ass(typ.str(1)==false,     '1 is not str')

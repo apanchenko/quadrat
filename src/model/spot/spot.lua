@@ -15,7 +15,6 @@ local spot = obj:extend('spot')
 
 -- interface
 function spot:wrap()
-  local opts  = {log = log.info}
   local x     = {'x', typ.num}
   local y     = {'y', typ.num}
   local space = {'space'}
@@ -26,22 +25,22 @@ function spot:wrap()
   local stash = {'stash', typ.tab}
 
   -- spot
-  wrp.fn(spot, 'new',           { x,   y,  space  })
+  wrp.wrap_tbl_trc(spot, 'new',           x,   y,  space)
 
   -- piece
-  wrp.fn(spot, 'can_set_piece', {                 }, opts)
-  wrp.fn(spot, 'spawn_piece',   { pid             }) -- create a new piece
-  wrp.fn(spot, 'move_piece',    { from            })
-  wrp.fn(spot, 'stash_piece',   { stash           }) -- put piece into special hidden place for a short time
-  wrp.fn(spot, 'unstash_piece', { stash           }) -- get piece from a stash
+  wrp.wrap_sub_inf(spot, 'can_set_piece')
+  wrp.wrap_sub_trc(spot, 'spawn_piece',   pid) -- create a new piece
+  wrp.wrap_sub_trc(spot, 'move_piece',    from)
+  wrp.wrap_sub_trc(spot, 'stash_piece',   stash) -- put piece into special hidden place for a short time
+  wrp.wrap_sub_trc(spot, 'unstash_piece', stash) -- get piece from a stash
 
   -- jades
-  wrp.fn(spot, 'spawn_jade',    {                 }, opts)
-  wrp.fn(spot, 'set_jade',      {                 }, opts)
-  wrp.fn(spot, 'remove_jade',   {                 }, opts)
+  wrp.wrap_sub_inf(spot, 'spawn_jade')
+  wrp.wrap_sub_inf(spot, 'set_jade')
+  wrp.wrap_sub_inf(spot, 'remove_jade')
 
   -- component
-  wrp.fn(spot, 'add_comp',      { comp            }, opts)
+  wrp.wrap_sub_inf(spot, 'add_comp',      comp)
 end
 
 

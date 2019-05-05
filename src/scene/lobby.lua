@@ -67,7 +67,7 @@ function lobby:wrap()
   wrp.fn(lobby, 'on_opponent_error', {{'msg', typ.str}}, 'lobby')
 end
 
-function lobby.test()
+function lobby:test()
   ass(true)
 end
 

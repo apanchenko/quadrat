@@ -55,15 +55,13 @@ pkg.find = pkg.get
 function pkg:wrap()
   local core = require 'src.core.package'
   -- cannot wrap the wrapper so do logging manually
-  log:trace(self.path..':wrap '.. arr.tostring(self.names)):enter()
+  log:trace(self.path..':wrap() '.. arr.tostring(self.names)):enter()
   -- for all modules
-  ass.tab(self.names)
   arr.each(self.names, function(name)
     local mod = self.modules[name]
     if mod.wrap then
-      log:trace(name..':wrap(core)'):enter()
+      log:trace(name..':wrap(core)')
       mod:wrap(core)
-      log:exit()
     end
   end)
   log:exit()

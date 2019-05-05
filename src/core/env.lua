@@ -33,7 +33,7 @@ function mt:__tostring()
 end
 
 -- self test
-function mt.test()
+function mt:test()
   -- create local test environment
   local env = setmetatable({}, mt)
 

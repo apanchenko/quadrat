@@ -37,8 +37,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function evt:wrap()
-  wrp.fn(evt, 'add', {{'listener', typ.tab}})
-  wrp.fn(evt, 'remove', {{'listener', typ.tab}})
+  wrp.wrap_sub_trc(evt, 'add',    {'listener', typ.tab})
+  wrp.wrap_sub_trc(evt, 'remove', {'listener', typ.tab})
   --TODO ellipsis wrp.fn(evt, 'call', {{'name'}})
 end
 
