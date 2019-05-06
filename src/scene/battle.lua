@@ -96,7 +96,7 @@ battle:addEventListener("destroy", battle)
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
 function battle:wrap()
-  wrp.fn(battle, 'move', {{'playerid'}}, {log = log.info})
+  wrp.wrap_sub_inf(battle, 'move', {'playerid'})
 end
 
 --

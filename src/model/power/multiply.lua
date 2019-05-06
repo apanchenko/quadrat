@@ -28,7 +28,7 @@ function multiply:wrap()
   local fspot = {'fr', 'spot'}
   local tspot = {'to', 'spot'}
 
-  wrp.fn(multiply, 'move_after',  {fspot, tspot})
+  wrp.wrap_sub_trc(multiply, 'move_after', fspot, tspot)
 end
 
 -- selftest

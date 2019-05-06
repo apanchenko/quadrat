@@ -27,7 +27,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function kamikadze:wrap()
-  wrp.fn(kamikadze, 'apply_to_spot', {{'spot'}})
+  wrp.wrap_sub_trc(kamikadze, 'apply_to_spot', {'spot'})
 end
 
 function kamikadze:test()

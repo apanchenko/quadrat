@@ -27,26 +27,26 @@ function piece:wrap()
   local tspot = {'to', 'spot'}
 
   -- piece
-  wrp.fn(piece, 'new',            {space, pid     })
-  wrp.fn(piece, 'set_color',      {pid            }      )
-  wrp.fn(piece, 'die',            {               }      )
+  wrp.wrap_tbl_trc(piece, 'new',            space, pid)
+  wrp.wrap_sub_trc(piece, 'set_color',      pid)
+  wrp.wrap_sub_trc(piece, 'die')
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.fn(piece, 'can_move',       {from,  to      })
-  wrp.fn(piece, 'move_before',    {fspot, tspot   })
-  wrp.fn(piece, 'move',           {fspot, tspot   })
-  wrp.fn(piece, 'move_after',     {fspot, tspot   })
+  wrp.wrap_sub_trc(piece, 'can_move',       from,  to)
+  wrp.wrap_sub_trc(piece, 'move_before',    fspot, tspot)
+  wrp.wrap_sub_trc(piece, 'move',           fspot, tspot)
+  wrp.wrap_sub_trc(piece, 'move_after',     fspot, tspot)
   
   -- jades
-  wrp.fn(piece, 'add_jade',       {jade,          }      )
-  wrp.fn(piece, 'remove_jade',    {id,    count   }      )
-  wrp.fn(piece, 'use_jade',       {id             }      )
+  wrp.wrap_sub_trc(piece, 'add_jade',       jade)
+  wrp.wrap_sub_trc(piece, 'remove_jade',    id, count)
+  wrp.wrap_sub_trc(piece, 'use_jade',       id)
 
   -- powers
-  wrp.fn(piece, 'add_power',      {power          }      )
-  wrp.fn(piece, 'remove_power',   {id             }      )
-  wrp.fn(piece, 'decrease_power', {name           }      )
+  wrp.wrap_sub_trc(piece, 'add_power',      power)
+  wrp.wrap_sub_trc(piece, 'remove_power',   id)
+  wrp.wrap_sub_trc(piece, 'decrease_power', name)
 end
 
 -- create a piece

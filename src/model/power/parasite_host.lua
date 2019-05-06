@@ -30,7 +30,7 @@ end
 
 --
 function parasite_host:wrap()
-  wrp.fn(parasite_host, 'on_add_jade', {{'jade'}})
+  wrp.wrap_sub_trc(parasite_host, 'on_add_jade', {'jade'})
 end
 
 return parasite_host

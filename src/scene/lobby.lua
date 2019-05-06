@@ -63,8 +63,8 @@ end
 
 -- interface
 function lobby:wrap()
-  wrp.fn(lobby, 'on_opponent', {{'room_id', typ.num}, {'createdByMe', typ.boo}}, 'lobby')
-  wrp.fn(lobby, 'on_opponent_error', {{'msg', typ.str}}, 'lobby')
+  wrp.wrap_sub_trc(lobby, 'on_opponent',       {'room_id', typ.num}, {'createdByMe', typ.boo})
+  wrp.wrap_sub_trc(lobby, 'on_opponent_error', {'msg', typ.str})
 end
 
 function lobby:test()

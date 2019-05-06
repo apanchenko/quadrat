@@ -129,12 +129,10 @@ end
 
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
-  ass(log.info)
-  local info = {log = log.info}
-  wrp.fn(cell, 'new',         {{'spot'}})
-  wrp.fn(cell, 'set_stone',   {{'stone'}})
-  wrp.fn(cell, 'stone',       {}, info)
-  wrp.fn(cell, 'remove_stone')
+  wrp.wrap_tbl_trc(cell, 'new',       {'spot'})
+  wrp.wrap_sub_trc(cell, 'set_stone', {'stone'})
+  wrp.wrap_sub_trc(cell, 'stone')
+  wrp.wrap_sub_trc(cell, 'remove_stone')
 end
 
 return cell

@@ -30,8 +30,8 @@ end
 
 -- module
 function playerid:wrap()
-  wrp.fn(playerid, 'swap',    {},                       {log=log.info})
-  wrp.fn(playerid, 'select',  {{'is_white', typ.boo}},  {log=log.info, call=wrp.call_static})
+  wrp.wrap_sub_inf(playerid, 'swap')
+  wrp.wrap_stc_inf(playerid, 'select', {'is_white', typ.boo})
 end
 
 --

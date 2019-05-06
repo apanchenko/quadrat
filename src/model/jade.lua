@@ -79,9 +79,9 @@ end
 
 -- module
 function jade:wrap()
-  wrp.fn(jade, 'new',    {}, {log=log.info})
-  wrp.fn(jade, 'add_to', {{'jades', typ.tab}})
-  wrp.fn(jade, 'use',    {{'piece'}})
+  wrp.wrap_tbl_inf(jade, 'new')
+  wrp.wrap_sub_trc(jade, 'add_to', {'jades', typ.tab})
+  wrp.wrap_sub_trc(jade, 'use',    {'piece'})
   --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 

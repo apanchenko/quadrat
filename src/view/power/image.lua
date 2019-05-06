@@ -29,8 +29,8 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function image:wrap()
-  wrp.fn(image, 'new',        {{'stone'}, {'name', typ.str}, {'count', typ.num}})
-  wrp.fn(image, 'set_count',  {{'count', typ.num}})
+  wrp.wrap_sub_trc(image, 'new',        {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.wrap_sub_trc(image, 'set_count',  {'count', typ.num})
 end
 
 return image

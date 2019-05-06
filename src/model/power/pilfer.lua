@@ -24,7 +24,7 @@ end
 
 --
 function pilfer:wrap()
-  wrp.fn(pilfer, 'apply_to_spot', {{'spot'}})
+  wrp.wrap_sub_trc(pilfer, 'apply_to_spot', {'spot'})
 end
 
 return pilfer

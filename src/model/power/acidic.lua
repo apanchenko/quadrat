@@ -34,7 +34,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function acidic:wrap()
-  wrp.fn(acidic, 'apply_to_enemy', {{'spot'}})
+  wrp.wrap_sub_trc(acidic, 'apply_to_enemy', {'spot'})
 end
 
 function acidic:test()

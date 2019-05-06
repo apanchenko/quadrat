@@ -14,14 +14,13 @@ function areal:wrap()
   local spot  = {'spot'}
   local def   = {'def', typ.tab}
   local zone  = {'zone', typ.tab}
-  local wrap  = function(name, ...) wrp.fn(areal, name, {...}) end
 
-  wrap('new',             piece, def, zone)
-  wrap('apply_to_spot',   spot            )
-  wrap('apply_to_self'                    )
-  wrap('apply_to_friend', spot            )
-  wrap('apply_to_enemy',  spot            )
-  wrap('apply_finish'                     )
+  wrp.wrap_tbl_trc(areal, 'new',             piece, def, zone)
+  wrp.wrap_sub_trc(areal, 'apply_to_spot',   spot            )
+  wrp.wrap_sub_trc(areal, 'apply_to_self'                    )
+  wrp.wrap_sub_trc(areal, 'apply_to_friend', spot            )
+  wrp.wrap_sub_trc(areal, 'apply_to_enemy',  spot            )
+  wrp.wrap_sub_trc(areal, 'apply_finish'                     )
 end
 
 -- create an areal power that sits on onwer piece and acts once or more times

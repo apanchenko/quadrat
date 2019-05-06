@@ -46,22 +46,22 @@ function net:new()
       this.on_error()
     end
   end
-  wrp.fn(client, 'onError', {
+  wrp.wrap_tbl_trc(client, 'onError',
     {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
-    {'msg', typ.str}}, 'client')
+    {'msg', typ.str})
 
   -- react to state change
   function client:onStateChange(state)
   end    
-  wrp.fn(client, 'onStateChange', {{'state', typ.num, Client.StateToName}}, 'client')
+  wrp.wrap_tbl_trc(client, 'onStateChange', {'state', typ.num, Client.StateToName})
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrp.fn(client, 'onOperationResponse', {
+  wrp.wrap_tbl_trc(client, 'onOperationResponse',
     {'errCode', typ.num},
     {'errMsg', typ.str},
     {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
-    {'content', typ.tab, map.tostring}}, 'client')
+    {'content', typ.tab, map.tostring})
 
   client.logger:setLevel(photon.common.Logger.Level.WARN)
   client.sent_count = 0
@@ -106,8 +106,8 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  wrp.fn(client, 'onActorJoin', {
-    {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end}}, 'client')
+  wrp.wrap_tbl_trc(client, 'onActorJoin', 
+    {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
 
   function client:sendData()
     if self:isJoinedToRoom() and self.sent_count < MAX_SENDCOUNT then
@@ -130,14 +130,13 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  wrp.fn(client, 'onRoomList', {
-    {'rooms', typ.tab, function(v) return arr.tostring(map.keys(v)) end}}, 'client')
-  wrp.fn(client, 'onJoinRoom', {{'createdByMe', typ.boo}}, 'client')
-  wrp.fn(client, 'onEvent', {
+  wrp.wrap_tbl_trc(client, 'onRoomList', 
+    {'rooms', typ.tab, function(v) return arr.tostring(map.keys(v)) end})
+  wrp.wrap_tbl_trc(client, 'onJoinRoom', {'createdByMe', typ.boo})
+  wrp.wrap_tbl_trc(client, 'onEvent',
     {'code', typ.num},
     {'content', typ.tab, map.tostring},
-    {'actor', typ.tab}}, 'client')
-
+    {'actor', typ.tab})
 
   -- start running
   function client:timer(event)
@@ -155,7 +154,7 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function net:wrap()
-  wrp.fn(net, 'new')
+  wrp.wrap_tbl_trc(net, 'new')
 end
 
 function net:test()

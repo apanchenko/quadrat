@@ -16,7 +16,7 @@ end
 
 -- module
 function movediagonal:wrap()
-  wrp.fn(movediagonal, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
+  wrp.wrap_sub_trc(movediagonal, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 --

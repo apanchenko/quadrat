@@ -28,8 +28,8 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function invisible:wrap()
-  wrp.fn(image, 'new',        {{'stone'}, {'id', typ.str}, {'count', typ.num}})
-  wrp.fn(image, 'set_count',  {{'count', typ.num}})
+  wrp.wrap_tbl_trc(image, 'new',        {'stone'}, {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_sub_trc(image, 'set_count',  {'count', typ.num})
 end
 
 return invisible

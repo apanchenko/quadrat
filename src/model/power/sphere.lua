@@ -18,7 +18,7 @@ end
 
 --
 function sphere:wrap()
-  wrp.fn(sphere, 'can_move', {{'from', 'vec'}, {'to', 'vec'}})
+  wrp.wrap_sub_trc(sphere, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 --

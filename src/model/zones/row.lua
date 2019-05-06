@@ -25,8 +25,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function row:wrap()
-  wrp.fn(row, 'new', {{'pos', vec}})
-  wrp.fn(row, 'filter', {{'pos', vec}})
+  wrp.wrap_tbl_inf(row, 'new',    {'pos', vec})
+  wrp.wrap_sub_inf(row, 'filter', {'pos', vec})
 end
 
 
