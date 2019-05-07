@@ -2,7 +2,7 @@ local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
 local areal       = require 'src.model.power.areal'
-local spot_acidic = require 'src.model.spot.comp.acidic'
+local spot_acidic = require 'src.model.spot.component.acidic'
 
 local acidic = areal:extend('Acidic')
 
@@ -21,7 +21,7 @@ function acidic:apply_to_enemy(spot)
   spot.piece = nil
   self.piece.space:yell('remove_piece', spot.pos) -- notify
   -- mark spot as acidic
-  spot:add_comp(spot_acidic())
+  spot:add_comp(spot_acidic:new())
 end
 function acidic:apply_to_enemy_after(spot)
   ass(not spot:can_set_piece())

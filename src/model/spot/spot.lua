@@ -10,6 +10,7 @@ local cfg       = require 'src.model.cfg'
 local cnt       = require 'src.core.cnt'
 local piece     = require 'src.model.piece'
 local jade      = require 'src.model.jade'
+local component = require 'src.model.spot.component.component'
 
 local spot = obj:extend('spot')
 
@@ -21,7 +22,7 @@ function spot:wrap()
   local pid   = {'playerid'}
   local piece = {'piece'}
   local from  = {'from', spot}
-  local comp  = {'comp'}
+  local comp  = {'comp', component}
   local stash = {'stash', typ.tab}
 
   -- spot
