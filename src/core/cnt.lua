@@ -10,7 +10,7 @@ local obj   = require 'src.core.obj'
 --   .count     - optional number counts objects with same id
 --   .id        - equal ids mean equal objects
 --   :copy()    - create a copy of the object
-local cnt = obj.create('cnt')
+local cnt = obj.create_lib('cnt')
 
 -- interface
 function cnt:wrap()
@@ -48,6 +48,9 @@ end
 -- Add object to container
 -- @param obj   - object to add
 -- @return      - resulting number of objects in container
+function cnt:push_wrap_before(obj)
+  ass(obj.id)
+end
 function cnt:push(obj)
   local my = self.data[obj.id] -- exisitng object in container
   if my then

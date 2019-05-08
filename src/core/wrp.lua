@@ -24,7 +24,11 @@ function wrp.wrap_sub_trc(t, fname, ...)  wrp.fn(t, fname, {...}, {call=wrp.call
 function wrp.fn(t, fn_name, arg_infos, opts)
   opts = opts or {}
 
-  local t_name = opts.name or tostring(t)
+  local t_name = tostring(t)
+  if not typ.str(t_name) then
+    error('wrp.fn t name is '.. tostring(t_name))
+    return;
+  end
   local log_fn = opts.log or log.trace
   local callconv = opts.call or wrp.call_subtable
 

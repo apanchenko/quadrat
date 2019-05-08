@@ -37,6 +37,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function evt:wrap()
+  ass.eq(tostring(evt), 'evt')
   wrp.wrap_sub_trc(evt, 'add',    {'listener', typ.tab})
   wrp.wrap_sub_trc(evt, 'remove', {'listener', typ.tab})
   --TODO ellipsis wrp.fn(evt, 'call', {{'name'}})

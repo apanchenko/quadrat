@@ -1,54 +1,55 @@
-local ass   = require 'src.core.ass'
-local typ   = require 'src.core.typ'
-local wrp   = require 'src.core.wrp'
-local log   = require 'src.core.log'
+--[[
+    Inheritance implementation. The obj is a base type you may extend from.
+    Call 'extend' to inherit new type and 'new' to create instance of a type.
 
--------------------------------------------------------------------------------
-local obj = setmetatable({}, {__tostring = function() return 'obj' end})
+    While there is no semantic difference between type and instance in Lua
+    and so it is not a problem to inherit any table, classic OOP does not
+    defines this. Should we prohibit extending instance objects?
+]]--
 
---
-function obj.create(typename)
-  local t = setmetatable({}, {__tostring = function() return typename end})
-  t.__index = t
-  return t
-end
+-- Create obj
+local mt        = {__tostring = function(self) return self.tname end}
+local obj       = setmetatable({tname = 'obj'}, mt)
+obj.__index     = obj
 
---
-function obj.__call(cls, ...)
-  return cls:new(...)
-end
+-- Create library table for static functions
+obj.create_lib = function(tname)
+  local lib = setmetatable({tname = tname}, mt)
+  lib.__index = lib 
+  return lib
+end 
 
---
-function obj:__tostring()
-  return self.type
-end
-
---
-function obj:extend(type)
-  local sub = setmetatable({type=type}, self)
-  self.__index = self
-  function sub:__tostring() return self.type end
+-- Create new type extending obj
+obj.extend = function(self, tname)
+  local sub = setmetatable({tname = tname}, self)
+  sub.__index = sub
+  sub.__tostring = function(self) return self.tname end
   return sub
 end
 
---
-function obj:new(def)
-  --log:trace('obj:new ', self._type)
-  def = setmetatable(def or {}, self)
-  self.__index = self
-  return def
-end
+-- Construct instance object
+obj.new = function(self, def) return setmetatable(def or {}, self) end
+
+-- Helper for faster call new
+obj.__call = function(t, ...) return t:new(...) end
+
+-- Support tostring for ancestors
+obj.__tostring  = function(self) return self.tname end
 
 
 -- module -------------------------------------------------------------------
 --
 function obj:wrap()
+  local wrp   = require 'src.core.wrp'
+  local typ   = require 'src.core.typ'
+  local ass   = require 'src.core.ass'
+  ass.eq(tostring(obj), 'obj')
   wrp.wrap_tbl_inf(obj, 'extend', {'name', typ.str})
-  --wrp.fn(obj, 'new',    {{'def', typ.any}})
+  --wrp.wrap_tbl_inf(obj, 'new',    {{'def', typ.any}})
 end
 
 --
-function obj:test()
+function obj:test(ass) 
   ass(tostring(obj))
 
   -- account extends obj

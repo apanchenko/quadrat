@@ -16,19 +16,19 @@ function jade:new()
   self = obj.new(self)
   self.power = powers:random(function(p) return p:can_spawn() end)
   ass(self.power)
-  self.id = self.power.type
+  self.id = tostring(self.power)
   self.count = 1
 
   if self.power.is_areal then
     self.zone = zones:random()
-    self.id = self.id.. ' '.. self.zone.type
+    self.id = self.id.. ' '.. tostring(self.zone)
   end
   return self
 end
 
 --
 function jade:__tostring()
-  return self.type.. '{'.. self.id.. '}'
+  return self.tname.. '{'.. self.id.. '}'
 end
 
 --

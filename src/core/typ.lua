@@ -49,18 +49,22 @@ function mt:__call(v)
 end
 
 -- describe type by name and checking function
-function typ:new(name, check_fn)
-  --print('typ:new '..name.. ' check '..tostring(check_fn))
-  -- create own table, do not modify typ
-  local mymt = setmetatable({}, self)
-  mymt.__tostring = function() return name end
-  
-  function mymt:__call(v)
-    --print(name..'('..tostring(v)..') check '..tostring(check_fn).. ' -> '.. tostring(check_fn(v)))
-    return check_fn(v)
+function typ:new(name, check)
+  -- validate arguments
+  if self ~= typ then
+    error('typ:new - self is not typ')
+    return
   end
-  return setmetatable({}, mymt)
+  if type(name) ~= 'string' or type(check) ~= 'function' then
+    error('tip('..tostring(name)..', '..tostring(check)..')')
+    return
+  end
+  -- save name and check for typ instance
+  return setmetatable({name=name, check=check}, self)
 end
+
+function typ:__tostring() return self.name end
+function typ:__call(v) return self.check(v) end
 
 -- tab or smth
 --function tab.__add(l, r)
