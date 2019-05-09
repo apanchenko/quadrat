@@ -24,8 +24,8 @@ end
 
 --
 function battle.goto_solo()
-  env.player_white = agent:get('user'):new(env, playerid.white)
-  env.player_black = agent:get('random'):new(env, playerid.black)
+  env.player_white = agent:get('random'):new(env, playerid.white)
+  env.player_black = agent:get('user'):new(env, playerid.black)
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
