@@ -28,7 +28,7 @@ end
 
 --
 function jade:__tostring()
-  return self.tname.. '{'.. self.id.. '}'
+  return self:get_typename().. '{'.. self.id.. '}'
 end
 
 --

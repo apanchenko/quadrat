@@ -8,7 +8,7 @@ local acidic = component:extend('spot_acidic')
 
 -- constructor
 function acidic:new()
-  return obj.new(self, {id = self.type})
+  return obj.new(self, {id = self:get_typename()})
 end
 
 -- spot with acidic cannot receive pieces

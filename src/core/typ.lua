@@ -75,10 +75,7 @@ function typ:__call(v) return self.check(v) end
 
 -- get checker function type(v)
 local get_istype = function(typename)
-  return function(v)
-    --print('typ.istype('..tostring(v)..' ['..type(v)..'], '..tostring(typename)..')')
-    return type(v) == typename
-  end
+  return function(v) return type(v) == typename end
 end
 
 -- simple types

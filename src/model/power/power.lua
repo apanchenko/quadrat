@@ -11,7 +11,7 @@ local power = obj:extend('power')
 -- @param piece - apply power to this piece
 function power:new(piece, def)
   def.piece = piece
-  def.id = self.type -- TODO: type is unique now, will be not
+  def.id = self:get_typename()
   return obj.new(self, def)
 end
 
@@ -27,7 +27,7 @@ end
 
 -- add to powers map, non-additive
 function power:add_to(powers)
-  powers[self.type] = self
+  powers[self.id] = self
   return 1
 end
 

@@ -29,7 +29,7 @@ end
 
 --
 function acidic:__tostring()
-  return self.type.. self.zone.type
+  return self:get_typename().. tostring(self.zone)
 end
 
 -- MODULE ---------------------------------------------------------------------

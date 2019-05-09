@@ -12,7 +12,7 @@ end
 
 --
 function multiply:__tostring()
-  return self.type.. '{'.. self.count.. '}'
+  return self:get_typename().. '{'.. self.count.. '}'
 end
 
 -- implement pure virtual areal:apply_to_spot
@@ -20,7 +20,7 @@ end
 function multiply:move_after(from, to)
   local piece = self.piece
   from:spawn_piece(piece.pid)
-  piece:decrease_power(self.type) -- decrease
+  piece:decrease_power(self:get_typename()) -- decrease
 end
 
 --
