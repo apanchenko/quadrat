@@ -55,7 +55,6 @@ function stone:set_color(pid)
     if self.img then
       self.img:removeSelf()
     end
-    cfg.view.cell.order = 1
     cfg.view.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
     self.img = lay.image(self, cfg.view.cell)
   end
@@ -219,7 +218,8 @@ function stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
-    lay.render(self.board, self, {x=self.view.x, y=self.view.y})
+    --lay.render(self.board, self, {x=self.view.x, y=self.view.y})
+    self.view:toFront()
   end
 end
 

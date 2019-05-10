@@ -1,5 +1,5 @@
 local obj         = require 'src.core.obj'
-local typ       = require 'src.core.typ'
+local typ         = require 'src.core.typ'
 local ass         = require 'src.core.ass'
 local log         = require 'src.core.log'
 local wrp         = require 'src.core.wrp'
@@ -28,8 +28,9 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function invisible:wrap()
-  wrp.wrap_tbl_trc(image, 'new',        {'stone'}, {'id', typ.str}, {'count', typ.num})
-  wrp.wrap_sub_trc(image, 'set_count',  {'count', typ.num})
+  local count = {'count', typ.num}
+  wrp.wrap_tbl_trc(image, 'new',        {'stone'}, {'id', typ.str}, count)
+  wrp.wrap_sub_trc(image, 'set_count',  count)
 end
 
 return invisible

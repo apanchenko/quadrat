@@ -33,7 +33,7 @@ function piece:wrap()
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.wrap_sub_trc(piece, 'can_move',       from,  to)
+  wrp.wrap_sub_inf(piece, 'can_move',       from,  to)
   wrp.wrap_sub_trc(piece, 'move_before',    fspot, tspot)
   wrp.wrap_sub_trc(piece, 'move',           fspot, tspot)
   wrp.wrap_sub_trc(piece, 'move_after',     fspot, tspot)

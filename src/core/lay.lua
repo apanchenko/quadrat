@@ -35,9 +35,11 @@ end
 -- @param opts.vx         defaults to 0
 -- @param opts.vy         defaults to 0
 -- @param opts.order      render order, 1 renders first, larger renders later
-function lay.render(target, obj, opts)
+lay.render_wrap_before = function(target, obj, opts)
   ass(opts.x or opts.vx, 'lay.render - set opts x or vx')
   ass(opts.y or opts.vy, 'lay.render - set opts y or vy')
+end
+lay.render = function(target, obj, opts)
   target = target.view or target
   child = obj.view or obj
   child.anchorX = opts.anchorX or 0
@@ -50,21 +52,17 @@ function lay.render(target, obj, opts)
     child:scale(scale, scale)
   end
 
-  -- calculate group index by order
-  ass.num(target.numChildren)
-  local next = target.numChildren + 1
-  child.order = opts.order or next
-  local index = arr.find_index(target, 1, next, child, function(a, b)
-    ass.num(a.order, 'order not set in '..tostring(a))
-    ass.num(b.order, 'order not set in '..tostring(b))
-    return a.order < b.order
-  end)
-  target:insert(index, child)
+  if opts.order then
+    target:insert(opts.order, child)
+  else
+    target:insert(child)
+  end
+
   return obj
 end
 
 -- animate coordinates
-function lay.to(obj, pos, params)
+lay.to = function(obj, pos, params)
   params.x = pos.x
   params.y = pos.y
   transition.to(obj.view, params)

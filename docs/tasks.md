@@ -3,7 +3,7 @@
 ## Todo
 
 ### Core
-
+- fix invisible
 - rename view.* similar to model.*
 - spawn fixed number of jades on random fields
 - local player side always bottom
