@@ -30,7 +30,6 @@
 - build for iphone
 - build for web
 - build for win32
-- wrp - check function arguments and output consistency
 - add core.prf profiler
 - backend
 - separate core project
@@ -49,6 +48,7 @@
 - power Lenta - similar to Scramble but pieces move together in one direction
 
 ## Done
+- wrp - check function arguments and output consistency
 - acidic
 - scramble
 - purify
