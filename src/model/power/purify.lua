@@ -30,9 +30,9 @@ function purify:apply_to_enemy(spot)
 end
 
 --
-function purify.wrap()
-  wrp.fn(purify, 'apply_to_friend', {{'spot'}})
-  wrp.fn(purify, 'apply_to_enemy', {{'spot'}})
+function purify:wrap()
+  wrp.wrap_sub_trc(purify, 'apply_to_friend', {'spot'})
+  wrp.wrap_sub_trc(purify, 'apply_to_enemy', {'spot'})
 end
 
 return purify

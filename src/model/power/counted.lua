@@ -16,13 +16,13 @@ end
 
 -- add to powers map
 function counted:add_to(powers)
-  local other = powers[self.type]
+  local other = powers[self.id]
   if other then
     other.count = other.count + self.count
     return other.count
   end
 
-  powers[self.type] = self
+  powers[self.id] = self
   return self.count
 end
 
@@ -49,10 +49,10 @@ end
 
 --
 function counted:wrap()
-  wrp.fn(counted, 'new',        {{'piece'}, {'def', typ.tab}})
-  wrp.fn(counted, 'increase')
-  wrp.fn(counted, 'decrease')
-  wrp.fn(counted, 'get_count',  {}, {log=log.info})
+  wrp.wrap_tbl_trc(counted, 'new',        {'piece'}, {'def', typ.tab})
+  wrp.wrap_sub_trc(counted, 'increase')
+  wrp.wrap_sub_trc(counted, 'decrease')
+  wrp.wrap_sub_inf(counted, 'get_count')
 end
 
 return counted

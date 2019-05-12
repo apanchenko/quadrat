@@ -49,8 +49,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  wrp.fn(user, 'new', {{'env'}, {'pid', 'playerid'}})
-  wrp.fn(user, 'on_spawn_stone', {{'stone'}})
+  wrp.wrap_tbl_trc(user, 'new',            {'env'}, {'pid', 'playerid'})
+  wrp.wrap_sub_trc(user, 'on_spawn_stone', {'stone'})
 end
 
 return user

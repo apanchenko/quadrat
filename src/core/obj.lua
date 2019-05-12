@@ -1,84 +1,86 @@
-local ass   = require 'src.core.ass'
-local typ   = require 'src.core.typ'
-local wrp   = require 'src.core.wrp'
-local log   = require 'src.core.log'
+--[[
+    Inheritance implementation. The obj is a base type to extend.
+    Call 'extend' to inherit new type and 'new' to create instance of a type.
 
--------------------------------------------------------------------------------
-local obj = setmetatable({}, {__tostring = function() return 'obj' end})
+    While there is no semantic difference between type and instance in Lua
+    and so it is not a problem to inherit any table, classic OOP does not
+    defines this. Should we prohibit extending instances?
+]]--
 
---
-function obj.__call(cls, ...)
-  return cls:new(...)
-end
+-- Create obj
+local mt        = {__tostring = function(self) return self.tname end}
+local obj       = setmetatable({tname = 'obj'}, mt)
+obj.__index     = obj
 
---
-function obj:__tostring()
-  return self.type
-end
+-- Create library table for static functions
+obj.create_lib = function(typename)
+  local lib = setmetatable({tname = typename}, mt)
+  lib.__index = lib 
+  return lib
+end 
 
---
-function obj:extend(type)
-  local sub = setmetatable({type=type}, self)
-  self.__index = self
-  function sub:__tostring() return self.type end
+-- Create new type extending obj
+obj.extend = function(self, typename)
+  local sub = setmetatable({tname = typename}, self)
+  sub.__index = sub
+  sub.__tostring = function(self) return self.tname end
   return sub
 end
 
---
-function obj:new(def)
-  --log:trace('obj:new ', self._type)
-  def = setmetatable(def or {}, self)
-  self.__index = self
-  return def
+-- Construct instance object
+obj.new = function(self, inst) return setmetatable(inst or {}, self) end
+
+-- Helper for faster call new
+obj.__call = function(t, ...) return t:new(...) end
+
+-- Support tostring for ancestors
+obj.__tostring  = function(self) return self.tname end
+
+-- Typename getter
+obj.get_typename = function(self) return self.tname end
+
+-- Wrap obj functions with logs and checks 
+function obj:wrap()
+  local wrp = require 'src.core.wrp'
+  local typ = require 'src.core.typ'
+  local ass = require 'src.core.ass'
+  local typename = {'typename', typ.str}
+  wrp.wrap_stc_inf(obj, 'create_lib', typename)
+  wrp.wrap_tbl_inf(obj, 'extend',     typename)
 end
 
-
--- module -------------------------------------------------------------------
---
-function obj.wrap()
-  wrp.fn(obj, 'extend', {{'name', typ.str}}, {log = log.info})
-  --wrp.fn(obj, 'new',    {{'def', typ.any}})
-end
-
---
-function obj.test()
-  ass(tostring(obj))
+-- test obj
+function obj:test(ass) 
+  ass.eq(tostring(obj), 'obj')
 
   -- account extends obj
   local account = obj:extend('account')
-  -- add balance property to account
-  account.balance = 0
-  -- account instance to string
-  function account:__tostring()     return 'account '..self.balance end
+  -- add account constructor
+  account.new = function(self, inst)
+    inst.balance = 0
+    return obj.new(self, inst)
+  end
   -- add function deposit to account
-  function account:deposit(v)       self.balance = self.balance + v end
-
-  ass.eq(tostring(account), 'account')
+  account.deposit = function(self, v) self.balance = self.balance + v end
+  account.get_balance = function(self) return self.balance end
 
   -- extended type of account
   local limited = account:extend('limited')
   -- add limit property
-  limited.limit = 100
-  -- limited account instance tostring
-  function limited:__tostring()     return 'limited account '..self.balance..' of '..self.limit end
-  -- overload deposit method
-  limited._deposit = limited.deposit
-  function limited:deposit(v)       self:_deposit(math.min(v, self.limit)) end
+  limited.new = function(self, inst, limit)
+    inst.limit = limit
+    return account.new(self, inst)
+  end
+  -- overload deposit
+  limited.deposit = function(self, v) account.deposit(self, math.min(v, self.limit)) end
 
-  -- masha's account
-  local masha = account:new()
-  masha:deposit(30)
-  ass(tostring(masha) == 'account 30')
+  local bob = limited:new({}, 100)
+  bob:deposit(120)
 
-  -- kolya's limited account
-  local kolya = limited:new()
-  kolya:deposit(120)
-  ass(tostring(kolya) == 'limited account 100 of 100')
-
+  ass.eq(bob:get_balance(), 100)
+  ass.eq(tostring(bob), 'limited')
   ass.is(account, obj)
-  ass.is(masha, account)
-  ass.is(limited, account)
-  ass.is(kolya, limited)
+  ass.is(bob, account)
 end
 
 return obj

@@ -7,24 +7,21 @@ local wrp = require 'src.core.wrp'
 local map = require 'src.core.map'
 local widget = require 'widget'
 
-local lay = {}
+local lay = setmetatable({}, { __tostring = function() return 'lay' end})
 
 -- wrap interface
-function lay.wrap()
-  local wrap = function(name, ...)
-    wrp.fn(lay, name, {...}, {name='lay', static=true, log=log.info})
-  end
+function lay:wrap()
   local target = {'target', typ.tab}
   local obj    = {'object', typ.tab}
   local opts   = {'opts', typ.tab, map.tostring}
   local pos    = {'pos', typ.tab}
   local space  = {'space', typ.num}
 
-  wrap('render', target,  obj, opts)
-  wrap('to',     obj,     pos, opts)
-  wrap('image',  target,  opts)
-  wrap('column', obj,     space)
-  wrap('rows',   obj,     opts)
+  wrp.wrap_stc_inf(lay, 'render', target,  obj, opts)
+  wrp.wrap_stc_inf(lay, 'to',     obj,     pos, opts)
+  wrp.wrap_stc_inf(lay, 'image',  target,  opts)
+  wrp.wrap_stc_inf(lay, 'column', obj,     space)
+  wrp.wrap_stc_inf(lay, 'rows',   obj,     opts)
 end
 
 
@@ -38,9 +35,11 @@ end
 -- @param opts.vx         defaults to 0
 -- @param opts.vy         defaults to 0
 -- @param opts.order      render order, 1 renders first, larger renders later
-function lay.render(target, obj, opts)
+lay.render_wrap_before = function(target, obj, opts)
   ass(opts.x or opts.vx, 'lay.render - set opts x or vx')
   ass(opts.y or opts.vy, 'lay.render - set opts y or vy')
+end
+lay.render = function(target, obj, opts)
   target = target.view or target
   child = obj.view or obj
   child.anchorX = opts.anchorX or 0
@@ -53,21 +52,17 @@ function lay.render(target, obj, opts)
     child:scale(scale, scale)
   end
 
-  -- calculate group index by order
-  ass.num(target.numChildren)
-  local next = target.numChildren + 1
-  child.order = opts.order or next
-  local index = arr.find_index(target, 1, next, child, function(a, b)
-    ass.num(a.order, 'order not set in '..tostring(a))
-    ass.num(b.order, 'order not set in '..tostring(b))
-    return a.order < b.order
-  end)
-  target:insert(index, child)
+  if opts.order then
+    target:insert(opts.order, child)
+  else
+    target:insert(child)
+  end
+
   return obj
 end
 
 -- animate coordinates
-function lay.to(obj, pos, params)
+lay.to = function(obj, pos, params)
   params.x = pos.x
   params.y = pos.y
   transition.to(obj.view, params)
@@ -220,7 +215,7 @@ function lay.sheet(group, sheet, frame, opts)
 end
 
 --
-function lay.test()
+function lay:test()
 end
 
 return lay

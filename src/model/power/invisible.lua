@@ -1,5 +1,3 @@
-local ass     = require 'src.core.ass'
-local log     = require 'src.core.log'
 local power   = require 'src.model.power.power'
 
 local invisible = power:extend('Invisible')

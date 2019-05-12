@@ -98,12 +98,12 @@ function stoneAbilities:hide()
 end
 
 --
-function stoneAbilities.wrap()
-  wrp.fn(stoneAbilities, 'new', {{'stone'}})
-  wrp.fn(stoneAbilities, 'set_count', {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(stoneAbilities, 'is_empty', {log=log.info})
-  wrp.fn(stoneAbilities, 'show')
-  wrp.fn(stoneAbilities, 'hide')
+function stoneAbilities:wrap()
+  wrp.wrap_tbl_trc(stoneAbilities, 'new',       {'stone'})
+  wrp.wrap_sub_trc(stoneAbilities, 'set_count', {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_sub_inf(stoneAbilities, 'is_empty')
+  wrp.wrap_sub_trc(stoneAbilities, 'show')
+  wrp.wrap_sub_trc(stoneAbilities, 'hide')
 end
 
 --

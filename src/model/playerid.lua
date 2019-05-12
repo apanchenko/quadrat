@@ -29,13 +29,13 @@ function playerid.select(is_white)
 end
 
 -- module
-function playerid.wrap()
-  wrp.fn(playerid, 'swap',    {},                       {log=log.info})
-  wrp.fn(playerid, 'select',  {{'is_white', typ.boo}},  {log=log.info, static=true})
+function playerid:wrap()
+  wrp.wrap_sub_inf(playerid, 'swap')
+  wrp.wrap_stc_inf(playerid, 'select', {'is_white', typ.boo})
 end
 
 --
-function playerid.test()
+function playerid:test()
   ass.eq(playerid.white, playerid.white)
   ass.eq(playerid.black, playerid.black)
   ass.ne(playerid.white, playerid.black)

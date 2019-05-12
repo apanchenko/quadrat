@@ -12,7 +12,7 @@ end
 
 --
 function multiply:__tostring()
-  return self.type.. '{'.. self.count.. '}'
+  return self:get_typename().. '{'.. self.count.. '}'
 end
 
 -- implement pure virtual areal:apply_to_spot
@@ -20,16 +20,19 @@ end
 function multiply:move_after(from, to)
   local piece = self.piece
   from:spawn_piece(piece.pid)
-  piece:decrease_power(self.type) -- decrease
+  piece:decrease_power(self:get_typename()) -- decrease
 end
 
 --
-function multiply.wrap()
-  wrp.fn(multiply, 'move_after',  {{'vec'}, {'vec'}})
+function multiply:wrap()
+  local fspot = {'fr', 'spot'}
+  local tspot = {'to', 'spot'}
+
+  wrp.wrap_sub_trc(multiply, 'move_after', fspot, tspot)
 end
 
 -- selftest
-function multiply.test()
+function multiply:test()
 end
 
 return multiply

@@ -1,8 +1,8 @@
 local ass = require 'src.core.ass'
 local bld = require 'src.core.bld'
 
--- Create log.
-local log = { depth = 0 }
+-- Create log
+local log = setmetatable({ depth = 0 }, { __tostring = function() return 'log' end})
 
 --
 local function out(...)
@@ -42,17 +42,15 @@ end
 -- increase stack depth
 function log:enter()
   self.depth = self.depth + 1
-  return self.depth
 end
 
 -- decrease stack depth
-function log:exit(depth)
-  ass.eq(self.depth, depth)
-  self.depth = depth - 1
+function log:exit()
+  self.depth = self.depth - 1
 end
 
 --
-function log.test()
+function log:test()
 end
 
 return log

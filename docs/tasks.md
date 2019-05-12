@@ -3,7 +3,7 @@
 ## Todo
 
 ### Core
-
+- fix invisible
 - rename view.* similar to model.*
 - spawn fixed number of jades on random fields
 - local player side always bottom
@@ -13,7 +13,7 @@
 - piece mods:        bankrupt, network, spyware, invis, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
 - ability powers:    2x, benefactor, scavenger
-- attack powers:     bombs, acidic
+- attack powers:     bombs
 - orb mods:          orbspy
 - overall visual style
 - smarter bot
@@ -30,7 +30,6 @@
 - build for iphone
 - build for web
 - build for win32
-- wrp - check function arguments and output consistency
 - add core.prf profiler
 - backend
 - separate core project
@@ -49,7 +48,8 @@
 - power Lenta - similar to Scramble but pieces move together in one direction
 
 ## Done
-
+- wrp - check function arguments and output consistency
+- acidic
 - scramble
 - purify
 - kamikadze

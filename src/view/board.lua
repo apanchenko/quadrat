@@ -139,14 +139,18 @@ end
 
 
 -- MODULE ---------------------------------------------------------------------
-function board.wrap()
+function board:wrap()
   local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.fn(board, 'set_ability',   {pos, id, count})
-  wrp.fn(board, 'add_power',     {pos, {'name', typ.str}, count})
-  wrp.fn(board, 'set_color',     {pos, {'pid', 'playerid'}})
-  wrp.fn(board, 'add_spot_comp', {pos, id, count})
+  wrp.wrap_sub_trc(board, 'set_ability',   pos, id, count)
+  wrp.wrap_sub_inf(board, 'add_power',     pos, {'name', typ.str}, count)
+  wrp.wrap_sub_inf(board, 'set_color',     pos, {'pid', 'playerid'})
+  wrp.wrap_sub_inf(board, 'add_spot_comp', pos, id, count)
+end
+
+function board:test()
+  ass.isname(board, 'board')
 end
 
 return board

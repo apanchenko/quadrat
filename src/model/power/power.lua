@@ -11,7 +11,7 @@ local power = obj:extend('power')
 -- @param piece - apply power to this piece
 function power:new(piece, def)
   def.piece = piece
-  def.id = self.type -- TODO: type is unique now, will be not
+  def.id = self:get_typename()
   return obj.new(self, def)
 end
 
@@ -27,7 +27,7 @@ end
 
 -- add to powers map, non-additive
 function power:add_to(powers)
-  powers[self.type] = self
+  powers[self.id] = self
   return 1
 end
 
@@ -52,12 +52,10 @@ function power:move_after (cell_from, cell_to) end
 function power:on_add_jade(jade) end
 
 -- module
-function power.wrap()
-  local info = {log = log.info}
-
-  wrp.fn(power, 'new',      {{'piece'}, {'def', typ.tab}})
-  wrp.fn(power, 'add_to',   {{'powers', typ.tab}})
-  wrp.fn(power, 'can_move', {{'from', 'vec'}, {'to', 'vec'}}, info)
+function power:wrap()
+  wrp.wrap_tbl_trc(power, 'new',      {'piece'}, {'def', typ.tab})
+  wrp.wrap_sub_trc(power, 'add_to',   {'powers', typ.tab})
+  wrp.wrap_sub_trc(power, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 return power

@@ -18,15 +18,15 @@ function col:filter(pos)
 end
 
 -- selftest
-function col.Test()
+function col:test()
   print('test Col..')
 
-  assert(tostring(Col) == 'Col')
+  assert(tostring(col) == 'Col')
 end
 
 -- MODULE ---------------------------------------------------------------------
-function col.wrap()
-  wrp.fn(col, 'filter', {{'pos', vec}})
+function col:wrap()
+  wrp.wrap_sub_inf(col, 'filter', {'pos', vec})
 end
 
 return col

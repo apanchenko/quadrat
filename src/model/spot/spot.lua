@@ -10,38 +10,38 @@ local cfg       = require 'src.model.cfg'
 local cnt       = require 'src.core.cnt'
 local piece     = require 'src.model.piece'
 local jade      = require 'src.model.jade'
+local component = require 'src.model.spot.component.component'
 
 local spot = obj:extend('spot')
 
 -- interface
-function piece.wrap()
-  local opts  = {log = log.info}
+function spot:wrap()
   local x     = {'x', typ.num}
   local y     = {'y', typ.num}
   local space = {'space'}
   local pid   = {'playerid'}
   local piece = {'piece'}
   local from  = {'from', spot}
-  local comp  = {'comp'}
+  local comp  = {'comp', component}
   local stash = {'stash', typ.tab}
 
   -- spot
-  wrp.fn(spot, 'new',           { x,   y,  space  })
+  wrp.wrap_tbl_trc(spot, 'new',           x,   y,  space)
 
   -- piece
-  wrp.fn(spot, 'can_set_piece', {                 }, opts)
-  wrp.fn(spot, 'spawn_piece',   { pid             }) -- create a new piece
-  wrp.fn(spot, 'move_piece',    { from            })
-  wrp.fn(spot, 'stash_piece',   { stash           }) -- put piece into special hidden place for a short time
-  wrp.fn(spot, 'unstash_piece', { stash           }) -- get piece from a stash
+  wrp.wrap_sub_inf(spot, 'can_set_piece')
+  wrp.wrap_sub_trc(spot, 'spawn_piece',   pid) -- create a new piece
+  wrp.wrap_sub_trc(spot, 'move_piece',    from)
+  wrp.wrap_sub_trc(spot, 'stash_piece',   stash) -- put piece into special hidden place for a short time
+  wrp.wrap_sub_trc(spot, 'unstash_piece', stash) -- get piece from a stash
 
   -- jades
-  wrp.fn(spot, 'spawn_jade',    {                 }, opts)
-  wrp.fn(spot, 'set_jade',      {                 }, opts)
-  wrp.fn(spot, 'remove_jade',   {                 }, opts)
+  wrp.wrap_sub_inf(spot, 'spawn_jade')
+  wrp.wrap_sub_inf(spot, 'set_jade')
+  wrp.wrap_sub_inf(spot, 'remove_jade')
 
   -- component
-  wrp.fn(spot, 'add_comp',      { comp            }, opts)
+  wrp.wrap_sub_inf(spot, 'add_comp',      comp)
 end
 
 
@@ -53,7 +53,7 @@ function spot:new(x, y, space)
     space = space, -- duplicate
     pos = vec(x, y), -- duplicate
     jade = nil, -- store
-    comps = {} -- container for powers
+    comps = cnt:new() -- container for powers
   })
 end
 
@@ -108,7 +108,7 @@ end
 
 -- return true if cell is able to receive (spawn or move) piece
 function spot:can_set_piece()
-  return map.all(self.comps, function(comp) return comp:can_set_piece() end)
+  return self.comps:all(function(comp) return comp:can_set_piece() end)
 end
 
 -- create a new piece on this spot
@@ -123,7 +123,7 @@ end
 function spot:move_piece(from)
   -- kill target piece
   if self.piece then
-    self.piece.die()
+    self.piece:die()
     self.space:yell('remove_piece', self.pos) -- notify
   end
   -- change piece position
@@ -149,7 +149,7 @@ support_stash('piece')
 function spot:can_set_jade()
   return self.piece == nil
      and self.jade == nil
-     and map.all(self.comps, function(comp) return comp:can_set_jade() end)
+     and self.comps:all(function(comp) return comp:can_set_jade() end)
 end
 
 -- take chance to spawn a new jade if can
@@ -171,7 +171,7 @@ function spot:set_jade()
 end
 
 -- Remove and return jade
-function spot:remove_jade_before()
+function spot:remove_jade_wrap_before()
   ass(self.jade)
 end
 function spot:remove_jade()
@@ -180,9 +180,9 @@ function spot:remove_jade()
   self.space:yell('remove_jade', self.pos) -- notify that a new jade set
   return jade
 end
-function spot:remove_jade_after(jade)
+function spot:remove_jade_wrap_after(jade)
   ass.nul(self.jade)
-  ass(jade)
+  ass(typ.isname(jade, 'jade'))
 end
 
 -- add stash_jade/unstash_jade functions
@@ -191,7 +191,7 @@ support_stash('jade')
 -- COMPONENTS -----------------------------------------------------------------
 --
 function spot:add_comp(comp)
-  local count = cnt.push(self.comps, comp)
+  local count = self.comps:push(comp)
   self.space:yell('add_spot_comp', self.pos, comp.id, count) -- notify
 end
 

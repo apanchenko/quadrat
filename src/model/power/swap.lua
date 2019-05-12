@@ -19,8 +19,8 @@ function swap:apply_to_spot(spot)
 end
 
 --
-function swap.wrap()
-  wrp.fn(swap, 'apply_to_spot', {{'spot'}})
+function swap:wrap()
+  wrp.wrap_sub_trc(swap, 'apply_to_spot', {'spot'})
 end
 
 return swap

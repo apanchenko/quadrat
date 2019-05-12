@@ -1,30 +1,32 @@
-local check = require 'src.core.chk'
+local typ = require 'src.core.typ'
 
 local m = {}
 
 -- 'v' is true
-function m.__call(_, v, msg) return v or error(msg or tostring(v)..' is false') end
+function m:__call(v, msg)   return v or error(msg or tostring(v)..' is false') end
 
 local ass = setmetatable({}, m)
 
 -- 'v' is nil
 function ass.nul(v, msg)    return v == nil or error(msg or tostring(v)..' is not nil') end
 -- 'v' is not nil
-function ass.NotNil(v, msg) return v ~= nil or error(msg or 'value is nil') end
+function ass.any(v, msg)    return v ~= nil or error(msg or 'value is nil') end
 -- 'v' is a number
-function ass.num(v, msg)    return check.num(v) or error(msg or tostring(v)..' is not a number') end
+function ass.num(v, msg)    return typ.num(v) or error(msg or tostring(v)..' is not a number') end
 -- 'n' is natural number
-function ass.nat(v)         return ass.num(v) and ass(v >= 0) end
+function ass.nat(v, msg)    return typ.nat(v) or error(msg or tostring(v)..' is not natural') end
 -- 'v' is a table
-function ass.tab(v, msg)    return check.tab(v) or error(msg or tostring(v)..' is not a table') end
+function ass.tab(v, msg)    return typ.tab(v) or error(msg or tostring(v)..' is not a table') end
 -- 'v' is a string
-function ass.str(v)         return check.str(v) or error(tostring(v)..' is not a string') end
+function ass.str(v)         return typ.str(v) or error(tostring(v)..' is not a string') end
 -- 'v' is a boolean
-function ass.bool(v)        return check.boo(v) or error(tostring(v)..' is not a boolean') end
+function ass.bool(v)        return typ.boo(v) or error(tostring(v)..' is not a boolean') end
 -- 'v' is a function
-function ass.fun(v, msg)    return check.fun(v) or error(msg or tostring(v)..' is not a function') end
--- 'v' is an instance of T
-function ass.is(t, T, msg)  return check.is(t, T) or error(msg or tostring(t)..' is not '..tostring(T)) end
+function ass.fun(v, msg)    return typ.fun(v) or error(msg or tostring(v)..' is not a function') end
+-- 't' has metatable 'mt'
+function ass.is(t, mt, msg) return typ.is(t, mt) or error(msg or tostring(t)..' is not '..tostring(mt)) end
+-- 't' has metatable with 'name'
+function ass.isname(t, name, msg) return typ.isname(t, name) or error(msg or tostring(t)..' is not '..name) end
 --
 function ass.eq(a, b, msg)  return a == b or error(msg or tostring(a).. ' ~= '.. tostring(b)) end
 function ass.ne(a, b, msg)  return a ~= b or error(msg or tostring(a).. ' == '.. tostring(b)) end
@@ -33,7 +35,7 @@ function ass.gt(a, b, msg)  return a >  b or error(msg or tostring(a).. ' <= '..
 function ass.ge(a, b, msg)  return a >= b or error(msg or tostring(a).. ' > ' .. tostring(b)) end
 
 --
-function ass.test()
+function ass:test()
   ass(true)
   ass.nul(x)
   ass.num(8.8)
@@ -43,5 +45,6 @@ function ass.test()
   ass.bool(false)
   ass.fun(function() end)
 end
+
 
 return ass

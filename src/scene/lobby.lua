@@ -61,12 +61,13 @@ function lobby.goto_lobby()
   return true
 end
 
---
-wrp.fn(lobby, 'on_opponent', {{'room_id', typ.num}, {'createdByMe', typ.boo}}, 'lobby')
-wrp.fn(lobby, 'on_opponent_error', {{'msg', typ.str}}, 'lobby')
+-- interface
+function lobby:wrap()
+  wrp.wrap_sub_trc(lobby, 'on_opponent',       {'room_id', typ.num}, {'createdByMe', typ.boo})
+  wrp.wrap_sub_trc(lobby, 'on_opponent_error', {'msg', typ.str})
+end
 
-function lobby.test()
-  print('test lobby..')
+function lobby:test()
   ass(true)
 end
 

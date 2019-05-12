@@ -50,15 +50,17 @@ function space:col(place)   return (place - (place % self.cols)) / self.cols end
 -- send private event
 function space:whisper(event, ...)
   ass.is(self, space)
-  ass.is(event, typ.str)
+  ass(typ.str(event))
   log:info('space:notify_own', event, ...)
   self.own_evt:call(event, ...)
 end
 
 -- send public event
-function space:yell(event, ...)
+function space:yell_wrap_before(event, ...)
   ass.is(self, space)
-  ass.is(event, typ.str)
+  ass.is(typ.str(event))
+end
+function space:yell(event, ...)
   log:info('space:notify_opp', event, ...)
   self.own_evt:call(event, ...)
   self.opp_evt:call(event, ...)
@@ -86,27 +88,27 @@ function space:spot(vec)    return self.grid[self:index(vec)] end
 --
 function space:select_spots(filter)
   local selected = {}
-  for k, spot in ipairs(self.grid) do
+  self:each_spot(function(spot)
     if filter(spot) then
       selected[#selected + 1] = spot
     end
-  end
+  end)
   return selected
 end
 --
 function space:each_spot(fn)
-  for k, spot in ipairs(self.grid) do
-    fn(spot)
+  for i = 0, #self.grid do
+    fn(self.grid[i])
   end
 end
 --
 function space:each_piece(fn)
-  for k, spot in ipairs(self.grid) do
+  self:each_spot(function(spot)
     local piece = spot.piece
     if piece then
       fn(piece)
     end
-	end
+  end)
 end
 
 -- PIECES----------------------------------------------------------------------
@@ -124,13 +126,13 @@ function space:count_pieces()
   res[tostring(playerid.white)] = 0
   res[tostring(playerid.black)] = 0
 
-  for i = 0, #self.grid do -- pics is not dense, so use # on grid
-    local piece = self.grid[i].piece
+  self:each_spot(function(spot)
+    local piece = spot.piece
     if piece then
       local idx = tostring(piece.pid)
       res[idx] = res[idx] + 1
     end
-  end
+  end)
   return res
 end
 
@@ -186,9 +188,9 @@ function space:move(fr, to)
 
   -- randomly spawn jades
   if (self.move_count % cfg.jade.moves) == 0 then
-    for i = 0, #self.grid do -- pics is not dense, so use # on grid
-      self.grid[i]:spawn_jade()
-    end
+    self:each_spot(function(spot)
+      spot:spawn_jade()
+    end)
   end
 
   self:yell('move', self.pid) -- notify color to move
@@ -211,26 +213,25 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
-function space.wrap()
-  local info = {log = log.info}
-  --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
-  wrp.fn(space, 'setup',      {})
-  wrp.fn(space, 'pos',        {{'index', typ.num}})
-  wrp.fn(space, 'width',      {},                           info)
-  wrp.fn(space, 'height',     {})
-  wrp.fn(space, 'row',        {{'place', typ.num}})
-  wrp.fn(space, 'col',        {{'place', typ.num}})
-  wrp.fn(space, 'pos',        {{'index', typ.num}})
-  wrp.fn(space, 'index',      {{'vec', vec}},               info)
-  wrp.fn(space, 'spot',       {{'pos', vec}},               info)
-  wrp.fn(space, 'each_piece', {{'fn', typ.fun}},            info)
-  wrp.fn(space, 'each_spot',  {{'fn', typ.fun}},            info)
-  wrp.fn(space, 'count_pieces', {},                         info)
-  wrp.fn(space, 'piece',      {{'pos', vec}},               info)
-  wrp.fn(space, 'who_move',   {}, info)
-  wrp.fn(space, 'can_move',   {{'from', vec}, {'to', vec}}, info)
-  wrp.fn(space, 'move',       {{'from', vec}, {'to', vec}})
-  wrp.fn(space, 'use',        {{'pos', vec}, {'ability_name', typ.str}})
+function space:wrap()
+   --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
+  wrp.wrap_sub_trc(space, 'setup')
+  wrp.wrap_sub_inf(space, 'pos',        {'index', typ.num})
+  wrp.wrap_sub_inf(space, 'width')
+  wrp.wrap_sub_inf(space, 'height')
+  wrp.wrap_sub_trc(space, 'row',        {'place', typ.num})
+  wrp.wrap_sub_inf(space, 'col',        {'place', typ.num})
+  wrp.wrap_sub_inf(space, 'pos',        {'index', typ.num})
+  wrp.wrap_sub_inf(space, 'index',      {'vec', vec})
+  wrp.wrap_sub_inf(space, 'spot',       {'pos', vec})
+  wrp.wrap_sub_inf(space, 'each_piece', {'fn', typ.fun})
+  wrp.wrap_sub_inf(space, 'each_spot',  {'fn', typ.fun})
+  wrp.wrap_sub_inf(space, 'count_pieces')
+  wrp.wrap_sub_inf(space, 'piece',      {'pos', vec})
+  wrp.wrap_sub_inf(space, 'who_move')
+  wrp.wrap_sub_inf(space, 'can_move',   {'from', vec}, {'to', vec})
+  wrp.wrap_sub_trc(space, 'move',       {'from', vec}, {'to', vec})
+  wrp.wrap_sub_trc(space, 'use',        {'pos', vec}, {'ability_name', typ.str})
 end
 
 -- return module

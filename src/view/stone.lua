@@ -55,7 +55,6 @@ function stone:set_color(pid)
     if self.img then
       self.img:removeSelf()
     end
-    cfg.view.cell.order = 1
     cfg.view.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
     self.img = lay.image(self, cfg.view.cell)
   end
@@ -67,7 +66,7 @@ end
 
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
-  ass.is(board, 'board')
+  ass.isname(board, 'board')
   lay.render(board, self, {vx=0, vy=0})
   self.board = board
 end
@@ -190,11 +189,11 @@ end
 -- to be called from board
 function stone:deselect()
   if self.isSelected then
-    local depth = log:trace(self, ":deselect"):enter()
+    log:trace(self, ":deselect"):enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos(self._pos)                  -- adgjust group position
       self._abilities:hide()
-    log:exit(depth)
+    log:exit()
   end
 end
 --
@@ -219,7 +218,8 @@ function stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self.view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
-    lay.render(self.board, self, {x=self.view.x, y=self.view.y})
+    --lay.render(self.board, self, {x=self.view.x, y=self.view.y})
+    self.view:toFront()
   end
 end
 
@@ -250,23 +250,22 @@ function stone:update_group_pos(pos)
 end
 
 --
-function stone.wrap()
+function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
-  local info = {log = log.info}
 
-  wrp.fn(stone, 'new',          {{'pid', 'playerid'}})
-  wrp.fn(stone, 'select')
-  wrp.fn(stone, 'deselect',     {}, info)
-  wrp.fn(stone, 'set_color',    {{'playerid'}})
-  wrp.fn(stone, 'color',        {}, info)
-  wrp.fn(stone, 'puton',        {{'board'}})
-  wrp.fn(stone, 'putoff')
-  wrp.fn(stone, 'pos')
-  wrp.fn(stone, 'set_ability',  {{'id', typ.str}, {'count', typ.num}})
-  wrp.fn(stone, 'add_power',    {{'id', typ.str}, {'result_count', typ.num}})
-  wrp.fn(stone, 'touch',        {event}, info)
-  wrp.fn(stone, 'touch_began',  {event}, info)
-  wrp.fn(stone, 'touch_moved',  {event}, info)
+  wrp.wrap_tbl_trc(stone, 'new',          {'pid', 'playerid'})
+  wrp.wrap_sub_trc(stone, 'select')
+  wrp.wrap_sub_inf(stone, 'deselect')
+  wrp.wrap_sub_trc(stone, 'set_color',    {'playerid'})
+  wrp.wrap_sub_inf(stone, 'color')
+  wrp.wrap_sub_trc(stone, 'puton',        {'board'})
+  wrp.wrap_sub_trc(stone, 'putoff')
+  wrp.wrap_sub_trc(stone, 'pos')
+  wrp.wrap_sub_trc(stone, 'set_ability',  {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_sub_trc(stone, 'add_power',    {'id', typ.str}, {'result_count', typ.num})
+  wrp.wrap_sub_inf(stone, 'touch',        event)
+  wrp.wrap_sub_inf(stone, 'touch_began',  event)
+  wrp.wrap_sub_inf(stone, 'touch_moved',  event)
 end
 
 return stone

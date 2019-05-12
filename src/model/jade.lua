@@ -16,19 +16,19 @@ function jade:new()
   self = obj.new(self)
   self.power = powers:random(function(p) return p:can_spawn() end)
   ass(self.power)
-  self.id = self.power.type
+  self.id = tostring(self.power)
   self.count = 1
 
   if self.power.is_areal then
     self.zone = zones:random()
-    self.id = self.id.. ' '.. self.zone.type
+    self.id = self.id.. ' '.. tostring(self.zone)
   end
   return self
 end
 
 --
 function jade:__tostring()
-  return self.type.. '{'.. self.id.. '}'
+  return self:get_typename().. '{'.. self.id.. '}'
 end
 
 --
@@ -78,10 +78,10 @@ function jade:use(piece)
 end
 
 -- module
-function jade.wrap()
-  wrp.fn(jade, 'new',    {}, {log=log.info})
-  wrp.fn(jade, 'add_to', {{'jades', typ.tab}})
-  wrp.fn(jade, 'use',    {{'piece'}})
+function jade:wrap()
+  wrp.wrap_tbl_inf(jade, 'new')
+  wrp.wrap_sub_trc(jade, 'add_to', {'jades', typ.tab})
+  wrp.wrap_sub_trc(jade, 'use',    {'piece'})
   --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 

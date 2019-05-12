@@ -6,7 +6,6 @@ local log         = require 'src.core.log'
 
 -- Core dependency graph:
 -- typ bld
--- chk
 -- ass
 -- log
 -- wrp lay
@@ -23,22 +22,24 @@ function pkg:new(path)
   return obj.new(self,
   {
     path = path,
-    modules = {}
+    names = {}, -- array of module names, keeping order
+    modules = {} -- map id->module
   })
 end
 
 -- load module to package
 function pkg:load(...)
-  local args = {...}
-  local depth = log:info(self.path..':load('..arr.tostring(args)..')'):enter()
-  arr.each(args, function(name)
+  self.names = {...}
+  log:info(self.path..':load('..arr.tostring(self.names)..')'):enter()
+  arr.each(self.names, function(name)
+    log:info(name)
     local fullname = self.path.. '.'.. name
-    local module = require(fullname)
-    ass(module, 'failed found module '.. fullname)
+    local mod = require(fullname)
+    ass(mod, 'failed found module '.. fullname)
     ass.nul(self.modules[name], 'module '.. name.. ' already loaded')
-    self.modules[name] = module
+    self.modules[name] = mod
   end)
-  log:exit(depth)
+  log:exit()
   return self
 end
 
@@ -52,18 +53,18 @@ pkg.find = pkg.get
 
 -- wrap modules
 function pkg:wrap()
+  local core = require 'src.core.package'
   -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':wrap'):enter()
+  log:trace(self.path..':wrap() '.. arr.tostring(self.names)):enter()
   -- for all modules
-  for id, module in pairs(self.modules) do
-    local mod_wrap = module.wrap
-    if mod_wrap then
-      local depth = log:trace(id..':wrap'):enter()
-      mod_wrap(module)
-      log:exit(depth)
+  arr.each(self.names, function(name)
+    local mod = self.modules[name]
+    if mod.wrap then
+      log:trace(name..':wrap(core)')
+      mod:wrap(core)
     end
-  end
-  log:exit(depth)
+  end)
+  log:exit()
 end
 
 -- get random module
@@ -76,17 +77,14 @@ end
 
 -- test modules
 function pkg:test()
-  -- cannot wrap the wrapper so do logging manually
-  local depth = log:trace(self.path..':test'):enter()
-  for id, module in pairs(self.modules) do
-    local mod_test = module.test
-    if mod_test then
-      local depth = log:trace(id..':test'):enter()
-      mod_test(module)
-      log:exit(depth)
+  arr.each(self.names, function(name)
+    local mod = self.modules[name]
+    if mod.test then
+      log:trace(name..':test(ass)'):enter()
+      mod:test(ass)
+      log:exit()
     end
-  end
-  log:exit(depth)
+  end)
 end
 
 -- module

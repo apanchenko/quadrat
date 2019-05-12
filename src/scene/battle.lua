@@ -24,8 +24,8 @@ end
 
 --
 function battle.goto_solo()
-  env.player_white = agent:get('user'):new(env, playerid.white)
-  env.player_black = agent:get('random'):new(env, playerid.black)
+  env.player_white = agent:get('random'):new(env, playerid.white)
+  env.player_black = agent:get('user'):new(env, playerid.black)
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
@@ -95,13 +95,12 @@ battle:addEventListener("destroy", battle)
 
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
-function battle.wrap()
-  wrp.fn(battle, 'move', {{'playerid'}}, {log = log.info})
+function battle:wrap()
+  wrp.wrap_tbl_inf(battle, 'move', {'playerid'})
 end
 
 --
-function battle.test()
-  print('test battle..')
+function battle:test()
   ass(true)
 end
 

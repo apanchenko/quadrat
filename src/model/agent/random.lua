@@ -28,7 +28,7 @@ function random:on_space(space)
 end
 --
 function random:__tostring()
-  return 'random_player['..tostring(self.pid)..']'
+  return 'random_player{'..tostring(self.pid)..'}'
 end
 --
 function random:move(pid)
@@ -47,7 +47,7 @@ function random:move_async()
     local piece = space:piece(from)
     if piece ~= nil and piece.pid == self.pid then
       -- execute random ability
-      local jade = map.random(piece.jades)
+      local jade = piece.jades:random()
       if jade then
         piece:use_jade(jade.id)
       end
@@ -69,9 +69,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function random:wrap()
-  wrp.fn(random, 'new',     {{'env', typ.any}, {'playerid'}}) -- env?
-  wrp.fn(random, 'move',    {{'playerid'}}, {log=log.info})
-  wrp.fn(random, 'move_async')
+  wrp.wrap_tbl_trc(random, 'new',       {'env', typ.any}, {'playerid'})
+  wrp.wrap_sub_inf(random, 'move',      {'playerid'})
+  wrp.wrap_sub_trc(random, 'move_async')
 end
 
 return random

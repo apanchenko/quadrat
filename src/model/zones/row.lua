@@ -17,16 +17,16 @@ function row:filter(pos)
 end
 
 -- selftest
-function row.Test()
+function row:test()
   print('test row..')
 
   assert(tostring(row) == 'Row')
 end
 
 -- MODULE ---------------------------------------------------------------------
-function row.wrap()
-  wrp.fn(row, 'new', {{'pos', vec}})
-  wrp.fn(row, 'filter', {{'pos', vec}})
+function row:wrap()
+  wrp.wrap_tbl_inf(row, 'new',    {'pos', vec})
+  wrp.wrap_sub_inf(row, 'filter', {'pos', vec})
 end
 
 

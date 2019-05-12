@@ -9,7 +9,7 @@ local vec = obj:extend('vec')
 vec.x = 0
 vec.y = 0
 
--- stateless ------------------------------------------------------------------
+-- static ---------------------------------------------------------------------
 --
 function vec.copy(from, to)
   to.x = from.x
@@ -46,7 +46,7 @@ end
 -- methods ---------------------------------------------------------------------
 --
 function vec:__tostring()
-  return '{'.. self.x.. ",".. self.y.. '}'
+  return '{'..self.x.. ",".. self.y..'}'
 end
 -- square length
 function vec:length2()
@@ -72,22 +72,22 @@ vec.one = vec(1, 1)
 
 -- module ---------------------------------------------------------------------
 -- wrap vec functions
-function vec.wrap()
-  local opts = { static = true, log = log.info }
-  wrp.fn(vec, 'copy', {{'from', typ.tab}, {'to', typ.tab}}, opts)
-  wrp.fn(vec, 'center', {{'obj', typ.tab}}, opts)
-  opts.static = false
-  wrp.fn(vec, 'new', {{'x', typ.num}, {'y', typ.num}}, opts)
-  wrp.fn(vec, 'random', {{'min', vec}, {'max', vec}}, opts)
-  wrp.fn(vec, 'from', {{'obj', typ.tab}}, opts)
-  wrp.fn(vec, 'length2', {}, opts)
-  wrp.fn(vec, 'round', {}, opts)
-  wrp.fn(vec, 'to', {{'obj', typ.tab}}, opts)
-  wrp.fn(vec, 'abs', {}, opts)
+function vec:wrap()
+  wrp.wrap_stc_inf(vec, 'copy',   {'from', typ.tab}, {'to', typ.tab})
+  wrp.wrap_stc_inf(vec, 'center', {'obj', typ.tab})
+  
+  wrp.wrap_tbl_inf(vec, 'new',    {'x', typ.num}, {'y', typ.num})
+  wrp.wrap_tbl_inf(vec, 'random', {'min', vec}, {'max', vec})
+  wrp.wrap_tbl_inf(vec, 'from',   {'obj', typ.tab})
+  
+  wrp.wrap_sub_inf(vec, 'length2')
+  wrp.wrap_sub_inf(vec, 'round')
+  wrp.wrap_sub_inf(vec, 'to',     {'obj', typ.tab})
+  wrp.wrap_sub_inf(vec, 'abs')
 end
 
 -- selftest
-function vec.test()
+function vec:test()
   assert(tostring(vec.one) == '{1,1}')
   
   local a = vec(2, 2)

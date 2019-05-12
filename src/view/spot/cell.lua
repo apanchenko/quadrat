@@ -51,7 +51,7 @@ function cell:remove_jade()
 end
 
 -- put jade into special hidden place for a short time
-function cell:stash_jade_before()
+function cell:stash_jade_wrap_before()
   ass(self._jade)
 end
 function cell:stash_jade(stash)
@@ -60,12 +60,12 @@ function cell:stash_jade(stash)
   --jade:set_pos(nil)
   arr.push(stash, jade)
 end
-function cell:stash_jade_after()
+function cell:stash_jade_wrap_after()
   ass.nul(self._jade)
 end
 
 -- get jade from stash
-function cell:unstash_jade_before()
+function cell:unstash_jade_wrap_before()
   ass.nul(self._stone)
   ass.nul(self._jade)
 end
@@ -73,7 +73,7 @@ function cell:unstash_jade(stash)
   self._jade = arr.pop(stash)
   --self._jade:set_pos(self.pos)
 end
-function cell:unstash_jade_after()
+function cell:unstash_jade_wrap_after()
   ass(self._jade)
 end
 
@@ -90,7 +90,7 @@ function cell:stone()
 end
 --
 function cell:remove_stone()
-  ass(self._stone)
+  ass(self._stone, tostring(self).. ' has no stone')
   local stone = self._stone
   self._stone = nil
   return stone
@@ -128,13 +128,11 @@ function cell:unstash_piece_after()
 end
 
 -- MODULE-----------------------------------------------------------------------
-function cell.wrap()
-  ass(log.info)
-  local info = {log = log.info}
-  wrp.fn(cell, 'new',         {{'spot'}})
-  wrp.fn(cell, 'set_stone',   {{'stone'}})
-  wrp.fn(cell, 'stone',       {}, info)
-  wrp.fn(cell, 'remove_stone')
+function cell:wrap()
+  wrp.wrap_tbl_trc(cell, 'new',       {'spot'})
+  wrp.wrap_sub_trc(cell, 'set_stone', {'stone'})
+  wrp.wrap_sub_trc(cell, 'stone')
+  wrp.wrap_sub_trc(cell, 'remove_stone')
 end
 
 return cell

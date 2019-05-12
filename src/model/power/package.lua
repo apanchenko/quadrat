@@ -24,5 +24,4 @@ return pkg
   'scramble',
   'sphere',
   'swap',
-  'teach'
-)
+  'teach')

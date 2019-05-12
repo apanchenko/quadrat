@@ -10,8 +10,8 @@ local cfg = {
   },
 
   board = {
-    cols = 8,
-    rows = 8
+    cols = 7,
+    rows = 7
   },
 
   switching = {
