@@ -1,6 +1,6 @@
 local areal     = require 'src.model.power.areal'
-local ass       = require 'src.core.ass'
-local arr       = require 'src.core.arr'
+local ass       = require 'src.luacor.ass'
+local arr       = require 'src.luacor.arr'
 
 local scramble = areal:extend('Scramble')
 

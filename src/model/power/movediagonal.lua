@@ -1,4 +1,4 @@
-local wrp     = require 'src.core.wrp'
+local wrp     = require 'src.luacor.wrp'
 local power   = require 'src.model.power.power'
 
 local movediagonal = power:extend('Movediagonal')

@@ -1,8 +1,8 @@
-local vec = require 'src.core.vec'
+local vec = require 'src.luacor.vec'
 local cfg = require 'src.cfg'
-local lay = require 'src.core.lay'
-local ass = require 'src.core.ass'
-local obj = require 'src.core.obj'
+local lay = require 'src.luacor.lay'
+local ass = require 'src.luacor.ass'
+local obj = require 'src.luacor.obj'
 
 -------------------------------------------------------------------------------
 local player = obj:extend('player')

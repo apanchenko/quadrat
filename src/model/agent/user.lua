@@ -1,8 +1,8 @@
-local ass       = require 'src.core.ass'
-local log       = require 'src.core.log'
-local obj       = require 'src.core.obj'
-local wrp       = require 'src.core.wrp'
-local typ       = require 'src.core.typ'
+local ass       = require 'src.luacor.ass'
+local log       = require 'src.luacor.log'
+local obj       = require 'src.luacor.obj'
+local wrp       = require 'src.luacor.wrp'
+local typ       = require 'src.luacor.typ'
 
 -- controller for user
 local user = obj:extend('user')

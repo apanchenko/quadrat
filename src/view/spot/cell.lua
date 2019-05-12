@@ -1,11 +1,11 @@
-local vec   = require 'src.core.vec'
-local arr   = require 'src.core.arr'
+local vec   = require 'src.luacor.vec'
+local arr   = require 'src.luacor.arr'
 local cfg   = require 'src.cfg'
-local lay   = require "src.core.lay"
-local log   = require "src.core.log"
-local ass   = require "src.core.ass"
-local obj   = require "src.core.obj"
-local wrp   = require 'src.core.wrp'
+local lay   = require "src.luacor.lay"
+local log   = require "src.luacor.log"
+local ass   = require "src.luacor.ass"
+local obj   = require "src.luacor.obj"
+local wrp   = require 'src.luacor.wrp'
 local spot  = require 'src.model.spot.spot'
 
 local cell = obj:extend('cell')

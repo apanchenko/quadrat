@@ -1,9 +1,9 @@
-local obj         = require 'src.core.obj'
-local typ       = require 'src.core.typ'
-local ass         = require 'src.core.ass'
-local log         = require 'src.core.log'
-local wrp         = require 'src.core.wrp'
-local lay         = require 'src.core.lay'
+local obj         = require 'src.luacor.obj'
+local typ       = require 'src.luacor.typ'
+local ass         = require 'src.luacor.ass'
+local log         = require 'src.luacor.log'
+local wrp         = require 'src.luacor.wrp'
+local lay         = require 'src.luacor.lay'
 local cfg         = require 'src.cfg'
 
 local image = obj:extend('view.power.image')

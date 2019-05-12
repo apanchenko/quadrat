@@ -1,8 +1,8 @@
-local ass = require 'src.core.ass'
-local obj = require 'src.core.obj'
-local log = require 'src.core.log'
-local wrp = require 'src.core.wrp'
-local typ = require 'src.core.typ'
+local ass = require 'src.luacor.ass'
+local obj = require 'src.luacor.obj'
+local log = require 'src.luacor.log'
+local wrp = require 'src.luacor.wrp'
+local typ = require 'src.luacor.typ'
 
 local playerid = obj:extend('playerid')
 

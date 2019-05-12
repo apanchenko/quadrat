@@ -1,5 +1,5 @@
-local ass       = require 'src.core.ass'
-local wrp       = require 'src.core.wrp'
+local ass       = require 'src.luacor.ass'
+local wrp       = require 'src.luacor.wrp'
 local power     = require 'src.model.power.power'
 
 -- @see parasite

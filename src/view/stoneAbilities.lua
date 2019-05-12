@@ -1,14 +1,14 @@
 local widget    = require 'widget'
-local arr       = require 'src.core.arr'
-local vec       = require 'src.core.vec'
+local arr       = require 'src.luacor.arr'
+local vec       = require 'src.luacor.vec'
 local cfg       = require 'src.cfg'
-local lay       = require 'src.core.lay'
-local ass       = require 'src.core.ass'
-local log       = require 'src.core.log'
-local obj       = require 'src.core.obj'
-local typ       = require 'src.core.typ'
-local wrp       = require 'src.core.wrp'
-local env       = require 'src.core.env'
+local lay       = require 'src.luacor.lay'
+local ass       = require 'src.luacor.ass'
+local log       = require 'src.luacor.log'
+local obj       = require 'src.luacor.obj'
+local typ       = require 'src.luacor.typ'
+local wrp       = require 'src.luacor.wrp'
+local env       = require 'src.luacor.env'
 
 local stoneAbilities = obj:extend('stoneAbilities')
 

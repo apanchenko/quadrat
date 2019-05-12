@@ -1,6 +1,6 @@
 local power = require 'src.model.power.power'
-local ass   = require 'src.core.ass'
-local arr   = require 'src.core.arr'
+local ass   = require 'src.luacor.ass'
+local arr   = require 'src.luacor.arr'
 
 local rehash = power:extend('Rehash')
 

@@ -1,7 +1,7 @@
-local ass       = require 'src.core.ass'
-local log       = require 'src.core.log'
-local wrp       = require 'src.core.wrp'
-local obj       = require 'src.core.obj'
+local ass       = require 'src.luacor.ass'
+local log       = require 'src.luacor.log'
+local wrp       = require 'src.luacor.wrp'
+local obj       = require 'src.luacor.obj'
 local component = require 'src.model.spot.component.component'
 
 local acidic = component:extend('spot_acidic')
