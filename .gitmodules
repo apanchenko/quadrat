@@ -1,0 +1,3 @@
+[submodule "src/luacor"]
+	path = src/luacor
+	url = https://github.com/apanchenko/luacor.git
