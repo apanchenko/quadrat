@@ -1,6 +1,6 @@
-local ass     = require 'src.luacor.ass'
-local log     = require 'src.luacor.log'
-local wrp     = require 'src.luacor.wrp'
+local ass     = require 'src.lua-cor.ass'
+local log     = require 'src.lua-cor.log'
+local wrp     = require 'src.lua-cor.wrp'
 local areal   = require 'src.model.power.areal'
 
 local destroy = areal:extend('Destroy')

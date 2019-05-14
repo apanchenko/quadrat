@@ -1,9 +1,9 @@
-local obj         = require 'src.luacor.obj'
-local typ         = require 'src.luacor.typ'
-local ass         = require 'src.luacor.ass'
-local log         = require 'src.luacor.log'
-local wrp         = require 'src.luacor.wrp'
-local lay         = require 'src.luacor.lay'
+local obj         = require 'src.lua-cor.obj'
+local typ         = require 'src.lua-cor.typ'
+local ass         = require 'src.lua-cor.ass'
+local log         = require 'src.lua-cor.log'
+local wrp         = require 'src.lua-cor.wrp'
+local lay         = require 'src.lua-cor.lay'
 local cfg         = require 'src.cfg'
 
 local invisible = obj:extend('view.power.invisible')

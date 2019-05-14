@@ -1,8 +1,8 @@
-local ass       = require 'src.luacor.ass'
-local obj       = require 'src.luacor.obj'
-local log       = require 'src.luacor.log'
-local vec       = require 'src.luacor.vec'
-local wrp     = require 'src.luacor.wrp'
+local ass       = require 'src.lua-cor.ass'
+local obj       = require 'src.lua-cor.obj'
+local log       = require 'src.lua-cor.log'
+local vec       = require 'src.lua-cor.vec'
+local wrp     = require 'src.lua-cor.wrp'
 
 local row = obj:extend('Row')
 

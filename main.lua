@@ -1,8 +1,8 @@
 print(_VERSION)
 
-local env = require 'src.luacor.env'
+local env = require 'src.lua-cor.env'
 
-env.log = require 'src.luacor.log'
+env.log = require 'src.lua-cor.log'
 env.cfg = require 'src.cfg'
 
 local package = require 'src.package'

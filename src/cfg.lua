@@ -1,5 +1,5 @@
-local bld = require 'src.luacor.bld'
-local vec = require 'src.luacor.vec'
+local bld = require 'src.lua-cor.bld'
+local vec = require 'src.lua-cor.vec'
 
 local cfg = {
   build   = bld.develop,

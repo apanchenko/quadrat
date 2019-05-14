@@ -1,9 +1,9 @@
-local ass       = require 'src.luacor.ass'
-local vec       = require 'src.luacor.vec'
-local obj       = require 'src.luacor.obj'
-local log       = require 'src.luacor.log'
-local arr       = require 'src.luacor.arr'
-local wrp       = require 'src.luacor.wrp'
+local ass       = require 'src.lua-cor.ass'
+local vec       = require 'src.lua-cor.vec'
+local obj       = require 'src.lua-cor.obj'
+local log       = require 'src.lua-cor.log'
+local arr       = require 'src.lua-cor.arr'
+local wrp       = require 'src.lua-cor.wrp'
 
 local radial = obj:extend('radial')
 

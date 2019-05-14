@@ -1,5 +1,5 @@
-local ass     = require 'src.luacor.ass'
-local log     = require 'src.luacor.log'
+local ass     = require 'src.lua-cor.ass'
+local log     = require 'src.lua-cor.log'
 local power   = require 'src.model.power.power'
 
 local jumpproof = power:extend('Jumpproof')

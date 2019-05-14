@@ -1,6 +1,6 @@
-local ass     = require 'src.luacor.ass'
-local wrp     = require 'src.luacor.wrp'
-local typ     = require 'src.luacor.typ'
+local ass     = require 'src.lua-cor.ass'
+local wrp     = require 'src.lua-cor.wrp'
+local typ     = require 'src.lua-cor.typ'
 local counted = require 'src.model.power.counted'
 
 local multiply = counted:extend('Multiply')

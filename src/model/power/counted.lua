@@ -1,7 +1,7 @@
-local ass     = require 'src.luacor.ass'
-local log     = require 'src.luacor.log'
-local typ     = require 'src.luacor.typ'
-local wrp     = require 'src.luacor.wrp'
+local ass     = require 'src.lua-cor.ass'
+local log     = require 'src.lua-cor.log'
+local typ     = require 'src.lua-cor.typ'
+local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
 
 -- power with counter

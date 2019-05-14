@@ -1,10 +1,10 @@
-local log       = require 'src.luacor.log'
-local obj       = require 'src.luacor.obj'
-local typ       = require 'src.luacor.typ'
-local ass       = require 'src.luacor.ass'
-local map       = require 'src.luacor.map'
-local arr       = require 'src.luacor.arr'
-local wrp       = require 'src.luacor.wrp'
+local log       = require 'src.lua-cor.log'
+local obj       = require 'src.lua-cor.obj'
+local typ       = require 'src.lua-cor.typ'
+local ass       = require 'src.lua-cor.ass'
+local map       = require 'src.lua-cor.map'
+local arr       = require 'src.lua-cor.arr'
+local wrp       = require 'src.lua-cor.wrp'
 
 local photon    = require 'plugin.photon'
 local Client    = photon.loadbalancing.LoadBalancingClient
