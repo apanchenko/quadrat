@@ -76,7 +76,7 @@ end
 
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
-  local stone = stone:new(color) -- create a new stone
+  local stone = stone:new(env, color) -- create a new stone
   stone:puton(self) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)

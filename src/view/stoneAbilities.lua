@@ -38,7 +38,7 @@ function stoneAbilities:set_count(id, count)
   end
 
   if count > 0 and self._mark == nil then
-    cfg.view.cell.path = "src/view/ability_"..tostring(self._stone:color())..".png"
+    cfg.view.cell.path = "src/view/ability_"..tostring(self._stone:get_pid())..".png"
     cfg.view.cell.order = 1
     self._mark = lay.image(self._stone, cfg.view.cell)
   end

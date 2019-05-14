@@ -61,7 +61,7 @@ function space:yell_wrap_before(event, ...)
   ass.is(typ.str(event))
 end
 function space:yell(event, ...)
-  log:info('space:notify_opp', event, ...)
+  log:info('space:yell', event, ...)
   self.own_evt:call(event, ...)
   self.opp_evt:call(event, ...)
 end

@@ -11,14 +11,14 @@ local Abilities   = require 'src.view.stoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.cfg'
 local powers      = require 'src.view.power.powers'
-local env         = require 'src.lua-cor.env'
 
 local stone = obj:extend('stone')
 
 --INIT-------------------------------------------------------------------------
-function stone:new(pid)
+function stone:new(env, pid)
   self = obj.new(self,
   {
+    env = env,
     view = display.newGroup(),
     scale = 1,
     powers = {},
@@ -60,7 +60,7 @@ function stone:set_color(pid)
   end
 end
 --
-function stone:color()
+function stone:get_pid()
   return self.pid
 end
 
@@ -106,7 +106,7 @@ end
 function stone:add_power(id, result_count)
   local power = self.powers[id]
   if power == nil then
-    self.powers[id] = powers[id]:new(self, id, result_count)
+    self.powers[id] = powers[id]:new(self.env, self, id, result_count)
   else
     self.powers[id] = power:set_count(result_count)
   end
@@ -116,7 +116,7 @@ end
 -- touch listener function
 function stone:touch(event)
   -- do not touch opponent stones
-  if env.space:who_move() ~= self.pid then
+  if self.env.space:who_move() ~= self.pid then
     log:trace('not my move')
     return true
   end
@@ -133,7 +133,7 @@ function stone:touch(event)
   if event.phase == "moved" then
     local proj = self:touch_moved(event)
 
-    if env.space:can_move(self._pos, proj) then
+    if self.env.space:can_move(self._pos, proj) then
       self:create_project(proj)
     else
       self:remove_project()
@@ -144,7 +144,7 @@ function stone:touch(event)
   if event.phase == "ended" or event.phase == "cancelled" then
     self:set_drag(nil)
     if self.proj then
-      env.space:move(self._pos, self.proj)
+      self.env.space:move(self._pos, self.proj)
       self.board:select(nil) -- deselect any
     else
       if self.isSelected then
@@ -253,11 +253,11 @@ end
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
 
-  wrp.wrap_tbl_trc(stone, 'new',          {'pid', 'playerid'})
+  wrp.wrap_tbl_trc(stone, 'new',          {'env'}, {'pid', 'playerid'})
   wrp.wrap_sub_trc(stone, 'select')
   wrp.wrap_sub_inf(stone, 'deselect')
   wrp.wrap_sub_trc(stone, 'set_color',    {'playerid'})
-  wrp.wrap_sub_inf(stone, 'color')
+  wrp.wrap_sub_inf(stone, 'get_pid')
   wrp.wrap_sub_trc(stone, 'puton',        {'board'})
   wrp.wrap_sub_trc(stone, 'putoff')
   wrp.wrap_sub_trc(stone, 'pos')

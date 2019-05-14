@@ -1,19 +1,20 @@
 local obj         = require 'src.lua-cor.obj'
 local typ         = require 'src.lua-cor.typ'
 local ass         = require 'src.lua-cor.ass'
-local log         = require 'src.lua-cor.log'
 local wrp         = require 'src.lua-cor.wrp'
-local lay         = require 'src.lua-cor.lay'
-local cfg         = require 'src.cfg'
 
 local invisible = obj:extend('view.power.invisible')
 
--- constructor
 -- create image with initial one count
-function invisible:new(stone, id, count)
+function invisible:new(env, stone, id, count)
   ass.eq(count, 1)
-  stone.view.alpha = 0.5
-  return obj.new(self, {view = stone.view})
+  self = obj.new(self, {
+    env = env,
+    stone = stone,
+  })
+  self:move(self.env.space:who_move())
+  self.env.space.opp_evt:add(self)
+  return self
 end
 
 --
@@ -21,16 +22,25 @@ function invisible:set_count(count)
   if count > 0 then
     return self
   end
-  self.view.alpha = 1
-  self.image:removeSelf()
+  self.stone.view.alpha = 1
 end
 
+-- space event
+function invisible:move(pid)
+  local alpha = 0
+  if self.stone:get_pid() == pid then
+      alpha = 0.5
+  end
+  self.stone.view.alpha = alpha
+end
 
 --MODULE-----------------------------------------------------------------------
 function invisible:wrap()
   local count = {'count', typ.num}
-  wrp.wrap_tbl_trc(image, 'new',        {'stone'}, {'id', typ.str}, count)
-  wrp.wrap_sub_trc(image, 'set_count',  count)
+
+  wrp.wrap_tbl_trc(invisible, 'new',        {'env'}, {'stone'}, {'id', typ.str}, count)
+  wrp.wrap_sub_trc(invisible, 'set_count',  count)
+  wrp.wrap_sub_trc(invisible, 'move',       {'playerid'})
 end
 
 return invisible

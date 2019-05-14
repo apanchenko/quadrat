@@ -10,7 +10,7 @@ local image = obj:extend('view.power.image')
 
 -- constructor
 -- create image with initial one count
-function image:new(stone, name)
+function image:new(env, stone, name)
   self = obj.new(self)
   cfg.view.cell.path = 'src/view/power/'..name..'.png'
   cfg.view.cell.order = 10
@@ -29,7 +29,7 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function image:wrap()
-  wrp.wrap_sub_trc(image, 'new',        {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.wrap_sub_trc(image, 'new',        {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
   wrp.wrap_sub_trc(image, 'set_count',  {'count', typ.num})
 end
 

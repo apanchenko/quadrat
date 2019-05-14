@@ -33,7 +33,7 @@ end
 --
 function random:move(pid)
   if pid == self.pid then
-    timer.performWithDelay(20, function() self:move_async() end)
+    timer.performWithDelay(1000, function() self:move_async() end)
   end
 end
 --

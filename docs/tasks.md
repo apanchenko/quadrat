@@ -3,14 +3,14 @@
 ## Todo
 
 ### Core
-- fix invisible
+
 - rename view.* similar to model.*
 - spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
 - ground mods:       refurb, power plant
-- piece mods:        bankrupt, network, spyware, invis, rat tail, inhibit
+- piece mods:        bankrupt, network, spyware, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
 - ability powers:    2x, benefactor, scavenger
 - attack powers:     bombs
@@ -32,7 +32,6 @@
 - build for win32
 - add core.prf profiler
 - backend
-- separate core project
 
 ### Marketing
 
@@ -48,6 +47,9 @@
 - power Lenta - similar to Scramble but pieces move together in one direction
 
 ## Done
+
+- invisible
+- separate core project
 - wrp - check function arguments and output consistency
 - acidic
 - scramble
