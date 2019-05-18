@@ -5,9 +5,9 @@ return pkg
 :load(
   'power',
   'areal',
-  --[[
   'acidic',
-  'counted',
+  'beneficiary',
+--[[  'counted',
   'destroy',
   'invisible',
   'jumpproof',
@@ -24,8 +24,8 @@ return pkg
   'relocate',
   'scramble',
   'sphere',
-  ]]--
   'swap',
+  ]]--
   'teach',
   'x2'
 )

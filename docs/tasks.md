@@ -11,7 +11,7 @@
 - ground mods:       refurb, power plant
 - piece mods:        bankrupt, network, spyware, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
-- ability powers:    benefactor, scavenger
+- ability powers:    scavenger
 - attack powers:     bombs
 - orb mods:          orbspy
 - overall visual style
@@ -47,6 +47,7 @@
 
 ## Done
 
+- beneficiary
 - x2
 - invisible
 - separate core project

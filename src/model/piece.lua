@@ -42,6 +42,8 @@ function piece:wrap()
   wrp.wrap_sub_trc(piece, 'add_jade',       jade)
   wrp.wrap_sub_trc(piece, 'remove_jade',    id, count)
   wrp.wrap_sub_trc(piece, 'use_jade',       id)
+  wrp.wrap_sub_trc(piece, 'each_jade',      {'fn', typ.fun})
+  wrp.wrap_sub_trc(piece, 'clear_jades')
 
   -- powers
   wrp.wrap_sub_trc(piece, 'add_power',      power)
@@ -74,6 +76,10 @@ end
 function piece:set_color(color)
   self.pid = color
   self.space:yell('set_color', self.pos, color) -- notify
+end
+--
+function piece:get_pid()
+  return self.pid
 end
 
 -- POSITION & MOVE ------------------------------------------------------------
@@ -138,6 +144,23 @@ function piece:use_jade(id)
   if power then
     self:add_power(power) -- increase power
   end
+end
+
+-- iterate jades
+function piece:each_jade(fn)
+  self.jades:each(fn)
+end
+
+-- remove all jades
+function piece:clear_jades()
+  if self.jades:is_empty() then
+    return -- nothing to do
+  end
+  self:each_jade(function(jade)
+    self.space:whisper('set_ability', self.pos, jade.id, 0)
+  end)
+  self.space:yell('piece_has_jade', self.pos, false)
+  self.jades:clear()
 end
 
 -- POWER ----------------------------------------------------------------------
