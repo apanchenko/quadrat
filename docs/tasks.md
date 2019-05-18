@@ -4,7 +4,6 @@
 
 ### Core
 
-- rename view.* similar to model.*
 - spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
@@ -12,7 +11,7 @@
 - ground mods:       refurb, power plant
 - piece mods:        bankrupt, network, spyware, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
-- ability powers:    2x, benefactor, scavenger
+- ability powers:    benefactor, scavenger
 - attack powers:     bombs
 - orb mods:          orbspy
 - overall visual style
@@ -48,6 +47,7 @@
 
 ## Done
 
+- x2
 - invisible
 - separate core project
 - wrp - check function arguments and output consistency

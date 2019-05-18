@@ -3,8 +3,10 @@ local pkg = require 'src.lua-cor.pkg'
 return pkg
 :new('src.model.power')
 :load(
-  'acidic',
+  'power',
   'areal',
+  --[[
+  'acidic',
   'counted',
   'destroy',
   'invisible',
@@ -16,12 +18,14 @@ return pkg
   'parasite',
   'parasite_host',
   'pilfer',
-  'power',
   'purify',
   'recruit',
   'rehash',
   'relocate',
   'scramble',
   'sphere',
+  ]]--
   'swap',
-  'teach')
+  'teach',
+  'x2'
+)
