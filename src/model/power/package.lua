@@ -7,7 +7,7 @@ return pkg
   'areal',
   'acidic',
   'beneficiary',
---[[  'counted',
+  'counted',
   'destroy',
   'invisible',
   'jumpproof',
@@ -25,7 +25,6 @@ return pkg
   'scramble',
   'sphere',
   'swap',
-  ]]--
   'teach',
   'x2'
 )

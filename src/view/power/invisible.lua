@@ -29,7 +29,7 @@ end
 function invisible:move(pid)
   local alpha = 0
   if self.stone:get_pid() == pid then
-      alpha = 0.5
+    alpha = 0.5
   end
   self.stone.view.alpha = alpha
 end

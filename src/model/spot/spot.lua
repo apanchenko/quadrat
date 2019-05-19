@@ -157,9 +157,9 @@ function spot:spawn_jade()
   if not self:can_set_jade() then
     return
   end
-  if math.random() > cfg.jade.probability then
-    return
-  end
+  --if math.random() > cfg.jade.probability then
+  --  return
+  --end
   self.jade = jade:new()
   self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
 end

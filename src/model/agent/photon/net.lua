@@ -131,7 +131,7 @@ function net:find_opponent(on_opponent, on_error)
   ass(client:connectToRegionMaster("EU"))
 
   wrp.wrap_tbl_trc(client, 'onRoomList', 
-    {'rooms', typ.tab, function(v) return arr.tostring(map.keys(v)) end})
+    {'rooms', typ.tab, function(v) return arr.join(map.keys(v)) end})
   wrp.wrap_tbl_trc(client, 'onJoinRoom', {'createdByMe', typ.boo})
   wrp.wrap_tbl_trc(client, 'onEvent',
     {'code', typ.num},

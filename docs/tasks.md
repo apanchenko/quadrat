@@ -4,7 +4,6 @@
 
 ### Core
 
-- spawn fixed number of jades on random fields
 - local player side always bottom
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
@@ -47,6 +46,7 @@
 
 ## Done
 
+- spawn fixed number of jades on random fields
 - beneficiary
 - x2
 - invisible

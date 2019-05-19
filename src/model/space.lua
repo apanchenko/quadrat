@@ -9,6 +9,7 @@ local log       = require 'src.lua-cor.log'
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
+local arr       = require 'src.lua-cor.arr'
 
 local space = obj:extend('space')
 
@@ -85,9 +86,9 @@ function space:index(vec)   return vec.x * self.cols + vec.y end
 function space:spots()      return pairs(self.grid) end
 -- get spot by position vector
 function space:spot(vec)    return self.grid[self:index(vec)] end
---
+-- select spots array
 function space:select_spots(filter)
-  local selected = {}
+  local selected = arr()
   self:each_spot(function(spot)
     if filter(spot) then
       selected[#selected + 1] = spot
@@ -188,9 +189,9 @@ function space:move(fr, to)
 
   -- randomly spawn jades
   if (self.move_count % cfg.jade.moves) == 0 then
-    self:each_spot(function(spot)
-      spot:spawn_jade()
-    end)
+    self:select_spots(function(spot) return spot:can_set_jade() end)
+        :random_sample(cfg.jade.spawn_count)
+        :each(function(spot) spot:spawn_jade() end)
   end
 
   self:yell('move', self.pid) -- notify color to move
