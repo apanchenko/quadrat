@@ -36,7 +36,7 @@ end
 
 -------------------------------------------------------------------------------
 function menu:create(event)
-  lay.image(self.view, cfg.bg)
+  lay.img(self.view, cfg.bg)
 
   local buttons = display.newGroup()
   buttons:insert(new_button('lobby', 'Play', lobby.goto_lobby))

@@ -11,6 +11,7 @@ local Abilities   = require 'src.view.stoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.cfg'
 local powers      = require 'src.view.power.powers'
+local layout      = require 'src.view.stone.layout'
 
 local stone = obj:extend('stone')
 
@@ -19,12 +20,13 @@ function stone:new(env, pid)
   self = obj.new(self,
   {
     env = env,
-    view = display.newGroup(),
+    _view = layout.new_group(),
     scale = 1,
     powers = {},
     isSelected = false,
     is_drag = false
   })
+  self._view.show('stone')
   self._abilities = Abilities:new(self)
   self:set_color(pid)
   return self
@@ -50,13 +52,7 @@ function stone:set_color(pid)
   -- nothing to change
   if pid ~= self.pid then
     self.pid = pid
-
-    -- change image
-    if self.img then
-      self.img:removeSelf()
-    end
-    cfg.view.cell.path = "src/view/stone_"..tostring(self.pid)..".png"
-    self.img = lay.image(self, cfg.view.cell)
+    self._view.show(tostring(pid))
   end
 end
 --
@@ -67,17 +63,16 @@ end
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
   ass.isname(board, 'board')
-  lay.render(board, self, {vx=0, vy=0})
+  lay.render(board, self._view, {vx=0, vy=0})
   self.board = board
 end
 
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
-  self.view:removeSelf()
-  self.view = nil
-  self.img:removeSelf()
-  self.img = nil
+--  self.view:removeSelf()
+  self._view:removeSelf()
+  self._view = nil
   self._abilities = nil
   self.powers = nil
   self.board = nil
@@ -174,7 +169,7 @@ function stone:touch_moved(event)
   shift = shift / vec(xScale, xScale)
   shift = shift + (self._pos * cfg.view.cell.size)
   local proj = (shift / cfg.view.cell.size):round()
-  vec.copy(shift, self.view)
+  vec.copy(shift, self._view)
   return proj;
 end
 
@@ -200,7 +195,7 @@ end
 function stone:create_project(proj)
   if not self.project then
     cfg.view.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
-    self.project = lay.image(self.board, cfg.view.cell)
+    self.project = lay.img(self.board.view, cfg.view.cell)
   end
   self.proj = proj
   vec.copy(proj * cfg.view.cell.size, self.project)
@@ -215,11 +210,11 @@ function stone:remove_project()
 end
 --
 function stone:set_drag(eventId)
-  display.getCurrentStage():setFocus(self.view, eventId)
+  display.getCurrentStage():setFocus(self._view, eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
     --lay.render(self.board, self, {x=self.view.x, y=self.view.y})
-    self.view:toFront()
+    self._view:toFront()
   end
 end
 
@@ -228,8 +223,8 @@ function stone:update_group_pos(pos)
   -- remove from board
   if pos == nil then
     self._pos = nil
-    self.view.x = 0
-    self.view.y = 0
+    self._view.x = 0
+    self._view.y = 0
     return
   end
 
@@ -241,10 +236,10 @@ function stone:update_group_pos(pos)
 
   if self._pos then
     log:info('animate to view position', view_pos)
-    lay.to(self, view_pos, cfg.view.stone.move)
+    lay.to(self._view, view_pos, cfg.view.stone.move)
   else
     log:info('instant set view position', view_pos)
-    view_pos:to(self.view)
+    view_pos:to(self._view)
   end
   self._pos = pos
 end

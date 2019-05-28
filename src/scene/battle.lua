@@ -32,9 +32,9 @@ end
 
 --
 function battle:create(event)
-  lay.image(self, cfg.bg)
+  lay.img(self.view, cfg.bg)
 
-  self.move_pointer = lay.image(self.view, cfg.arrow)
+  self.move_pointer = lay.img(self.view, cfg.arrow)
 
   self.players = {}
 

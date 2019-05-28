@@ -40,7 +40,7 @@ function stoneAbilities:set_count(id, count)
   if count > 0 and self._mark == nil then
     cfg.view.cell.path = "src/view/ability_"..tostring(self._stone:get_pid())..".png"
     cfg.view.cell.order = 1
-    self._mark = lay.image(self._stone, cfg.view.cell)
+    self._mark = lay.img(self._stone._view, cfg.view.cell)
   end
 
   local reshow = self._view ~= nil

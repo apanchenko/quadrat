@@ -27,20 +27,25 @@ cfg.view.battle = {
   },
 }
 
-cfg.view.board = {
+cfg.view.board =
+{
   vx = 0,
   vy = 15,
   vw = 100,
 }
 
-cfg.view.player = {
+cfg.view.player =
+{
+  z = 2,
   vx = 0,
   vy = 0,
   vw = 6,
   ratio = 1,
 }
 
-cfg.view.cell = {
+cfg.view.cell =
+{
+  z = 2,
   vx = 0,
   vy = 0,
   w = 64,
@@ -48,7 +53,9 @@ cfg.view.cell = {
   size = vec(64, 64)
 }
 
-cfg.view.jade = {
+cfg.view.jade =
+{
+  z = 5,
   vx = 0,
   vy = 0,
   w = cfg.view.cell.w,

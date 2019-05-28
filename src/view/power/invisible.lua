@@ -22,7 +22,7 @@ function invisible:set_count(count)
   if count > 0 then
     return self
   end
-  self.stone.view.alpha = 1
+  self.stone._view.alpha = 1
 end
 
 -- space event
@@ -31,7 +31,7 @@ function invisible:move(pid)
   if self.stone:get_pid() == pid then
     alpha = 0.5
   end
-  self.stone.view.alpha = alpha
+  self.stone._view.alpha = alpha
 end
 
 --MODULE-----------------------------------------------------------------------

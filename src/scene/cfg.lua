@@ -1,7 +1,9 @@
 local cfg = {
   app = require 'src.cfg',
 
-  bg = {
+  bg =
+  {
+    z = 1,
     vx = 0,
     vy = 0,
     vw = 100,
@@ -9,17 +11,21 @@ local cfg = {
     path = "src/background.png"
   },
 
-  board = {
+  board =
+  {
     cols = 7,
     rows = 7
   },
 
-  switching = {
+  switching =
+  {
     effect = 'fade',
     time = 600
   },
 
-  arrow = {
+  arrow =
+  {
+    z = 3,
     x = 4,
     vy = 4,
     vw = 12,

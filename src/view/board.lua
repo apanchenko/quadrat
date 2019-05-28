@@ -1,5 +1,5 @@
 local cell     = require 'src.view.spot.cell'
-local stone    = require 'src.view.stone'
+local stone    = require 'src.view.stone.stone'
 local vec      = require 'src.lua-cor.vec'
 local piece    = require 'src.model.piece'
 local cfg      = require 'src.cfg'
