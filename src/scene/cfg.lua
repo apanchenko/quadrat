@@ -36,11 +36,13 @@ local cfg = {
   player = {
     red = {
       vx = 18,
-      vy = 4
+      vy = 4,
+      z = 2
     },
     black = {
       vx = 18,
-      vy = 9
+      vy = 9,
+      z = 3
     }
   }
 }

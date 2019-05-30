@@ -16,6 +16,11 @@ function invisible:new(env, stone, id, count)
   self.env.space.opp_evt:add(self)
   return self
 end
+--
+function invisible:destroy()
+  self.env.space.opp_evt:remove(self)
+  self.stone = nil
+end
 
 --
 function invisible:set_count(count)

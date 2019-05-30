@@ -40,11 +40,11 @@ function battle:create(event)
 
   local white = playerid.white
   self.players[white] = player(white, "Salvador")
-  lay.render(self, self.players[white], cfg.player.red)
+  lay.insert(self.view, self.players[white].view, cfg.player.red)
 
   local black = playerid.black
   self.players[black] = player(black, "Gala")
-  lay.render(self, self.players[black], cfg.player.black)
+  lay.insert(self.view, self.players[black].view, cfg.player.black)
 
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   env.space.own_evt:add(self)
@@ -81,7 +81,7 @@ end
 
 --
 function battle:win(message)
-  lay.text(self.view, {x=0, vy=50, vw=100, text=message, fontSize=38, align="center"})
+  lay.txt(self.view, {x=0, vy=50, vw=100, z=4, text=message, fontSize=38, font=cfg.font, align="center"})
 end
 
 function battle:show(event) end

@@ -33,12 +33,14 @@ function board:new()
   self.grid = {}
   for k, spot in env.space:spots() do
     local cell = cell:new(spot)
-    lay.render(self, cell, cell.pos * cfg.view.cell.size)
+    local param = cell.pos * cfg.view.cell.size
+    param.z = 1
+    lay.insert(self.view, cell.view, param)
     self.grid[k] = cell
   end
 
   self.view.anchorChildren = true          -- center on screen
-  lay.render(env.battle, self.view, cfg.view.board)
+  lay.insert(env.battle.view, self.view, cfg.view.board)
   return self
 end
 

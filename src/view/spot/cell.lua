@@ -7,24 +7,22 @@ local ass   = require "src.lua-cor.ass"
 local obj   = require "src.lua-cor.obj"
 local wrp   = require 'src.lua-cor.wrp'
 local spot  = require 'src.model.spot.spot'
+local layout = require 'src.view.spot.layout'
 
 local cell = obj:extend('cell')
 
 function cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
-cell.sheet_opt = {width = cfg.view.cell.w, height = cfg.view.cell.h, numFrames = 1}
-cell.sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", cell.sheet_opt)
-
---
 function cell:new(spot)
-  local frame = math.random(1, cell.sheet_opt.numFrames);
   self = obj.new(self, 
   {
     pos = spot.pos,
-    view = display.newGroup(),
+    --view = display.newGroup(),
+    view = layout.new_group()
   })
-  self.img = lay.sheet(self.view, cell.sheet, frame, cfg.view.cell)
+  self.view.show('cell')
+  --self.img = lay.sheet(self.view, param)
   return self
 end
 

@@ -48,8 +48,8 @@ function menu:create(event)
   end
 
   lay.column(buttons, 5)
-  lay.text(self, {text = cfg.app.version, vx=0, vy=90})
-  lay.render(self, buttons, {vx=0, vy=15})
+  lay.txt(self.view, {text=cfg.app.version, font=cfg.font, z=2, vx=0, vy=90})
+  lay.insert(self.view, buttons, {vx=0, vy=15, z=3})
 end
 
 -------------------------------------------------------------------------------

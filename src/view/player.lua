@@ -26,7 +26,7 @@ function player:new(pid, name)
   lay.img(self.view, cfg.view.player)
 
   -- player name
-  lay.text(self, {text=self.name, vx=8, vy=0})
+  lay.txt(self.view, {text=self.name, font=cfg.font, z=4, vx=8, vy=0})
 
   print(tostring(self))
   return self

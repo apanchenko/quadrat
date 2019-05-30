@@ -81,12 +81,11 @@ function stoneAbilities:show()
       return true
     end
     --log:trace(opts.label)
-    --lay.render(self._view, widget.newButton(opts), cfg.origin)
-    lay.button(self._view, opts)
+    lay.btn(self._view, opts)
   end
   --lay.column(self._view, 3)
   lay.rows(self._view, cfg.view.abilities.rows)
-  lay.render(env.battle, self._view, cfg.view.abilities)
+  lay.insert(env.battle.view, self._view, cfg.view.abilities)
 end
 
 -- hide from board when piece deselected

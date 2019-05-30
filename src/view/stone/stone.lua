@@ -63,17 +63,17 @@ end
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
   ass.isname(board, 'board')
-  lay.render(board, self._view, {vx=0, vy=0})
+  lay.insert(board.view, self._view, {vx=0, vy=0, z=50})
   self.board = board
 end
 
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
---  self.view:removeSelf()
   self._view:removeSelf()
   self._view = nil
   self._abilities = nil
+  map.invoke_colon(self.powers, 'destroy')
   self.powers = nil
   self.board = nil
 end

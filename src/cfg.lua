@@ -32,6 +32,7 @@ cfg.view.board =
   vx = 0,
   vy = 15,
   vw = 100,
+  z = 4
 }
 
 cfg.view.player =
@@ -73,11 +74,14 @@ cfg.view.stone = {
 cfg.view.abilities = {
   vx = 9,
   y = (cfg.view.vh * cfg.view.board.vy) + (cfg.view.vw * cfg.view.board.vw) + cfg.view.vh,
-  button = {
+  z = 2,
+  button =
+  {
     x = 0,
     y = 0,
     vw = 40,
     height = 16,
+    z = 3,
     emboss = false,
     font = cfg.view.font,
     fontSize = 14,

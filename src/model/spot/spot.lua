@@ -124,13 +124,14 @@ function spot:move_piece(from)
   -- kill target piece
   if self.piece then
     self.piece:die()
+    self.piece = nil
     self.space:yell('remove_piece', self.pos) -- notify
   end
   -- change piece position
   from.piece:move_before(from, self)
   self.piece = from.piece
-  self.piece:move(from, self)
   from.piece = nil
+  self.piece:move(from, self)
   self.piece:move_after(from, self)
   -- consume jade
   if self.jade then

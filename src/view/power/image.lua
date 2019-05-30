@@ -17,6 +17,9 @@ function image:new(env, stone, name)
   self.image = lay.img(stone._view, cfg.view.cell)
   return self
 end
+--
+function image:destroy()
+end
 
 --
 function image:set_count(count)
