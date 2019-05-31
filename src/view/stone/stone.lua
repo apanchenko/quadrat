@@ -195,7 +195,7 @@ end
 function stone:create_project(proj)
   if not self.project then
     cfg.view.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
-    self.project = lay.img(self.board.view, cfg.view.cell)
+    self.project = lay.new_image(self.board.view, cfg.view.cell)
   end
   self.proj = proj
   vec.copy(proj * cfg.view.cell.size, self.project)

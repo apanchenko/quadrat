@@ -36,7 +36,7 @@ end
 
 -------------------------------------------------------------------------------
 function menu:create(event)
-  lay.img(self.view, cfg.bg)
+  lay.new_image(self.view, cfg.bg)
 
   local buttons = display.newGroup()
   buttons:insert(new_button('lobby', 'Play', lobby.goto_lobby))
@@ -48,7 +48,7 @@ function menu:create(event)
   end
 
   lay.column(buttons, 5)
-  lay.txt(self.view, {text=cfg.app.version, font=cfg.font, z=2, vx=0, vy=90})
+  lay.new_text(self.view, {text=cfg.app.version, font=cfg.font, z=2, vx=0, vy=90})
   lay.insert(self.view, buttons, {vx=0, vy=15, z=3})
 end
 

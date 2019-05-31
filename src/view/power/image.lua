@@ -14,7 +14,7 @@ function image:new(env, stone, name)
   self = obj.new(self)
   cfg.view.cell.path = 'src/view/power/'..name..'.png'
   cfg.view.cell.order = 10
-  self.image = lay.img(stone._view, cfg.view.cell)
+  self.image = lay.new_image(stone._view, cfg.view.cell)
   return self
 end
 --

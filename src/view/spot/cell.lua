@@ -22,7 +22,7 @@ function cell:new(spot)
     view = layout.new_group()
   })
   self.view.show('cell')
-  --self.img = lay.sheet(self.view, param)
+  --self.img = lay.new_sheet(self.view, param)
   return self
 end
 
@@ -30,7 +30,7 @@ end
 --
 function cell:add_comp(id, count)
   if id == 'spot_acidic' then
-    lay.img(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/power/jumpproof.png'})
+    lay.new_image(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/power/jumpproof.png'})
   end
 end
 
@@ -39,7 +39,7 @@ end
 function cell:set_jade()
   ass.nul(self._jade)
   ass.nul(self._stone)
-  self._jade = lay.img(self.view, cfg.view.jade)
+  self._jade = lay.new_image(self.view, cfg.view.jade)
 end
 --
 function cell:remove_jade()

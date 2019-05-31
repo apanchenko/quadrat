@@ -32,9 +32,9 @@ end
 
 --
 function battle:create(event)
-  lay.img(self.view, cfg.bg)
+  lay.new_image(self.view, cfg.bg)
 
-  self.move_pointer = lay.img(self.view, cfg.arrow)
+  self.move_pointer = lay.new_image(self.view, cfg.arrow)
 
   self.players = {}
 
@@ -81,7 +81,7 @@ end
 
 --
 function battle:win(message)
-  lay.txt(self.view, {x=0, vy=50, vw=100, z=4, text=message, fontSize=38, font=cfg.font, align="center"})
+  lay.new_text(self.view, {x=0, vy=50, vw=100, z=4, text=message, fontSize=38, font=cfg.font, align="center"})
 end
 
 function battle:show(event) end

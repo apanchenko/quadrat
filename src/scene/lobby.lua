@@ -17,7 +17,7 @@ lobby.options = {effect = 'fade', time = 600}
 
 -------------------------------------------------------------------------------
 function lobby:create(event)
-  lay.img(self, cfg.bg)
+  lay.new_image(self, cfg.bg)
 
   self.net = net:new()
 

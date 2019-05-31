@@ -18,7 +18,6 @@ function stoneAbilities:new(stone)
   {
     _list = {}, -- list of abilities
     _stone = stone, -- owner
-    _mark = nil -- image marking that piece have abilities
   })
 end
 --
@@ -37,10 +36,9 @@ function stoneAbilities:set_count(id, count)
     self._list[id] = count
   end
 
-  if count > 0 and self._mark == nil then
-    cfg.view.cell.path = "src/view/ability_"..tostring(self._stone:get_pid())..".png"
-    cfg.view.cell.order = 1
-    self._mark = lay.img(self._stone._view, cfg.view.cell)
+  if count > 0 then
+    local pid = self._stone:get_pid()
+    self._stone._view.show('ability_'..tostring(pid))
   end
 
   local reshow = self._view ~= nil
@@ -50,8 +48,8 @@ function stoneAbilities:set_count(id, count)
   end
 
   if self:is_empty() then
-    self._mark:removeSelf()
-    self._mark = nil
+    self._stone._view.hide('ability_white')
+    self._stone._view.hide('ability_black')
   else
     if reshow then
       self:show()
@@ -81,7 +79,7 @@ function stoneAbilities:show()
       return true
     end
     --log:trace(opts.label)
-    lay.btn(self._view, opts)
+    lay.new_button(self._view, opts)
   end
   --lay.column(self._view, 3)
   lay.rows(self._view, cfg.view.abilities.rows)

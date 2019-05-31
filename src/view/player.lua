@@ -23,10 +23,10 @@ function player:new(pid, name)
 
   -- piece image
   cfg.view.player.path = "src/view/stone_"..tostring(self.pid)..".png"
-  lay.img(self.view, cfg.view.player)
+  lay.new_image(self.view, cfg.view.player)
 
   -- player name
-  lay.txt(self.view, {text=self.name, font=cfg.font, z=4, vx=8, vy=0})
+  lay.new_text(self.view, {text=self.name, font=cfg.font, z=4, vx=8, vy=0})
 
   print(tostring(self))
   return self

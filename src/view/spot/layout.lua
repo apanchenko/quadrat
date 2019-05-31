@@ -14,7 +14,7 @@ layout.add('cell',
   h = 64,
   sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", sheet_opt),
   frame = math.random(1, sheet_opt.numFrames),
-  fn = lay.sheet
+  fn = lay.new_sheet
 })
 
 return layout
