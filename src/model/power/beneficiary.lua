@@ -21,7 +21,7 @@ function beneficiary:new(piece, def)
   end)
 
   -- apply to each selected spot
-  arr.each(spots, function(spot)
+  spots:each(function(spot)
     spot.piece:each_jade(function(jade)
       piece:add_jade(jade)
     end)

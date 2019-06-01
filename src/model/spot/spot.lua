@@ -79,7 +79,7 @@ local function support_stash(name)
     local obj = self[name]
     self[name] = nil
     obj:set_pos(nil)
-    arr.push(stash, obj)
+    stash:push(obj)
     self.space:yell('stash_'..name, self.pos) -- notify
   end
 
@@ -94,7 +94,7 @@ local function support_stash(name)
   end
 
   spot['unstash_'..name] = function(self, stash)
-    self[name] = arr.pop(stash)
+    self[name] = stash:pop()
     self[name]:set_pos(self.pos)
     self.space:yell('unstash_'..name, self.pos) -- notify
   end

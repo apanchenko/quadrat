@@ -9,6 +9,7 @@ local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local env       = require 'src.lua-cor.env'
+local map       = require 'src.lua-cor.map'
 
 local stoneAbilities = obj:extend('stoneAbilities')
 
@@ -59,7 +60,7 @@ end
 
 -- return true if empty
 function stoneAbilities:is_empty()
-  return arr.is_empty(self._list)
+  return map.count(self._list) == 0
 end
 
 -- show on board

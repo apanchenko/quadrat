@@ -11,6 +11,7 @@ local typ      = require 'src.lua-cor.typ'
 local evt      = require 'src.lua-cor.evt'
 local wrp      = require 'src.lua-cor.wrp'
 local env      = require 'src.lua-cor.env'
+local arr      = require 'src.lua-cor.arr'
 
 local board = obj:extend('board')
 
@@ -67,7 +68,7 @@ end
 --
 function board:stash_jade(pos)
   if self.jade_stash == nil then
-    self.jade_stash = {}
+    self.jade_stash = arr()
   end
   self:cell(pos):stash_jade(self.jade_stash)
 end
@@ -104,7 +105,7 @@ end
 --
 function board:stash_piece(pos)
   if self.stash == nil then
-    self.stash = {}
+    self.stash = arr()
   end
   self:cell(pos):stash_piece(self.stash)
 end

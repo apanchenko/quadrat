@@ -17,7 +17,7 @@ function scramble:apply_to_spot(spot)
   local piece = spot.piece
   if piece then
     if self.stash == nil then
-      self.stash = {}
+      self.stash = arr()
     end
     spot:stash_piece(self.stash) -- put piece into stash
     ass(spot:can_set_piece())
@@ -26,9 +26,9 @@ function scramble:apply_to_spot(spot)
   -- remember spot
   if spot:can_set_piece() and (spot.jade == nil) then
     if self.spots == nil then
-      self.spots = {}
+      self.spots = arr()
     end
-    arr.push(self.spots, spot)
+    self.spots:push(spot)
   end
 end
 function scramble:apply_to_spot_after(spot)
@@ -39,8 +39,8 @@ end
 
 -- @override
 function scramble:apply_finish()
-  while not arr.is_empty(self.stash) do
-    local spot = arr.remove_random(self.spots)
+  while not self.stash:is_empty() do
+    local spot = self.spots:remove_random()
     spot:unstash_piece(self.stash)
   end
   self.stash = nil

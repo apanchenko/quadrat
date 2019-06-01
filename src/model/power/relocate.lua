@@ -16,7 +16,7 @@ function relocate:new(piece)
   -- select all empty spots
   local spots = space:select_spots(function(c) return c.piece == nil end)
   -- choose random target spot
-  local to_spot = arr.random(spots)
+  local to_spot = spots:random()
   -- change piece position
   to_spot:move_piece(from_spot)
 end

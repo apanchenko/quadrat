@@ -30,7 +30,7 @@ end
 --
 function cell:add_comp(id, count)
   if id == 'spot_acidic' then
-    lay.new_image(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/power/jumpproof.png'})
+    lay.new_image(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/stone/jumpproof.png'})
   end
 end
 
@@ -56,7 +56,7 @@ function cell:stash_jade(stash)
   local jade = self._jade
   self._jade = nil
   --jade:set_pos(nil)
-  arr.push(stash, jade)
+  stash:push(jade)
 end
 function cell:stash_jade_wrap_after()
   ass.nul(self._jade)
@@ -68,7 +68,7 @@ function cell:unstash_jade_wrap_before()
   ass.nul(self._jade)
 end
 function cell:unstash_jade(stash)
-  self._jade = arr.pop(stash)
+  self._jade = stash:pop()
   --self._jade:set_pos(self.pos)
 end
 function cell:unstash_jade_wrap_after()
@@ -104,7 +104,7 @@ function cell:stash_piece(stash)
   local piece = self._stone
   self._stone = nil
   piece:set_pos(nil)
-  arr.push(stash, piece)
+  stash:push(piece)
 end
 function cell:stash_piece_after()
   ass.nul(self._stone)
@@ -118,7 +118,7 @@ function cell:unstash_piece_before()
   ass.nul(self._jade)
 end
 function cell:unstash_piece(stash)
-  self._stone = arr.pop(stash)
+  self._stone = stash:pop()
   self._stone:set_pos(self.pos)
 end
 function cell:unstash_piece_after()

@@ -91,7 +91,7 @@ function space:select_spots(filter)
   local selected = arr()
   self:each_spot(function(spot)
     if filter(spot) then
-      selected[#selected + 1] = spot
+      selected:push(spot)
     end
   end)
   return selected
