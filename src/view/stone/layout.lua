@@ -1,60 +1,37 @@
 local lay = require 'src.lua-cor.lay'
+local map = require 'src.lua-cor.map'
 
 local layout = lay.new_layout()
 
-layout.add('ability_white',
+local cell =
 {
-  z = 1,
-  x = 0,
-  y = 0,
-  w = 64,
-  h = 64,
-  path = 'src/view/ability_white.png',
+  x = 0,  y = 0,
+  w = 64, h = 64,
   fn = lay.new_image
-})
+}
+local pimp =
+{
+  x = 20, y = 20,
+  w = 24, h = 24,
+  fn = lay.new_image
+}
 
-layout.add('ability_black',
-{
-  z = 1,
-  x = 0,
-  y = 0,
-  w = 64,
-  h = 64,
-  path = 'src/view/ability_black.png',
-  fn = lay.new_image
-})
+function layout:add_image(name, shape, z, file)
+  self.add(name, map.merge(shape,
+  {
+    z=z, path='src/view/stone/'.. file.. '.png'
+  }))
+end
 
-layout.add('stone',
-{
-  z = 2,
-  x = 0,
-  y = 0,
-  w = 64,
-  h = 64,
-  path = 'src/view/stone/stone.png',
-  fn = lay.new_image
-})
-
-layout.add('white',
-{
-  z = 3,
-  x = 20,
-  y = 20,
-  w = 24,
-  h = 24,
-  path = 'src/view/stone/pimp_green.png',
-  fn = lay.new_image
-})
-
-layout.add('black',
-{
-  z = 3,
-  x = 20,
-  y = 20,
-  w = 24,
-  h = 24,
-  path = 'src/view/stone/pimp_red.png',
-  fn = lay.new_image
-})
+layout:add_image('ability_white', cell, 1, 'ability_white')
+layout:add_image('ability_black', cell, 1, 'ability_black')
+layout:add_image('stone',         cell, 2, 'stone')
+layout:add_image('white',         pimp, 3, 'pimp_green')
+layout:add_image('black',         pimp, 3, 'pimp_red')
+layout:add_image('Jumpproof',     cell, 4, 'jumpproof')
+layout:add_image('Movediagonal',  cell, 5, 'movediagonal')
+layout:add_image('Parasite',      cell, 6, 'parasite')
+layout:add_image('Parasite_host', cell, 7, 'parasite_host')
+layout:add_image('Sphere',        cell, 8, 'sphere')
 
 return layout

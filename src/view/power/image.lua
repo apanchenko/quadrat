@@ -11,10 +11,11 @@ local image = obj:extend('view.power.image')
 -- constructor
 -- create image with initial one count
 function image:new(env, stone, name)
-  self = obj.new(self)
-  cfg.view.cell.path = 'src/view/power/'..name..'.png'
-  cfg.view.cell.order = 10
-  self.image = lay.new_image(stone._view, cfg.view.cell)
+  self = obj.new(self, {
+    stone = stone,
+    name = name
+  })
+  self.stone._view.show(name)
   return self
 end
 --
@@ -26,7 +27,7 @@ function image:set_count(count)
   if count > 0 then
     return self
   end
-  self.image:removeSelf()
+  self.stone._view.hide(self.name)
 end
 
 
