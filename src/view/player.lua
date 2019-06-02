@@ -3,6 +3,7 @@ local cfg = require 'src.cfg'
 local lay = require 'src.lua-cor.lay'
 local ass = require 'src.lua-cor.ass'
 local obj = require 'src.lua-cor.obj'
+local log = require 'src.lua-cor.log'
 
 -------------------------------------------------------------------------------
 local player = obj:extend('player')
@@ -28,7 +29,7 @@ function player:new(pid, name)
   -- player name
   lay.new_text(self.view, {text=self.name, font=cfg.font, z=4, vx=8, vy=0})
 
-  print(tostring(self))
+  log:trace(tostring(self))
   return self
 end
 

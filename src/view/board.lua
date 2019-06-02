@@ -4,9 +4,9 @@ local vec      = require 'src.lua-cor.vec'
 local piece    = require 'src.model.piece'
 local cfg      = require 'src.cfg'
 local obj      = require 'src.lua-cor.obj'
-local lay      = require 'src.lua-cor.lay'
+local lay      = (require 'src.lua-cor.lay')
 local ass      = require 'src.lua-cor.ass'
-local log      = require 'src.lua-cor.log'
+local log      = require('src.lua-cor.log').get_module('board').enable()
 local typ      = require 'src.lua-cor.typ'
 local evt      = require 'src.lua-cor.evt'
 local wrp      = require 'src.lua-cor.wrp'
@@ -29,16 +29,21 @@ function board:new()
     on_change = evt:new()
   })
   env.space.own_evt:add(self)
-  self.view = display.newGroup()
+  self.view = lay.new_layout().new_group()
 
   self.grid = {}
   for k, spot in env.space:spots() do
     local cell = cell:new(spot)
     local param = cell.pos * cfg.view.cell.size
     param.z = 1
+    param.w = 40
+    param.h = 40
     lay.insert(self.view, cell.view, param)
+    log:trace('Cell at', param.x, param.y)
     self.grid[k] = cell
   end
+  --ass.eq(self.view.numChildren, 49)
+  --self.view.walk_tree()
 
   self.view.anchorChildren = true          -- center on screen
   lay.insert(env.battle.view, self.view, cfg.view.board)

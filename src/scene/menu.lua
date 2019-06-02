@@ -11,12 +11,15 @@ local platform = system.getInfo('platform')
 
 local options = {effect = 'fade', time = 600}
 
--------------------------------------------------------------------------------
--- create new button
-local function new_button(id, label, onPress)
-  return widget.newButton {
-    x = display.contentCenterX,
-    y = 0,
+local layout = lay.new_layout()
+
+layout.add_button = function(id, label, onPress, z)
+  layout.add(id,
+  {
+    vx = 20,
+    vy = 20,
+    vw = 60,
+    height = 32,
     id = id,
     label = label,
     onPress = onPress,
@@ -24,32 +27,39 @@ local function new_button(id, label, onPress)
     font = native.systemFont,
     fontSize = 17,
     shape = 'roundedRect',
-    width = 250,
-    height = 32,
     cornerRadius = 9,
-    fillColor = {default = {0.6, 0.7, 0.8, 1}, over = {0.6, 0.7, 0.8, 0.8}},
-    labelColor = {default = {1.0, 1.0, 1.0, 1}, over = {1.0, 1.0, 1.0, 1.0}},
+    fillColor   = {default = {0.6, 0.7, 0.8, 1}, over = {0.6, 0.7, 0.8, 0.8}},
+    labelColor  = {default = {1.0, 1.0, 1.0, 1}, over = {1.0, 1.0, 1.0, 1.0}},
     strokeColor = {default = {1.0, 0.4, 0.0, 1}, over = {0.8, 0.8, 1.0, 1.0}},
-    strokeWidth = 0
-  }
+    strokeWidth = 0,
+    fn = lay.new_button,
+    z = z
+  })
+  return layout
 end
+
+layout
+  .add('bg', cfg.bg)
+  .add_button('lobby', 'Play', lobby.goto_lobby, 2)
+  .add_button('battle', 'Solo', battle.goto_solo, 3)
+  .add_button('robots', 'Robots Arena', battle.goto_robots, 4)
+  .add_button('exit', 'Exit', native.requestExit, 5)
+  .add('version', {text=cfg.app.version, font=cfg.font, z=6, vx=0, vy=90, fn=lay.new_text})
 
 -------------------------------------------------------------------------------
 function menu:create(event)
-  lay.new_image(self.view, cfg.bg)
-
-  local buttons = display.newGroup()
-  buttons:insert(new_button('lobby', 'Play', lobby.goto_lobby))
-  buttons:insert(new_button('battle', 'Solo', battle.goto_solo))
-  buttons:insert(new_button('robots', 'Robots Arena', battle.goto_robots))
-
+  self.view = layout.new_group(self.view)
+  self.view
+    .show('lobby')
+    .show('battle')
+    .show('robots')
   if (platform ~= 'ios' and platform ~= 'tvos') then
-    buttons:insert(new_button('exit', 'Exit', function() native.requestExit() end))
+    self.view.show('exit')
   end
-
-  lay.column(buttons, 5)
-  lay.new_text(self.view, {text=cfg.app.version, font=cfg.font, z=2, vx=0, vy=90})
-  lay.insert(self.view, buttons, {vx=0, vy=15, z=3})
+  self.view
+    .column(5)
+    .show('bg')
+    .show('version')
 end
 
 -------------------------------------------------------------------------------

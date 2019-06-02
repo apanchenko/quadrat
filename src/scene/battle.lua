@@ -51,6 +51,8 @@ function battle:create(event)
   env.battle = self
   env.board = board:new()
   env.space:setup() -- start playing
+
+  --env.board.view.walk_tree()
 end
 
 --

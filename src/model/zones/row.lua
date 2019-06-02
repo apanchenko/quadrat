@@ -18,7 +18,7 @@ end
 
 -- selftest
 function row:test()
-  print('test row..')
+  log:trace('test row..')
 
   assert(tostring(row) == 'Row')
 end

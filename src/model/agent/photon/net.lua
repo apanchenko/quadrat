@@ -158,7 +158,7 @@ function net:wrap()
 end
 
 function net:test()
-  print('test net..')
+  log:trace('test net..')
 end
 
 return net

@@ -2,7 +2,7 @@ local vec   = require 'src.lua-cor.vec'
 local arr   = require 'src.lua-cor.arr'
 local cfg   = require 'src.cfg'
 local lay   = require "src.lua-cor.lay"
-local log   = require "src.lua-cor.log"
+local log   = require('src.lua-cor.log').get_module('cell').enable()
 local ass   = require "src.lua-cor.ass"
 local obj   = require "src.lua-cor.obj"
 local wrp   = require 'src.lua-cor.wrp'
@@ -18,11 +18,11 @@ function cell:new(spot)
   self = obj.new(self, 
   {
     pos = spot.pos,
-    --view = display.newGroup(),
     view = layout.new_group()
   })
-  self.view.show('cell')
-  --self.img = lay.new_sheet(self.view, param)
+  self.view.show('floor')
+  self.view._id = 'cell'
+  ass.eq(self.view.numChildren, 1)
   return self
 end
 

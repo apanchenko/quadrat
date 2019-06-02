@@ -19,7 +19,7 @@ end
 
 -- selftest
 function col:test()
-  print('test Col..')
+  log:trace('test Col..')
 
   assert(tostring(col) == 'Col')
 end

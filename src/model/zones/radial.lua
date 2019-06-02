@@ -24,7 +24,7 @@ end
 
 -- selftest
 function radial:test()
-  print('test radial..')
+  log:trace('test radial..')
 
   ass(tostring(radial) == 'radial')
   local rad = radial:new(vec(3, 3))

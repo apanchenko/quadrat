@@ -5,7 +5,7 @@ local layout = lay.new_layout()
 
 local sheet_opt = {width = cfg.view.cell.w, height = cfg.view.cell.h, numFrames = 1}
 
-layout.add('cell',
+layout.add('floor',
 {
   z = 1,
   x = 0,

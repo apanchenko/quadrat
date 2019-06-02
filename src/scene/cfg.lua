@@ -1,3 +1,5 @@
+local lay = require 'src.lua-cor.lay'
+
 local cfg = {
   app = require 'src.cfg',
 
@@ -8,7 +10,8 @@ local cfg = {
     vy = 0,
     vw = 100,
     vh = 100,
-    path = "src/background.png"
+    path = "src/background.png",
+    fn = lay.new_image
   },
 
   board =
