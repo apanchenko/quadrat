@@ -1,6 +1,7 @@
 local areal     = require 'src.model.power.areal'
 local ass       = require 'src.lua-cor.ass'
 local arr       = require 'src.lua-cor.arr'
+local log = require('src.lua-cor.log').get('model')
 
 local scramble = areal:extend('Scramble')
 

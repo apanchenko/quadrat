@@ -1,4 +1,5 @@
 local power   = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 local invisible = power:extend('Invisible')
 

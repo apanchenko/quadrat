@@ -1,6 +1,7 @@
 local ass     = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 local sphere = power:extend('Sphere')
 
@@ -18,7 +19,7 @@ end
 
 --
 function sphere:wrap()
-  wrp.wrap_sub_trc(sphere, 'can_move', {'from', 'vec'}, {'to', 'vec'})
+  wrp.wrap_sub(log.trace, sphere, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 --

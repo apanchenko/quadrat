@@ -1,5 +1,5 @@
 local ass     = require 'src.lua-cor.ass'
-local log     = require 'src.lua-cor.log'
+local log     = require('src.lua-cor.log').get('')
 local vec     = require 'src.lua-cor.vec'
 local obj     = require 'src.lua-cor.obj'
 local wrp     = require 'src.lua-cor.wrp'
@@ -79,9 +79,9 @@ end
 
 -- module
 function jade:wrap()
-  wrp.wrap_tbl_inf(jade, 'new')
-  wrp.wrap_sub_trc(jade, 'add_to', {'jades', typ.tab})
-  wrp.wrap_sub_trc(jade, 'use',    {'piece'})
+  wrp.wrap_tbl(log.info, jade, 'new')
+  wrp.wrap_sub(log.trace, jade, 'add_to', {'jades', typ.tab})
+  wrp.wrap_sub(log.trace, jade, 'use',    {'piece'})
   --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 

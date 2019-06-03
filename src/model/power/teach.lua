@@ -1,6 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local areal     = require 'src.model.power.areal'
+local log = require('src.lua-cor.log').get('model')
 
 local teach = areal:extend('Teach')
 
@@ -22,7 +23,7 @@ end
 
 --
 function teach:wrap()
-  wrp.wrap_sub_trc(teach, 'apply_to_spot', {'spot'})
+  wrp.wrap_sub(log.trace, teach, 'apply_to_spot', {'spot'})
 end
 
 return teach

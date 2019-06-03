@@ -3,7 +3,7 @@ local space         = require 'src.model.space'
 local playerid      = require 'src.model.playerid'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
-local log           = require 'src.lua-cor.log'
+local log           = require('src.lua-cor.log').get('')
 local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local typ           = require 'src.lua-cor.typ'
@@ -63,8 +63,8 @@ end
 
 -- interface
 function lobby:wrap()
-  wrp.wrap_sub_trc(lobby, 'on_opponent',       {'room_id', typ.num}, {'createdByMe', typ.boo})
-  wrp.wrap_sub_trc(lobby, 'on_opponent_error', {'msg', typ.str})
+  wrp.wrap_sub(log.trace, lobby, 'on_opponent',       {'room_id', typ.num}, {'createdByMe', typ.boo})
+  wrp.wrap_sub(log.trace, lobby, 'on_opponent_error', {'msg', typ.str})
 end
 
 function lobby:test()

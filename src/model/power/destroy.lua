@@ -1,5 +1,5 @@
 local ass     = require 'src.lua-cor.ass'
-local log     = require 'src.lua-cor.log'
+local log     = require('src.lua-cor.log').get('model')
 local wrp     = require 'src.lua-cor.wrp'
 local areal   = require 'src.model.power.areal'
 
@@ -26,7 +26,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function destroy:wrap()
-  wrp.wrap_sub_trc(destroy, 'apply_to_spot', {'spot'})
+  wrp.wrap_sub(log.trace, destroy, 'apply_to_spot', {'spot'})
 end
 
 function destroy:test()

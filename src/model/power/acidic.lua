@@ -1,5 +1,5 @@
 local ass         = require 'src.lua-cor.ass'
-local log         = require 'src.lua-cor.log'
+local log         = require('src.lua-cor.log').get('model')
 local wrp         = require 'src.lua-cor.wrp'
 local areal       = require 'src.model.power.areal'
 local spot_acidic = require 'src.model.spot.component.acidic'
@@ -34,7 +34,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function acidic:wrap()
-  wrp.wrap_sub_trc(acidic, 'apply_to_enemy', {'spot'})
+  wrp.wrap_sub(log.trace, acidic, 'apply_to_enemy', {'spot'})
 end
 
 function acidic:test()

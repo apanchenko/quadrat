@@ -2,6 +2,7 @@ local ass     = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local typ     = require 'src.lua-cor.typ'
 local counted = require 'src.model.power.counted'
+local log = require('src.lua-cor.log').get('model')
 
 local multiply = counted:extend('Multiply')
 
@@ -28,7 +29,7 @@ function multiply:wrap()
   local fspot = {'fr', 'spot'}
   local tspot = {'to', 'spot'}
 
-  wrp.wrap_sub_trc(multiply, 'move_after', fspot, tspot)
+  wrp.wrap_sub(log.trace, multiply, 'move_after', fspot, tspot)
 end
 
 -- selftest

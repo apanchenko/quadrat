@@ -1,6 +1,6 @@
 local obj       = require 'src.lua-cor.obj'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local vec       = require 'src.lua-cor.vec'
 local wrp       = require 'src.lua-cor.wrp'
 
@@ -19,14 +19,14 @@ end
 
 -- selftest
 function col:test()
-  log:trace('test Col..')
+  log.trace('test Col..')
 
   assert(tostring(col) == 'Col')
 end
 
 -- MODULE ---------------------------------------------------------------------
 function col:wrap()
-  wrp.wrap_sub_inf(col, 'filter', {'pos', vec})
+  wrp.wrap_sub(log.info, col, 'filter', {'pos', vec})
 end
 
 return col

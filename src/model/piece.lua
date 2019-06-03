@@ -2,7 +2,7 @@ local map       = require 'src.lua-cor.map'
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local vec       = require 'src.lua-cor.vec'
 local wrp       = require 'src.lua-cor.wrp'
 local cnt       = require 'src.lua-cor.cnt'
@@ -27,28 +27,28 @@ function piece:wrap()
   local tspot = {'to', 'spot'}
 
   -- piece
-  wrp.wrap_tbl_trc(piece, 'new',            space, pid)
-  wrp.wrap_sub_trc(piece, 'set_color',      pid)
-  wrp.wrap_sub_trc(piece, 'die')
+  wrp.wrap_tbl(log.trace, piece, 'new',            space, pid)
+  wrp.wrap_sub(log.trace, piece, 'set_color',      pid)
+  wrp.wrap_sub(log.trace, piece, 'die')
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.wrap_sub_inf(piece, 'can_move',       from,  to)
-  wrp.wrap_sub_trc(piece, 'move_before',    fspot, tspot)
-  wrp.wrap_sub_trc(piece, 'move',           fspot, tspot)
-  wrp.wrap_sub_trc(piece, 'move_after',     fspot, tspot)
+  wrp.wrap_sub(log.info, piece, 'can_move',       from,  to)
+  wrp.wrap_sub(log.trace, piece, 'move_before',    fspot, tspot)
+  wrp.wrap_sub(log.trace, piece, 'move',           fspot, tspot)
+  wrp.wrap_sub(log.trace, piece, 'move_after',     fspot, tspot)
   
   -- jades
-  wrp.wrap_sub_trc(piece, 'add_jade',       jade)
-  wrp.wrap_sub_trc(piece, 'remove_jade',    id, count)
-  wrp.wrap_sub_trc(piece, 'use_jade',       id)
-  wrp.wrap_sub_trc(piece, 'each_jade',      {'fn', typ.fun})
-  wrp.wrap_sub_trc(piece, 'clear_jades')
+  wrp.wrap_sub(log.trace, piece, 'add_jade',       jade)
+  wrp.wrap_sub(log.trace, piece, 'remove_jade',    id, count)
+  wrp.wrap_sub(log.trace, piece, 'use_jade',       id)
+  wrp.wrap_sub(log.trace, piece, 'each_jade',      {'fn', typ.fun})
+  wrp.wrap_sub(log.trace, piece, 'clear_jades')
 
   -- powers
-  wrp.wrap_sub_trc(piece, 'add_power',      power)
-  wrp.wrap_sub_trc(piece, 'remove_power',   id)
-  wrp.wrap_sub_trc(piece, 'decrease_power', name)
+  wrp.wrap_sub(log.trace, piece, 'add_power',      power)
+  wrp.wrap_sub(log.trace, piece, 'remove_power',   id)
+  wrp.wrap_sub(log.trace, piece, 'decrease_power', name)
 end
 
 -- create a piece

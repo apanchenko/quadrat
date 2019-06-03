@@ -1,7 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local vec       = require 'src.lua-cor.vec'
 local obj       = require 'src.lua-cor.obj'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local arr       = require 'src.lua-cor.arr'
 local wrp       = require 'src.lua-cor.wrp'
 
@@ -24,7 +24,7 @@ end
 
 -- selftest
 function radial:test()
-  log:trace('test radial..')
+  log.trace('test radial..')
 
   ass(tostring(radial) == 'radial')
   local rad = radial:new(vec(3, 3))
@@ -39,8 +39,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function radial:wrap()
-  wrp.wrap_tbl_inf(radial, 'new',    {'pos', vec})
-  wrp.wrap_sub_inf(radial, 'filter', {'pos', vec})
+  wrp.wrap_tbl(log.info, radial, 'new',    {'pos', vec})
+  wrp.wrap_sub(log.info, radial, 'filter', {'pos', vec})
 end
 
 return radial

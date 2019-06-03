@@ -1,6 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local areal     = require 'src.model.power.areal'
+local log = require('src.lua-cor.log').get('model')
 
 local recruit = areal:extend('Recruit')
 
@@ -21,7 +22,7 @@ end
 
 --
 function recruit:wrap()
-  wrp.wrap_sub_trc(recruit, 'apply_to_spot', {'spot'})
+  wrp.wrap_sub(log.trace, recruit, 'apply_to_spot', {'spot'})
 end
 
 return recruit

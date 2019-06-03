@@ -5,7 +5,7 @@ local cfg       = require 'src.model.cfg'
 local evt       = require 'src.lua-cor.evt'
 local vec       = require 'src.lua-cor.vec'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
@@ -52,7 +52,7 @@ function space:col(place)   return (place - (place % self.cols)) / self.cols end
 function space:whisper(event, ...)
   ass.is(self, space)
   ass(typ.str(event))
-  log:info('space:notify_own', event, ...)
+  log.info('space:notify_own', event, ...)
   self.own_evt:call(event, ...)
 end
 
@@ -62,7 +62,7 @@ function space:yell_wrap_before(event, ...)
   ass.is(typ.str(event))
 end
 function space:yell(event, ...)
-  log:info('space:yell', event, ...)
+  log.info('space:yell', event, ...)
   self.own_evt:call(event, ...)
   self.opp_evt:call(event, ...)
 end
@@ -151,11 +151,11 @@ function space:can_move(fr, to)
   -- check move rights
   local actor = self:piece(fr)        -- peek piece at from position
   if actor == nil then                      -- check if it exists
-    log:trace(self, ':can_move from', fr, 'piece is nil')
+    log.trace(self, ':can_move from', fr, 'piece is nil')
     return false                            -- can not move
   end
   if self:who_move() ~= actor.pid then         -- check color who moves now
-    log:trace(self, ":can_move, wrong color")
+    log.trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
 
@@ -202,11 +202,11 @@ function space:use(pos, ability_name)
   -- check rights
   local piece = self:piece(pos)        -- peek piece at from position
   if piece == nil then                      -- check if it exists
-    log:trace(self, ':use at ', pos, ' piece is nil')
+    log.trace(self, ':use at ', pos, ' piece is nil')
     return false                            -- can not move
   end
   if self:who_move() ~= piece.pid then         -- check color who moves now
-    log:trace(self, ":can_move, wrong color")
+    log.trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
   return piece:use_jade(ability_name)
@@ -216,23 +216,23 @@ end
 -- wrap functions
 function space:wrap()
    --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
-  wrp.wrap_sub_trc(space, 'setup')
-  wrp.wrap_sub_inf(space, 'pos',        {'index', typ.num})
-  wrp.wrap_sub_inf(space, 'width')
-  wrp.wrap_sub_inf(space, 'height')
-  wrp.wrap_sub_trc(space, 'row',        {'place', typ.num})
-  wrp.wrap_sub_inf(space, 'col',        {'place', typ.num})
-  wrp.wrap_sub_inf(space, 'pos',        {'index', typ.num})
-  wrp.wrap_sub_inf(space, 'index',      {'vec', vec})
-  wrp.wrap_sub_inf(space, 'spot',       {'pos', vec})
-  wrp.wrap_sub_inf(space, 'each_piece', {'fn', typ.fun})
-  wrp.wrap_sub_inf(space, 'each_spot',  {'fn', typ.fun})
-  wrp.wrap_sub_inf(space, 'count_pieces')
-  wrp.wrap_sub_inf(space, 'piece',      {'pos', vec})
-  wrp.wrap_sub_inf(space, 'who_move')
-  wrp.wrap_sub_inf(space, 'can_move',   {'from', vec}, {'to', vec})
-  wrp.wrap_sub_trc(space, 'move',       {'from', vec}, {'to', vec})
-  wrp.wrap_sub_trc(space, 'use',        {'pos', vec}, {'ability_name', typ.str})
+  wrp.wrap_sub(log.trace, space, 'setup')
+  wrp.wrap_sub(log.info, space, 'pos',        {'index', typ.num})
+  wrp.wrap_sub(log.info, space, 'width')
+  wrp.wrap_sub(log.info, space, 'height')
+  wrp.wrap_sub(log.trace, space, 'row',        {'place', typ.num})
+  wrp.wrap_sub(log.info, space, 'col',        {'place', typ.num})
+  wrp.wrap_sub(log.info, space, 'pos',        {'index', typ.num})
+  wrp.wrap_sub(log.info, space, 'index',      {'vec', vec})
+  wrp.wrap_sub(log.info, space, 'spot',       {'pos', vec})
+  wrp.wrap_sub(log.info, space, 'each_piece', {'fn', typ.fun})
+  wrp.wrap_sub(log.info, space, 'each_spot',  {'fn', typ.fun})
+  wrp.wrap_sub(log.info, space, 'count_pieces')
+  wrp.wrap_sub(log.info, space, 'piece',      {'pos', vec})
+  wrp.wrap_sub(log.info, space, 'who_move')
+  wrp.wrap_sub(log.info, space, 'can_move',   {'from', vec}, {'to', vec})
+  wrp.wrap_sub(log.trace, space, 'move',       {'from', vec}, {'to', vec})
+  wrp.wrap_sub(log.trace, space, 'use',        {'pos', vec}, {'ability_name', typ.str})
 end
 
 -- return module

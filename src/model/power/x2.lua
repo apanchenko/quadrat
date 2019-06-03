@@ -1,6 +1,7 @@
 local wrp       = require 'src.lua-cor.wrp'
 local typ       = require 'src.lua-cor.typ'
 local power     = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 local x2 = power:extend('X2')
 
@@ -18,7 +19,7 @@ end
 
 --
 function x2:wrap()
-  wrp.wrap_tbl_trc(x2, 'new', {'piece'}, {'def', typ.tab})
+  wrp.wrap_tbl(log.trace, x2, 'new', {'piece'}, {'def', typ.tab})
 end
 
 return x2

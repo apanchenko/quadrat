@@ -1,5 +1,6 @@
 local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 local movediagonal = power:extend('Movediagonal')
 
@@ -16,7 +17,7 @@ end
 
 -- module
 function movediagonal:wrap()
-  wrp.wrap_sub_trc(movediagonal, 'can_move', {'from', 'vec'}, {'to', 'vec'})
+  wrp.wrap_sub(log.trace, movediagonal, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 --

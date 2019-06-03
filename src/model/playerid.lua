@@ -1,6 +1,6 @@
 local ass = require 'src.lua-cor.ass'
 local obj = require 'src.lua-cor.obj'
-local log = require 'src.lua-cor.log'
+local log = require('src.lua-cor.log').get('pid')
 local wrp = require 'src.lua-cor.wrp'
 local typ = require 'src.lua-cor.typ'
 
@@ -30,8 +30,8 @@ end
 
 -- module
 function playerid:wrap()
-  wrp.wrap_sub_inf(playerid, 'swap')
-  wrp.wrap_stc_inf(playerid, 'select', {'is_white', typ.boo})
+  wrp.wrap_sub(log.info, playerid, 'swap')
+  wrp.wrap_stc(log.info, playerid, 'select', {'is_white', typ.boo})
 end
 
 --

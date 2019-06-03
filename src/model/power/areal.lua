@@ -1,5 +1,5 @@
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('model')
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
@@ -15,12 +15,12 @@ function areal:wrap()
   local def   = {'def', typ.tab}
   local zone  = {'zone', typ.tab}
 
-  wrp.wrap_tbl_trc(areal, 'new',             piece, def, zone)
-  wrp.wrap_sub_trc(areal, 'apply_to_spot',   spot            )
-  wrp.wrap_sub_trc(areal, 'apply_to_self'                    )
-  wrp.wrap_sub_trc(areal, 'apply_to_friend', spot            )
-  wrp.wrap_sub_trc(areal, 'apply_to_enemy',  spot            )
-  wrp.wrap_sub_trc(areal, 'apply_finish'                     )
+  wrp.wrap_tbl(log.trace, areal, 'new',             piece, def, zone)
+  wrp.wrap_sub(log.trace, areal, 'apply_to_spot',   spot            )
+  wrp.wrap_sub(log.trace, areal, 'apply_to_self'                    )
+  wrp.wrap_sub(log.trace, areal, 'apply_to_friend', spot            )
+  wrp.wrap_sub(log.trace, areal, 'apply_to_enemy',  spot            )
+  wrp.wrap_sub(log.trace, areal, 'apply_finish'                     )
 end
 
 -- create an areal power that sits on onwer piece and acts once or more times

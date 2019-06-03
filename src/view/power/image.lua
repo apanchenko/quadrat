@@ -1,7 +1,7 @@
 local obj         = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local ass         = require 'src.lua-cor.ass'
-local log         = require 'src.lua-cor.log'
+local log         = require('src.lua-cor.log').get('')
 local wrp         = require 'src.lua-cor.wrp'
 local lay         = require 'src.lua-cor.lay'
 local cfg         = require 'src.cfg'
@@ -33,8 +33,8 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function image:wrap()
-  wrp.wrap_sub_trc(image, 'new',        {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
-  wrp.wrap_sub_trc(image, 'set_count',  {'count', typ.num})
+  wrp.wrap_sub(log.trace, image, 'new',        {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.wrap_sub(log.trace, image, 'set_count',  {'count', typ.num})
 end
 
 return image

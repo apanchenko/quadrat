@@ -2,7 +2,7 @@ local arr         = require 'src.lua-cor.arr'
 local vec         = require 'src.lua-cor.vec'
 local lay         = require 'src.lua-cor.lay'
 local ass         = require 'src.lua-cor.ass'
-local log         = require 'src.lua-cor.log'
+local log         = require('src.lua-cor.log').get('')
 local map         = require 'src.lua-cor.map'
 local obj         = require 'src.lua-cor.obj'
 local typ         = require 'src.lua-cor.typ'
@@ -112,7 +112,7 @@ end
 function stone:touch(event)
   -- do not touch opponent stones
   if self.env.space:who_move() ~= self.pid then
-    log:trace('not my move')
+    log.trace('not my move')
     return true
   end
   -- take stone
@@ -184,11 +184,12 @@ end
 -- to be called from board
 function stone:deselect()
   if self.isSelected then
-    log:trace(self, ":deselect"):enter()
+    log.trace(self, ":deselect")
+    log.enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos(self._pos)                  -- adgjust group position
       self._abilities:hide()
-    log:exit()
+    log.exit()
   end
 end
 --
@@ -235,10 +236,10 @@ function stone:update_group_pos(pos)
   end
 
   if self._pos then
-    log:info('animate to view position', view_pos)
+    log.info('animate to view position', view_pos)
     lay.to(self._view, view_pos, cfg.view.stone.move)
   else
-    log:info('instant set view position', view_pos)
+    log.info('instant set view position', view_pos)
     view_pos:to(self._view)
   end
   self._pos = pos
@@ -248,19 +249,19 @@ end
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
 
-  wrp.wrap_tbl_trc(stone, 'new',          {'env'}, {'pid', 'playerid'})
-  wrp.wrap_sub_trc(stone, 'select')
-  wrp.wrap_sub_inf(stone, 'deselect')
-  wrp.wrap_sub_trc(stone, 'set_color',    {'playerid'})
-  wrp.wrap_sub_inf(stone, 'get_pid')
-  wrp.wrap_sub_trc(stone, 'puton',        {'board'})
-  wrp.wrap_sub_trc(stone, 'putoff')
-  wrp.wrap_sub_trc(stone, 'pos')
-  wrp.wrap_sub_trc(stone, 'set_ability',  {'id', typ.str}, {'count', typ.num})
-  wrp.wrap_sub_trc(stone, 'add_power',    {'id', typ.str}, {'result_count', typ.num})
-  wrp.wrap_sub_inf(stone, 'touch',        event)
-  wrp.wrap_sub_inf(stone, 'touch_began',  event)
-  wrp.wrap_sub_inf(stone, 'touch_moved',  event)
+  wrp.wrap_tbl(log.trace, stone, 'new',          {'env'}, {'pid', 'playerid'})
+  wrp.wrap_sub(log.trace, stone, 'select')
+  wrp.wrap_sub(log.info, stone, 'deselect')
+  wrp.wrap_sub(log.trace, stone, 'set_color',    {'playerid'})
+  wrp.wrap_sub(log.info, stone, 'get_pid')
+  wrp.wrap_sub(log.trace, stone, 'puton',        {'board'})
+  wrp.wrap_sub(log.trace, stone, 'putoff')
+  wrp.wrap_sub(log.trace, stone, 'pos')
+  wrp.wrap_sub(log.trace, stone, 'set_ability',  {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_sub(log.trace, stone, 'add_power',    {'id', typ.str}, {'result_count', typ.num})
+  wrp.wrap_sub(log.info, stone, 'touch',        event)
+  wrp.wrap_sub(log.info, stone, 'touch_began',  event)
+  wrp.wrap_sub(log.info, stone, 'touch_moved',  event)
 end
 
 return stone

@@ -1,6 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local areal     = require 'src.model.power.areal'
+local log = require('src.lua-cor.log').get('model')
 
 local pilfer = areal:extend('Pilfer')
 
@@ -24,7 +25,7 @@ end
 
 --
 function pilfer:wrap()
-  wrp.wrap_sub_trc(pilfer, 'apply_to_spot', {'spot'})
+  wrp.wrap_sub(log.trace, pilfer, 'apply_to_spot', {'spot'})
 end
 
 return pilfer

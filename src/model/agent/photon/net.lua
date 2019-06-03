@@ -1,4 +1,4 @@
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local ass       = require 'src.lua-cor.ass'
@@ -46,18 +46,18 @@ function net:new()
       this.on_error()
     end
   end
-  wrp.wrap_tbl_trc(client, 'onError',
+  wrp.wrap_tbl(log.trace, client, 'onError',
     {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
     {'msg', typ.str})
 
   -- react to state change
   function client:onStateChange(state)
   end    
-  wrp.wrap_tbl_trc(client, 'onStateChange', {'state', typ.num, Client.StateToName})
+  wrp.wrap_tbl(log.trace, client, 'onStateChange', {'state', typ.num, Client.StateToName})
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrp.wrap_tbl_trc(client, 'onOperationResponse',
+  wrp.wrap_tbl(log.trace, client, 'onOperationResponse',
     {'errCode', typ.num},
     {'errMsg', typ.str},
     {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
@@ -78,11 +78,11 @@ function net:find_opponent(on_opponent, on_error)
 
   function client:onRoomList(rooms) -- {roomName: loadbalancing.RoomInfo}
     if map.any(rooms, function(room) return room.isOpen end) then
-      log:trace('join random room')
+      log.trace('join random room')
       self:joinRandomRoom()
     else
       local room_name = tostring(math.random(10000, 99999))
-      log:trace('create room '.. room_name)
+      log.trace('create room '.. room_name)
       self:createRoom(room_name)
     end
   end
@@ -90,7 +90,7 @@ function net:find_opponent(on_opponent, on_error)
   function client:onJoinRoom(createdByMe)
     local room = self:myRoom()
     local room_name = room.name
-    log:trace('room name '..room_name)
+    log.trace('room name '..room_name)
 
     -- i am second, can play here
     if room.playerCount == 2 then
@@ -106,7 +106,7 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  wrp.wrap_tbl_trc(client, 'onActorJoin', 
+  wrp.wrap_tbl(log.trace, client, 'onActorJoin', 
     {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
 
   function client:sendData()
@@ -130,10 +130,10 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  wrp.wrap_tbl_trc(client, 'onRoomList', 
+  wrp.wrap_tbl(log.trace, client, 'onRoomList', 
     {'rooms', typ.tab, function(v) return map.keys(v):join() end})
-  wrp.wrap_tbl_trc(client, 'onJoinRoom', {'createdByMe', typ.boo})
-  wrp.wrap_tbl_trc(client, 'onEvent',
+  wrp.wrap_tbl(log.trace, client, 'onJoinRoom', {'createdByMe', typ.boo})
+  wrp.wrap_tbl(log.trace, client, 'onEvent',
     {'code', typ.num},
     {'content', typ.tab, map.tostring},
     {'actor', typ.tab})
@@ -154,11 +154,11 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function net:wrap()
-  wrp.wrap_tbl_trc(net, 'new')
+  wrp.wrap_tbl(log.trace, net, 'new')
 end
 
 function net:test()
-  log:trace('test net..')
+  log.trace('test net..')
 end
 
 return net

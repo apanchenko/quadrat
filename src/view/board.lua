@@ -6,7 +6,7 @@ local cfg      = require 'src.cfg'
 local obj      = require 'src.lua-cor.obj'
 local lay      = (require 'src.lua-cor.lay')
 local ass      = require 'src.lua-cor.ass'
-local log      = require('src.lua-cor.log').get_module('board').enable()
+local log      = require('src.lua-cor.log').get('board').enable()
 local typ      = require 'src.lua-cor.typ'
 local evt      = require 'src.lua-cor.evt'
 local wrp      = require 'src.lua-cor.wrp'
@@ -39,7 +39,7 @@ function board:new()
     param.w = 40
     param.h = 40
     lay.insert(self.view, cell.view, param)
-    log:trace('Cell at', param.x, param.y)
+    log.trace('Cell at', param.x, param.y)
     self.grid[k] = cell
   end
   --ass.eq(self.view.numChildren, 49)
@@ -151,10 +151,10 @@ function board:wrap()
   local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.wrap_sub_trc(board, 'set_ability',   pos, id, count)
-  wrp.wrap_sub_inf(board, 'add_power',     pos, {'name', typ.str}, count)
-  wrp.wrap_sub_inf(board, 'set_color',     pos, {'pid', 'playerid'})
-  wrp.wrap_sub_inf(board, 'add_spot_comp', pos, id, count)
+  wrp.wrap_sub(log.trace, board, 'set_ability',   pos, id, count)
+  wrp.wrap_sub(log.info, board, 'add_power',     pos, {'name', typ.str}, count)
+  wrp.wrap_sub(log.info, board, 'set_color',     pos, {'pid', 'playerid'})
+  wrp.wrap_sub(log.info, board, 'add_spot_comp', pos, id, count)
 end
 
 function board:test()

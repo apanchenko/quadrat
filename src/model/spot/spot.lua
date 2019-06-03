@@ -3,7 +3,7 @@ local arr       = require 'src.lua-cor.arr'
 local vec       = require 'src.lua-cor.vec'
 local map       = require 'src.lua-cor.map'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local cfg       = require 'src.model.cfg'
@@ -26,22 +26,22 @@ function spot:wrap()
   local stash = {'stash', typ.tab}
 
   -- spot
-  wrp.wrap_tbl_trc(spot, 'new',           x,   y,  space)
+  wrp.wrap_tbl(log.trace, spot, 'new',           x,   y,  space)
 
   -- piece
-  wrp.wrap_sub_inf(spot, 'can_set_piece')
-  wrp.wrap_sub_trc(spot, 'spawn_piece',   pid) -- create a new piece
-  wrp.wrap_sub_trc(spot, 'move_piece',    from)
-  wrp.wrap_sub_trc(spot, 'stash_piece',   stash) -- put piece into special hidden place for a short time
-  wrp.wrap_sub_trc(spot, 'unstash_piece', stash) -- get piece from a stash
+  wrp.wrap_sub(log.info, spot, 'can_set_piece')
+  wrp.wrap_sub(log.trace, spot, 'spawn_piece',   pid) -- create a new piece
+  wrp.wrap_sub(log.trace, spot, 'move_piece',    from)
+  wrp.wrap_sub(log.trace, spot, 'stash_piece',   stash) -- put piece into special hidden place for a short time
+  wrp.wrap_sub(log.trace, spot, 'unstash_piece', stash) -- get piece from a stash
 
   -- jades
-  wrp.wrap_sub_inf(spot, 'spawn_jade')
-  wrp.wrap_sub_inf(spot, 'set_jade')
-  wrp.wrap_sub_inf(spot, 'remove_jade')
+  wrp.wrap_sub(log.info, spot, 'spawn_jade')
+  wrp.wrap_sub(log.info, spot, 'set_jade')
+  wrp.wrap_sub(log.info, spot, 'remove_jade')
 
   -- component
-  wrp.wrap_sub_inf(spot, 'add_comp',      comp)
+  wrp.wrap_sub(log.info, spot, 'add_comp',      comp)
 end
 
 

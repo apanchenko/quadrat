@@ -1,6 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 -- @see parasite
 local parasite_host = power:extend('Parasite_host')
@@ -30,7 +31,7 @@ end
 
 --
 function parasite_host:wrap()
-  wrp.wrap_sub_trc(parasite_host, 'on_add_jade', {'jade'})
+  wrp.wrap_sub(log.trace, parasite_host, 'on_add_jade', {'jade'})
 end
 
 return parasite_host

@@ -1,7 +1,7 @@
 local obj         = require 'src.lua-cor.obj'
 local typ         = require 'src.lua-cor.typ'
 local ass         = require 'src.lua-cor.ass'
-local log         = require 'src.lua-cor.log'
+local log         = require('src.lua-cor.log').get('')
 local wrp         = require 'src.lua-cor.wrp'
 local lay         = require 'src.lua-cor.lay'
 local cfg         = require 'src.cfg'
@@ -34,8 +34,8 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function count:wrap()
-  wrp.wrap_sub_trc(count, 'new',        {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
-  wrp.wrap_sub_trc(count, 'set_count',  {'count', typ.num})
+  wrp.wrap_sub(log.trace, count, 'new',        {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.wrap_sub(log.trace, count, 'set_count',  {'count', typ.num})
 end
 
 return count

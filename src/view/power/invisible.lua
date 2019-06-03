@@ -43,9 +43,9 @@ end
 function invisible:wrap()
   local count = {'count', typ.num}
 
-  wrp.wrap_tbl_trc(invisible, 'new',        {'env'}, {'stone'}, {'id', typ.str}, count)
-  wrp.wrap_sub_trc(invisible, 'set_count',  count)
-  wrp.wrap_sub_trc(invisible, 'move',       {'playerid'})
+  wrp.wrap_tbl(log.trace, invisible, 'new',        {'env'}, {'stone'}, {'id', typ.str}, count)
+  wrp.wrap_sub(log.trace, invisible, 'set_count',  count)
+  wrp.wrap_sub(log.trace, invisible, 'move',       {'playerid'})
 end
 
 return invisible

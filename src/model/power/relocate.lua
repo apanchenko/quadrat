@@ -1,6 +1,7 @@
 local power = require 'src.model.power.power'
 local ass   = require 'src.lua-cor.ass'
 local arr = require 'src.lua-cor.arr'
+local log = require('src.lua-cor.log').get('model')
 
 local relocate = power:extend('Relocate')
 

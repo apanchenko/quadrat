@@ -1,5 +1,5 @@
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local obj       = require 'src.lua-cor.obj'
 local wrp       = require 'src.lua-cor.wrp'
 local typ       = require 'src.lua-cor.typ'
@@ -30,7 +30,7 @@ end
 --
 function user:on_spawn_stone(stone)
   if stone.pid == self.pid then
-    log:info('register ', stone, ' to listen itself')
+    log.info('register ', stone, ' to listen itself')
     stone._view:addEventListener("touch", stone)
   end
 end
@@ -38,10 +38,10 @@ end
 --
 function user:on_stone_color_changed(stone)
   if stone.pid == self.pid then
-    log:info('register ', stone, ' to listen itself')
+    log.info('register ', stone, ' to listen itself')
     stone._view:addEventListener('touch', stone)
   else
-    log:info('unregister ', stone, ' listen touch')
+    log.info('unregister ', stone, ' listen touch')
     stone._view:removeEventListener('touch', stone)
   end
 end
@@ -49,8 +49,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  wrp.wrap_tbl_trc(user, 'new',            {'env'}, {'pid', 'playerid'})
-  wrp.wrap_sub_trc(user, 'on_spawn_stone', {'stone'})
+  wrp.wrap_tbl(log.trace, user, 'new',            {'env'}, {'pid', 'playerid'})
+  wrp.wrap_sub(log.trace, user, 'on_spawn_stone', {'stone'})
 end
 
 return user

@@ -1,6 +1,6 @@
 local map       = require 'src.lua-cor.map'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local vec       = require 'src.lua-cor.vec'
 local obj       = require 'src.lua-cor.obj'
 local env       = require 'src.lua-cor.env'
@@ -60,7 +60,7 @@ function random:move_async()
 
     attempts = attempts - 1
     if attempts <= 0 then
-      log:trace('cannot find move')
+      log.trace('cannot find move')
       break
     end
   end
@@ -69,9 +69,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function random:wrap()
-  wrp.wrap_tbl_trc(random, 'new',       {'env', typ.any}, {'playerid'})
-  wrp.wrap_sub_inf(random, 'move',      {'playerid'})
-  wrp.wrap_sub_trc(random, 'move_async')
+  wrp.wrap_tbl(log.trace, random, 'new',       {'env', typ.any}, {'playerid'})
+  wrp.wrap_sub(log.info, random, 'move',      {'playerid'})
+  wrp.wrap_sub(log.trace, random, 'move_async')
 end
 
 return random

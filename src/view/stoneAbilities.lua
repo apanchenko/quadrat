@@ -4,7 +4,7 @@ local vec       = require 'src.lua-cor.vec'
 local cfg       = require 'src.cfg'
 local lay       = require 'src.lua-cor.lay'
 local ass       = require 'src.lua-cor.ass'
-local log       = require 'src.lua-cor.log'
+local log       = require('src.lua-cor.log').get('')
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
@@ -79,7 +79,7 @@ function stoneAbilities:show()
       env.space:use(self._stone:pos(), event.target.id)
       return true
     end
-    --log:trace(opts.label)
+    --log.trace(opts.label)
     lay.new_button(self._view, opts)
   end
   --lay.column(self._view, 3)
@@ -97,11 +97,11 @@ end
 
 --
 function stoneAbilities:wrap()
-  wrp.wrap_tbl_trc(stoneAbilities, 'new',       {'stone'})
-  wrp.wrap_sub_trc(stoneAbilities, 'set_count', {'id', typ.str}, {'count', typ.num})
-  wrp.wrap_sub_inf(stoneAbilities, 'is_empty')
-  wrp.wrap_sub_trc(stoneAbilities, 'show')
-  wrp.wrap_sub_trc(stoneAbilities, 'hide')
+  wrp.wrap_tbl(log.trace, stoneAbilities, 'new',       {'stone'})
+  wrp.wrap_sub(log.trace, stoneAbilities, 'set_count', {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_sub(log.info, stoneAbilities, 'is_empty')
+  wrp.wrap_sub(log.trace, stoneAbilities, 'show')
+  wrp.wrap_sub(log.trace, stoneAbilities, 'hide')
 end
 
 --

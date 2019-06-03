@@ -4,7 +4,7 @@ local board         = require 'src.view.board'
 local player        = require 'src.view.player'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
-local log           = require 'src.lua-cor.log'
+local log           = require('src.lua-cor.log').get('')
 local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
@@ -57,7 +57,7 @@ end
 
 --
 function battle:move(pid)
-  log:trace('-----------------------------------------------')
+  log.trace('-----------------------------------------------')
 
   local counts = env.space:count_pieces()
   local white = counts[tostring(playerid.white)]
@@ -75,7 +75,7 @@ function battle:move(pid)
     return
   end
 
-  log:trace(tostring(self.players[pid]), 'is going to move.', white, black)
+  log.trace(tostring(self.players[pid]), 'is going to move.', white, black)
 
   -- move pointer
   transition.moveTo(self.move_pointer, {y=self.players[pid].view.y, time=500})
@@ -98,7 +98,7 @@ battle:addEventListener("destroy", battle)
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
 function battle:wrap()
-  wrp.wrap_tbl_inf(battle, 'move', {'playerid'})
+  wrp.wrap_tbl(log.info, battle, 'move', {'playerid'})
 end
 
 --

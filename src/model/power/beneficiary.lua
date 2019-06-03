@@ -3,6 +3,7 @@ local arr       = require 'src.lua-cor.arr'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
+local log = require('src.lua-cor.log').get('model')
 
 local beneficiary = power:extend('Beneficiary')
 
@@ -32,7 +33,7 @@ end
 
 --
 function beneficiary:wrap()
-  wrp.wrap_tbl_trc(beneficiary, 'new', {'piece'}, {'def', typ.tab})
+  wrp.wrap_tbl(log.trace, beneficiary, 'new', {'piece'}, {'def', typ.tab})
 end
 
 return beneficiary

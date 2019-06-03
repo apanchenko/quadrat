@@ -2,13 +2,8 @@ print(_VERSION)
 
 local env = require 'src.lua-cor.env'
 
-env.log = require 'src.lua-cor.log'
 env.cfg = require 'src.cfg'
-
-local _test = env.log.get_module('_test')
-_test.enable()
-_test:trace('test _test module')
-
+env.log = require 'src.lua-cor.log'
 
 local package = require 'src.package'
 --package:get('core.package'):test()

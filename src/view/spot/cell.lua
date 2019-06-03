@@ -2,7 +2,7 @@ local vec   = require 'src.lua-cor.vec'
 local arr   = require 'src.lua-cor.arr'
 local cfg   = require 'src.cfg'
 local lay   = require "src.lua-cor.lay"
-local log   = require('src.lua-cor.log').get_module('cell').enable()
+local log   = require('src.lua-cor.log').get('cell').enable()
 local ass   = require "src.lua-cor.ass"
 local obj   = require "src.lua-cor.obj"
 local wrp   = require 'src.lua-cor.wrp'
@@ -127,10 +127,10 @@ end
 
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
-  wrp.wrap_tbl_trc(cell, 'new',       {'spot'})
-  wrp.wrap_sub_trc(cell, 'set_stone', {'stone'})
-  wrp.wrap_sub_trc(cell, 'stone')
-  wrp.wrap_sub_trc(cell, 'remove_stone')
+  wrp.wrap_tbl(log.trace, cell, 'new',       {'spot'})
+  wrp.wrap_sub(log.trace, cell, 'set_stone', {'stone'})
+  wrp.wrap_sub(log.info, cell, 'stone')
+  wrp.wrap_sub(log.trace, cell, 'remove_stone')
 end
 
 return cell

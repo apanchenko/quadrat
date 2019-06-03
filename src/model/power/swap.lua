@@ -1,6 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp       = require 'src.lua-cor.wrp'
 local areal     = require 'src.model.power.areal'
+local log = require('src.lua-cor.log').get('model')
 
 local swap = areal:extend('Swap')
 
@@ -20,7 +21,7 @@ end
 
 --
 function swap:wrap()
-  wrp.wrap_sub_trc(swap, 'apply_to_spot', {'spot'})
+  wrp.wrap_sub(log.trace, swap, 'apply_to_spot', {'spot'})
 end
 
 return swap

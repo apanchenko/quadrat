@@ -1,5 +1,5 @@
 local ass     = require 'src.lua-cor.ass'
-local log     = require 'src.lua-cor.log'
+local log     = require('src.lua-cor.log').get('model')
 local typ     = require 'src.lua-cor.typ'
 local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
@@ -49,10 +49,10 @@ end
 
 --
 function counted:wrap()
-  wrp.wrap_tbl_trc(counted, 'new',        {'piece'}, {'def', typ.tab})
-  wrp.wrap_sub_trc(counted, 'increase')
-  wrp.wrap_sub_trc(counted, 'decrease')
-  wrp.wrap_sub_inf(counted, 'get_count')
+  wrp.wrap_tbl(log.trace, counted, 'new',        {'piece'}, {'def', typ.tab})
+  wrp.wrap_sub(log.trace, counted, 'increase')
+  wrp.wrap_sub(log.trace, counted, 'decrease')
+  wrp.wrap_sub(log.info, counted, 'get_count')
 end
 
 return counted

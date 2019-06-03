@@ -1,5 +1,5 @@
 local ass     = require 'src.lua-cor.ass'
-local log     = require 'src.lua-cor.log'
+local log     = require('src.lua-cor.log').get('model')
 local obj     = require 'src.lua-cor.obj'
 local wrp     = require 'src.lua-cor.wrp'
 local typ     = require 'src.lua-cor.typ'
@@ -53,9 +53,9 @@ function power:on_add_jade(jade) end
 
 -- module
 function power:wrap()
-  wrp.wrap_tbl_trc(power, 'new',      {'piece'}, {'def', typ.tab})
-  wrp.wrap_sub_trc(power, 'add_to',   {'powers', typ.tab})
-  wrp.wrap_sub_trc(power, 'can_move', {'from', 'vec'}, {'to', 'vec'})
+  wrp.wrap_tbl(log.trace, power, 'new',      {'piece'}, {'def', typ.tab})
+  wrp.wrap_sub(log.trace, power, 'add_to',   {'powers', typ.tab})
+  wrp.wrap_sub(log.trace, power, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end
 
 return power
