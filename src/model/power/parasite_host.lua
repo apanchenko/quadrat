@@ -1,7 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 -- @see parasite
 local parasite_host = power:extend('Parasite_host')

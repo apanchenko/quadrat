@@ -2,7 +2,7 @@ local ass     = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local typ     = require 'src.lua-cor.typ'
 local counted = require 'src.model.power.counted'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 local multiply = counted:extend('Multiply')
 

@@ -3,7 +3,7 @@ local arr       = require 'src.lua-cor.arr'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 local beneficiary = power:extend('Beneficiary')
 

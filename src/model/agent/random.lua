@@ -1,6 +1,6 @@
 local map       = require 'src.lua-cor.map'
 local ass       = require 'src.lua-cor.ass'
-local log       = require('src.lua-cor.log').get('')
+local log       = require('src.lua-cor.log').get('mode')
 local vec       = require 'src.lua-cor.vec'
 local obj       = require 'src.lua-cor.obj'
 local env       = require 'src.lua-cor.env'

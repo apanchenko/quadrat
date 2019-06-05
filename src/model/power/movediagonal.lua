@@ -1,6 +1,6 @@
 local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 local movediagonal = power:extend('Movediagonal')
 

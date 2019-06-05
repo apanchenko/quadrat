@@ -1,7 +1,7 @@
 local wrp       = require 'src.lua-cor.wrp'
 local typ       = require 'src.lua-cor.typ'
 local power     = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 local x2 = power:extend('X2')
 

@@ -1,7 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local wrp     = require 'src.lua-cor.wrp'
 local areal     = require 'src.model.power.areal'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 
 local recruit = areal:extend('Recruit')
 

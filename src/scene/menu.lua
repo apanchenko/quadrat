@@ -1,6 +1,6 @@
 local widget    = require 'widget'
 local composer  = require 'composer'
-local log       = require('src.lua-cor.log').get('')
+local log       = require('src.lua-cor.log').get('scen')
 local lay       = require 'src.lua-cor.lay'
 local cfg       = require 'src.scene.cfg'
 local battle    = require 'src.scene.battle'

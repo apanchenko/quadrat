@@ -1,6 +1,6 @@
 local ass = require 'src.lua-cor.ass'
 local obj = require 'src.lua-cor.obj'
-local log = require('src.lua-cor.log').get('model')
+local log = require('src.lua-cor.log').get('mode')
 local wrp = require 'src.lua-cor.wrp'
 local typ = require 'src.lua-cor.typ'
 
