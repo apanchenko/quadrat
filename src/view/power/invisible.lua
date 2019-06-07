@@ -41,9 +41,10 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function invisible:wrap()
+  local is   = {'invisible', typ.new_is(invisible)}
   local count = {'count', typ.num}
 
-  wrp.wrap_tbl(log.trace, invisible, 'new',        {'env'}, {'stone'}, {'id', typ.str}, count)
+  wrp.wrap_stc(log.trace, invisible, 'new',        is, {'env'}, {'stone'}, {'id', typ.str}, count)
   wrp.wrap_sub(log.trace, invisible, 'set_count',  count)
   wrp.wrap_sub(log.trace, invisible, 'move',       {'playerid'})
 end

@@ -69,7 +69,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function random:wrap()
-  wrp.wrap_tbl(log.trace, random, 'new',       {'env', typ.any}, {'playerid'})
+  local is   = {'random', typ.new_is(random)}
+
+  wrp.wrap_stc(log.trace, random, 'new',       is, {'env', typ.any}, {'playerid'})
   wrp.wrap_sub(log.info, random, 'move',      {'playerid'})
   wrp.wrap_sub(log.trace, random, 'move_async')
 end

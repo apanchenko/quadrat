@@ -46,18 +46,22 @@ function net:new()
       this.on_error()
     end
   end
-  wrp.wrap_tbl(log.trace, client, 'onError',
+  wrp.wrap_stc(log.trace, client, 'onError',
+    {'client', typ.new_is(client)},
     {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
     {'msg', typ.str})
 
   -- react to state change
   function client:onStateChange(state)
-  end    
-  wrp.wrap_tbl(log.trace, client, 'onStateChange', {'state', typ.num, Client.StateToName})
+  end
+
+  local is   = {'client', typ.new_is(client)}
+
+  wrp.wrap_stc(log.trace, client, 'onStateChange', is, {'state', typ.num, Client.StateToName})
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrp.wrap_tbl(log.trace, client, 'onOperationResponse',
+  wrp.wrap_stc(log.trace, client, 'onOperationResponse', is,
     {'errCode', typ.num},
     {'errMsg', typ.str},
     {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
@@ -106,7 +110,7 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  wrp.wrap_tbl(log.trace, client, 'onActorJoin', 
+  wrp.wrap_stc(log.trace, client, 'onActorJoin', is,
     {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
 
   function client:sendData()
@@ -130,10 +134,10 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  wrp.wrap_tbl(log.trace, client, 'onRoomList', 
+  wrp.wrap_stc(log.trace, client, 'onRoomList', is,
     {'rooms', typ.tab, function(v) return map.keys(v):join() end})
-  wrp.wrap_tbl(log.trace, client, 'onJoinRoom', {'createdByMe', typ.boo})
-  wrp.wrap_tbl(log.trace, client, 'onEvent',
+  wrp.wrap_stc(log.trace, client, 'onJoinRoom', is, {'createdByMe', typ.boo})
+  wrp.wrap_stc(log.trace, client, 'onEvent', is,
     {'code', typ.num},
     {'content', typ.tab, map.tostring},
     {'actor', typ.tab})
@@ -154,7 +158,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function net:wrap()
-  wrp.wrap_tbl(log.trace, net, 'new')
+  local is   = {'net', typ.new_is(net)}
+
+  wrp.wrap_stc(log.trace, net, 'new', is)
 end
 
 function net:test()

@@ -30,7 +30,7 @@ end
 
 -- module
 function playerid:wrap()
-  wrp.wrap_sub(log.info, playerid, 'swap')
+  wrp.wrap_stc(log.info, playerid, 'swap', {'pid', typ.new_ex(playerid)})
   wrp.wrap_stc(log.info, playerid, 'select', {'is_white', typ.boo})
 end
 

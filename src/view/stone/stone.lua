@@ -248,8 +248,9 @@ end
 --
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
+  local is   = {'stone', typ.new_is(stone)}
 
-  wrp.wrap_tbl(log.trace, stone, 'new',          {'env'}, {'pid', 'playerid'})
+  wrp.wrap_stc(log.trace, stone, 'new',          is, {'env'}, {'pid', 'playerid'})
   wrp.wrap_sub(log.trace, stone, 'select')
   wrp.wrap_sub(log.info, stone, 'deselect')
   wrp.wrap_sub(log.trace, stone, 'set_color',    {'playerid'})

@@ -53,7 +53,8 @@ function power:on_add_jade(jade) end
 
 -- module
 function power:wrap()
-  wrp.wrap_tbl(log.trace, power, 'new',      {'piece'}, {'def', typ.tab})
+  local is   = {'power', typ.new_is(power)}
+  wrp.wrap_stc(log.trace, power, 'new',      is, {'piece'}, {'def', typ.tab})
   wrp.wrap_sub(log.trace, power, 'add_to',   {'powers', typ.tab})
   wrp.wrap_sub(log.trace, power, 'can_move', {'from', 'vec'}, {'to', 'vec'})
 end

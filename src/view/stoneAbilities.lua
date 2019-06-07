@@ -97,7 +97,8 @@ end
 
 --
 function stoneAbilities:wrap()
-  wrp.wrap_tbl(log.trace, stoneAbilities, 'new',       {'stone'})
+  local is   = {'stoneAbilities', typ.new_is(stoneAbilities)}
+  wrp.wrap_stc(log.trace, stoneAbilities, 'new',       is, {'stone'})
   wrp.wrap_sub(log.trace, stoneAbilities, 'set_count', {'id', typ.str}, {'count', typ.num})
   wrp.wrap_sub(log.info, stoneAbilities, 'is_empty')
   wrp.wrap_sub(log.trace, stoneAbilities, 'show')

@@ -13,7 +13,8 @@ local piece = obj:extend('piece')
 
 -- interface
 function piece:wrap()
-  local opts  = {log=log.info}
+  local pis   = {'piece', typ.new_is(piece)}
+  local pex   = {'piece', typ.new_ex(piece)}
   local space = {'space'}
   local pid   = {'playerid'}
   local jade  = {'jade'}
@@ -27,28 +28,28 @@ function piece:wrap()
   local tspot = {'to', 'spot'}
 
   -- piece
-  wrp.wrap_tbl(log.trace, piece, 'new',            space, pid)
-  wrp.wrap_sub(log.trace, piece, 'set_color',      pid)
-  wrp.wrap_sub(log.trace, piece, 'die')
+  wrp.wrap_stc(log.trace, piece, 'new',            pis, space, pid)
+  wrp.wrap_stc(log.trace, piece, 'set_color',      pex, pid)
+  wrp.wrap_stc(log.trace, piece, 'die',            pex)
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.wrap_sub(log.info, piece, 'can_move',       from,  to)
-  wrp.wrap_sub(log.trace, piece, 'move_before',    fspot, tspot)
-  wrp.wrap_sub(log.trace, piece, 'move',           fspot, tspot)
-  wrp.wrap_sub(log.trace, piece, 'move_after',     fspot, tspot)
+  wrp.wrap_stc(log.info, piece, 'can_move',        pex, from,  to)
+  wrp.wrap_stc(log.trace, piece, 'move_before',    pex, fspot, tspot)
+  wrp.wrap_stc(log.trace, piece, 'move',           pex, fspot, tspot)
+  wrp.wrap_stc(log.trace, piece, 'move_after',     pex, fspot, tspot)
   
   -- jades
-  wrp.wrap_sub(log.trace, piece, 'add_jade',       jade)
-  wrp.wrap_sub(log.trace, piece, 'remove_jade',    id, count)
-  wrp.wrap_sub(log.trace, piece, 'use_jade',       id)
-  wrp.wrap_sub(log.trace, piece, 'each_jade',      {'fn', typ.fun})
-  wrp.wrap_sub(log.trace, piece, 'clear_jades')
+  wrp.wrap_stc(log.trace, piece, 'add_jade',       pex, jade)
+  wrp.wrap_stc(log.trace, piece, 'remove_jade',    pex, id, count)
+  wrp.wrap_stc(log.trace, piece, 'use_jade',       pex, id)
+  wrp.wrap_stc(log.trace, piece, 'each_jade',      pex, {'fn', typ.fun})
+  wrp.wrap_stc(log.trace, piece, 'clear_jades',    pex)
 
   -- powers
-  wrp.wrap_sub(log.trace, piece, 'add_power',      power)
-  wrp.wrap_sub(log.trace, piece, 'remove_power',   id)
-  wrp.wrap_sub(log.trace, piece, 'decrease_power', name)
+  wrp.wrap_stc(log.trace, piece, 'add_power',      pex, power)
+  wrp.wrap_stc(log.trace, piece, 'remove_power',   pex, id)
+  wrp.wrap_stc(log.trace, piece, 'decrease_power', pex, name)
 end
 
 -- create a piece

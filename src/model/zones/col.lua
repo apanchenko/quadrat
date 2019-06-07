@@ -3,6 +3,7 @@ local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local vec       = require 'src.lua-cor.vec'
 local wrp       = require 'src.lua-cor.wrp'
+local typ     = require 'src.lua-cor.typ'
 
 local col       = obj:extend('Col')
 
@@ -26,7 +27,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function col:wrap()
-  wrp.wrap_sub(log.info, col, 'filter', {'pos', vec})
+  local is   = {'col', typ.new_is(col)}
+  local ex   = {'col', typ.new_ex(col)}
+
+  wrp.wrap_stc(log.info, col, 'filter', ex, {'pos', vec})
 end
 
 return col

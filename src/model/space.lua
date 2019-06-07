@@ -215,24 +215,27 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function space:wrap()
+  local sis   = {'space', typ.new_is(space)}
+  local sex   = {'space', typ.new_ex(space)}
+
    --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
-  wrp.wrap_sub(log.trace, space, 'setup')
-  wrp.wrap_sub(log.info, space, 'pos',        {'index', typ.num})
-  wrp.wrap_sub(log.info, space, 'width')
-  wrp.wrap_sub(log.info, space, 'height')
-  wrp.wrap_sub(log.trace, space, 'row',        {'place', typ.num})
-  wrp.wrap_sub(log.info, space, 'col',        {'place', typ.num})
-  wrp.wrap_sub(log.info, space, 'pos',        {'index', typ.num})
-  wrp.wrap_sub(log.info, space, 'index',      {'vec', vec})
-  wrp.wrap_sub(log.info, space, 'spot',       {'pos', vec})
-  wrp.wrap_sub(log.info, space, 'each_piece', {'fn', typ.fun})
-  wrp.wrap_sub(log.info, space, 'each_spot',  {'fn', typ.fun})
-  wrp.wrap_sub(log.info, space, 'count_pieces')
-  wrp.wrap_sub(log.info, space, 'piece',      {'pos', vec})
-  wrp.wrap_sub(log.info, space, 'who_move')
-  wrp.wrap_sub(log.info, space, 'can_move',   {'from', vec}, {'to', vec})
-  wrp.wrap_sub(log.trace, space, 'move',       {'from', vec}, {'to', vec})
-  wrp.wrap_sub(log.trace, space, 'use',        {'pos', vec}, {'ability_name', typ.str})
+  wrp.wrap_stc(log.trace, space, 'setup', {'space', typ.meta(space)})
+  wrp.wrap_stc(log.info,  space, 'pos',   {'space', typ:new('typ_space', function(v) return typ.extends(v, space) end)}, {'index', typ.num})
+  wrp.wrap_stc(log.info, space, 'width',  sex)
+  wrp.wrap_stc(log.info, space, 'height', sex)
+  wrp.wrap_stc(log.trace, space, 'row',   sex,    {'place', typ.num})
+  wrp.wrap_stc(log.info, space, 'col',    sex,    {'place', typ.num})
+  wrp.wrap_stc(log.info, space, 'pos',    sex,    {'index', typ.num})
+  wrp.wrap_stc(log.info, space, 'index',  sex,    {'vec', vec})
+  wrp.wrap_stc(log.info, space, 'spot',   sex,    {'pos', vec})
+  wrp.wrap_stc(log.info, space, 'each_piece', sex,    {'fn', typ.fun})
+  wrp.wrap_stc(log.info, space, 'each_spot',   sex,  {'fn', typ.fun})
+  wrp.wrap_stc(log.info, space, 'count_pieces',   sex)
+  wrp.wrap_stc(log.info, space, 'piece',   sex,      {'pos', vec})
+  wrp.wrap_stc(log.info, space, 'who_move',   sex)
+  wrp.wrap_stc(log.info, space, 'can_move',   sex,   {'from', vec}, {'to', vec})
+  wrp.wrap_stc(log.trace, space, 'move',   sex,       {'from', vec}, {'to', vec})
+  wrp.wrap_stc(log.trace, space, 'use',   sex,        {'pos', vec}, {'ability_name', typ.str})
 end
 
 -- return module

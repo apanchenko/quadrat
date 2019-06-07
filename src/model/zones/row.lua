@@ -3,6 +3,7 @@ local obj       = require 'src.lua-cor.obj'
 local log       = require('src.lua-cor.log').get('mode')
 local vec       = require 'src.lua-cor.vec'
 local wrp     = require 'src.lua-cor.wrp'
+local typ     = require 'src.lua-cor.typ'
 
 local row = obj:extend('Row')
 
@@ -25,8 +26,11 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function row:wrap()
-  wrp.wrap_tbl(log.info, row, 'new',    {'pos', vec})
-  wrp.wrap_sub(log.info, row, 'filter', {'pos', vec})
+  local ris   = {'row', typ.new_is(row)}
+  local rex   = {'row', typ.new_ex(row)}
+
+  wrp.wrap_stc(log.info, row, 'new',    ris, {'pos', vec})
+  wrp.wrap_stc(log.info, row, 'filter', rex, {'pos', vec})
 end
 
 

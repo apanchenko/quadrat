@@ -49,7 +49,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  wrp.wrap_tbl(log.trace, user, 'new',            {'env'}, {'pid', 'playerid'})
+  local is   = {'user', typ.new_is(user)}
+  wrp.wrap_stc(log.trace, user, 'new',            is, {'env'}, {'pid', 'playerid'})
   wrp.wrap_sub(log.trace, user, 'on_spawn_stone', {'stone'})
 end
 

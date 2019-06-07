@@ -10,12 +10,13 @@ areal.is_areal = true
 
 --
 function areal:wrap()
+  local is    = {'areal', typ.new_is(areal)}
   local piece = {'piece'}
   local spot  = {'spot'}
   local def   = {'def', typ.tab}
   local zone  = {'zone', typ.tab}
 
-  wrp.wrap_tbl(log.trace, areal, 'new',             piece, def, zone)
+  wrp.wrap_stc(log.trace, areal, 'new',             is, piece, def, zone)
   wrp.wrap_sub(log.trace, areal, 'apply_to_spot',   spot            )
   wrp.wrap_sub(log.trace, areal, 'apply_to_self'                    )
   wrp.wrap_sub(log.trace, areal, 'apply_to_friend', spot            )

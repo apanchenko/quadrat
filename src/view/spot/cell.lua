@@ -8,6 +8,7 @@ local obj   = require "src.lua-cor.obj"
 local wrp   = require 'src.lua-cor.wrp'
 local spot  = require 'src.model.spot.spot'
 local layout = require 'src.view.spot.layout'
+local typ     = require 'src.lua-cor.typ'
 
 local cell = obj:extend('cell')
 
@@ -127,7 +128,9 @@ end
 
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
-  wrp.wrap_tbl(log.trace, cell, 'new',       {'spot'})
+  local is   = {'cell', typ.new_is(cell)}
+
+  wrp.wrap_stc(log.trace, cell, 'new',       is, {'spot'})
   wrp.wrap_sub(log.trace, cell, 'set_stone', {'stone'})
   wrp.wrap_sub(log.info, cell, 'stone')
   wrp.wrap_sub(log.trace, cell, 'remove_stone')

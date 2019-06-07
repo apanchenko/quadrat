@@ -10,6 +10,7 @@ local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space'
 local agent         = require 'src.model.agent.package'
+local typ     = require 'src.lua-cor.typ'
 
 -- battle scene
 local battle = composer.newScene()
@@ -98,7 +99,8 @@ battle:addEventListener("destroy", battle)
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
 function battle:wrap()
-  wrp.wrap_tbl(log.info, battle, 'move', {'playerid'})
+  local is   = {'battle', typ.new_is(battle)}
+  wrp.wrap_stc(log.info, battle, 'move', is, {'playerid'})
 end
 
 --

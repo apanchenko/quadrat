@@ -4,7 +4,7 @@ local env = require 'src.lua-cor.env'
 
 -- select 'debug', 'dev', 'release'
 log.set_configuration('dev')
-
+log.get('view').disable()
 
 env.cfg = require 'src.cfg'
 env.log = log

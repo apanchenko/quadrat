@@ -49,7 +49,8 @@ end
 
 --
 function counted:wrap()
-  wrp.wrap_tbl(log.trace, counted, 'new',        {'piece'}, {'def', typ.tab})
+  local is   = {'counted', typ.new_is(counted)}
+  wrp.wrap_stc(log.trace, counted, 'new',        is, {'piece'}, {'def', typ.tab})
   wrp.wrap_sub(log.trace, counted, 'increase')
   wrp.wrap_sub(log.trace, counted, 'decrease')
   wrp.wrap_sub(log.info, counted, 'get_count')

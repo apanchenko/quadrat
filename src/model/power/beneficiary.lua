@@ -33,7 +33,8 @@ end
 
 --
 function beneficiary:wrap()
-  wrp.wrap_tbl(log.trace, beneficiary, 'new', {'piece'}, {'def', typ.tab})
+  local is   = {'beneficiary', typ.new_is(beneficiary)}
+  wrp.wrap_stc(log.trace, beneficiary, 'new', is, {'piece'}, {'def', typ.tab})
 end
 
 return beneficiary
