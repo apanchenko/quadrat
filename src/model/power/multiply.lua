@@ -26,10 +26,11 @@ end
 
 --
 function multiply:wrap()
+  local ex    = {'exmultiply', typ.new_ex(multiply)}
   local fspot = {'fr', 'spot'}
   local tspot = {'to', 'spot'}
 
-  wrp.wrap_sub(log.trace, multiply, 'move_after', fspot, tspot)
+  wrp.wrap_stc(log.trace, multiply, 'move_after', ex, fspot, tspot)
 end
 
 -- selftest

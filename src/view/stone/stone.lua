@@ -249,20 +249,21 @@ end
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
   local is   = {'stone', typ.new_is(stone)}
+  local ex    = {'exstone', typ.new_ex(stone)}
 
   wrp.wrap_stc(log.trace, stone, 'new',          is, {'env'}, {'pid', 'playerid'})
-  wrp.wrap_sub(log.trace, stone, 'select')
-  wrp.wrap_sub(log.info, stone, 'deselect')
-  wrp.wrap_sub(log.trace, stone, 'set_color',    {'playerid'})
-  wrp.wrap_sub(log.info, stone, 'get_pid')
-  wrp.wrap_sub(log.trace, stone, 'puton',        {'board'})
-  wrp.wrap_sub(log.trace, stone, 'putoff')
-  wrp.wrap_sub(log.trace, stone, 'pos')
-  wrp.wrap_sub(log.trace, stone, 'set_ability',  {'id', typ.str}, {'count', typ.num})
-  wrp.wrap_sub(log.trace, stone, 'add_power',    {'id', typ.str}, {'result_count', typ.num})
-  wrp.wrap_sub(log.info, stone, 'touch',        event)
-  wrp.wrap_sub(log.info, stone, 'touch_began',  event)
-  wrp.wrap_sub(log.info, stone, 'touch_moved',  event)
+  wrp.wrap_stc(log.trace, stone, 'select', ex)
+  wrp.wrap_stc(log.info, stone, 'deselect', ex)
+  wrp.wrap_stc(log.trace, stone, 'set_color',    ex, {'playerid'})
+  wrp.wrap_stc(log.info, stone, 'get_pid', ex)
+  wrp.wrap_stc(log.trace, stone, 'puton',        ex, {'board'})
+  wrp.wrap_stc(log.trace, stone, 'putoff', ex)
+  wrp.wrap_stc(log.trace, stone, 'pos', ex)
+  wrp.wrap_stc(log.trace, stone, 'set_ability',  ex, {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_stc(log.trace, stone, 'add_power',    ex, {'id', typ.str}, {'result_count', typ.num})
+  wrp.wrap_stc(log.info, stone, 'touch',        ex, event)
+  wrp.wrap_stc(log.info, stone, 'touch_began',  ex, event)
+  wrp.wrap_stc(log.info, stone, 'touch_moved',  ex, event)
 end
 
 return stone

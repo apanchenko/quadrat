@@ -50,8 +50,10 @@ end
 --
 function user:wrap()
   local is   = {'user', typ.new_is(user)}
+  local ex    = {'exuser', typ.new_ex(user)}
+
   wrp.wrap_stc(log.trace, user, 'new',            is, {'env'}, {'pid', 'playerid'})
-  wrp.wrap_sub(log.trace, user, 'on_spawn_stone', {'stone'})
+  wrp.wrap_stc(log.trace, user, 'on_spawn_stone', ex, {'stone'})
 end
 
 return user

@@ -148,13 +148,14 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function board:wrap()
+  local ex    = {'exboard', typ.new_ex(board)}
   local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.wrap_sub(log.trace, board, 'set_ability',   pos, id, count)
-  wrp.wrap_sub(log.info, board, 'add_power',     pos, {'name', typ.str}, count)
-  wrp.wrap_sub(log.info, board, 'set_color',     pos, {'pid', 'playerid'})
-  wrp.wrap_sub(log.info, board, 'add_spot_comp', pos, id, count)
+  wrp.wrap_stc(log.trace, board, 'set_ability',  ex, pos, id, count)
+  wrp.wrap_stc(log.info, board, 'add_power',     ex, pos, {'name', typ.str}, count)
+  wrp.wrap_stc(log.info, board, 'set_color',     ex, pos, {'pid', 'playerid'})
+  wrp.wrap_stc(log.info, board, 'add_spot_comp', ex, pos, id, count)
 end
 
 function board:test()

@@ -129,11 +129,12 @@ end
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
   local is   = {'cell', typ.new_is(cell)}
+  local ex    = {'excell', typ.new_ex(cell)}
 
   wrp.wrap_stc(log.trace, cell, 'new',       is, {'spot'})
-  wrp.wrap_sub(log.trace, cell, 'set_stone', {'stone'})
-  wrp.wrap_sub(log.info, cell, 'stone')
-  wrp.wrap_sub(log.trace, cell, 'remove_stone')
+  wrp.wrap_stc(log.trace, cell, 'set_stone', ex, {'stone'})
+  wrp.wrap_stc(log.info, cell, 'stone', ex)
+  wrp.wrap_stc(log.trace, cell, 'remove_stone', ex)
 end
 
 return cell

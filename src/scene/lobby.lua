@@ -63,8 +63,9 @@ end
 
 -- interface
 function lobby:wrap()
-  wrp.wrap_sub(log.trace, lobby, 'on_opponent',       {'room_id', typ.num}, {'createdByMe', typ.boo})
-  wrp.wrap_sub(log.trace, lobby, 'on_opponent_error', {'msg', typ.str})
+  local ex    = {'exlobby', typ.new_ex(lobby)}
+  wrp.wrap_stc(log.trace, lobby, 'on_opponent',       ex, {'room_id', typ.num}, {'createdByMe', typ.boo})
+  wrp.wrap_stc(log.trace, lobby, 'on_opponent_error', ex, {'msg', typ.str})
 end
 
 function lobby:test()

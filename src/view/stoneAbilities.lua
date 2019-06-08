@@ -98,11 +98,12 @@ end
 --
 function stoneAbilities:wrap()
   local is   = {'stoneAbilities', typ.new_is(stoneAbilities)}
+  local ex    = {'exstoneAbilities', typ.new_ex(stoneAbilities)}
   wrp.wrap_stc(log.trace, stoneAbilities, 'new',       is, {'stone'})
-  wrp.wrap_sub(log.trace, stoneAbilities, 'set_count', {'id', typ.str}, {'count', typ.num})
-  wrp.wrap_sub(log.info, stoneAbilities, 'is_empty')
-  wrp.wrap_sub(log.trace, stoneAbilities, 'show')
-  wrp.wrap_sub(log.trace, stoneAbilities, 'hide')
+  wrp.wrap_stc(log.trace, stoneAbilities, 'set_count', ex, {'id', typ.str}, {'count', typ.num})
+  wrp.wrap_stc(log.info, stoneAbilities, 'is_empty', ex)
+  wrp.wrap_stc(log.trace, stoneAbilities, 'show', ex)
+  wrp.wrap_stc(log.trace, stoneAbilities, 'hide', ex)
 end
 
 --
