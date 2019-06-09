@@ -30,7 +30,7 @@ function multiply:wrap()
   local fspot = {'fr', 'spot'}
   local tspot = {'to', 'spot'}
 
-  wrp.wrap_stc(log.trace, multiply, 'move_after', ex, fspot, tspot)
+  wrp.fn(log.trace, multiply, 'move_after', ex, fspot, tspot)
 end
 
 -- selftest

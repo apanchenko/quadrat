@@ -27,7 +27,7 @@ end
 --
 function pilfer:wrap()
   local ex    = {'expilfer', typ.new_ex(pilfer)}
-  wrp.wrap_stc(log.trace, pilfer, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, pilfer, 'apply_to_spot', ex, {'spot'})
 end
 
 return pilfer

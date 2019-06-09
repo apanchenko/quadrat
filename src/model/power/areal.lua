@@ -17,12 +17,12 @@ function areal:wrap()
   local def   = {'def', typ.tab}
   local zone  = {'zone', typ.tab}
 
-  wrp.wrap_stc(log.trace, areal, 'new',             is, piece, def, zone)
-  wrp.wrap_stc(log.trace, areal, 'apply_to_spot',   ex, spot            )
-  wrp.wrap_stc(log.trace, areal, 'apply_to_self',   ex                )
-  wrp.wrap_stc(log.trace, areal, 'apply_to_friend', ex, spot            )
-  wrp.wrap_stc(log.trace, areal, 'apply_to_enemy',  ex, spot            )
-  wrp.wrap_stc(log.trace, areal, 'apply_finish',    ex                 )
+  wrp.fn(log.trace, areal, 'new',             is, piece, def, zone)
+  wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot            )
+  wrp.fn(log.trace, areal, 'apply_to_self',   ex                )
+  wrp.fn(log.trace, areal, 'apply_to_friend', ex, spot            )
+  wrp.fn(log.trace, areal, 'apply_to_enemy',  ex, spot            )
+  wrp.fn(log.trace, areal, 'apply_finish',    ex                 )
 end
 
 -- create an areal power that sits on onwer piece and acts once or more times

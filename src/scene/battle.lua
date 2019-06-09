@@ -100,7 +100,7 @@ battle:addEventListener("destroy", battle)
 -- wrap vec functions
 function battle:wrap()
   local is   = {'battle', typ.new_is(battle)}
-  wrp.wrap_stc(log.info, battle, 'move', is, {'playerid'})
+  wrp.fn(log.info, battle, 'move', is, {'playerid'})
 end
 
 --

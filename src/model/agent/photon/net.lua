@@ -46,7 +46,7 @@ function net:new()
       this.on_error()
     end
   end
-  wrp.wrap_stc(log.trace, client, 'onError',
+  wrp.fn(log.trace, client, 'onError',
     {'client', typ.new_is(client)},
     {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
     {'msg', typ.str})
@@ -57,11 +57,11 @@ function net:new()
 
   local is   = {'client', typ.new_is(client)}
 
-  wrp.wrap_stc(log.trace, client, 'onStateChange', is, {'state', typ.num, Client.StateToName})
+  wrp.fn(log.trace, client, 'onStateChange', is, {'state', typ.num, Client.StateToName})
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrp.wrap_stc(log.trace, client, 'onOperationResponse', is,
+  wrp.fn(log.trace, client, 'onOperationResponse', is,
     {'errCode', typ.num},
     {'errMsg', typ.str},
     {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
@@ -110,7 +110,7 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  wrp.wrap_stc(log.trace, client, 'onActorJoin', is,
+  wrp.fn(log.trace, client, 'onActorJoin', is,
     {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
 
   function client:sendData()
@@ -134,10 +134,10 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  wrp.wrap_stc(log.trace, client, 'onRoomList', is,
+  wrp.fn(log.trace, client, 'onRoomList', is,
     {'rooms', typ.tab, function(v) return map.keys(v):join() end})
-  wrp.wrap_stc(log.trace, client, 'onJoinRoom', is, {'createdByMe', typ.boo})
-  wrp.wrap_stc(log.trace, client, 'onEvent', is,
+  wrp.fn(log.trace, client, 'onJoinRoom', is, {'createdByMe', typ.boo})
+  wrp.fn(log.trace, client, 'onEvent', is,
     {'code', typ.num},
     {'content', typ.tab, map.tostring},
     {'actor', typ.tab})
@@ -160,7 +160,7 @@ end
 function net:wrap()
   local is   = {'net', typ.new_is(net)}
 
-  wrp.wrap_stc(log.trace, net, 'new', is)
+  wrp.fn(log.trace, net, 'new', is)
 end
 
 function net:test()

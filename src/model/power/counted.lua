@@ -52,10 +52,10 @@ function counted:wrap()
   local is   = {'counted', typ.new_is(counted)}
   local ex    = {'excounted', typ.new_ex(counted)}
 
-  wrp.wrap_stc(log.trace, counted, 'new',        is, {'piece'}, {'def', typ.tab})
-  wrp.wrap_stc(log.trace, counted, 'increase',   ex)
-  wrp.wrap_stc(log.trace, counted, 'decrease',   ex)
-  wrp.wrap_stc(log.info, counted, 'get_count',   ex)
+  wrp.fn(log.trace, counted, 'new',        is, {'piece'}, {'def', typ.tab})
+  wrp.fn(log.trace, counted, 'increase',   ex)
+  wrp.fn(log.trace, counted, 'decrease',   ex)
+  wrp.fn(log.info, counted, 'get_count',   ex)
 end
 
 return counted

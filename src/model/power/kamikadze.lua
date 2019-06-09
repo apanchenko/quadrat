@@ -29,7 +29,7 @@ end
 -- MODULE ---------------------------------------------------------------------
 function kamikadze:wrap()
   local ex    = {'exkamikadze', typ.new_ex(kamikadze)}
-  wrp.wrap_stc(log.trace, kamikadze, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, {'spot'})
 end
 
 function kamikadze:test()

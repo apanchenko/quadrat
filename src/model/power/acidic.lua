@@ -37,7 +37,7 @@ end
 function acidic:wrap()
   local ex    = {'exacidic', typ.new_ex(acidic)}
 
-  wrp.wrap_stc(log.trace, acidic, 'apply_to_enemy', ex, {'spot'})
+  wrp.fn(log.trace, acidic, 'apply_to_enemy', ex, {'spot'})
 end
 
 function acidic:test()

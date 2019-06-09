@@ -27,7 +27,7 @@ function teach:wrap()
   local is   = {'teach', typ.new_is(teach)}
   local ex   = {'teach', typ.new_ex(teach)}
 
-  wrp.wrap_stc(log.trace, teach, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, teach, 'apply_to_spot', ex, {'spot'})
 end
 
 return teach

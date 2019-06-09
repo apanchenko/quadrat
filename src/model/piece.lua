@@ -28,28 +28,28 @@ function piece:wrap()
   local tspot = {'to', 'spot'}
 
   -- piece
-  wrp.wrap_stc(log.trace, piece, 'new',            pis, space, pid)
-  wrp.wrap_stc(log.trace, piece, 'set_color',      pex, pid)
-  wrp.wrap_stc(log.trace, piece, 'die',            pex)
+  wrp.fn(log.trace, piece, 'new',            pis, space, pid)
+  wrp.fn(log.trace, piece, 'set_color',      pex, pid)
+  wrp.fn(log.trace, piece, 'die',            pex)
 
   -- position
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.wrap_stc(log.info, piece, 'can_move',        pex, from,  to)
-  wrp.wrap_stc(log.trace, piece, 'move_before',    pex, fspot, tspot)
-  wrp.wrap_stc(log.trace, piece, 'move',           pex, fspot, tspot)
-  wrp.wrap_stc(log.trace, piece, 'move_after',     pex, fspot, tspot)
+  wrp.fn(log.info, piece, 'can_move',        pex, from,  to)
+  wrp.fn(log.trace, piece, 'move_before',    pex, fspot, tspot)
+  wrp.fn(log.trace, piece, 'move',           pex, fspot, tspot)
+  wrp.fn(log.trace, piece, 'move_after',     pex, fspot, tspot)
   
   -- jades
-  wrp.wrap_stc(log.trace, piece, 'add_jade',       pex, jade)
-  wrp.wrap_stc(log.trace, piece, 'remove_jade',    pex, id, count)
-  wrp.wrap_stc(log.trace, piece, 'use_jade',       pex, id)
-  wrp.wrap_stc(log.trace, piece, 'each_jade',      pex, {'fn', typ.fun})
-  wrp.wrap_stc(log.trace, piece, 'clear_jades',    pex)
+  wrp.fn(log.trace, piece, 'add_jade',       pex, jade)
+  wrp.fn(log.trace, piece, 'remove_jade',    pex, id, count)
+  wrp.fn(log.trace, piece, 'use_jade',       pex, id)
+  wrp.fn(log.trace, piece, 'each_jade',      pex, {'fn', typ.fun})
+  wrp.fn(log.trace, piece, 'clear_jades',    pex)
 
   -- powers
-  wrp.wrap_stc(log.trace, piece, 'add_power',      pex, power)
-  wrp.wrap_stc(log.trace, piece, 'remove_power',   pex, id)
-  wrp.wrap_stc(log.trace, piece, 'decrease_power', pex, name)
+  wrp.fn(log.trace, piece, 'add_power',      pex, power)
+  wrp.fn(log.trace, piece, 'remove_power',   pex, id)
+  wrp.fn(log.trace, piece, 'decrease_power', pex, name)
 end
 
 -- create a piece

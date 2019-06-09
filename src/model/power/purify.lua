@@ -34,8 +34,8 @@ end
 --
 function purify:wrap()
   local ex    = {'expurify', typ.new_ex(purify)}
-  wrp.wrap_stc(log.trace, purify, 'apply_to_friend', ex, {'spot'})
-  wrp.wrap_stc(log.trace, purify, 'apply_to_enemy', ex, {'spot'})
+  wrp.fn(log.trace, purify, 'apply_to_friend', ex, {'spot'})
+  wrp.fn(log.trace, purify, 'apply_to_enemy', ex, {'spot'})
 end
 
 return purify

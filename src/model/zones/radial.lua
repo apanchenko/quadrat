@@ -43,8 +43,8 @@ function radial:wrap()
   local is   = {'radial', typ.new_is(radial)}
   local ex   = {'radial', typ.new_ex(radial)}
 
-  wrp.wrap_stc(log.info, radial, 'new',    is, {'pos', vec})
-  wrp.wrap_stc(log.info, radial, 'filter', ex, {'pos', vec})
+  wrp.fn(log.info, radial, 'new',    is, {'pos', vec})
+  wrp.fn(log.info, radial, 'filter', ex, {'pos', vec})
 end
 
 return radial

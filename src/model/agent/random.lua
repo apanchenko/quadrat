@@ -72,9 +72,9 @@ function random:wrap()
   local is   = {'random', typ.new_is(random)}
   local ex    = {'exrandom', typ.new_ex(random)}
 
-  wrp.wrap_stc(log.trace, random, 'new',        is, {'env', typ.any}, {'playerid'})
-  wrp.wrap_stc(log.info, random, 'move',        ex, {'playerid'})
-  wrp.wrap_stc(log.trace, random, 'move_async', ex)
+  wrp.fn(log.trace, random, 'new',        is, {'env', typ.any}, {'playerid'})
+  wrp.fn(log.info, random, 'move',        ex, {'playerid'})
+  wrp.fn(log.trace, random, 'move_async', ex)
 end
 
 return random

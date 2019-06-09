@@ -21,7 +21,7 @@ end
 --
 function sphere:wrap()
   local ex    = {'exsphere', typ.new_ex(sphere)}
-  wrp.wrap_stc(log.trace, sphere, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
+  wrp.fn(log.trace, sphere, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
 end
 
 --

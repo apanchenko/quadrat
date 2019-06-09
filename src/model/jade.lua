@@ -82,9 +82,9 @@ function jade:wrap()
   local jis   = {'jade', typ.new_is(jade)}
   local jex   = {'jade', typ.new_ex(jade)}
 
-  wrp.wrap_stc(log.info, jade, 'new',     jis)
-  wrp.wrap_stc(log.trace, jade, 'add_to', jex, {'jades', typ.tab})
-  wrp.wrap_stc(log.trace, jade, 'use',    jex, {'piece'})
+  wrp.fn(log.info, jade, 'new',     jis)
+  wrp.fn(log.trace, jade, 'add_to', jex, {'jades', typ.tab})
+  wrp.fn(log.trace, jade, 'use',    jex, {'piece'})
   --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 

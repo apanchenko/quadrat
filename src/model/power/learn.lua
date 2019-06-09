@@ -25,7 +25,7 @@ end
 --
 function learn:wrap()
   local ex    = {'exlearn', typ.new_ex(learn)}
-  wrp.wrap_stc(log.trace, learn, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, learn, 'apply_to_spot', ex, {'spot'})
 end
 
 return learn

@@ -29,8 +29,8 @@ function row:wrap()
   local ris   = {'row', typ.new_is(row)}
   local rex   = {'row', typ.new_ex(row)}
 
-  wrp.wrap_stc(log.info, row, 'new',    ris, {'pos', vec})
-  wrp.wrap_stc(log.info, row, 'filter', rex, {'pos', vec})
+  wrp.fn(log.info, row, 'new',    ris, {'pos', vec})
+  wrp.fn(log.info, row, 'filter', rex, {'pos', vec})
 end
 
 

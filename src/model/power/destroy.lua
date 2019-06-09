@@ -29,7 +29,7 @@ end
 function destroy:wrap()
   local ex    = {'exdestroy', typ.new_ex(destroy)}
 
-  wrp.wrap_stc(log.trace, destroy, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, {'spot'})
 end
 
 function destroy:test()

@@ -152,10 +152,10 @@ function board:wrap()
   local pos = {'pos', vec}
   local id = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.wrap_stc(log.trace, board, 'set_ability',  ex, pos, id, count)
-  wrp.wrap_stc(log.info, board, 'add_power',     ex, pos, {'name', typ.str}, count)
-  wrp.wrap_stc(log.info, board, 'set_color',     ex, pos, {'pid', 'playerid'})
-  wrp.wrap_stc(log.info, board, 'add_spot_comp', ex, pos, id, count)
+  wrp.fn(log.trace, board, 'set_ability',  ex, pos, id, count)
+  wrp.fn(log.info, board, 'add_power',     ex, pos, {'name', typ.str}, count)
+  wrp.fn(log.info, board, 'set_color',     ex, pos, {'pid', 'playerid'})
+  wrp.fn(log.info, board, 'add_spot_comp', ex, pos, id, count)
 end
 
 function board:test()

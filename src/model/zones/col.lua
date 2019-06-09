@@ -30,7 +30,7 @@ function col:wrap()
   local is   = {'col', typ.new_is(col)}
   local ex   = {'col', typ.new_ex(col)}
 
-  wrp.wrap_stc(log.info, col, 'filter', ex, {'pos', vec})
+  wrp.fn(log.info, col, 'filter', ex, {'pos', vec})
 end
 
 return col

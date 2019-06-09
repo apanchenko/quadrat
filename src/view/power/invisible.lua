@@ -45,9 +45,9 @@ function invisible:wrap()
   local ex    = {'exinvisible', typ.new_ex(invisible)}
   local count = {'count', typ.num}
 
-  wrp.wrap_stc(log.trace, invisible, 'new',        is, {'env'}, {'stone'}, {'id', typ.str}, count)
-  wrp.wrap_stc(log.trace, invisible, 'set_count',  ex, count)
-  wrp.wrap_stc(log.trace, invisible, 'move',       ex, {'playerid'})
+  wrp.fn(log.trace, invisible, 'new',        is, {'env'}, {'stone'}, {'id', typ.str}, count)
+  wrp.fn(log.trace, invisible, 'set_count',  ex, count)
+  wrp.fn(log.trace, invisible, 'move',       ex, {'playerid'})
 end
 
 return invisible

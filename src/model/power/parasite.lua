@@ -26,8 +26,8 @@ end
 --
 function parasite:wrap()
   local ex    = {'exparasite', typ.new_ex(parasite)}
-  wrp.wrap_stc(log.trace, parasite, 'apply_to_self', ex)
-  wrp.wrap_stc(log.trace, parasite, 'apply_to_enemy', ex, {'spot'})
+  wrp.fn(log.trace, parasite, 'apply_to_self', ex)
+  wrp.fn(log.trace, parasite, 'apply_to_enemy', ex, {'spot'})
 end
 
 return parasite

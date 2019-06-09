@@ -19,7 +19,7 @@ end
 -- module
 function movediagonal:wrap()
   local ex    = {'exmovediagonal', typ.new_ex(movediagonal)}
-  wrp.wrap_stc(log.trace, movediagonal, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
+  wrp.fn(log.trace, movediagonal, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
 end
 
 --
