@@ -3,6 +3,7 @@ local log       = require('src.lua-cor.log').get('mode')
 local obj       = require 'src.lua-cor.obj'
 local wrp       = require 'src.lua-cor.wrp'
 local typ       = require 'src.lua-cor.typ'
+local com         = require 'src.lua-cor.com'
 
 -- controller for user
 local user = obj:extend('user')
@@ -10,16 +11,15 @@ local user = obj:extend('user')
 -- create
 function user:new(env, pid)
   ass.eq(tostring(env), 'env')
-  return obj.new(self,
-  {
-    env = env,
-    pid = pid
-  })
+  local this = obj.new(self, com())
+  this.env = env
+  this.pid = pid
+  return this
 end
 
 -- listen board
 function user:on_board(board)
-  board.on_change:add(self)
+  board.on_change:listen(self)
 end
 
 --

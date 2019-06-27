@@ -3,7 +3,7 @@ local vec = require 'src.lua-cor.vec'
 
 local cfg =
 {
-  build    = bld.develop,
+  build    = bld.debug,
   version  = '0.0.1',
   log_info = false
 }

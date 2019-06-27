@@ -4,7 +4,7 @@ local vec      = require 'src.lua-cor.vec'
 local piece    = require 'src.model.piece'
 local cfg      = require 'src.cfg'
 local obj      = require 'src.lua-cor.obj'
-local lay      = (require 'src.lua-cor.lay')
+local lay      = require('src.lua-cor.lay')
 local ass      = require 'src.lua-cor.ass'
 local log      = require('src.lua-cor.log').get('view')
 local typ      = require 'src.lua-cor.typ'
@@ -12,6 +12,7 @@ local evt      = require 'src.lua-cor.evt'
 local wrp      = require 'src.lua-cor.wrp'
 local env      = require 'src.lua-cor.env'
 local arr      = require 'src.lua-cor.arr'
+local com         = require 'src.lua-cor.com'
 
 local board = obj:extend('board')
 
@@ -24,11 +25,10 @@ local board = obj:extend('board')
   selected piece
 -----------------------------------------------------------------------------]]--
 function board:new()
-  self = obj.new(self,
-  {
-    on_change = evt:new()
-  })
-  env.space.own_evt:add(self)
+  self = obj.new(self, com())
+  self.on_change = evt:new()
+  
+  env.space.own_evt.add(self)
   self.view = lay.new_layout().new_group()
 
   self.grid = {}
@@ -104,7 +104,7 @@ function board:set_ability(pos, id, count)
   self:stone(pos):set_ability(id, count)
 end
 --
-function board:add_power(pos, name, count)
+function board:piece_add_power(pos, name, count)
   self:stone(pos):add_power(name, count)
 end
 --
@@ -119,7 +119,7 @@ function board:unstash_piece(pos)
   self:cell(pos):unstash_piece(self.stash)
 end
 --
-function board:set_color(pos, color)
+function board:piece_set_color(pos, color)
   local stone = self:stone(pos)
   stone:set_color(color)
   self.on_change:call('on_stone_color_changed', stone)
@@ -153,8 +153,8 @@ function board:wrap()
   local id = {'id', typ.str}
   local count = {'count', typ.num}
   wrp.fn(log.trace, board, 'set_ability',  ex, pos, id, count)
-  wrp.fn(log.info, board, 'add_power',     ex, pos, {'name', typ.str}, count)
-  wrp.fn(log.info, board, 'set_color',     ex, pos, {'pid', 'playerid'})
+  wrp.fn(log.info, board, 'piece_add_power',     ex, pos, {'name', typ.str}, count)
+  wrp.fn(log.info, board, 'piece_set_color',     ex, pos, {'pid', 'playerid'})
   wrp.fn(log.info, board, 'add_spot_comp', ex, pos, id, count)
 end
 

@@ -7,6 +7,7 @@ local env       = require 'src.lua-cor.env'
 local wrp       = require 'src.lua-cor.wrp'
 local typ       = require 'src.lua-cor.typ'
 local playerid  = require 'src.model.playerid'
+local com         = require 'src.lua-cor.com'
 
 --
 local random = obj:extend('random')
@@ -15,16 +16,14 @@ random.pid = nil
 
 -- create
 function random:new(env, pid)
-  self = obj.new(self,
-  {
-    env = env,
-    pid = pid
-  })
+  self = obj.new(self, com())
+  self.env = env
+  self.pid = pid
   return self
 end
 -- listen space
 function random:on_space(space)
-  space.own_evt:add(self)
+  space.own_evt.add(self)
 end
 --
 function random:__tostring()

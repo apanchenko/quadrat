@@ -38,9 +38,9 @@
      showgrid="false"
      inkscape:current-layer="g4837"
      inkscape:document-units="px"
-     inkscape:cy="-9.9265823"
-     inkscape:cx="-48.20082"
-     inkscape:zoom="2"
+     inkscape:cy="-16.341772"
+     inkscape:cx="-44.034153"
+     inkscape:zoom="3"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -49,6 +49,30 @@
      id="base" />
   <defs
      id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient991">
+      <stop
+         style="stop-color:#b40000;stop-opacity:0.70918363"
+         offset="0"
+         id="stop987" />
+      <stop
+         style="stop-color:#b43e00;stop-opacity:0.01960784"
+         offset="1"
+         id="stop989" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient979"
+       inkscape:collect="always">
+      <stop
+         id="stop975"
+         offset="0"
+         style="stop-color:#37ff10;stop-opacity:0.78894472" />
+      <stop
+         id="stop977"
+         offset="1"
+         style="stop-color:#37ff10;stop-opacity:0.0201005" />
+    </linearGradient>
     <inkscape:path-effect
        effect="fill_between_strokes"
        id="path-effect24290"
@@ -700,6 +724,28 @@
        fx="68.845184"
        fy="-26.746691"
        r="14.287499" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient991"
+       id="radialGradient967"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3662942,-0.00524712,0.00526518,2.3744501,-93.893019,28.966168)"
+       cx="68.829063"
+       cy="-21.112803"
+       fx="68.829063"
+       fy="-21.112803"
+       r="14.287499" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient979"
+       id="radialGradient985"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3593953,-0.00523182,0.00524983,2.3675274,-93.319991,28.917574)"
+       cx="68.829063"
+       cy="-21.112803"
+       fx="68.829063"
+       fy="-21.112803"
+       r="14.287499" />
   </defs>
   <metadata
      id="metadata5">
@@ -757,18 +803,18 @@
      inkscape:export-xdpi="24.081503"
      inkscape:export-ydpi="24.081503" />
   <g
-     sodipodi:insensitive="true"
      inkscape:groupmode="layer"
      style="display:inline"
-     inkscape:label="piece_green"
+     inkscape:label="piece"
      id="g4837"
      transform="matrix(-0.89423991,0,0,0.89423991,61.634555,86.89801)"
      inkscape:export-xdpi="24"
      inkscape:export-ydpi="24">
     <g
        id="g3848"
-       inkscape:label="piece"
-       style="display:none">
+       inkscape:label="body"
+       style="display:inline"
+       sodipodi:insensitive="true">
       <circle
          style="display:inline;opacity:1;fill:url(#radialGradient4581);fill-opacity:1;stroke:none;stroke-width:0.99208218;stroke-miterlimit:4;stroke-dasharray:none"
          id="path4553"
@@ -867,6 +913,20 @@
          style="display:inline;opacity:1;fill:#ffffff;fill-opacity:0.7782427;stroke:none;stroke-width:0.8523553;stroke-miterlimit:4;stroke-dasharray:none"
          id="path3854" />
     </g>
+    <circle
+       style="display:none;opacity:1;fill:url(#radialGradient985);fill-opacity:1;stroke:none;stroke-width:2.36078811;stroke-miterlimit:4;stroke-dasharray:none"
+       id="circle955"
+       cx="68.923958"
+       cy="-21.43125"
+       inkscape:label="active_green"
+       r="33.729763" />
+    <circle
+       inkscape:label="active_red"
+       cy="-21.529875"
+       cx="68.825333"
+       id="circle983"
+       style="display:inline;opacity:1;fill:url(#radialGradient967);fill-opacity:1;stroke:none;stroke-width:2.36769104;stroke-miterlimit:4;stroke-dasharray:none"
+       r="33.828388" />
   </g>
   <g
      sodipodi:insensitive="true"

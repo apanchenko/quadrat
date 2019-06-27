@@ -11,6 +11,7 @@ local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space'
 local agent         = require 'src.model.agent.package'
 local typ     = require 'src.lua-cor.typ'
+local com     = require 'src.lua-cor.com'
 
 -- battle scene
 local battle = composer.newScene()
@@ -33,6 +34,8 @@ end
 
 --
 function battle:create(event)
+  com(self) -- turn self into component
+
   lay.new_image(self.view, cfg.bg)
 
   self.move_pointer = lay.new_image(self.view, cfg.arrow)
@@ -48,7 +51,7 @@ function battle:create(event)
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  env.space.own_evt:add(self)
+  env.space.own_evt.add(self)
   env.battle = self
   env.board = board:new()
   env.space:setup() -- start playing

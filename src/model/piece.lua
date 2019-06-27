@@ -76,7 +76,7 @@ end
 --
 function piece:set_color(color)
   self.pid = color
-  self.space:yell('set_color', self.pos, color) -- notify
+  self.space:yell('piece_set_color', self.pos, color) -- notify
 end
 --
 function piece:get_pid()
@@ -168,13 +168,13 @@ end
 --
 function piece:add_power(power)
   local count = self.powers:push(power)
-  self.space:yell('add_power', self.pos, power.id, count) -- notify
+  self.space:yell('piece_add_power', self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
   self.powers:pull(id, 1)
-  self.space:yell('add_power', self.pos, id, self.powers:count(id)) -- notify
+  self.space:yell('piece_add_power', self.pos, id, self.powers:count(id)) -- notify
 end
 
 -- Completely remove power by id

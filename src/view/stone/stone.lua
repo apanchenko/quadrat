@@ -12,25 +12,40 @@ local power_image = require 'src.view.power.image'
 local cfg         = require 'src.cfg'
 local powers      = require 'src.view.power.powers'
 local layout      = require 'src.view.stone.layout'
+local com         = require 'src.lua-cor.com'
 
 local stone = obj:extend('stone')
 
 --INIT-------------------------------------------------------------------------
 function stone:new(env, pid)
-  self = obj.new(self,
-  {
-    env = env,
-    _view = layout.new_group(),
-    scale = 1,
-    powers = {},
-    isSelected = false,
-    is_drag = false
-  })
+  self = obj.new(self, com())
+  self.env = env
+  self._view = self.com_add(layout.new_group())
+  self.scale = 1
+  self.powers = {}
+  self.isSelected = false
+  self.is_drag = false
+
   self._view.show('stone')
   self._abilities = Abilities:new(self)
   self:set_color(pid)
+  env.space.opp_evt.add(self)
   return self
 end
+
+-- remove stone from board
+function stone:putoff()
+  ass(self.board)
+  self._view:removeSelf()
+  self._view = nil
+  self._abilities = nil
+  map.invoke_colon(self.powers, 'destroy')
+  self.powers = nil
+  self.board = nil
+  self.com_destroy()
+end
+
+
 --
 function stone:__tostring() 
   local s = "stone["
@@ -47,6 +62,7 @@ function stone:__tostring()
   end
   return s.. "]"
 end
+
 --
 function stone:set_color(pid)
   -- nothing to change
@@ -55,6 +71,7 @@ function stone:set_color(pid)
     self._view.show(tostring(pid))
   end
 end
+
 --
 function stone:get_pid()
   return self.pid
@@ -67,15 +84,14 @@ function stone:puton(board)
   self.board = board
 end
 
--- remove stone from board
-function stone:putoff()
-  ass(self.board)
-  self._view:removeSelf()
-  self._view = nil
-  self._abilities = nil
-  map.invoke_colon(self.powers, 'destroy')
-  self.powers = nil
-  self.board = nil
+-- space event
+function stone:move(pid)
+  local my_active_view = 'active_'..tostring(pid)
+  if self:get_pid() == pid then
+    self._view.show(my_active_view)
+  else
+    self._view.hide(my_active_view)
+  end
 end
 
 -- POSITION -------------------------------------------------------------------
@@ -86,6 +102,7 @@ function stone:set_pos(pos)
   end
   self:update_group_pos(pos)
 end
+
 --
 function stone:pos()
   return self._pos
@@ -95,7 +112,6 @@ end
 function stone:set_ability(id, count)
   self._abilities:set_count(id, count)
 end
-
 
 -- POWER ----------------------------------------------------------------------
 function stone:add_power(id, result_count)
@@ -153,6 +169,7 @@ function stone:touch(event)
 
   return true
 end
+
 --
 function stone:touch_began(event)
   if self.isSelected == false then
@@ -160,6 +177,7 @@ function stone:touch_began(event)
   end
   self:set_drag(event.id)
 end
+
 --
 function stone:touch_moved(event)
   local start = vec(event.xStart, event.yStart)
@@ -177,7 +195,7 @@ end
 function stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
-  self:update_group_pos(self._pos)                  -- adjust group position
+  self:update_group_pos(self._pos)          -- adjust group position
   self._abilities:show()
 end
 
@@ -187,11 +205,12 @@ function stone:deselect()
     log.trace(self, ":deselect")
     log.enter()
       self.isSelected = false                   -- set not selected
-      self:update_group_pos(self._pos)                  -- adgjust group position
+      self:update_group_pos(self._pos)          -- adgjust group position
       self._abilities:hide()
     log.exit()
   end
 end
+
 --
 function stone:create_project(proj)
   if not self.project then
@@ -201,6 +220,7 @@ function stone:create_project(proj)
   self.proj = proj
   vec.copy(proj * cfg.view.cell.size, self.project)
 end
+
 --
 function stone:remove_project()
   if self.project then
@@ -209,6 +229,7 @@ function stone:remove_project()
   end
   self.proj = nil
 end
+
 --
 function stone:set_drag(eventId)
   display.getCurrentStage():setFocus(self._view, eventId)
@@ -248,22 +269,24 @@ end
 --
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
-  local is   = {'stone', typ.new_is(stone)}
-  local ex    = {'exstone', typ.new_ex(stone)}
+  local is    = {'stone', typ.new_is(stone)}
+  local ex    = {'this', typ.new_ex(stone)}
+  local pid   = {'pid', 'playerid'}
 
-  wrp.fn(log.trace, stone, 'new',          is, {'env'}, {'pid', 'playerid'})
-  wrp.fn(log.trace, stone, 'select', ex)
-  wrp.fn(log.info, stone, 'deselect', ex)
-  wrp.fn(log.trace, stone, 'set_color',    ex, {'playerid'})
-  wrp.fn(log.info, stone, 'get_pid', ex)
-  wrp.fn(log.trace, stone, 'puton',        ex, {'board'})
-  wrp.fn(log.trace, stone, 'putoff', ex)
-  wrp.fn(log.trace, stone, 'pos', ex)
-  wrp.fn(log.trace, stone, 'set_ability',  ex, {'id', typ.str}, {'count', typ.num})
-  wrp.fn(log.trace, stone, 'add_power',    ex, {'id', typ.str}, {'result_count', typ.num})
-  wrp.fn(log.info, stone, 'touch',        ex, event)
-  wrp.fn(log.info, stone, 'touch_began',  ex, event)
-  wrp.fn(log.info, stone, 'touch_moved',  ex, event)
+  wrp.fn(log.trace, stone,  'new',            is, {'env'}, pid)
+  wrp.fn(log.trace, stone,  'select',         ex)
+  wrp.fn(log.info,  stone,  'deselect',       ex)
+  wrp.fn(log.trace, stone,  'set_color',      ex, {'playerid'})
+  wrp.fn(log.info,  stone,  'get_pid',        ex)
+  wrp.fn(log.trace, stone,  'puton',          ex, {'board'})
+  wrp.fn(log.trace, stone,  'putoff',         ex)
+  wrp.fn(log.trace, stone,  'move',           ex, pid)
+  wrp.fn(log.trace, stone,  'pos',            ex)
+  wrp.fn(log.trace, stone,  'set_ability',    ex, {'id', typ.str}, {'count', typ.num})
+  wrp.fn(log.trace, stone,  'add_power',      ex, {'id', typ.str}, {'count', typ.num})
+  wrp.fn(log.info,  stone,  'touch',          ex, event)
+  wrp.fn(log.info,  stone,  'touch_began',    ex, event)
+  wrp.fn(log.info,  stone,  'touch_moved',    ex, event)
 end
 
 return stone

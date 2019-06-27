@@ -2,18 +2,19 @@ local obj         = require 'src.lua-cor.obj'
 local typ         = require 'src.lua-cor.typ'
 local ass         = require 'src.lua-cor.ass'
 local wrp         = require 'src.lua-cor.wrp'
+local com         = require 'src.lua-cor.com'
 
 local invisible = obj:extend('view.power.invisible')
 
 -- create image with initial one count
 function invisible:new(env, stone, id, count)
   ass.eq(count, 1)
-  self = obj.new(self, {
-    env = env,
-    stone = stone,
-  })
+  self = obj.new(self, com())
+  self.env = env
+  self.stone = stone
+
   self:move(self.env.space:who_move())
-  self.env.space.opp_evt:add(self)
+  self.env.space.opp_evt.add(self)
   return self
 end
 --
