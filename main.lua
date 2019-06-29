@@ -5,14 +5,12 @@ local env = require 'src.lua-cor.env'
 -- select 'debug', 'dev', 'release'
 log.set_configuration('dev')
 --log.get('view').disable()
-
 env.cfg = require 'src.cfg'
 env.log = log
 
-local package = require('src._pack')
---package:get('core._pack'):test()
-package:wrap()
-package:test()
+require('src._pack')
+  :wrap()
+  :test()
 
-local composer = require 'composer'
-composer.gotoScene('src.scene.menu')
+require('composer')
+  .gotoScene('src.scene.menu')
