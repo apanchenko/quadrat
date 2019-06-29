@@ -4,8 +4,8 @@ local vec     = require 'src.lua-cor.vec'
 local obj     = require 'src.lua-cor.obj'
 local wrp     = require 'src.lua-cor.wrp'
 local typ     = require 'src.lua-cor.typ'
-local powers  = require 'src.model.power.package'
-local zones   = require 'src.model.zones.package'
+local powers  = require 'src.model.power._pack'
+local zones   = require 'src.model.zones._pack'
 
 -- jade
 local jade = obj:extend('jade')

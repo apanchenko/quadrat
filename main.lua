@@ -9,8 +9,8 @@ log.set_configuration('dev')
 env.cfg = require 'src.cfg'
 env.log = log
 
-local package = require 'src.package'
---package:get('core.package'):test()
+local package = require('src._pack')
+--package:get('core._pack'):test()
 package:wrap()
 package:test()
 

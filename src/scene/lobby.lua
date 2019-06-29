@@ -8,7 +8,7 @@ local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local typ           = require 'src.lua-cor.typ'
 local net           = require 'src.model.agent.photon.net'
-local agent         = require 'src.model.agent.package'
+local agent         = require 'src.model.agent._pack'
 
 -- variables
 local lobby = composer.newScene()

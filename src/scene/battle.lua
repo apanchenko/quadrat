@@ -9,7 +9,7 @@ local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space'
-local agent         = require 'src.model.agent.package'
+local agent         = require 'src.model.agent._pack'
 local typ     = require 'src.lua-cor.typ'
 local com     = require 'src.lua-cor.com'
 
