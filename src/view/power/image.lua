@@ -15,7 +15,7 @@ function image:new(env, stone, name)
     stone = stone,
     name = name
   })
-  self.stone._view.show(name)
+  self.stone:view().show(name)
   return self
 end
 --
@@ -27,7 +27,7 @@ function image:set_count(count)
   if count > 0 then
     return self
   end
-  self.stone._view.hide(self.name)
+  self.stone:view().hide(self.name)
 end
 
 

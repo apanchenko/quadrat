@@ -31,7 +31,7 @@ end
 function user:on_spawn_stone(stone)
   if stone.pid == self.pid then
     log.info('register ', stone, ' to listen itself')
-    stone._view:addEventListener("touch", stone)
+    stone:activate_touch()
   end
 end
 
@@ -39,10 +39,10 @@ end
 function user:on_stone_color_changed(stone)
   if stone.pid == self.pid then
     log.info('register ', stone, ' to listen itself')
-    stone._view:addEventListener('touch', stone)
+    stone:activate_touch()
   else
     log.info('unregister ', stone, ' listen touch')
-    stone._view:removeEventListener('touch', stone)
+    stone:deactivate_touch()
   end
 end
 

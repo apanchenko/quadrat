@@ -7,7 +7,6 @@ local map         = require 'src.lua-cor.map'
 local obj         = require 'src.lua-cor.obj'
 local typ         = require 'src.lua-cor.typ'
 local wrp         = require 'src.lua-cor.wrp'
-local Abilities   = require 'src.view.stone.stoneAbilities'
 local power_image = require 'src.view.power.image'
 local cfg         = require 'src.cfg'
 local powers      = require 'src.view.power.powers'
@@ -16,35 +15,43 @@ local com         = require 'src.lua-cor.com'
 
 local stone = obj:extend('stone')
 
+-- private
+local abilities = {}
+local ability_view = {}
+local view = {}
+
 --INIT-------------------------------------------------------------------------
 function stone:new(env, pid)
   self = obj.new(self, com())
   self.env = env
-  self._view = self.com_add(layout.new_group())
+  self[view] = self.com_add(layout.new_group())
   self.scale = 1
   self.powers = {}
   self.isSelected = false
   self.is_drag = false
 
-  self._view.show('stone')
-  self._abilities = Abilities:new(self)
+  self[view].show('stone')
+  self[abilities] = {}
+
   self:set_color(pid)
   env.space.opp_evt.add(self)
   return self
 end
 
+function stone:view()
+  return self[view]
+end
+
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
-  self._view:removeSelf()
-  self._view = nil
-  self._abilities = nil
+  self[view]:removeSelf()
+  self[view] = nil
   map.invoke_colon(self.powers, 'destroy')
   self.powers = nil
   self.board = nil
   self.com_destroy()
 end
-
 
 --
 function stone:__tostring() 
@@ -68,7 +75,7 @@ function stone:set_color(pid)
   -- nothing to change
   if pid ~= self.pid then
     self.pid = pid
-    self._view.show(tostring(pid))
+    self[view].show(tostring(pid))
   end
 end
 
@@ -80,17 +87,19 @@ end
 -- insert stone into group, with scale for dragging
 function stone:puton(board)
   ass.isname(board, 'board')
-  lay.insert(board.view, self._view, {vx=0, vy=0, z=50})
+  lay.insert(board.view, self[view], {vx=0, vy=0, z=50})
   self.board = board
 end
 
 -- space event
+function stone:move_wrap_before(pid)
+end
 function stone:move(pid)
   local my_active_view = 'active_'..tostring(pid)
   if self:get_pid() == pid then
-    self._view.show(my_active_view)
+    self[view].show(my_active_view)
   else
-    self._view.hide(my_active_view)
+    self[view].hide(my_active_view)
   end
 end
 
@@ -109,8 +118,74 @@ function stone:pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
+-- show on board
+function stone:show_abilities()
+  ass.nul(self[ability_view])                 -- check is hidden now
+  self[ability_view] = display.newGroup()
+
+  for name, count in pairs(self[abilities]) do     -- create new button
+    local opts = cfg.view.abilities.button
+    opts.id = name
+    opts.label = name
+    if count > 1 then
+      opts.label = opts.label.. ' '.. count
+    end
+    opts.onRelease = function(event)
+      self.env.space:use(self:pos(), event.target.id)
+      return true
+    end
+    --log.trace(opts.label)
+    lay.new_button(self[ability_view], opts)
+  end
+  lay.rows(self[ability_view], cfg.view.abilities.rows)
+  lay.insert(self.env.battle.view, self[ability_view], cfg.view.abilities)
+end
+
+-- hide from board when piece deselected
+function stone:hide_abilities()
+  if self[ability_view] then -- check shown
+    self[ability_view]:removeSelf()
+    self[ability_view] = nil
+  end
+end
+
+-- set ability count 
+function stone:set_ability_wrap_before(id, count)
+end
 function stone:set_ability(id, count)
-  self._abilities:set_count(id, count)
+  ass.ge(count, 0)
+
+  if count == 0 then
+    self[abilities][id] = nil
+  else
+    self[abilities][id] = count
+  end
+
+  if count > 0 then
+    local pid = self:get_pid()
+    self[view].show('ability_'..tostring(pid))
+  end
+
+  local reshow = self[ability_view] ~= nil
+  if reshow then
+    self:hide_abilities()
+  end
+
+  if self:is_abilities_empty() then
+    self[view].hide('ability_white')
+    self[view].hide('ability_black')
+  else
+    if reshow then
+      self:show_abilities()
+    end
+  end
+end
+function stone:set_ability_wrap_after(id, count)
+end
+
+-- return true if empty
+function stone:is_abilities_empty()
+  return map.count(self[abilities]) == 0
 end
 
 -- POWER ----------------------------------------------------------------------
@@ -124,6 +199,14 @@ function stone:add_power(id, result_count)
 end
 
 -- TOUCH-----------------------------------------------------------------------
+function stone:activate_touch()
+  self[view]:addEventListener('touch', self)
+end
+
+function stone:deactivate_touch()
+  self[view]:removeEventListener('touch', self)
+end
+
 -- touch listener function
 function stone:touch(event)
   -- do not touch opponent stones
@@ -187,7 +270,7 @@ function stone:touch_moved(event)
   shift = shift / vec(xScale, xScale)
   shift = shift + (self._pos * cfg.view.cell.size)
   local proj = (shift / cfg.view.cell.size):round()
-  vec.copy(shift, self._view)
+  vec.copy(shift, self[view])
   return proj;
 end
 
@@ -196,7 +279,7 @@ function stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
   self:update_group_pos(self._pos)          -- adjust group position
-  self._abilities:show()
+  self:show_abilities()
 end
 
 -- to be called from board
@@ -206,7 +289,7 @@ function stone:deselect()
     log.enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos(self._pos)          -- adgjust group position
-      self._abilities:hide()
+      self:hide_abilities()
     log.exit()
   end
 end
@@ -232,11 +315,11 @@ end
 
 --
 function stone:set_drag(eventId)
-  display.getCurrentStage():setFocus(self._view, eventId)
+  display.getCurrentStage():setFocus(self[view], eventId)
   self.is_drag = (eventId ~= nil)
   if self.is_drag then
     --lay.render(self.board, self, {x=self.view.x, y=self.view.y})
-    self._view:toFront()
+    self[view]:toFront()
   end
 end
 
@@ -245,8 +328,8 @@ function stone:update_group_pos(pos)
   -- remove from board
   if pos == nil then
     self._pos = nil
-    self._view.x = 0
-    self._view.y = 0
+    self[view].x = 0
+    self[view].y = 0
     return
   end
 
@@ -258,10 +341,10 @@ function stone:update_group_pos(pos)
 
   if self._pos then
     log.info('animate to view position', view_pos)
-    lay.to(self._view, view_pos, cfg.view.stone.move)
+    lay.to(self[view], view_pos, cfg.view.stone.move)
   else
     log.info('instant set view position', view_pos)
-    view_pos:to(self._view)
+    view_pos:to(self[view])
   end
   self._pos = pos
 end

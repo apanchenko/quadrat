@@ -16,14 +16,6 @@ local com         = require 'src.lua-cor.com'
 
 local board = obj:extend('board')
 
---[[-----------------------------------------------------------------------------
-  size of the board
-  scale to device
-  group to render
-  grid with cells and pieces
-  player color who moves now
-  selected piece
------------------------------------------------------------------------------]]--
 function board:new()
   self = obj.new(self, com())
   self.on_change = evt:new()
@@ -49,7 +41,6 @@ function board:new()
   lay.insert(env.battle.view, self.view, cfg.view.board)
   return self
 end
-
 
 -- POSITION--------------------------------------------------------------------
 -- peek piece from cell by position
