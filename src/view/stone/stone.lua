@@ -76,6 +76,10 @@ function stone:set_color(pid)
   if pid ~= self.pid then
     self.pid = pid
     self[view].show(tostring(pid))
+
+    if not self:is_abilities_empty() then
+      self:show_aura()
+    end
   end
 end
 
@@ -118,6 +122,11 @@ function stone:pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
+--
+function stone:show_aura()
+  self[view].show('aura_'..tostring(self.pid))
+end
+
 -- show on board
 function stone:show_abilities()
   ass.nul(self[ability_view])                 -- check is hidden now
@@ -162,8 +171,7 @@ function stone:set_ability(id, count)
   end
 
   if count > 0 then
-    local pid = self:get_pid()
-    self[view].show('ability_'..tostring(pid))
+    self:show_aura()
   end
 
   local reshow = self[ability_view] ~= nil
@@ -172,8 +180,8 @@ function stone:set_ability(id, count)
   end
 
   if self:is_abilities_empty() then
-    self[view].hide('ability_white')
-    self[view].hide('ability_black')
+    self[view].hide('aura_white')
+    self[view].hide('aura_black')
   else
     if reshow then
       self:show_abilities()
@@ -353,7 +361,7 @@ end
 function stone:wrap()
   local event = {'event', typ.tab, map.tostring}
   local is    = {'stone', typ.new_is(stone)}
-  local ex    = {'this', typ.new_ex(stone)}
+  local ex    = {'self', typ.new_ex(stone)}
   local pid   = {'pid', 'playerid'}
 
   wrp.fn(log.trace, stone,  'new',            is, {'env'}, pid)
@@ -365,11 +373,13 @@ function stone:wrap()
   wrp.fn(log.trace, stone,  'putoff',         ex)
   wrp.fn(log.trace, stone,  'move',           ex, pid)
   wrp.fn(log.trace, stone,  'pos',            ex)
+  wrp.fn(log.trace, stone,  'show_aura',      ex)
   wrp.fn(log.trace, stone,  'set_ability',    ex, {'id', typ.str}, {'count', typ.num})
   wrp.fn(log.trace, stone,  'add_power',      ex, {'id', typ.str}, {'count', typ.num})
   wrp.fn(log.info,  stone,  'touch',          ex, event)
   wrp.fn(log.info,  stone,  'touch_began',    ex, event)
   wrp.fn(log.info,  stone,  'touch_moved',    ex, event)
+  wrp.fn(log.info,  stone,  'is_abilities_empty', ex)
 end
 
 return stone

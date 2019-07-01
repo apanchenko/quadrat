@@ -12,7 +12,8 @@ local power = obj:extend('power')
 function power:new(piece, def)
   def.piece = piece
   def.id = self:get_typename()
-  return obj.new(self, def)
+  self = obj.new(self, def)
+  return self
 end
 
 -- is it desired or undesired power

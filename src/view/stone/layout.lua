@@ -29,8 +29,8 @@ function layout:add_image(id, shape, z, file)
   }))
 end
 
-layout:add_image('ability_white', cell,   1, 'ability_white')
-layout:add_image('ability_black', cell,   1, 'ability_black')
+layout:add_image('aura_white',    cell,   1, 'aura_white')
+layout:add_image('aura_black',    cell,   1, 'aura_black')
 layout:add_image('stone',         cell,   2, 'stone')
 layout:add_image('white',         pimp,   3, 'pimp_green')
 layout:add_image('black',         pimp,   3, 'pimp_red')

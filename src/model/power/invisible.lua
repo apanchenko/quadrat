@@ -1,5 +1,7 @@
 local power   = require 'src.model.power.power'
 local log = require('src.lua-cor.log').get('mode')
+local wrp = require('src.lua-cor.wrp')
+local typ = require('src.lua-cor.typ')
 
 local invisible = power:extend('Invisible')
 
@@ -8,6 +10,12 @@ function invisible:can_spawn()
   return true
 end
 
+-- MODULE ---------------------------------------------------------------------
+function invisible:wrap()
+  local is    = {'is', typ.new_is(invisible)}
+
+  wrp.fn(log.trace, invisible, 'can_spawn', is)
+end
 
 --
 return invisible

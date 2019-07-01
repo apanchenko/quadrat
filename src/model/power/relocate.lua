@@ -2,6 +2,8 @@ local power = require 'src.model.power.power'
 local ass   = require 'src.lua-cor.ass'
 local arr = require 'src.lua-cor.arr'
 local log = require('src.lua-cor.log').get('mode')
+local wrp   = require 'src.lua-cor.wrp'
+local typ   = require 'src.lua-cor.typ'
 
 local relocate = power:extend('Relocate')
 
@@ -20,6 +22,15 @@ function relocate:new(piece)
   local to_spot = spots:random()
   -- change piece position
   to_spot:move_piece(from_spot)
+end
+
+-- MODULE ---------------------------------------------------------------------
+function relocate:wrap()
+  local is = {'relocate', typ.new_is(relocate)}
+  local ex = {'ex', typ.new_ex(relocate)}
+
+  wrp.fn(log.trace, relocate, 'new', is)
+  wrp.fn(log.trace, relocate, 'can_spawn', is)
 end
 
 return relocate
