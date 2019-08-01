@@ -49,10 +49,6 @@ settings =
 		enableCloseButton = true,
 		enableMinimizeButton = true,
 		enableMaximizeButton = true,
-	},  
-	excludeFiles =
-	{
-		all = { "res/*.*" },
 	},
 
 	plugins =
@@ -65,7 +61,16 @@ settings =
 
 	excludeFiles =
 	{
-		all = { "Icon.png", "Icon-*dpi.png", "Images.xcassets", },
+		all = {
+			"*.md",
+			"*.svg",
+			"docs/*.*",
+			"build/*.*",
+			"Icon.png",
+			"Icon-*dpi.png",
+			"Images.xcassets/*.*",
+			"LICENSE"
+		},
 		android = { "LaunchScreen.storyboardc", },
 	},
 }
