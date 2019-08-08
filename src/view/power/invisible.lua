@@ -3,6 +3,7 @@ local typ         = require 'src.lua-cor.typ'
 local ass         = require 'src.lua-cor.ass'
 local wrp         = require 'src.lua-cor.wrp'
 local com         = require 'src.lua-cor.com'
+local log         = require('src.lua-cor.log').get('view')
 
 local invisible = obj:extend('view.power.invisible')
 

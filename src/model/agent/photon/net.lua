@@ -16,7 +16,7 @@ local net = obj:extend('net')
 
 -- net constructor
 function net:new()
-  this = obj.new(self,
+  local this = obj.new(self,
   {
     serverAddress = "ns.exitgames.com:5058",
     appId         = "a5aaee83-7690-404e-b43c-d7c2de4646fe",
@@ -110,8 +110,8 @@ function net:find_opponent(on_opponent, on_error)
       on_opponent(room_id, createdByMe)
     end
   end
-  wrp.fn(log.trace, client, 'onActorJoin', is,
-    {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
+  -- wrp.fn(log.trace, client, 'onActorJoin', is,
+  --   {'actor', typ.tab, function(actor) return tostring(actor.actorNr) end})
 
   function client:sendData()
     if self:isJoinedToRoom() and self.sent_count < MAX_SENDCOUNT then
@@ -134,13 +134,13 @@ function net:find_opponent(on_opponent, on_error)
 
   ass(client:connectToRegionMaster("EU"))
 
-  wrp.fn(log.trace, client, 'onRoomList', is,
-    {'rooms', typ.tab, function(v) return map.keys(v):join() end})
-  wrp.fn(log.trace, client, 'onJoinRoom', is, {'createdByMe', typ.boo})
-  wrp.fn(log.trace, client, 'onEvent', is,
-    {'code', typ.num},
-    {'content', typ.tab, map.tostring},
-    {'actor', typ.tab})
+  -- wrp.fn(log.trace, client, 'onRoomList', is,
+  --   {'rooms', typ.tab, function(v) return map.keys(v):join() end})
+  -- wrp.fn(log.trace, client, 'onJoinRoom', is, {'createdByMe', typ.boo})
+  -- wrp.fn(log.trace, client, 'onEvent', is,
+  --   {'code', typ.num},
+  --   {'content', typ.tab, map.tostring},
+  --   {'actor', typ.tab})
 
   -- start running
   function client:timer(event)

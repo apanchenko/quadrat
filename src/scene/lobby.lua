@@ -7,8 +7,11 @@ local log           = require('src.lua-cor.log').get('scen')
 local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local typ           = require 'src.lua-cor.typ'
+local env           = require 'src.lua-cor.env'
 local net           = require 'src.model.agent.photon.net'
 local agent         = require 'src.model.agent._pack'
+local random_player = require('src.model.agent.random')
+local user_player   = require('src.model.agent.user')
 
 -- variables
 local lobby = composer.newScene()
@@ -32,8 +35,8 @@ function lobby:on_opponent(room_id, createdByMe)
   --local params = { net = self.net }
 
   local space = space:new(cfg.board.cols, cfg.board.rows, room_id)
-  local p1 = players.random:new(space, playerid.select(createdByMe))
-  local p2 = players.user:new(space, playerid.select(not createdByMe))
+  local p1 = random_player:new(space, playerid.select(createdByMe))
+  local p2 = user_player:new(space, playerid.select(not createdByMe))
 
   space.own_evt.add(p1)
   space.own_evt.add(p2)
