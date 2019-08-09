@@ -119,10 +119,4 @@ function battle:wrap()
   wrp.fn(log.info, battle, 'move', is, {'playerid'})
 end
 
---
-function battle:test()
-  ass(true)
-end
-
-
 return battle

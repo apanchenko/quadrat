@@ -33,8 +33,4 @@ function multiply:wrap()
   wrp.fn(log.trace, multiply, 'move_after', ex, fspot, tspot)
 end
 
--- selftest
-function multiply:test()
-end
-
 return multiply

@@ -71,8 +71,4 @@ function lobby:wrap()
   wrp.fn(log.trace, lobby, 'on_opponent_error', ex, {'msg', typ.str})
 end
 
-function lobby:test()
-  ass(true)
-end
-
 return lobby

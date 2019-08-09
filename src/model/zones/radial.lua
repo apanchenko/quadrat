@@ -23,21 +23,6 @@ function radial:filter(pos)
   return (pos - self.pos):length2() < 3
 end
 
--- selftest
-function radial:test()
-  log.trace('test radial..')
-
-  ass(tostring(radial) == 'radial')
-  local rad = radial:new(vec(3, 3))
-
-  local trues = arr(vec(2,2), vec(3,2), vec(4,2),
-                    vec(2,3), vec(3,3), vec(4,3),
-                    vec(2,4), vec(3,4), vec(4,4))
-  ass(trues:all(function(v) return rad:filter(v) end))
-
-  ass(not rad:filter(vec(0, 0)))
-end
-
 -- MODULE ---------------------------------------------------------------------
 function radial:wrap()
   local is   = {'radial', typ.new_is(radial)}

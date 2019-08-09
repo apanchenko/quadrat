@@ -32,8 +32,4 @@ function destroy:wrap()
   wrp.fn(log.trace, destroy, 'apply_to_spot', ex, {'spot'})
 end
 
-function destroy:test()
-  ass.eq(tostring(destroy), 'Destroy')
-end
-
 return destroy

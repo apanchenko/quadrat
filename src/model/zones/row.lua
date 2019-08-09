@@ -17,13 +17,6 @@ function row:filter(pos)
   return pos.y == self.pos.y
 end
 
--- selftest
-function row:test()
-  log.trace('test row..')
-
-  assert(tostring(row) == 'Row')
-end
-
 -- MODULE ---------------------------------------------------------------------
 function row:wrap()
   local ris   = {'row', typ.new_is(row)}

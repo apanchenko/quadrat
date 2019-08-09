@@ -199,18 +199,4 @@ function piece:is_jump_protected()
   return self.powers:any(function(p) return p.is_jump_protected == true end)
 end
 
--- MODULE ---------------------------------------------------------------------
-function piece:test()
-  local i = cnt:new()
-  ass(i:is_empty())
-
-  local copy = function(self)
-    return {id=self.id, count=self.count, copy=self.copy}
-  end
-  local res = i:push({id='b', count=2, copy=copy})
-  res = i:push({id='b', count=3, copy=copy})
-  ass.eq(res, 5)
-
-end
-
 return piece

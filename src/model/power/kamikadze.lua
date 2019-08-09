@@ -32,7 +32,4 @@ function kamikadze:wrap()
   wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, {'spot'})
 end
 
-function kamikadze:test()
-end
-
 return kamikadze

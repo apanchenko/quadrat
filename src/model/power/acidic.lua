@@ -40,7 +40,4 @@ function acidic:wrap()
   wrp.fn(log.trace, acidic, 'apply_to_enemy', ex, {'spot'})
 end
 
-function acidic:test()
-end
-
 return acidic

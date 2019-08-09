@@ -34,14 +34,4 @@ function playerid:wrap()
   wrp.fn(log.info, playerid, 'select', {'is_white', typ.boo})
 end
 
---
-function playerid:test()
-  ass.eq(playerid.white, playerid.white)
-  ass.eq(playerid.black, playerid.black)
-  ass.ne(playerid.white, playerid.black)
-  ass.eq(playerid.white:swap(), playerid.black)
-  ass.eq(tostring(playerid.white), 'white')
-  ass.eq(tostring(playerid.black), 'black')
-end
-
 return playerid

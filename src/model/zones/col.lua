@@ -18,12 +18,6 @@ function col:filter(pos)
   return pos.x == self.pos.x
 end
 
--- selftest
-function col:test()
-  log.trace('test Col..')
-
-  assert(tostring(col) == 'Col')
-end
 
 -- MODULE ---------------------------------------------------------------------
 function col:wrap()

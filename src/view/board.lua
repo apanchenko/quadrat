@@ -149,8 +149,4 @@ function board:wrap()
   wrp.fn(log.info, board, 'add_spot_comp', ex, pos, id, count)
 end
 
-function board:test()
-  ass.isname(board, 'board')
-end
-
 return board
