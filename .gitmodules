@@ -1,4 +1,4 @@
 [submodule "src/lua-cor"]
 	path = src/lua-cor
 	url = https://github.com/apanchenko/lua-cor.git
-	master = master
+	branch = master
