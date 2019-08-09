@@ -19,7 +19,7 @@ local board = obj:extend('board')
 function board:new()
   self = obj.new(self, com())
   self.on_change = evt:new()
-  
+
   env.space.own_evt.add(self)
   self.view = lay.new_layout().new_group()
 

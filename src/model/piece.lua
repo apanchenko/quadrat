@@ -1,4 +1,3 @@
-local map       = require 'src.lua-cor.map'
 local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local ass       = require 'src.lua-cor.ass'

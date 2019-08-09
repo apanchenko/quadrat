@@ -4,6 +4,7 @@
     "easing",
     "graphics",
     "native",
+    "Runtime",
     "system",
     "timer",
     "transition"]

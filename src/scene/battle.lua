@@ -90,6 +90,15 @@ function battle:win(message)
   lay.new_text(self.view, {x=0, vy=50, vw=100, z=4, text=message, fontSize=38, font=cfg.font, align="center"})
 end
 
+--
+function battle:resize(event)
+  --log.trace('Event '..event.name)
+  log.trace('display.content         '..display.contentWidth..'*'..display.contentHeight)
+  log.trace('display.actualContent   '..display.actualContentWidth..'*'..display.actualContentHeight)
+  log.trace('display.viewableContent '..display.viewableContentWidth..'*'..display.viewableContentHeight)
+  log.trace('display.screenOrigin    '..display.screenOriginX..'*'..display.screenOriginY)
+end
+
 function battle:show(event) end
 function battle:hide(event) end
 function battle:destroy(event) end
@@ -98,6 +107,10 @@ battle:addEventListener("create", battle)
 battle:addEventListener("show", battle)
 battle:addEventListener("hide", battle)
 battle:addEventListener("destroy", battle)
+
+-- Add the "resize" event listener
+Runtime:addEventListener('resize', function(event) battle.resize(event) end)
+
 
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions

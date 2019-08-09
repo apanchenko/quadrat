@@ -6,8 +6,8 @@ local cfg = {
   bg =
   {
     z = 1,
-    vx = 0,
-    vy = 0,
+    x = 0,
+    y = 0,
     vw = 100,
     vh = 100,
     path = "src/background.png",
