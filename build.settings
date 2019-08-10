@@ -24,8 +24,11 @@ settings =
 		xcassets = "Images.xcassets",
 		plist =
 		{
+			--CFBundleIconFiles = {},  -- Required!
+			UILaunchStoryboardName = "LaunchScreen",  -- Required!
 			UIStatusBarHidden = false,
-			UILaunchStoryboardName = "LaunchScreen",
+			CFBundleDisplayName = "Corona App",
+			CFBundleName = "Corona App"
 		},
 	},
 
