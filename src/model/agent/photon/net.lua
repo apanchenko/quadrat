@@ -107,7 +107,7 @@ function net:find_opponent(on_opponent, on_error)
     local room = self:myRoom()
     if room.playerCount == 2 then
       local room_id = tonumber(room.name)
-      on_opponent(room_id, createdByMe)
+      on_opponent(room_id, true)--createdByMe)
     end
   end
   -- wrp.fn(log.trace, client, 'onActorJoin', is,

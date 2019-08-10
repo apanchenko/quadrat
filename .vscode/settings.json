@@ -1,12 +1,14 @@
 {
-  "Lua.diagnostics.globals": [
-    "display",
-    "easing",
-    "graphics",
-    "native",
-    "Runtime",
-    "system",
-    "timer",
-    "transition",
-    "unpack"]
+    "Lua.diagnostics.globals": [
+        "display",
+        "easing",
+        "graphics",
+        "native",
+        "Runtime",
+        "system",
+        "timer",
+        "transition",
+        "unpack",
+        "application"
+    ]
 }
