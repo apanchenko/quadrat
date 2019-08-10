@@ -1,5 +1,4 @@
 local spot      = require 'src.model.spot.spot'
-local piece     = require 'src.model.piece'
 local playerid  = require 'src.model.playerid'
 local cfg       = require 'src.model.cfg'
 local evt       = require 'src.lua-cor.evt'

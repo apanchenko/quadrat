@@ -42,9 +42,10 @@ layout
   .add('bg', cfg.bg)
   .add_button('lobby', 'Play', lobby.goto_lobby, 2)
   .add_button('battle', 'Solo', battle.goto_solo, 3)
-  .add_button('robots', 'Robots Arena', battle.goto_robots, 4)
-  .add_button('exit', 'Exit', native.requestExit, 5)
-  .add('version', {text=cfg.app.version, font=cfg.font, z=6, vx=0, vy=90, fn=lay.new_text})
+  .add_button('robots', 'Robots', battle.goto_robots, 4)
+  .add_button('ai', 'AI', battle.goto_bot, 5)
+  .add_button('exit', 'Exit', native.requestExit, 6)
+  .add('version', {text=cfg.app.version, font=cfg.font, z=7, vx=0, vy=90, fn=lay.new_text})
 
 -------------------------------------------------------------------------------
 function menu:create(event)
@@ -53,6 +54,7 @@ function menu:create(event)
     .show('lobby')
     .show('battle')
     .show('robots')
+    .show('ai')
   if (platform ~= 'ios' and platform ~= 'tvos') then
     self.view.show('exit')
   end

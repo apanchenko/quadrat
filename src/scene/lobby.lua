@@ -1,5 +1,5 @@
 local composer      = require 'composer'
-local space         = require 'src.model.space'
+local space         = require 'src.model.space.space'
 local playerid      = require 'src.model.playerid'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'

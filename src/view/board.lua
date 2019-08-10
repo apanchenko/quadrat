@@ -1,7 +1,7 @@
 local cell     = require 'src.view.spot.cell'
 local stone    = require 'src.view.stone.stone'
 local vec      = require 'src.lua-cor.vec'
-local piece    = require 'src.model.piece'
+local piece    = require 'src.model.piece.piece'
 local cfg      = require 'src.cfg'
 local obj      = require 'src.lua-cor.obj'
 local lay      = require('src.lua-cor.lay')

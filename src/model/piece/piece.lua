@@ -46,6 +46,7 @@ function piece:wrap()
   wrp.fn(log.trace, piece, 'clear_jades',    pex)
 
   -- powers
+  wrp.fn(log.trace, piece, 'count_power',    pex, id)
   wrp.fn(log.trace, piece, 'add_power',      pex, power)
   wrp.fn(log.trace, piece, 'remove_power',   pex, id)
   wrp.fn(log.trace, piece, 'decrease_power', pex, name)
@@ -164,6 +165,10 @@ function piece:clear_jades()
 end
 
 -- POWER ----------------------------------------------------------------------
+function piece:count_power(id)
+  return self.powers:count(id)
+end
+
 --
 function piece:add_power(power)
   local count = self.powers:push(power)

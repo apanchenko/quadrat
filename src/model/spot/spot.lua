@@ -8,7 +8,7 @@ local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local cfg       = require 'src.model.cfg'
 local cnt       = require 'src.lua-cor.cnt'
-local piece     = require 'src.model.piece'
+local piece     = require 'src.model.piece.piece'
 local jade      = require 'src.model.jade'
 local component = require 'src.model.spot.component.component'
 
@@ -147,6 +147,12 @@ end
 support_stash('piece')
 
 -- JADE -----------------------------------------------------------------------
+function spot:has_jade()
+  if self.jade then
+    return true
+  end
+  return false
+end
 
 -- return true if cell is able to receive a jade
 function spot:can_set_jade()

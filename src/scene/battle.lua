@@ -8,7 +8,8 @@ local log           = require('src.lua-cor.log').get('scen')
 local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
-local space         = require 'src.model.space'
+local space         = require 'src.model.space.space'
+local space_agent   = require 'src.model.space.agent'
 local agent         = require 'src.model.agent._pack'
 local typ     = require 'src.lua-cor.typ'
 local com     = require 'src.lua-cor.com'
@@ -18,6 +19,8 @@ local battle = composer.newScene()
 
 --
 function battle.goto_robots()
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+
   env.player_white = agent:get('random'):new(env, playerid.white)
   env.player_black = agent:get('random'):new(env, playerid.black)
   composer.gotoScene('src.scene.battle', cfg.switching)
@@ -25,7 +28,20 @@ function battle.goto_robots()
 end
 
 --
+function battle.goto_bot()
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+  local bot_space = space_agent:new(env.space, playerid.white)
+
+  env.player_white = agent:get('bot'):new(bot_space)
+  env.player_black = agent:get('user'):new(env, playerid.black)
+  composer.gotoScene('src.scene.battle', cfg.switching)
+  return true
+end
+
+--
 function battle.goto_solo()
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+
   env.player_white = agent:get('random'):new(env, playerid.white)
   env.player_black = agent:get('user'):new(env, playerid.black)
   composer.gotoScene('src.scene.battle', cfg.switching)
@@ -50,7 +66,6 @@ function battle:create(event)
   self.players[black] = player(black, "Gala")
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   env.space.own_evt.add(self)
   env.battle = self
   env.board = board:new()
