@@ -1,8 +1,8 @@
-local power = require 'src.model.power.power'
-local ass   = require 'src.lua-cor.ass'
-local arr   = require 'src.lua-cor.arr'
-local wrp   = require 'src.lua-cor.wrp'
-local typ   = require 'src.lua-cor.typ'
+local power = require('src.model.power.power')
+local ass   = require('src.lua-cor.ass')
+local arr   = require('src.lua-cor.arr')
+local wrp   = require('src.lua-cor.wrp')
+local typ   = require('src.lua-cor.typ')
 local log   = require('src.lua-cor.log').get('mode')
 
 local rehash = power:extend('Rehash')
@@ -41,7 +41,7 @@ function rehash:wrap()
   local is = {'rehash', typ.new_is(rehash)}
   local ex = {'ex', typ.new_ex(rehash)}
 
-  wrp.fn(log.trace, rehash, 'new', is)
+  wrp.fn(log.trace, rehash, 'new',       is, {'piece'}, {'def', typ.tab})
   wrp.fn(log.trace, rehash, 'can_spawn', is)
 end
 

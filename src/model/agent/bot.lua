@@ -6,7 +6,7 @@ local typ       = require 'src.lua-cor.typ'
 local com         = require 'src.lua-cor.com'
 
 --
-local random = obj:extend('random')
+local bot = obj:extend('bot')
 random.space = nil
 random.pid = nil
 

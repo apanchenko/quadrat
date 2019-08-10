@@ -1,9 +1,9 @@
-local areal     = require 'src.model.power.areal'
-local ass       = require 'src.lua-cor.ass'
-local arr       = require 'src.lua-cor.arr'
-local log = require('src.lua-cor.log').get('mode')
-local wrp   = require 'src.lua-cor.wrp'
-local typ   = require 'src.lua-cor.typ'
+local areal = require('src.model.power.areal')
+local ass   = require('src.lua-cor.ass')
+local arr   = require('src.lua-cor.arr')
+local log   = require('src.lua-cor.log').get('mode')
+local wrp   = require('src.lua-cor.wrp')
+local typ   = require('src.lua-cor.typ')
 
 local scramble = areal:extend('Scramble')
 
@@ -23,7 +23,6 @@ function scramble:apply_to_spot(spot)
       self.stash = arr()
     end
     spot:stash_piece(self.stash) -- put piece into stash
-    ass(spot:can_set_piece())
   end
 
   -- remember spot
@@ -52,9 +51,6 @@ end
 -- MODULE ---------------------------------------------------------------------
 function scramble:wrap()
   local is = {'scramble', typ.new_is(scramble)}
-  local ex = {'ex', typ.new_ex(scramble)}
-
-  wrp.fn(log.trace, scramble, 'new', is)
   wrp.fn(log.trace, scramble, 'can_spawn', is)
 end
 
