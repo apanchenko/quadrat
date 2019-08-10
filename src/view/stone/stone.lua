@@ -293,12 +293,12 @@ end
 -- to be called from board
 function stone:deselect()
   if self.isSelected then
-    log.trace(self, ":deselect")
-    log.enter()
+    local indent = log.trace(self, ":deselect")
+    indent.enter()
       self.isSelected = false                   -- set not selected
       self:update_group_pos(self._pos)          -- adgjust group position
       self:hide_abilities()
-    log.exit()
+    indent.exit()
   end
 end
 
