@@ -1,17 +1,24 @@
-# Thesaurus
+# Quadrat design
+
+## Thesaurus
+
 - quadrat - the name of the game
 - field   - one of 64 square element of the board
 - jade    - randomly spawns on free fields, contains an ability or modification
 
-# Keywords
+## Keywords
+
 chekers, board, powerups, quadradius
 
-# Short description
+## Short description
+
 Checkers with powerups.
 
-# Core game description
+## Core game description
+
 The Quadrat is an 8x8 squares board game for two players. Each player starts with 16 similar stones placed on first two lines like in chess.
 Each turn a player may
+
 1. use any amount of jades her stones have
 2. then move any stone one square in any straight direction to:
    - either an empty field
@@ -19,6 +26,7 @@ Each turn a player may
    - or field is taken by opponent stone, killing it.
 
 As a game goes on new jades will spawn on free fields. Players normally cannot see spawned jades qualities. When a jade is acquired, depending on its type, it:
+
 - immediately modifies owner stone
 - or stored in owner stone to be used later.
 
@@ -26,13 +34,15 @@ A player must destroy all enemy stones to win. The easiest way to destroy an ene
 
 Yet basic rules are primitive and accessible to everyone, to become proficient it is crucial to have a good knowledge of jade abilities, how they interact and how to organize better collaboration in certain context.
 
-#### todo - fix stone-jade - similar meaning
+### todo - fix stone-jade - similar meaning
 
-# Meta game description
+## Meta game description
+
 Player starts first battle with a set of free jades. Every time she eats a new jade, the jade becomes available immediately or in jade shop.
 A player has a box of selected jades to be used in battle.
 
-# Jades
+## Jades
+
 - may be Radial, Row or Column
 
 | Name            | Effect                                     | Free         |
@@ -83,6 +93,7 @@ A player has a box of selected jades to be used in battle.
 | Acidic *        | Destroys any surrounding enemy pieces. Their tiles become completely uninhabitable.                                      | No           |
 | Recruit *       | Steal any enemy pieces surrounding your piece.                                                                             | No           |
 
-Quadradius:
-https://steamcommunity.com/sharedfiles/filedetails/?id=187949734
-https://www.facebook.com/Quadradius/
+## Quadradius reference
+
+- [Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=187949734)
+- [fb](https://www.facebook.com/Quadradius/)
