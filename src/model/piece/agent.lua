@@ -21,6 +21,16 @@ function agent:is_friend()
   return self[piece]:get_pid() == self[pid]
 end
 
+-- get all jade ids
+function agent:get_jades()
+  return self[piece].jades:keys()
+end
+
+-- use jade by id
+function agent:use_jade(id)
+  self[piece]:use_jade(id)
+end
+
 --
 function agent:is_jump_protected()
   return self[piece]:is_jump_protected()
@@ -50,6 +60,8 @@ function agent:wrap()
 
   wrp.fn(log.trace, agent, 'new',       is, {'piece', piece}, pid)
   wrp.fn(log.trace, agent, 'is_friend', ex)
+  wrp.fn(log.trace, agent, 'get_jades', ex)
+  wrp.fn(log.trace, agent, 'use_jade',  ex, {'id', typ.str})
   wrp.fn(log.trace, agent, 'is_jump_protected', ex, pos)
   wrp.fn(log.trace, agent, 'is_invisible', ex)
 end

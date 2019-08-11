@@ -10,10 +10,10 @@ local bot = obj:extend('bot')
 local _space = {}
 
 -- create
-function bot:new(space)
+function bot:new(space_agent)
   self = obj.new(self, com())
-  self[_space] = space
-  space:add_listener(self)
+  self[_space] = space_agent
+  self[_space]:add_listener(self)
   return self
 end
 
@@ -62,7 +62,7 @@ function bot:evaluate()
   local space = self[_space]
   local size = space:get_size()
   local evaluation = 0
-  size:iterate_grid(function(pos)
+  space:iterate_grid(function(pos)
     local piece = space:get_piece(pos)
     if piece:is_friend() then
       evaluation = evaluation + 1
