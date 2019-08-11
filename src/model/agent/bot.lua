@@ -18,11 +18,6 @@ function bot:new(space)
 end
 
 --
-function bot:__tostring()
-  return 'bot'
-end
-
---
 function bot:move(pid)
   if self[_space]:is_my_move() then
     timer.performWithDelay(1000, function() self:move_async() end)
@@ -61,6 +56,21 @@ function bot:move_async()
   end
 end
 
+-- Position evaluation
+-- S = friends_count + abilities_count - enemies_count - jaded_enemy_count
+function bot:evaluate()
+  local space = self[_space]
+  local size = space:get_size()
+  local evaluation = 0
+  size:iterate_grid(function(pos)
+    local piece = space:get_piece(pos)
+    if piece:is_friend() then
+      evaluation = evaluation + 1
+    else
+      evaluation = evaluation - 1
+    end
+  end)
+end
 
 --
 function bot:wrap()

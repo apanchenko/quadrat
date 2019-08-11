@@ -1,29 +1,29 @@
-local invis = require('src.model.power.invisible')
 local obj   = require('src.lua-cor.obj')
+local invis = require('src.model.power.invisible')
 
 -- piece interface for player
 local agent = obj:extend('piece_agent')
 
 -- private
-local _piece = {}
-local _pid = {}
+local piece = {}
+local pid = {}
 
 --
-function agent:new(piece, player_id)
+function agent:new(model_piece, player_id)
   self = obj.new(self)
-  self[_piece] = piece
-  self[_pid] = player_id
+  self[piece] = model_piece
+  self[pid] = player_id
   return self
 end
 
 --
 function agent:is_friend()
-  return self[_piece]:get_pid() == self[_pid]
+  return self[piece]:get_pid() == self[pid]
 end
 
 --
 function agent:is_jump_protected()
-  return self[_piece]:is_jump_protected()
+  return self[piece]:is_jump_protected()
 end
 
 --
@@ -31,7 +31,7 @@ function agent:is_invisible()
   if not self:is_friend() then
     return false
   end
-  return self[_piece]:count_power(invis:get_typename())
+  return self[piece]:count_power(invis:get_typename())
 end
 
 -- wrap functions

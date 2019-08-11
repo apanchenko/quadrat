@@ -74,13 +74,13 @@ function agent:wrap()
   local pid = {'pid', typ.new_is(playerid)}
   local pos = {'pos', typ.new_is(vec)}
 
-  wrp.fn(log.trace, agent, 'new',       is, {'space', typ.meta(space)}, pid)
-  wrp.fn(log.trace, agent, 'get_size', ex)
-  wrp.fn(log.trace, agent, 'has_jade', ex, pos)
-  wrp.fn(log.trace, agent, 'get_piece', ex, pos)
-  wrp.fn(log.trace, agent, 'can_move',     ex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, agent, 'move',         ex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, agent, 'add_listener', ex, {'listener', typ.tab})
+  wrp.fn(log.trace, agent, 'new',           is, {'space', typ.meta(space)}, pid)
+  wrp.fn(log.trace, agent, 'get_size',      ex)
+  wrp.fn(log.trace, agent, 'has_jade',      ex, pos)
+  wrp.fn(log.trace, agent, 'get_piece',     ex, pos)
+  wrp.fn(log.trace, agent, 'can_move',      ex, {'from', vec}, {'to', vec})
+  wrp.fn(log.trace, agent, 'move',          ex, {'from', vec}, {'to', vec})
+  wrp.fn(log.trace, agent, 'add_listener',  ex, {'listener', typ.tab})
 end
 
 return agent
