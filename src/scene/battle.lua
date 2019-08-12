@@ -21,7 +21,7 @@ local battle = composer.newScene()
 function battle.goto_robots()
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   local space_white = space_agent:new(env.space, playerid.white)
-  local space_black = space_agent:new(env.space, playerid.white)
+  local space_black = space_agent:new(env.space, playerid.black)
 
   env.player_white = agent:get('random'):new(space_white)
   env.player_black = agent:get('random'):new(space_black)
@@ -34,9 +34,10 @@ end
 function battle.goto_bot()
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   local space_bot = space_agent:new(env.space, playerid.white)
+  local space_user = space_agent:new(env.space, playerid.black)
 
   env.player_white = agent:get('bot'):new(space_bot)
-  env.player_black = agent:get('user'):new(env, playerid.black)
+  env.player_black = agent:get('user'):new(space_user)
 
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
@@ -46,9 +47,10 @@ end
 function battle.goto_solo()
   env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
   local space_white = space_agent:new(env.space, playerid.white)
+  local space_black = space_agent:new(env.space, playerid.black)
 
   env.player_white = agent:get('random'):new(space_white)
-  env.player_black = agent:get('user'):new(env, playerid.black)
+  env.player_black = agent:get('user'):new(space_black)
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end

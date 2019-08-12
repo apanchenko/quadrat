@@ -1,19 +1,17 @@
-local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local obj       = require 'src.lua-cor.obj'
-local wrp       = require 'src.lua-cor.wrp'
-local typ       = require 'src.lua-cor.typ'
-local com         = require 'src.lua-cor.com'
+local com       = require 'src.lua-cor.com'
 
 -- controller for user
 local user = obj:extend('user')
 
+--private
+local space = {}
+
 -- create
-function user:new(env, pid)
-  ass.eq(tostring(env), 'env')
+function user:new(space_agent)
   local this = obj.new(self, com())
-  this.env = env
-  this.pid = pid
+  this[space] = space_agent
   return this
 end
 
@@ -24,12 +22,12 @@ end
 
 --
 function user:__tostring()
-  return 'player.user['..tostring(self.pid)..']'
+  return 'player.user['..tostring(self[space]:get_my_pid())..']'
 end
 
 --
 function user:on_spawn_stone(stone)
-  if stone.pid == self.pid then
+  if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
   end
@@ -37,7 +35,7 @@ end
 
 --
 function user:on_stone_color_changed(stone)
-  if stone.pid == self.pid then
+  if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
   else
@@ -49,10 +47,14 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
+  local wrp       = require 'src.lua-cor.wrp'
+  local typ       = require 'src.lua-cor.typ'
+  local space_agent = require('src.model.space.agent')
+
   local is   = {'user', typ.new_is(user)}
   local ex    = {'exuser', typ.new_ex(user)}
 
-  wrp.fn(log.trace, user, 'new',            is, {'env'}, {'pid', 'playerid'})
+  wrp.fn(log.trace, user, 'new',            is, {'space_agent', typ.new_is(space_agent)})
   wrp.fn(log.trace, user, 'on_spawn_stone', ex, {'stone'})
 end
 
