@@ -5,7 +5,6 @@ local player        = require 'src.view.player'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
 local log           = require('src.lua-cor.log').get('scen')
-local ass           = require 'src.lua-cor.ass'
 local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space.space'
@@ -19,38 +18,21 @@ local battle = composer.newScene()
 
 --
 function battle.goto_robots()
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  local space_white = space_agent:new(env.space, playerid.white)
-  local space_black = space_agent:new(env.space, playerid.black)
-
-  env.player_white = agent:get('random'):new(space_white)
-  env.player_black = agent:get('random'):new(space_black)
-
+  cfg.switching.params = {white = 'random', black = 'random'}
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
 
 --
 function battle.goto_bot()
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  local space_bot = space_agent:new(env.space, playerid.white)
-  local space_user = space_agent:new(env.space, playerid.black)
-
-  env.player_white = agent:get('bot'):new(space_bot)
-  env.player_black = agent:get('user'):new(space_user)
-
+  cfg.switching.params = {white = 'bot', black = 'user'}
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
 
 --
 function battle.goto_solo()
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
-  local space_white = space_agent:new(env.space, playerid.white)
-  local space_black = space_agent:new(env.space, playerid.black)
-
-  env.player_white = agent:get('random'):new(space_white)
-  env.player_black = agent:get('user'):new(space_black)
+  cfg.switching.params = {white = 'random', black = 'user'}
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
@@ -60,6 +42,8 @@ function battle:create(event)
   com(self) -- turn self into component
 
   lay.new_image(self.view, cfg.bg)
+
+  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
 
   self.move_pointer = lay.new_image(self.view, cfg.arrow)
 
@@ -75,8 +59,22 @@ function battle:create(event)
 
   env.space.own_evt.add(self)
   env.battle = self
-  env.board = board:new()
+
+  self.board = board:new()
+
+  local space_white = space_agent:new(env.space, playerid.white)
+  local space_black = space_agent:new(env.space, playerid.black)
+
+  self.player_white = agent:get(event.params.white):new(space_white)
+  self.player_black = agent:get(event.params.black):new(space_black)
+
+  if event.params.black == 'user' then
+    self.board.on_change:listen(self.player_black)
+  end
+
   env.space:setup() -- start playing
+
+
 
   --env.board.view.walk_tree()
 end

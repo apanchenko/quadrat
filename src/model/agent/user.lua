@@ -15,17 +15,12 @@ function user:new(space_agent)
   return this
 end
 
--- listen board
-function user:on_board(board)
-  board.on_change:listen(self)
-end
-
 --
 function user:__tostring()
   return 'player.user['..tostring(self[space]:get_my_pid())..']'
 end
 
---
+-- event from board
 function user:on_spawn_stone(stone)
   if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
@@ -33,7 +28,7 @@ function user:on_spawn_stone(stone)
   end
 end
 
---
+-- event from board
 function user:on_stone_color_changed(stone)
   if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
@@ -47,12 +42,12 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  local wrp       = require 'src.lua-cor.wrp'
-  local typ       = require 'src.lua-cor.typ'
+  local wrp = require 'src.lua-cor.wrp'
+  local typ = require 'src.lua-cor.typ'
   local space_agent = require('src.model.space.agent')
 
-  local is   = {'user', typ.new_is(user)}
-  local ex    = {'exuser', typ.new_ex(user)}
+  local is  = {'user', typ.new_is(user)}
+  local ex  = {'exuser', typ.new_ex(user)}
 
   wrp.fn(log.trace, user, 'new',            is, {'space_agent', typ.new_is(space_agent)})
   wrp.fn(log.trace, user, 'on_spawn_stone', ex, {'stone'})
