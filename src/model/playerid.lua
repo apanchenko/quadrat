@@ -20,6 +20,13 @@ function playerid:swap()
   return W
 end
 
+function playerid:other()
+  if self == W then
+    return B
+  end
+  return W
+end
+
 -- select white or black
 function playerid.select(is_white)
   if is_white then
@@ -31,6 +38,7 @@ end
 -- module
 function playerid:wrap()
   wrp.fn(log.info, playerid, 'swap', {'pid', typ.new_ex(playerid)})
+  wrp.fn(log.info, playerid, 'other', {'pid', typ.new_ex(playerid)})
   wrp.fn(log.info, playerid, 'select', {'is_white', typ.boo})
 end
 

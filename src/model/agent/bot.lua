@@ -28,8 +28,9 @@ end
 --
 function bot:move_async()
   local space = self[_space]
+  local pid = space:get_my_pid()
   local best_move_arr = arr()
-  local best_value = 0
+  local best_value = -1
 
   space:get_size():iterate_grid(function(from)
 
@@ -39,24 +40,33 @@ function bot:move_async()
       piece:get_move_to_arr():each(function(to)
         local my_value = 0
 
-        -- eat enemy
-        local enemy = space:get_piece(to)
-        if enemy and enemy:is_jaded() then
-          my_value = my_value + 4
-        else
-          my_value = my_value + 3
-        end
+        -- check safe moving to
+        local friend_support_count = space:get_support_count(to, pid) - 1
+        local enemy_support_count = space:get_support_count(to, pid:other())
+        if friend_support_count >= enemy_support_count then
+          -- eat enemy
+          local enemy = space:get_piece(to)
+          if enemy then
+            if enemy:is_jaded() then
+              my_value = my_value + 4
+            else
+              my_value = my_value + 3
+            end
+          end
 
-        -- eat jade
-        if space:has_jade(to) then
-          my_value = my_value + 2
+          -- eat jade
+          if space:has_jade(to) then
+            my_value = my_value + 2
+          end
         end
 
         -- save move
         if my_value > best_value then
+          log.trace('Better move', from, '->', to, '=', my_value)
           best_value = my_value
           best_move_arr = arr(move(from, to))
         elseif my_value == best_value then
+          log.trace('Equal move ', from, '->', to, '=', my_value)
           best_move_arr:push(move(from, to))
         end
 
@@ -110,9 +120,11 @@ function bot:wrap()
 
   local space_agent = require('src.model.space.agent')
   local is = {'bot', typ.new_is(bot)}
+  local ex = {'bot', typ.new_ex(bot)}
   local sp = {'space_agent', typ.new_is(space_agent)}
 
   wrp.fn(log.trace, bot, 'new', is, sp)
+  wrp.fn(log.trace, bot, 'move_async', ex)
 end
 
 return bot

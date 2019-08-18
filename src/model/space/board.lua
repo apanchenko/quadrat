@@ -27,14 +27,14 @@ end
 function board:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
-  local log = require('src.lua-cor.log').get('modl')
+  local log = require('src.lua-cor.log').get('mode')
   local space   = require('src.model.space.space')
 
   local is  = {'space_board', typ.new_is(board)}
   local ex  = {'space_board', typ.new_ex(board)}
 
-  wrp.fn(log.trace, board, 'new',           is, {'space', typ.meta(space)})
-  wrp.fn(log.trace, board, 'get_size',      ex)
+  wrp.fn(log.info, board, 'new',           is, {'space', typ.meta(space)})
+  wrp.fn(log.info, board, 'get_size',      ex)
   wrp.fn(log.trace, board, 'add_listener',  ex, {'listener', typ.tab})
 end
 
