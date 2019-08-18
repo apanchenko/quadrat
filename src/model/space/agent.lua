@@ -1,5 +1,6 @@
-local piece_agent = require('src.model.piece.agent')
-local space_board = require('src.model.space.board')
+local piece_enemy  = require('src.model.piece.enemy')
+local piece_friend = require('src.model.piece.friend')
+local space_board  = require('src.model.space.board')
 
 -- space interface for agent
 local agent = space_board:extend('space_agent')
@@ -33,11 +34,16 @@ end
 
 --
 function agent:get_piece(pos)
-  local piece = self[_space]:piece(pos)
-  if piece == nil then
+  local model_piece = self[_space]:piece(pos)
+  if model_piece == nil then
     return nil
   end
-  return piece_agent:new(piece, self[_pid])
+
+  if model_piece:get_pid() == self[_pid] then
+    return piece_friend:new(model_piece)
+  else
+    return piece_enemy:new(model_piece)
+  end
 end
 
 --

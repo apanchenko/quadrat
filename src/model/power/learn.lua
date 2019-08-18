@@ -16,7 +16,7 @@ end
 function learn:apply_to_spot(spot)
   local piece = spot.piece
   if piece and piece.pos ~= self.piece.pos and piece.pid == self.piece.pid then
-    piece.jades:each(function(jade)
+    piece.jades_cnt:each(function(jade)
       self.piece:add_jade(jade:copy())
     end)
   end

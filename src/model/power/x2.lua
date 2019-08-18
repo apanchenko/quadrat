@@ -7,7 +7,7 @@ local x2 = power:extend('X2')
 
 -- double piece jades
 function x2:new(piece, def)
-  piece.jades:each(function(jade)
+  piece.jades_cnt:each(function(jade)
     piece:add_jade(jade)
   end)
 end

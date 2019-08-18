@@ -58,7 +58,7 @@ function piece:new(space, pid)
   {
     space = space,
     pid = pid,
-    jades = cnt:new(), -- container for jades
+    jades_cnt = cnt:new(), -- container for jades
     powers = cnt:new() -- container for powers
   })
 end
@@ -117,7 +117,7 @@ end
 -- JADE -----------------------------------------------------------------------
 -- add jade
 function piece:add_jade(jade)
-  local res_count = self.jades:push(jade)
+  local res_count = self.jades_cnt:push(jade)
   -- TODO: change event name to 'add_jade'
   self.space:whisper('set_ability', self.pos, jade.id, res_count)
   self.space:yell('piece_has_jade', self.pos, true)
@@ -127,12 +127,12 @@ end
 
 -- split jade and return removed part
 function piece:remove_jade(id, count)
-  local jade = self.jades:pull(id, count)
+  local jade = self.jades_cnt:pull(id, count)
   ass(jade) -- TODO: to wrap prereq
   -- whisper new jade count
-  self.space:whisper('set_ability', self.pos, id, self.jades:count(id))
+  self.space:whisper('set_ability', self.pos, id, self.jades_cnt:count(id))
   -- yell piece has no jades
-  if self.jades:is_empty() then
+  if self.jades_cnt:is_empty() then
     self.space:yell('piece_has_jade', self.pos, false)
   end
   return jade
@@ -149,19 +149,19 @@ end
 
 -- iterate jades
 function piece:each_jade(fn)
-  self.jades:each(fn)
+  self.jades_cnt:each(fn)
 end
 
 -- remove all jades
 function piece:clear_jades()
-  if self.jades:is_empty() then
+  if self.jades_cnt:is_empty() then
     return -- nothing to do
   end
   self:each_jade(function(jade)
     self.space:whisper('set_ability', self.pos, jade.id, 0)
   end)
   self.space:yell('piece_has_jade', self.pos, false)
-  self.jades:clear()
+  self.jades_cnt:clear()
 end
 
 -- POWER ----------------------------------------------------------------------
