@@ -34,15 +34,15 @@ end
 
 --
 function space_agent:get_piece(pos)
-  local model_piece = self[_space]:piece(pos)
-  if model_piece == nil then
+  local piece_model = self[_space]:piece(pos)
+  if piece_model == nil then
     return nil
   end
 
-  if model_piece:get_pid() == self[_pid] then
-    return piece_friend:new(model_piece, self)
+  if piece_model:get_pid() == self[_pid] then
+    return piece_friend:new(piece_model, self)
   else
-    return piece_enemy:new(model_piece, self)
+    return piece_enemy:new(piece_model, self)
   end
 end
 
@@ -56,12 +56,13 @@ function space_agent:move(from, to)
   self[_space]:move(from, to)
 end
 
--- number of supporting neighbour pieces
+-- number of supporting pieces
 function space_agent:get_support_count(pos, pid)
+  local space = self[_space]
   local support_count = 0
   pos:each_neighbour_in_grid(self:get_size(), function(neighbour_pos)
-    local piece = self:get_piece(neighbour_pos)
-    if piece and piece:get_pid() == pid then
+    local piece_model = space:piece(neighbour_pos)
+    if piece_model and piece_model:get_pid() == pid and piece_model:can_move(neighbour_pos, pos) then
       support_count = support_count + 1
     end
   end)

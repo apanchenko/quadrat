@@ -30,7 +30,7 @@ function relocate:wrap()
   local ex = {'ex', typ.new_ex(relocate)}
 
   wrp.fn(log.trace, relocate, 'new', is, {'piece'}, {'def', typ.tab})
-  wrp.fn(log.trace, relocate, 'can_spawn', is)
+  wrp.fn(log.info, relocate, 'can_spawn', is)
 end
 
 return relocate

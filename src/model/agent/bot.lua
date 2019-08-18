@@ -41,32 +41,38 @@ function bot:move_async()
         local my_value = 0
 
         -- check safe moving to
-        local friend_support_count = space:get_support_count(to, pid) - 1
-        local enemy_support_count = space:get_support_count(to, pid:other())
-        if friend_support_count >= enemy_support_count then
+        local friend_support = space:get_support_count(to, pid) - 1
+        local enemy_support = space:get_support_count(to, pid:other())
+        if friend_support >= enemy_support then
           -- eat enemy
           local enemy = space:get_piece(to)
           if enemy then
             if enemy:is_jaded() then
-              my_value = my_value + 4
+              my_value = my_value + 6
             else
-              my_value = my_value + 3
+              my_value = my_value + 5
             end
           end
 
           -- eat jade
           if space:has_jade(to) then
-            my_value = my_value + 2
+            my_value = my_value + 4
+          end
+
+          -- better influence (max 3)
+          local from_support = space:get_support_count(from, pid)
+          if from_support > friend_support then
+            my_value = my_value + (from_support - friend_support)
           end
         end
 
         -- save move
         if my_value > best_value then
-          log.trace('Better move', from, '->', to, '=', my_value)
+          log.trace('Better move', from, '->', to, '=', my_value, 'Support', friend_support, 'vs', enemy_support)
           best_value = my_value
           best_move_arr = arr(move(from, to))
         elseif my_value == best_value then
-          log.trace('Equal move ', from, '->', to, '=', my_value)
+          log.trace('Equal move ', from, '->', to, '=', my_value, 'Support', friend_support, 'vs', enemy_support)
           best_move_arr:push(move(from, to))
         end
 

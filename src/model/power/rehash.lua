@@ -42,7 +42,7 @@ function rehash:wrap()
   local ex = {'ex', typ.new_ex(rehash)}
 
   wrp.fn(log.trace, rehash, 'new',       is, {'piece'}, {'def', typ.tab})
-  wrp.fn(log.trace, rehash, 'can_spawn', is)
+  wrp.fn(log.info, rehash, 'can_spawn', is)
 end
 
 return rehash

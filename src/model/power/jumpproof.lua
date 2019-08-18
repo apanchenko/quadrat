@@ -17,7 +17,7 @@ jumpproof.is_jump_protected = true
 function jumpproof:wrap()
   local is = {'jumpproof', typ.new_is(jumpproof)}
 
-  wrp.fn(log.trace, jumpproof, 'can_spawn', is)
+  wrp.fn(log.info, jumpproof, 'can_spawn', is)
 end
 
 --
