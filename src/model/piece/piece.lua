@@ -12,8 +12,8 @@ local piece = obj:extend('piece')
 
 -- interface
 function piece:wrap()
-  local pis   = {'piece', typ.new_is(piece)}
-  local pex   = {'piece', typ.new_ex(piece)}
+  local is   = {'piece', typ.new_is(piece)}
+  local ex   = {'piece', typ.new_ex(piece)}
   local space = {'space'}
   local pid   = {'playerid'}
   local jade  = {'jade'}
@@ -27,29 +27,30 @@ function piece:wrap()
   local tspot = {'to', 'spot'}
 
   -- piece
-  wrp.fn(log.trace, piece, 'new',            pis, space, pid)
-  wrp.fn(log.trace, piece, 'set_color',      pex, pid)
-  wrp.fn(log.trace, piece, 'die',            pex)
+  wrp.fn(log.trace, piece, 'new',            is, space, pid)
+  wrp.fn(log.trace, piece, 'set_color',      ex, pid)
+  wrp.fn(log.trace, piece, 'die',            ex)
 
   -- position
+  wrp.fn(log.info,  piece, 'get_pos',        ex)
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.fn(log.info, piece, 'can_move',        pex, from,  to)
-  wrp.fn(log.trace, piece, 'move_before',    pex, fspot, tspot)
-  wrp.fn(log.trace, piece, 'move',           pex, fspot, tspot)
-  wrp.fn(log.trace, piece, 'move_after',     pex, fspot, tspot)
+  wrp.fn(log.info, piece, 'can_move',        ex, from,  to)
+  wrp.fn(log.trace, piece, 'move_before',    ex, fspot, tspot)
+  wrp.fn(log.trace, piece, 'move',           ex, fspot, tspot)
+  wrp.fn(log.trace, piece, 'move_after',     ex, fspot, tspot)
   
   -- jades
-  wrp.fn(log.trace, piece, 'add_jade',       pex, jade)
-  wrp.fn(log.trace, piece, 'remove_jade',    pex, id, count)
-  wrp.fn(log.trace, piece, 'use_jade',       pex, id)
-  wrp.fn(log.trace, piece, 'each_jade',      pex, {'fn', typ.fun})
-  wrp.fn(log.trace, piece, 'clear_jades',    pex)
+  wrp.fn(log.trace, piece, 'add_jade',       ex, jade)
+  wrp.fn(log.trace, piece, 'remove_jade',    ex, id, count)
+  wrp.fn(log.trace, piece, 'use_jade',       ex, id)
+  wrp.fn(log.trace, piece, 'each_jade',      ex, {'fn', typ.fun})
+  wrp.fn(log.trace, piece, 'clear_jades',    ex)
 
   -- powers
-  wrp.fn(log.trace, piece, 'count_power',    pex, id)
-  wrp.fn(log.trace, piece, 'add_power',      pex, power)
-  wrp.fn(log.trace, piece, 'remove_power',   pex, id)
-  wrp.fn(log.trace, piece, 'decrease_power', pex, name)
+  wrp.fn(log.trace, piece, 'count_power',    ex, id)
+  wrp.fn(log.trace, piece, 'add_power',      ex, power)
+  wrp.fn(log.trace, piece, 'remove_power',   ex, id)
+  wrp.fn(log.trace, piece, 'decrease_power', ex, name)
 end
 
 -- create a piece
@@ -91,6 +92,12 @@ end
 function piece:set_pos(pos)
   self.pos = pos
 end
+
+--
+function piece:get_pos()
+  return self.pos
+end
+
 --
 function piece:can_move(fr, to)
   if (fr.x==to.x or fr.y==to.y) and (fr - to):length2() == 1 then

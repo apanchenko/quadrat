@@ -40,7 +40,7 @@ function agent:get_piece(pos)
   end
 
   if model_piece:get_pid() == self[_pid] then
-    return piece_friend:new(model_piece)
+    return piece_friend:new(model_piece, self)
   else
     return piece_enemy:new(model_piece)
   end

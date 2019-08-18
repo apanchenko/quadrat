@@ -1,7 +1,8 @@
 local log = require('src.lua-cor.log').get('mode')
 local obj = require('src.lua-cor.obj')
-local vec = require('src.lua-cor.vec')
+local arr = require('src.lua-cor.arr')
 local com = require('src.lua-cor.com')
+local move = require('src.model.move')
 
 -- smarter bot
 local bot = obj:extend('bot')
@@ -26,34 +27,53 @@ end
 
 --
 function bot:move_async()
-  local attempts = 1000
   local space = self[_space]
+  local best_move_arr = arr()
+  local best_value = 0
 
-  -- do something until can move
-  while space:is_my_move() do
-    -- select random piece of my color
-    local from = space:get_size():random_in_grid()
+  space:get_size():iterate_grid(function(from)
+
     local piece = space:get_piece(from)
-
     if piece and piece:is_friend() then
-      -- execute random ability
-      --local jade = piece.jades:random()
-      --if jade then
-      --  piece:use_jade(jade.id)
-      --end
-      -- move to random point
-      local to = from + vec:random(vec.zero-vec.one, vec.one)
-      if space:can_move(from, to) then
-        space:move(from, to)
-      end
-    end
 
-    attempts = attempts - 1
-    if attempts <= 0 then
-      log.trace('cannot find move')
-      break
-    end
+      piece:get_move_to_arr():each(function(to)
+        local my_value = 0
+
+        -- eat enemy
+        local enemy = space:get_piece(to)
+        if enemy and enemy:is_jaded() then
+          my_value = my_value + 4
+        else
+          my_value = my_value + 3
+        end
+
+        -- eat jade
+        if space:has_jade(to) then
+          my_value = my_value + 2
+        end
+
+        -- save move
+        if my_value > best_value then
+          best_value = my_value
+          best_move_arr = arr(move(from, to))
+        elseif my_value == best_value then
+          best_move_arr:push(move(from, to))
+        end
+
+      end) -- each to
+
+    end -- if friend
+
+  end) -- each spot
+
+  -- do selected move
+  local best_move = best_move_arr:random()
+  if best_move then
+    space:move(best_move:get_from(), best_move:get_to())
+  else
+    log.trace('cannot find move')
   end
+
 end
 
 -- Position evaluation

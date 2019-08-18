@@ -1,3 +1,4 @@
+local arr           = require('src.lua-cor.arr')
 local piece_enemy   = require('src.model.piece.enemy')
 local invis         = require('src.model.power.invisible')
 
@@ -6,11 +7,13 @@ local friend = piece_enemy:extend('piece_friend')
 
 -- private
 local _piece = {}
+local _space = {}
 
 --
-function friend:new(model_piece)
-  self = piece_enemy.new(self, model_piece)
-  self[_piece] = model_piece
+function friend:new(piece_model, space_agent)
+  self = piece_enemy.new(self, piece_model)
+  self[_piece] = piece_model
+  self[_space] = space_agent
   return self
 end
 
@@ -37,21 +40,36 @@ function friend:is_invisible()
   return self[_piece]:count_power(invis:get_typename())
 end
 
+-- return array of available move targets
+function friend:get_move_to_arr()
+  local space = self[_space]
+  local from = self[_piece]:get_pos()
+  local to_arr = arr()
+  space:get_size():iterate_grid(function(to)
+    if space:can_move(from, to) then
+      to_arr:push(to)
+    end
+  end)
+  return to_arr
+end
+
 -- wrap functions
 function friend:wrap()
   local wrp     = require('src.lua-cor.wrp')
   local typ     = require('src.lua-cor.typ')
   local log     = require('src.lua-cor.log').get('modl')
-  local piece   = require('src.model.piece.piece')
+  local piece_model = require('src.model.piece.piece')
+  local space_agent = require('src.model.space.agent')
 
   local is = {'piece_agent', typ.new_is(friend)}
   local ex = {'piece_agent', typ.new_ex(friend)}
 
-  wrp.fn(log.trace, friend, 'new',       is, {'piece', piece})
+  wrp.fn(log.trace, friend, 'new',       is, {'piece', piece_model}, {'space_agent', space_agent})
   wrp.fn(log.trace, friend, 'is_friend', ex)
   wrp.fn(log.trace, friend, 'get_jades', ex)
   wrp.fn(log.trace, friend, 'use_jade',  ex, {'id', typ.str})
   wrp.fn(log.trace, friend, 'is_invisible', ex)
+  wrp.fn(log.trace, friend, 'get_move_to_arr', ex)
 end
 
 return friend
