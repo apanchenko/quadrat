@@ -32,7 +32,7 @@ function bot:move_async()
   -- do something until can move
   while space:is_my_move() do
     -- select random piece of my color
-    local from = vec:random(vec.zero, space:get_size() - vec.one)
+    local from = space:get_size():random_in_grid()
     local piece = space:get_piece(from)
 
     if piece and piece:is_friend() then
@@ -57,16 +57,27 @@ function bot:move_async()
 end
 
 -- Position evaluation
--- S = friends_count + abilities_count - enemies_count - jaded_enemy_count
+-- S = friends - jades - enemies - jaded_enemies
 function bot:evaluate()
   local space = self[_space]
-  local size = space:get_size()
   local evaluation = 0
   space:iterate_grid(function(pos)
     local piece = space:get_piece(pos)
+
+    -- friend or enemy piece
     if piece:is_friend() then
       evaluation = evaluation + 1
     else
+      evaluation = evaluation - 1
+
+      -- jaded enemy
+      if not piece:get_jades():is_empty() then
+        evaluation = evaluation - 1
+      end
+    end
+
+    -- jade
+    if space:has_jade(pos) then
       evaluation = evaluation - 1
     end
   end)

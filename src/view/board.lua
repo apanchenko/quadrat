@@ -35,7 +35,7 @@ function board:new(space_board)
     param.h = 40
     lay.insert(self.view, cell.view, param)
     log.trace('Cell at', param.x, param.y)
-    self.grid[pos:to_index(size)] = cell
+    self.grid[pos:to_index_in_grid(size)] = cell
   end)
   --ass.eq(self.view.numChildren, 49)
   --self.view.walk_tree()
