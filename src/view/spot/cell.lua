@@ -1,24 +1,21 @@
-local vec   = require 'src.lua-cor.vec'
-local arr   = require 'src.lua-cor.arr'
-local cfg   = require 'src.cfg'
-local lay   = require "src.lua-cor.lay"
-local log   = require('src.lua-cor.log').get('view')
-local ass   = require "src.lua-cor.ass"
-local obj   = require "src.lua-cor.obj"
-local wrp   = require 'src.lua-cor.wrp'
-local spot  = require 'src.model.spot.spot'
-local layout = require 'src.view.spot.layout'
-local typ     = require 'src.lua-cor.typ'
+local cfg     = require('src.cfg')
+local lay     = require('src.lua-cor.lay')
+local log     = require('src.lua-cor.log').get('view')
+local ass     = require('src.lua-cor.ass')
+local obj     = require('src.lua-cor.obj')
+local wrp     = require('src.lua-cor.wrp')
+local layout  = require('src.view.spot.layout')
+local typ     = require('src.lua-cor.typ')
 
 local cell = obj:extend('cell')
 
 function cell:__tostring() return 'cell'.. tostring(self.pos) end
 
 --
-function cell:new(spot)
-  self = obj.new(self, 
+function cell:new(pos)
+  self = obj.new(self,
   {
-    pos = spot.pos,
+    pos = pos,
     view = layout.new_group()
   })
   self.view.show('floor')
@@ -128,12 +125,13 @@ end
 
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
-  local is   = {'cell', typ.new_is(cell)}
-  local ex    = {'excell', typ.new_ex(cell)}
+  local vec = require('src.lua-cor.vec')
+  local is  = {'cell', typ.new_is(cell)}
+  local ex  = {'excell', typ.new_ex(cell)}
 
-  wrp.fn(log.trace, cell, 'new',       is, {'spot'})
-  wrp.fn(log.trace, cell, 'set_stone', ex, {'stone'})
-  wrp.fn(log.info, cell, 'stone', ex)
+  wrp.fn(log.trace, cell, 'new',          is, {'pos', vec})
+  wrp.fn(log.trace, cell, 'set_stone',    ex, {'stone'})
+  wrp.fn(log.info,  cell, 'stone',        ex)
   wrp.fn(log.trace, cell, 'remove_stone', ex)
 end
 

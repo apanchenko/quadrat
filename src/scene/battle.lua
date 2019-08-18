@@ -9,6 +9,7 @@ local wrp           = require 'src.lua-cor.wrp'
 local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space.space'
 local space_agent   = require 'src.model.space.agent'
+local space_board   = require 'src.model.space.board'
 local agent         = require 'src.model.agent._pack'
 local typ     = require 'src.lua-cor.typ'
 local com     = require 'src.lua-cor.com'
@@ -60,7 +61,8 @@ function battle:create(event)
   env.space.own_evt.add(self)
   env.battle = self
 
-  self.board = board:new()
+  self.space_board = space_board:new(env.space)
+  self.board = board:new(self.space_board)
 
   local space_white = space_agent:new(env.space, playerid.white)
   local space_black = space_agent:new(env.space, playerid.black)

@@ -1,43 +1,46 @@
-local cell     = require 'src.view.spot.cell'
-local stone    = require 'src.view.stone.stone'
+local Cell     = require('src.view.spot.cell')
+local Stone   = require('src.view.stone.stone')
 local vec      = require 'src.lua-cor.vec'
-local piece    = require 'src.model.piece.piece'
 local cfg      = require 'src.cfg'
 local obj      = require 'src.lua-cor.obj'
 local lay      = require('src.lua-cor.lay')
-local ass      = require 'src.lua-cor.ass'
 local log      = require('src.lua-cor.log').get('view')
-local typ      = require 'src.lua-cor.typ'
 local evt      = require 'src.lua-cor.evt'
-local wrp      = require 'src.lua-cor.wrp'
 local env      = require 'src.lua-cor.env'
 local arr      = require 'src.lua-cor.arr'
-local com         = require 'src.lua-cor.com'
+local com      = require 'src.lua-cor.com'
 
 local board = obj:extend('board')
 
-function board:new()
+-- private
+local space = {}
+
+function board:new(space_board)
   self = obj.new(self, com())
+  self[space] = space_board
   self.on_change = evt:new()
 
-  env.space.own_evt.add(self)
+  self[space]:add_listener(self)
+
   self.view = lay.new_layout().new_group()
 
   self.grid = {}
-  for k, spot in env.space:spots() do
-    local cell = cell:new(spot)
+
+  local size = self[space]:get_size()
+  size:iterate_grid(function(pos)
+    local cell = Cell:new(pos)
     local param = cell.pos * cfg.view.cell.size
     param.z = 1
     param.w = 40
     param.h = 40
     lay.insert(self.view, cell.view, param)
     log.trace('Cell at', param.x, param.y)
-    self.grid[k] = cell
-  end
+    self.grid[pos:to_index(size)] = cell
+  end)
   --ass.eq(self.view.numChildren, 49)
   --self.view.walk_tree()
 
-  self.view.anchorChildren = true          -- center on screen
+  self.view.anchorChildren = true -- center on screen
   lay.insert(env.battle.view, self.view, cfg.view.board)
   return self
 end
@@ -45,8 +48,9 @@ end
 -- POSITION--------------------------------------------------------------------
 -- peek piece from cell by position
 function board:cell(pos)
-  return self.grid[pos.x * env.space:width() + pos.y]            
+  return self.grid[pos.x * self[space]:get_size().x + pos.y]
 end
+
 --
 function board:stone(pos)
   return self:cell(pos):stone()
@@ -75,7 +79,7 @@ end
 
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
-  local stone = stone:new(env, color) -- create a new stone
+  local stone = Stone:new(env, color) -- create a new stone
   stone:puton(self) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)
@@ -117,8 +121,8 @@ function board:piece_set_color(pos, color)
 end
 --
 function board:add_spot_comp(pos, id, count)
-  local cell = self:cell(pos)
-  cell:add_comp(id, count)
+  local cel = self:cell(pos)
+  cel:add_comp(id, count)
 end
 
 -------------------------------------------------------------------------------
@@ -136,14 +140,18 @@ function board:select(stone)
   end
 end
 
-
 -- MODULE ---------------------------------------------------------------------
 function board:wrap()
+  local typ   = require('src.lua-cor.typ')
+  local wrp   = require('src.lua-cor.wrp')
+  local space_board = require('src.model.space.board')
+  local is    = {'board', typ.new_is(board)}
   local ex    = {'exboard', typ.new_ex(board)}
-  local pos = {'pos', vec}
-  local id = {'id', typ.str}
+  local pos   = {'pos', vec}
+  local id    = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.fn(log.trace, board, 'set_ability',  ex, pos, id, count)
+  wrp.fn(log.info, board, 'new',                 is, {'space_board', typ.new_is(space_board)})
+  wrp.fn(log.trace, board, 'set_ability',        ex, pos, id, count)
   wrp.fn(log.info, board, 'piece_add_power',     ex, pos, {'name', typ.str}, count)
   wrp.fn(log.info, board, 'piece_set_color',     ex, pos, {'pid', 'playerid'})
   wrp.fn(log.info, board, 'add_spot_comp', ex, pos, id, count)

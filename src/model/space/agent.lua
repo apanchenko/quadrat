@@ -1,8 +1,8 @@
 local piece_agent = require('src.model.piece.agent')
-local obj         = require('src.lua-cor.obj')
+local space_board = require('src.model.space.board')
 
 -- space interface for agent
-local agent = obj:extend('space_agent')
+local agent = space_board:extend('space_agent')
 
 -- private
 local _space = {}
@@ -10,7 +10,7 @@ local _pid = {}
 
 -- constructor
 function agent:new(space, pid)
-  self = obj.new(self)
+  self = space_board.new(self, space)
   self[_space] = space
   self[_pid] = pid
   return self
@@ -24,11 +24,6 @@ end
 --
 function agent:get_my_pid()
   return self[_pid]
-end
-
---
-function agent:get_size()
-  return self[_space].size
 end
 
 --
@@ -55,11 +50,6 @@ function agent:move(from, to)
   self[_space]:move(from, to)
 end
 
---
-function agent:add_listener(listener)
-  self[_space].own_evt.add(listener)
-end
-
 -- wrap functions
 function agent:wrap()
   local wrp = require('src.lua-cor.wrp')
@@ -69,18 +59,16 @@ function agent:wrap()
   local playerid = require('src.model.playerid')
   local space   = require('src.model.space.space')
 
-  local is = {'space_agent', typ.new_is(agent)}
-  local ex = {'space_agent', typ.new_ex(agent)}
+  local is  = {'space_agent', typ.new_is(agent)}
+  local ex  = {'space_agent', typ.new_ex(agent)}
   local pid = {'pid', typ.new_is(playerid)}
   local pos = {'pos', typ.new_is(vec)}
 
   wrp.fn(log.trace, agent, 'new',           is, {'space', typ.meta(space)}, pid)
-  wrp.fn(log.trace, agent, 'get_size',      ex)
   wrp.fn(log.trace, agent, 'has_jade',      ex, pos)
   wrp.fn(log.trace, agent, 'get_piece',     ex, pos)
   wrp.fn(log.trace, agent, 'can_move',      ex, {'from', vec}, {'to', vec})
   wrp.fn(log.trace, agent, 'move',          ex, {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, agent, 'add_listener',  ex, {'listener', typ.tab})
 end
 
 return agent
