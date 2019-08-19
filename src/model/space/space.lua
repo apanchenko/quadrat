@@ -214,26 +214,26 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function space:wrap()
-  local sis   = {'space', typ.new_is(space)}
-  local sex   = {'space', typ.new_ex(space)}
+  --local sis   = {'space', typ.new_is(space)}
+  local ex   = {'space', typ.new_ex(space)}
 
    --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
   wrp.fn(log.trace, space, 'setup', {'space', typ.meta(space)})
-  wrp.fn(log.info, space, 'width',        sex)
-  wrp.fn(log.info, space, 'height',       sex)
-  wrp.fn(log.trace, space, 'row',         sex,  {'place', typ.num})
-  wrp.fn(log.info, space, 'col',          sex,  {'place', typ.num})
-  wrp.fn(log.info, space, 'pos',          sex,  {'index', typ.num})
-  wrp.fn(log.info, space, 'index',        sex,  {'vec', vec})
-  wrp.fn(log.info, space, 'spot',         sex,  {'pos', vec})
-  wrp.fn(log.info, space, 'each_piece',   sex,  {'fn', typ.fun})
-  wrp.fn(log.info, space, 'each_spot',    sex,  {'fn', typ.fun})
-  wrp.fn(log.info, space, 'count_pieces', sex)
-  wrp.fn(log.info, space, 'piece',        sex,  {'pos', vec})
-  wrp.fn(log.info, space, 'who_move',     sex)
-  wrp.fn(log.info, space, 'can_move',     sex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, space, 'move',        sex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, space, 'use',         sex,  {'pos', vec}, {'ability_name', typ.str})
+  wrp.fn(log.info, space, 'width',        ex)
+  wrp.fn(log.info, space, 'height',       ex)
+  wrp.fn(log.trace, space, 'row',         ex,  {'place', typ.num})
+  wrp.fn(log.info, space, 'col',          ex,  {'place', typ.num})
+  wrp.fn(log.info, space, 'pos',          ex,  {'index', typ.num})
+  wrp.fn(log.info, space, 'index',        ex,  {'vec', vec})
+  wrp.fn(log.info, space, 'spot',         ex,  {'pos', vec})
+  wrp.fn(log.info, space, 'each_piece',   ex,  {'fn', typ.fun})
+  wrp.fn(log.info, space, 'each_spot',    ex,  {'fn', typ.fun})
+  wrp.fn(log.info, space, 'count_pieces', ex)
+  wrp.fn(log.info, space, 'piece',        ex,  {'pos', vec})
+  wrp.fn(log.info, space, 'who_move',     ex)
+  wrp.fn(log.info, space, 'can_move',     ex,  {'from', vec}, {'to', vec})
+  wrp.fn(log.trace, space, 'move',        ex,  {'from', vec}, {'to', vec})
+  wrp.fn(log.trace, space, 'use',         ex,  {'pos', vec}, {'ability_name', typ.str})
 end
 
 -- return module

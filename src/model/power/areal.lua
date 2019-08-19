@@ -1,8 +1,4 @@
-local ass       = require 'src.lua-cor.ass'
-local log       = require('src.lua-cor.log').get('mode')
-local typ       = require 'src.lua-cor.typ'
-local wrp       = require 'src.lua-cor.wrp'
-local power     = require 'src.model.power.power'
+local power     = require('src.model.power.power')
 
 -- areal power
 local areal = power:extend('areal')
@@ -10,6 +6,10 @@ areal.is_areal = true
 
 --
 function areal:wrap()
+  local log   = require('src.lua-cor.log').get('mode')
+  local typ   = require('src.lua-cor.typ')
+  local wrp   = require('src.lua-cor.wrp')
+
   local is    = {'areal', typ.new_is(areal)}
   local ex    = {'exareal', typ.new_ex(areal)}
   local piece = {'piece'}
