@@ -41,7 +41,6 @@ function board:new(space_board)
   --self.view.walk_tree()
 
   self.view.anchorChildren = true -- center on screen
-  lay.insert(env.battle.view, self.view, cfg.view.board)
   return self
 end
 

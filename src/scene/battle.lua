@@ -19,7 +19,7 @@ local battle = composer.newScene()
 
 --
 function battle.goto_robots()
-  cfg.switching.params = {white = 'random', black = 'random'}
+  cfg.switching.params = {white = 'bot', black = 'random'}
   composer.gotoScene('src.scene.battle', cfg.switching)
   return true
 end
@@ -61,8 +61,9 @@ function battle:create(event)
   env.space.own_evt.add(self)
   env.battle = self
 
-  self.space_board = space_board:new(env.space)
-  self.board = board:new(self.space_board)
+  local space_board = space_board:new(env.space)
+  self.board = board:new(space_board)
+  lay.insert(self.view, self.board.view, cfg.board.view)
 
   local space_white = space_agent:new(env.space, playerid.white)
   local space_black = space_agent:new(env.space, playerid.black)
@@ -76,9 +77,6 @@ function battle:create(event)
 
   env.space:setup() -- start playing
 
-
-
-  --env.board.view.walk_tree()
 end
 
 --

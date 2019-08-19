@@ -17,7 +17,14 @@ local cfg = {
   board =
   {
     cols = 7,
-    rows = 7
+    rows = 7,
+    view =
+    {
+      vx = 0,
+      vy = 15,
+      vw = 100,
+      z = 4
+    }
   },
 
   switching =

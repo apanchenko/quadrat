@@ -21,7 +21,7 @@ end
 --
 function bot:move(pid)
   if self[_space]:is_my_move() then
-    timer.performWithDelay(1000, function() self:move_async() end)
+    timer.performWithDelay(100, function() self:move_async() end)
   end
 end
 
@@ -90,33 +90,6 @@ function bot:move_async()
     log.trace('cannot find move')
   end
 
-end
-
--- Position evaluation
--- S = friends - jades - enemies - jaded_enemies
-function bot:evaluate()
-  local space = self[_space]
-  local evaluation = 0
-  space:iterate_grid(function(pos)
-    local piece = space:get_piece(pos)
-
-    -- friend or enemy piece
-    if piece:is_friend() then
-      evaluation = evaluation + 1
-    else
-      evaluation = evaluation - 1
-
-      -- jaded enemy
-      if not piece:get_jades():is_empty() then
-        evaluation = evaluation - 1
-      end
-    end
-
-    -- jade
-    if space:has_jade(pos) then
-      evaluation = evaluation - 1
-    end
-  end)
 end
 
 --

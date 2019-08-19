@@ -27,14 +27,6 @@ cfg.view.battle = {
   },
 }
 
-cfg.view.board =
-{
-  vx = 0,
-  vy = 15,
-  vw = 100,
-  z = 4
-}
-
 cfg.view.player =
 {
   z = 2,
@@ -73,7 +65,7 @@ cfg.view.stone = {
 
 cfg.view.abilities = {
   vx = 9,
-  y = (cfg.view.vh * cfg.view.board.vy) + (cfg.view.vw * cfg.view.board.vw) + cfg.view.vh,
+  y = (cfg.view.vh * 15) + (cfg.view.vw * 100) + cfg.view.vh,
   z = 2,
   button =
   {
