@@ -62,7 +62,7 @@ function battle:create(event)
   env.battle = self
 
   local space_board = space_board:new(env.space)
-  self.board = board:new(space_board)
+  self.board = board:new(space_board, self.view)
   lay.insert(self.view, self.board.view, cfg.board.view)
 
   local space_white = space_agent:new(env.space, playerid.white)

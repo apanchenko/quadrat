@@ -10,7 +10,6 @@ log.get('scen').disable()
 
 --log.get('view').disable()
 env.cfg = require('src.cfg')
-env.log = log
 
 require('src._pack')
   :wrap()

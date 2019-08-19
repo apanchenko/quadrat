@@ -13,20 +13,23 @@ local com      = require 'src.lua-cor.com'
 local board = obj:extend('board')
 
 -- private
-local space = {}
+local _space = {}
+local _battle_view = {}
 
-function board:new(space_board)
+function board:new(space_board, battle_view)
   self = obj.new(self, com())
-  self[space] = space_board
+  self[_space] = space_board
+  self[_battle_view] = battle_view
+
   self.on_change = evt:new()
 
-  self[space]:add_listener(self)
+  self[_space]:add_listener(self)
 
   self.view = lay.new_layout().new_group()
 
   self.grid = {}
 
-  local size = self[space]:get_size()
+  local size = self[_space]:get_size()
   size:iterate_grid(function(pos)
     local cell = Cell:new(pos)
     local param = cell.pos * cfg.view.cell.size
@@ -47,7 +50,7 @@ end
 -- POSITION--------------------------------------------------------------------
 -- peek piece from cell by position
 function board:cell(pos)
-  return self.grid[pos.x * self[space]:get_size().x + pos.y]
+  return self.grid[pos.x * self[_space]:get_size().x + pos.y]
 end
 
 --
@@ -79,7 +82,7 @@ end
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
   local stone = Stone:new(env, color) -- create a new stone
-  stone:puton(self) -- put piece on board
+  stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)
 end
@@ -149,7 +152,7 @@ function board:wrap()
   local pos   = {'pos', vec}
   local id    = {'id', typ.str}
   local count = {'count', typ.num}
-  wrp.fn(log.info, board, 'new',                 is, {'space_board', typ.new_is(space_board)})
+  wrp.fn(log.info, board, 'new',                 is, {'space_board', typ.new_is(space_board)}, {'board_view', typ.tab})
   wrp.fn(log.trace, board, 'set_ability',        ex, pos, id, count)
   wrp.fn(log.info, board, 'piece_add_power',     ex, pos, {'name', typ.str}, count)
   wrp.fn(log.info, board, 'piece_set_color',     ex, pos, {'pid', 'playerid'})

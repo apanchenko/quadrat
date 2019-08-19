@@ -58,7 +58,7 @@ function power:wrap()
   local ex    = {'expower', typ.new_ex(power)}
   wrp.fn(log.trace, power, 'new',      is, {'piece'}, {'def', typ.tab})
   wrp.fn(log.trace, power, 'add_to',   ex, {'powers', typ.tab})
-  wrp.fn(log.trace, power, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
+  wrp.fn(log.info, power, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
 end
 
 return power

@@ -4,6 +4,7 @@
 
 ### Core
 
+- move images to separate resource folder
 - local player side always bottom
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
