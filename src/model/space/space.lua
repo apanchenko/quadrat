@@ -9,6 +9,7 @@ local obj       = require 'src.lua-cor.obj'
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
 local arr       = require 'src.lua-cor.arr'
+local bro       = require('src.lua-cor.bro')
 
 local space = obj:extend('space')
 
@@ -26,7 +27,8 @@ function space:new(cols, rows, seed)
     pid   = playerid.white, -- who moves now
     move_count = 0, -- number of moves from start
     own_evt = evt:new(), -- owner events - full information
-    opp_evt = evt:new() -- events from opponent - hidden information
+    opp_evt = evt:new(), -- events from opponent - hidden information
+    set_move = bro:new('set_move')
   })
 
   -- fill grid
@@ -46,6 +48,14 @@ function space:height()     return self.rows end
 function space:row(place)   return place % self.cols end
 -- place // self.cols
 function space:col(place)   return (place - (place % self.cols)) / self.cols end
+
+-- EVENTS------------------------------------------------------------------------
+function space:listen_set_move(listener)
+  self.set_move:add(listener)
+end
+function space:unlisten_set_move(listener)
+  self.set_move:remove(listener)
+end
 
 -- send private event
 function space:whisper(event, ...)
@@ -76,6 +86,7 @@ function space:setup()
     self:spot(vec(x, self.rows - 2)):spawn_piece(playerid.black)
   end
   self:yell('move', self.pid) -- notify color to move
+  self.set_move(self.pid)
 end
 -- position vector from grid index
 function space:pos(index)   return vec(self:col(index), self:row(index)) end
@@ -194,6 +205,7 @@ function space:move(fr, to)
   end
 
   self:yell('move', self.pid) -- notify color to move
+  self.set_move(self.pid)
 end
 
 -- use ability

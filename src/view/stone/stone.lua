@@ -16,9 +16,10 @@ local _abilities = {}
 local _ability_view = {}
 local _view = {}
 local _battle_view = {}
+local _piece = {}
 
 --INIT-------------------------------------------------------------------------
-function stone:new(env, pid)
+function stone:new(env, pid, piece_friend)
   self = obj.new(self, com())
   self.env = env
   self[_view] = self.com_add(layout.new_group())
@@ -29,9 +30,10 @@ function stone:new(env, pid)
 
   self[_view].show('stone')
   self[_abilities] = {}
+  self[_piece] = piece_friend
+  self[_piece]:listen_set_move(self)
 
   self:set_color(pid)
-  env.space.opp_evt.add(self)
   return self
 end
 
@@ -42,8 +44,11 @@ end
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
+  self[_piece]:unlisten_set_move(self)
+  self[_piece] = nil
   self[_view]:removeSelf()
   self[_view] = nil
+  self[_abilities] = nil
   map.invoke_colon(self.powers, 'destroy')
   self.powers = nil
   self.board = nil
@@ -51,7 +56,7 @@ function stone:putoff()
 end
 
 --
-function stone:__tostring() 
+function stone:__tostring()
   local s = "stone["
   if self._pos then
     s = s.. self._pos.x.. ','.. self._pos.y.. ','
@@ -94,9 +99,7 @@ function stone:puton(board, battle_view)
 end
 
 -- space event
-function stone:move_wrap_before(pid)
-end
-function stone:move(pid)
+function stone:set_move(pid)
   local my_active_view = 'active_'..tostring(pid)
   if self:get_pid() == pid then
     self[_view].show(my_active_view)
@@ -138,7 +141,7 @@ function stone:show_abilities()
       opts.label = opts.label.. ' '.. count
     end
     opts.onRelease = function(event)
-      self.env.space:use(self:pos(), event.target.id)
+      self[_piece]:use_jade(event.target.id)
       return true
     end
     --log.trace(opts.label)
@@ -216,7 +219,7 @@ end
 -- touch listener function
 function stone:touch(event)
   -- do not touch opponent stones
-  if self.env.space:who_move() ~= self.pid then
+  if not self[_piece]:is_my_move() then
     log.trace('not my move')
     return true
   end
@@ -233,7 +236,7 @@ function stone:touch(event)
   if event.phase == "moved" then
     local proj = self:touch_moved(event)
 
-    if self.env.space:can_move(self._pos, proj) then
+    if self[_piece]:can_move(proj) then
       self:create_project(proj)
     else
       self:remove_project()
@@ -244,7 +247,7 @@ function stone:touch(event)
   if event.phase == "ended" or event.phase == "cancelled" then
     self:set_drag(nil)
     if self.proj then
-      self.env.space:move(self._pos, self.proj)
+      self[_piece]:move(self.proj)
       self.board:select(nil) -- deselect any
     else
       if self.isSelected then
@@ -357,22 +360,23 @@ end
 
 --
 function stone:wrap()
-  local typ         = require 'src.lua-cor.typ'
-  local wrp         = require 'src.lua-cor.wrp'
+  local typ         = require('src.lua-cor.typ')
+  local wrp         = require('src.lua-cor.wrp')
+  local piece_friend = require('src.model.piece.friend')
 
   local event = {'event', typ.tab, map.tostring}
   local is    = {'stone', typ.new_is(stone)}
   local ex    = {'self', typ.new_ex(stone)}
   local pid   = {'pid', 'playerid'}
 
-  wrp.fn(log.trace, stone,  'new',            is, {'env'}, pid)
+  wrp.fn(log.trace, stone,  'new',            is, {'env'}, pid, {'piece_friend', piece_friend})
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
   wrp.fn(log.trace, stone,  'set_color',      ex, {'playerid'})
   wrp.fn(log.info,  stone,  'get_pid',        ex)
   wrp.fn(log.trace, stone,  'puton',          ex, {'board'}, {'battle_view', typ.tab})
   wrp.fn(log.trace, stone,  'putoff',         ex)
-  wrp.fn(log.trace, stone,  'move',           ex, pid)
+  wrp.fn(log.trace, stone,  'set_move',       ex, pid)
   wrp.fn(log.trace, stone,  'pos',            ex)
   wrp.fn(log.trace, stone,  'show_aura',      ex)
   wrp.fn(log.trace, stone,  'set_ability',    ex, {'id', typ.str}, {'count', typ.num})

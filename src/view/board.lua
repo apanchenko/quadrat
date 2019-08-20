@@ -9,6 +9,7 @@ local evt      = require 'src.lua-cor.evt'
 local env      = require 'src.lua-cor.env'
 local arr      = require 'src.lua-cor.arr'
 local com      = require 'src.lua-cor.com'
+local space_agent = require('src.model.space.agent')
 
 local board = obj:extend('board')
 
@@ -81,7 +82,8 @@ end
 
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
-  local stone = Stone:new(env, color) -- create a new stone
+  local space = space_agent:new(env.space, color)
+  local stone = Stone:new(env, color, space:get_piece(pos)) -- create a new stone
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)
@@ -152,6 +154,7 @@ function board:wrap()
   local pos   = {'pos', vec}
   local id    = {'id', typ.str}
   local count = {'count', typ.num}
+
   wrp.fn(log.info, board, 'new',                 is, {'space_board', typ.new_is(space_board)}, {'board_view', typ.tab})
   wrp.fn(log.trace, board, 'set_ability',        ex, pos, id, count)
   wrp.fn(log.info, board, 'piece_add_power',     ex, pos, {'name', typ.str}, count)
