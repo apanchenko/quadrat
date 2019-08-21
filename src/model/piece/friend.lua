@@ -17,14 +17,6 @@ function piece_friend:new(piece_model, space_agent)
   return self
 end
 
---
-function piece_friend:listen_set_move(listener)
-  self[_space]:listen_set_move(listener)
-end
-function piece_friend:unlisten_set_move(listener)
-  self[_space]:unlisten_set_move(listener)
-end
-
 -- override enemy:is_friend
 function piece_friend:is_friend()
   return true

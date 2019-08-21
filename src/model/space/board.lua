@@ -24,11 +24,8 @@ function space_board:add_listener(listener)
 end
 
 --
-function space_board:listen_set_move(listener)
-  self[_space]:listen_set_move(listener)
-end
-function space_board:unlisten_set_move(listener)
-  self[_space]:unlisten_set_move(listener)
+function space_board:listen_set_move(listener, subscribe)
+  self[_space]:listen_set_move(listener, subscribe)
 end
 
 -- wrap functions
@@ -44,7 +41,7 @@ function space_board:wrap()
   wrp.fn(log.info, space_board, 'new',           is, {'space', typ.meta(space)})
   wrp.fn(log.info, space_board, 'get_size',      ex)
   wrp.fn(log.trace, space_board, 'add_listener',  ex, {'listener', typ.tab})
-  wrp.fn(log.trace, space_board, 'listen_set_move',  ex, {'listener', typ.tab})
+  wrp.fn(log.trace, space_board, 'listen_set_move',  ex, {'listener', typ.tab}, {'subscribe', typ.boo})
 end
 
 return space_board

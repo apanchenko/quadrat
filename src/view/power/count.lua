@@ -10,7 +10,7 @@ local cfg         = require 'src.cfg'
 local count = obj:extend('view.power.count')
 
 -- constructor
-function count:new(env, stone, name, count)
+function count:new(stone, id, count)
   self = obj.new(self)
   self.count = count
   self.text = lay.new_text(stone:view(), {x=0, y=0, z=4, font=cfg.font, text=tostring(count), fontSize=22})
@@ -35,7 +35,7 @@ end
 --MODULE-----------------------------------------------------------------------
 function count:wrap()
   local ex    = {'excount', typ.new_ex(count)}
-  wrp.fn(log.trace, count, 'new',        ex, {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.fn(log.trace, count, 'new',        ex, {'stone'}, {'name', typ.str}, {'count', typ.num})
   wrp.fn(log.trace, count, 'set_count',  ex, {'count', typ.num})
 end
 

@@ -1,12 +1,9 @@
 local obj       = require 'src.lua-cor.obj'
-local arr       = require 'src.lua-cor.arr'
 local vec       = require 'src.lua-cor.vec'
-local map       = require 'src.lua-cor.map'
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local typ       = require 'src.lua-cor.typ'
 local wrp       = require 'src.lua-cor.wrp'
-local cfg       = require 'src.model.cfg'
 local cnt       = require 'src.lua-cor.cnt'
 local piece     = require 'src.model.piece.piece'
 local jade      = require 'src.model.jade'

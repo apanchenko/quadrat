@@ -1,14 +1,14 @@
 local obj   = require('src.lua-cor.obj')
 
 -- enemy piece interface for player
-local enemy = obj:extend('piece_enemy')
+local piece_foe = obj:extend('piece_enemy')
 
 -- private
 local _piece = {}
 local _space = {}
 
 --
-function enemy:new(piece_model, space_agent)
+function piece_foe:new(piece_model, space_agent)
   self = obj.new(self)
   self[_piece] = piece_model
   self[_space] = space_agent
@@ -16,27 +16,32 @@ function enemy:new(piece_model, space_agent)
 end
 
 --
-function enemy:get_pid()
+function piece_foe:listen_set_move(listener, subscribe)
+  self[_space]:listen_set_move(listener, subscribe)
+end
+
+--
+function piece_foe:get_pid()
   return self[_space]:get_my_pid()
 end
 
 --
-function enemy:is_friend()
+function piece_foe:is_friend()
   return false
 end
 
 -- is enemy piece jaded
-function enemy:is_jaded()
+function piece_foe:is_jaded()
   return not self[_piece].jades_cnt:is_empty()
 end
 
 --
-function enemy:is_jump_protected()
+function piece_foe:is_jump_protected()
   return self[_piece]:is_jump_protected()
 end
 
 -- wrap functions
-function enemy:wrap()
+function piece_foe:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
   local vec = require('src.lua-cor.vec')
@@ -44,14 +49,14 @@ function enemy:wrap()
   local piece_model = require('src.model.piece.piece')
   local space_agent = require('src.model.space.agent')
 
-  local is = {'piece_agent', typ.new_is(enemy)}
-  local ex = {'piece_agent', typ.new_ex(enemy)}
+  local is = {'piece_agent', typ.new_is(piece_foe)}
+  local ex = {'piece_agent', typ.new_ex(piece_foe)}
 
-  wrp.fn(log.info, enemy, 'new',       is, {'piece_model', piece_model}, {'space_agent', space_agent})
-  wrp.fn(log.info, enemy, 'get_pid',   ex)
-  wrp.fn(log.info, enemy, 'is_friend', ex)
-  wrp.fn(log.info, enemy, 'is_jaded',  ex)
-  wrp.fn(log.info, enemy, 'is_jump_protected', ex)
+  wrp.fn(log.info, piece_foe, 'new',       is, {'piece_model', piece_model}, {'space_agent', space_agent})
+  wrp.fn(log.info, piece_foe, 'get_pid',   ex)
+  wrp.fn(log.info, piece_foe, 'is_friend', ex)
+  wrp.fn(log.info, piece_foe, 'is_jaded',  ex)
+  wrp.fn(log.info, piece_foe, 'is_jump_protected', ex)
 end
 
-return enemy
+return piece_foe

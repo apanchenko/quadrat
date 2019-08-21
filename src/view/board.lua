@@ -83,7 +83,7 @@ end
 -- PIECE -----------------------------------------------------------------------
 function board:spawn_piece(color, pos)
   local space = space_agent:new(env.space, color)
-  local stone = Stone:new(env, color, space:get_piece(pos)) -- create a new stone
+  local stone = Stone:new(env, space:get_piece(pos)) -- create a new stone
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.on_change:call('on_spawn_stone', stone)

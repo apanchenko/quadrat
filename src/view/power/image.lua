@@ -7,12 +7,12 @@ local image = obj:extend('view.power.image')
 
 -- constructor
 -- create image with initial one count
-function image:new(env, stone, name)
+function image:new(stone, id)
   self = obj.new(self, {
     stone = stone,
-    name = name
+    name = id
   })
-  self.stone:view().show(name)
+  self.stone:view().show(id)
   return self
 end
 --
@@ -31,7 +31,7 @@ end
 --MODULE-----------------------------------------------------------------------
 function image:wrap()
   local ex    = {'eximage', typ.new_ex(image)}
-  wrp.fn(log.trace, image, 'new',        ex, {'env'}, {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.fn(log.trace, image, 'new',        ex, {'stone'}, {'name', typ.str}, {'count', typ.num})
   wrp.fn(log.trace, image, 'set_count',  ex, {'count', typ.num})
 end
 

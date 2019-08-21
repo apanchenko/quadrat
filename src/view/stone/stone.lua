@@ -1,13 +1,13 @@
-local vec         = require 'src.lua-cor.vec'
-local lay         = require 'src.lua-cor.lay'
-local ass         = require 'src.lua-cor.ass'
+local vec         = require('src.lua-cor.vec')
+local lay         = require('src.lua-cor.lay')
+local ass         = require('src.lua-cor.ass')
 local log         = require('src.lua-cor.log').get('view')
-local map         = require 'src.lua-cor.map'
-local obj         = require 'src.lua-cor.obj'
-local cfg         = require 'src.cfg'
-local powers      = require 'src.view.power.powers'
-local layout      = require 'src.view.stone.layout'
-local com         = require 'src.lua-cor.com'
+local map         = require('src.lua-cor.map')
+local obj         = require('src.lua-cor.obj')
+local com         = require('src.lua-cor.com')
+local powers      = require('src.view.power.powers')
+local layout      = require('src.view.stone.layout')
+local cfg         = require('src.cfg')
 
 local stone = obj:extend('stone')
 
@@ -19,7 +19,7 @@ local _battle_view = {}
 local _piece = {}
 
 --INIT-------------------------------------------------------------------------
-function stone:new(env, pid, piece_friend)
+function stone:new(env, piece_friend)
   self = obj.new(self, com())
   self.env = env
   self[_view] = self.com_add(layout.new_group())
@@ -31,9 +31,9 @@ function stone:new(env, pid, piece_friend)
   self[_view].show('stone')
   self[_abilities] = {}
   self[_piece] = piece_friend
-  self[_piece]:listen_set_move(self)
+  self[_piece]:listen_set_move(self, true)
 
-  self:set_color(pid)
+  self:set_color(self[_piece]:get_pid())
   return self
 end
 
@@ -44,7 +44,7 @@ end
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
-  self[_piece]:unlisten_set_move(self)
+  self[_piece]:listen_set_move(self, false)
   self[_piece] = nil
   self[_view]:removeSelf()
   self[_view] = nil
@@ -88,6 +88,11 @@ end
 --
 function stone:get_pid()
   return self.pid
+end
+
+--
+function stone:get_piece()
+  return self[_piece]
 end
 
 -- insert stone into group, with scale for dragging
@@ -201,7 +206,7 @@ end
 function stone:add_power(id, result_count)
   local power = self.powers[id]
   if power == nil then
-    self.powers[id] = powers[id]:new(self.env, self, id, result_count)
+    self.powers[id] = powers[id]:new(self, id, result_count)
   else
     self.powers[id] = power:set_count(result_count)
   end
@@ -369,7 +374,7 @@ function stone:wrap()
   local ex    = {'self', typ.new_ex(stone)}
   local pid   = {'pid', 'playerid'}
 
-  wrp.fn(log.trace, stone,  'new',            is, {'env'}, pid, {'piece_friend', piece_friend})
+  wrp.fn(log.trace, stone,  'new',            is, {'env'}, {'piece_friend', piece_friend})
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
   wrp.fn(log.trace, stone,  'set_color',      ex, {'playerid'})
