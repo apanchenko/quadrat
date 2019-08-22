@@ -49,7 +49,7 @@ function stone:putoff()
   self[_view]:removeSelf()
   self[_view] = nil
   self[_abilities] = nil
-  map.invoke_colon(self.powers, 'destroy')
+  map.invoke_self(self.powers, 'destroy')
   self.powers = nil
   self.board = nil
   self.com_destroy()

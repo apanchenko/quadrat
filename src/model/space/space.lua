@@ -51,11 +51,7 @@ function space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 -- EVENTS------------------------------------------------------------------------
 function space:listen_set_move(listener, subscribe)
-  if subscribe then
-    self.set_move:add(listener)
-  else
-    self.set_move:remove(listener)
-  end
+  self.set_move:listen(listener, subscribe)
 end
 
 -- send private event

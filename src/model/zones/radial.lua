@@ -1,10 +1,7 @@
-local ass       = require 'src.lua-cor.ass'
 local vec       = require 'src.lua-cor.vec'
 local obj       = require 'src.lua-cor.obj'
 local log       = require('src.lua-cor.log').get('mode')
-local arr       = require 'src.lua-cor.arr'
 local typ       = require 'src.lua-cor.typ'
-local cor       = require 'src.lua-cor.cor'
 
 local radial = obj:extend('radial')
 
@@ -25,11 +22,13 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function radial:wrap()
+  local wrp       = require 'src.lua-cor.wrp'
+
   local is   = {'radial', typ.new_is(radial)}
   local ex   = {'radial', typ.new_ex(radial)}
 
-  cor.wrp(log.info, radial, 'new',    is, {'pos', vec})
-  cor.wrp(log.info, radial, 'filter', ex, {'pos', vec})
+  wrp.fn(log.info, radial, 'new',    is, {'pos', vec})
+  wrp.fn(log.info, radial, 'filter', ex, {'pos', vec})
 end
 
 return radial
