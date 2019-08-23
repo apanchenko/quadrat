@@ -9,15 +9,11 @@ function areal:wrap()
   local log   = require('src.lua-cor.log').get('mode')
   local typ   = require('src.lua-cor.typ')
   local wrp   = require('src.lua-cor.wrp')
+  local spot = require('src.model.spot.spot')
+  local piece = require('src.model.piece.piece')
+  local ex = typ.new_ex(areal)
 
-  local is    = {'areal', typ.new_is(areal)}
-  local ex    = {'exareal', typ.new_ex(areal)}
-  local piece = {'piece'}
-  local spot  = {'spot'}
-  local def   = {'def', typ.tab}
-  local zone  = {'zone', typ.tab}
-
-  wrp.fn(log.trace, areal, 'new',             is, piece, def, zone)
+  wrp.fn(log.trace, areal, 'new',             areal, piece, typ.tab, typ.tab)
   wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot            )
   wrp.fn(log.trace, areal, 'apply_to_self',   ex                )
   wrp.fn(log.trace, areal, 'apply_to_friend', ex, spot            )

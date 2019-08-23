@@ -1,7 +1,4 @@
-local ass       = require 'src.lua-cor.ass'
-local wrp       = require 'src.lua-cor.wrp'
 local power     = require 'src.model.power.power'
-local typ         = require 'src.lua-cor.typ'
 local log = require('src.lua-cor.log').get('mode')
 
 -- @see parasite
@@ -32,8 +29,10 @@ end
 
 --
 function parasite_host:wrap()
-  local ex    = {'exparasite_host', typ.new_ex(parasite_host)}
-  wrp.fn(log.trace, parasite_host, 'on_add_jade', ex, {'jade'})
+  local wrp   = require('src.lua-cor.wrp')
+  local typ   = require('src.lua-cor.typ')
+  local ex    = typ.new_ex(parasite_host)
+  wrp.fn(log.trace, parasite_host, 'on_add_jade', ex, 'jade')
 end
 
 return parasite_host

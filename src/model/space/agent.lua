@@ -60,15 +60,12 @@ function space_agent:wrap()
   local playerid = require('src.model.playerid')
   local space   = require('src.model.space.space')
 
-  local is  = {'space_agent', typ.new_is(space_agent)}
-  local ex  = {'space_agent', typ.new_ex(space_agent)}
-  local pid = {'pid', typ.new_is(playerid)}
-  local pos = {'pos', typ.new_is(vec)}
+  local ex  = typ.new_ex(space_agent)
 
-  wrp.fn(log.info, space_agent, 'new',           is, {'space', typ.meta(space)}, pid)
-  wrp.fn(log.info, space_agent, 'get_piece',     ex, pos)
-  wrp.fn(log.info, space_agent, 'can_move',      ex, {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, space_agent, 'move',          ex, {'from', vec}, {'to', vec})
+  wrp.fn(log.info, space_agent, 'new',           space_agent, space, playerid)
+  wrp.fn(log.info, space_agent, 'get_piece',     ex, vec)
+  wrp.fn(log.info, space_agent, 'can_move',      ex, vec, vec)
+  wrp.fn(log.trace, space_agent, 'move',          ex, vec, vec)
 end
 
 return space_agent

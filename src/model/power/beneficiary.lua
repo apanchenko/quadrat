@@ -33,8 +33,8 @@ end
 
 --
 function beneficiary:wrap()
-  local is   = {'beneficiary', typ.new_is(beneficiary)}
-  wrp.fn(log.trace, beneficiary, 'new', is, {'piece'}, {'def', typ.tab})
+  local piece = require('src.model.piece.piece')
+  wrp.fn(log.trace, beneficiary, 'new', beneficiary, piece, typ.tab)
 end
 
 return beneficiary

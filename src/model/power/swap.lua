@@ -22,8 +22,8 @@ end
 
 --
 function swap:wrap()
-  local ex    = {'exswap', typ.new_ex(swap)}
-  wrp.fn(log.trace, swap, 'apply_to_spot', ex, {'spot'})
+  local ex    = typ.new_ex(swap)
+  wrp.fn(log.trace, swap, 'apply_to_spot', ex, 'spot')
 end
 
 return swap

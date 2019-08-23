@@ -23,8 +23,8 @@ end
 
 --
 function recruit:wrap()
-  local ex    = {'exrecruit', typ.new_ex(recruit)}
-  wrp.fn(log.trace, recruit, 'apply_to_spot', ex, {'spot'})
+  local ex    = typ.new_ex(recruit)
+  wrp.fn(log.trace, recruit, 'apply_to_spot', ex, 'spot')
 end
 
 return recruit

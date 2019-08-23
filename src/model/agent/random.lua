@@ -67,11 +67,11 @@ function random:wrap()
   local typ       = require 'src.lua-cor.typ'
 
   local space_agent = require('src.model.space.agent')
-  local is   = {'random', typ.new_is(random)}
-  local ex    = {'exrandom', typ.new_ex(random)}
+  local playerid = require('src.model.playerid')
+  local ex    = typ.new_ex(random)
 
-  wrp.fn(log.trace, random, 'new',        is, {'space_agent', typ.new_is(space_agent)})
-  wrp.fn(log.info, random, 'move',        ex, {'playerid'})
+  wrp.fn(log.trace, random, 'new',        random, space_agent)
+  wrp.fn(log.info, random, 'move',        ex, playerid)
   wrp.fn(log.trace, random, 'move_async', ex)
 end
 

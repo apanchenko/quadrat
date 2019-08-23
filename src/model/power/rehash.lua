@@ -38,11 +38,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function rehash:wrap()
-  local is = {'rehash', typ.new_is(rehash)}
-  local ex = {'ex', typ.new_ex(rehash)}
-
-  wrp.fn(log.trace, rehash, 'new',       is, {'piece'}, {'def', typ.tab})
-  wrp.fn(log.info, rehash, 'can_spawn', is)
+  wrp.fn(log.trace, rehash, 'new',       rehash, 'piece', typ.tab)
+  wrp.fn(log.info, rehash, 'can_spawn', rehash)
 end
 
 return rehash

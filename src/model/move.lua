@@ -31,10 +31,9 @@ function move:wrap()
   local typ = require('src.lua-cor.typ')
   local log = require('src.lua-cor.log')
 
-  local is   = {'move', typ.new_is(move)}
-  local ex   = {'move', typ.new_ex(move)}
+  local ex = typ.new_ex(move)
 
-  wrp.fn(log.info, move, 'new',        is)
+  wrp.fn(log.info, move, 'new',        move)
   wrp.fn(log.info, move, 'get_from',   ex)
   wrp.fn(log.info, move, 'get_to',     ex)
 end

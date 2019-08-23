@@ -66,9 +66,9 @@ end
 
 -- interface
 function lobby:wrap()
-  local ex    = {'exlobby', typ.new_ex(lobby)}
-  wrp.fn(log.trace, lobby, 'on_opponent',       ex, {'room_id', typ.num}, {'createdByMe', typ.boo})
-  wrp.fn(log.trace, lobby, 'on_opponent_error', ex, {'msg', typ.str})
+  local ex    = typ.new_ex(lobby)
+  wrp.fn(log.trace, lobby, 'on_opponent',       ex, typ.num, typ.boo)
+  wrp.fn(log.trace, lobby, 'on_opponent_error', ex, typ.str)
 end
 
 return lobby

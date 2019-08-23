@@ -12,9 +12,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function invisible:wrap()
-  local is    = {'is', typ.new_is(invisible)}
-
-  wrp.fn(log.info, invisible, 'can_spawn', is)
+  wrp.fn(log.info, invisible, 'can_spawn', invisible)
 end
 
 --

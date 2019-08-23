@@ -1,56 +1,49 @@
 local obj       = require 'src.lua-cor.obj'
-local typ       = require 'src.lua-cor.typ'
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local vec       = require 'src.lua-cor.vec'
-local wrp       = require 'src.lua-cor.wrp'
 local cnt       = require 'src.lua-cor.cnt'
-local playerid  = require 'src.model.playerid'
 
 --
 local piece = obj:extend('piece')
 
 -- interface
 function piece:wrap()
-  local is   = {'piece', typ.new_is(piece)}
-  local ex   = {'piece', typ.new_ex(piece)}
-  local space = {'space'}
-  local pid   = {'playerid'}
-  local jade  = {'jade'}
-  local from  = {'from', vec}
-  local to    = {'to', vec}
-  local id    = {'id', typ.str}
-  local count = {'count', typ.num}
-  local power = {'power'}
-  local name  = {'name', typ.str}
-  local fspot = {'fr', 'spot'}
-  local tspot = {'to', 'spot'}
+  local typ       = require 'src.lua-cor.typ'
+  local wrp       = require 'src.lua-cor.wrp'
+  local space     = require('src.model.space.space')
+  local jade      = require('src.model.jade')
+  local power     = require('src.model.power.power')
+  local spot      = require('src.model.spot.spot')
+  local playerid  = require('src.model.playerid')
+
+  local ex   = typ.new_ex(piece)
 
   -- piece
-  wrp.fn(log.trace, piece, 'new',            is, space, pid)
-  wrp.fn(log.trace, piece, 'set_color',      ex, pid)
+  wrp.fn(log.trace, piece, 'new',            piece, space, playerid)
+  wrp.fn(log.trace, piece, 'set_color',      ex, playerid)
   wrp.fn(log.trace, piece, 'die',            ex)
 
   -- position
   wrp.fn(log.info,  piece, 'get_pos',        ex)
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.fn(log.info, piece, 'can_move',        ex, from,  to)
-  wrp.fn(log.trace, piece, 'move_before',    ex, fspot, tspot)
-  wrp.fn(log.trace, piece, 'move',           ex, fspot, tspot)
-  wrp.fn(log.trace, piece, 'move_after',     ex, fspot, tspot)
+  wrp.fn(log.info, piece, 'can_move',        ex, vec, vec)
+  wrp.fn(log.trace, piece, 'move_before',    ex, spot, spot)
+  wrp.fn(log.trace, piece, 'move',           ex, spot, spot)
+  wrp.fn(log.trace, piece, 'move_after',     ex, spot, spot)
   
   -- jades
   wrp.fn(log.trace, piece, 'add_jade',       ex, jade)
-  wrp.fn(log.trace, piece, 'remove_jade',    ex, id, count)
-  wrp.fn(log.trace, piece, 'use_jade',       ex, id)
-  wrp.fn(log.trace, piece, 'each_jade',      ex, {'fn', typ.fun})
+  wrp.fn(log.trace, piece, 'remove_jade',    ex, typ.str, typ.num)
+  wrp.fn(log.trace, piece, 'use_jade',       ex, typ.str)
+  wrp.fn(log.trace, piece, 'each_jade',      ex, typ.fun)
   wrp.fn(log.trace, piece, 'clear_jades',    ex)
 
   -- powers
-  wrp.fn(log.trace, piece, 'count_power',    ex, id)
+  wrp.fn(log.trace, piece, 'count_power',    ex, typ.str)
   wrp.fn(log.trace, piece, 'add_power',      ex, power)
-  wrp.fn(log.trace, piece, 'remove_power',   ex, id)
-  wrp.fn(log.trace, piece, 'decrease_power', ex, name)
+  wrp.fn(log.trace, piece, 'remove_power',   ex, typ.str)
+  wrp.fn(log.trace, piece, 'decrease_power', ex, typ.str)
 end
 
 -- create a piece

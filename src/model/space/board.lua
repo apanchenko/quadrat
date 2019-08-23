@@ -60,16 +60,15 @@ function space_board:wrap()
   local space   = require('src.model.space.space')
   local playerid   = require('src.model.playerid')
 
-  local is  = {'space_board', typ.new_is(space_board)}
-  local ex  = {'space_board', typ.new_ex(space_board)}
+  local ex  = typ.new_ex(space_board)
 
-  wrp.fn(log.info, space_board, 'new',           is, {'space', typ.meta(space)})
+  wrp.fn(log.info, space_board, 'new',           space_board, space)
   wrp.fn(log.info, space_board, 'get_size',      ex)
-  wrp.fn(log.info, space_board, 'has_jade',      ex, {'pos', vec})
-  wrp.fn(log.trace, space_board, 'add_listener',  ex, {'listener', typ.tab})
-  wrp.fn(log.trace, space_board, 'listen_set_move',  ex, {'listener', typ.tab}, {'subscribe', typ.boo})
+  wrp.fn(log.info, space_board, 'has_jade',      ex, vec)
+  wrp.fn(log.trace, space_board, 'add_listener',  ex, typ.tab)
+  wrp.fn(log.trace, space_board, 'listen_set_move',  ex, typ.tab, typ.boo)
   wrp.fn(log.info, space_board, 'get_move_pid',      ex)
-  wrp.fn(log.info,  space_board, 'get_support_count', ex, {'pos', vec}, {'pid', playerid})
+  wrp.fn(log.info,  space_board, 'get_support_count', ex, vec, playerid)
 end
 
 return space_board

@@ -1,8 +1,4 @@
-local ass     = require 'src.lua-cor.ass'
-local wrp     = require 'src.lua-cor.wrp'
-local typ         = require 'src.lua-cor.typ'
 local power   = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('mode')
 
 local sphere = power:extend('Sphere')
 
@@ -20,8 +16,13 @@ end
 
 --
 function sphere:wrap()
-  local ex    = {'exsphere', typ.new_ex(sphere)}
-  wrp.fn(log.trace, sphere, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
+  local wrp = require 'src.lua-cor.wrp'
+  local typ = require 'src.lua-cor.typ'
+  local vec = require 'src.lua-cor.vec'
+  local log = require('src.lua-cor.log').get('mode')
+
+  local ex    = typ.new_ex(sphere)
+  wrp.fn(log.trace, sphere, 'can_move', ex, vec, vec)
 end
 
 --

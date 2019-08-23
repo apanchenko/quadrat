@@ -135,8 +135,7 @@ Runtime:addEventListener('resize', function(event) battle.resize(event) end)
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
 function battle:wrap()
-  local is   = {'battle', typ.new_is(battle)}
-  wrp.fn(log.info, battle, 'move', is, {'playerid'})
+  wrp.fn(log.info, battle, 'move', battle, playerid)
 end
 
 return battle

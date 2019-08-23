@@ -224,25 +224,25 @@ end
 -- wrap functions
 function space:wrap()
   --local sis   = {'space', typ.new_is(space)}
-  local ex   = {'space', typ.new_ex(space)}
+  local ex   = typ.new_ex(space)
 
    --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
-  wrp.fn(log.trace, space, 'setup', {'space', typ.meta(space)})
+  wrp.fn(log.trace, space, 'setup',       space)
   wrp.fn(log.info, space, 'width',        ex)
   wrp.fn(log.info, space, 'height',       ex)
-  wrp.fn(log.trace, space, 'row',         ex,  {'place', typ.num})
-  wrp.fn(log.info, space, 'col',          ex,  {'place', typ.num})
-  wrp.fn(log.info, space, 'pos',          ex,  {'index', typ.num})
-  wrp.fn(log.info, space, 'index',        ex,  {'vec', vec})
-  wrp.fn(log.info, space, 'spot',         ex,  {'pos', vec})
-  wrp.fn(log.info, space, 'each_piece',   ex,  {'fn', typ.fun})
-  wrp.fn(log.info, space, 'each_spot',    ex,  {'fn', typ.fun})
+  wrp.fn(log.trace, space, 'row',         ex,  typ.num)
+  wrp.fn(log.info, space, 'col',          ex,  typ.num)
+  wrp.fn(log.info, space, 'pos',          ex,  typ.num)
+  wrp.fn(log.info, space, 'index',        ex,  vec)
+  wrp.fn(log.info, space, 'spot',         ex,  vec)
+  wrp.fn(log.info, space, 'each_piece',   ex,  typ.fun)
+  wrp.fn(log.info, space, 'each_spot',    ex,  typ.fun)
   wrp.fn(log.info, space, 'count_pieces', ex)
-  wrp.fn(log.info, space, 'piece',        ex,  {'pos', vec})
-  wrp.fn(log.info, space, 'get_move_pid',     ex)
-  wrp.fn(log.info, space, 'can_move',     ex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, space, 'move',        ex,  {'from', vec}, {'to', vec})
-  wrp.fn(log.trace, space, 'use',         ex,  {'pos', vec}, {'ability_name', typ.str})
+  wrp.fn(log.info, space, 'piece',        ex,  vec)
+  wrp.fn(log.info, space, 'get_move_pid', ex)
+  wrp.fn(log.info, space, 'can_move',     ex,  vec, vec)
+  wrp.fn(log.trace, space, 'move',        ex,  vec, vec)
+  wrp.fn(log.trace, space, 'use',         ex,  vec, typ.str)
 end
 
 -- return module

@@ -47,13 +47,11 @@ function invisible:wrap()
   local wrp         = require 'src.lua-cor.wrp'
   local log         = require('src.lua-cor.log').get('view')
 
-  local is   = {'invisible', typ.new_is(invisible)}
-  local ex    = {'exinvisible', typ.new_ex(invisible)}
-  local count = {'count', typ.num}
+  local ex    = typ.new_ex(invisible)
 
-  wrp.fn(log.trace, invisible, 'new',        is, {'stone'}, {'id', typ.str}, count)
-  wrp.fn(log.trace, invisible, 'set_count',  ex, count)
-  wrp.fn(log.trace, invisible, 'set_move',   ex, {'playerid'})
+  wrp.fn(log.trace, invisible, 'new',        invisible, 'stone', typ.str, typ.num)
+  wrp.fn(log.trace, invisible, 'set_count',  ex, typ.num)
+  wrp.fn(log.trace, invisible, 'set_move',   ex, 'playerid')
 end
 
 return invisible

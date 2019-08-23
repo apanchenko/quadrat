@@ -1,7 +1,4 @@
-local wrp       = require 'src.lua-cor.wrp'
-local typ       = require 'src.lua-cor.typ'
 local power     = require 'src.model.power.power'
-local log = require('src.lua-cor.log').get('mode')
 
 local x2 = power:extend('X2')
 
@@ -19,10 +16,11 @@ end
 
 --
 function x2:wrap()
-  local is   = {'x2', typ.new_is(x2)}
-  local ex   = {'x2', typ.new_ex(x2)}
-  
-  wrp.fn(log.trace, x2, 'new', is, {'piece'}, {'def', typ.tab})
+  local wrp       = require 'src.lua-cor.wrp'
+  local typ       = require 'src.lua-cor.typ'
+  local log = require('src.lua-cor.log').get('mode')
+
+  wrp.fn(log.trace, x2, 'new', x2, 'piece', typ.tab)
 end
 
 return x2

@@ -149,17 +149,16 @@ function board:wrap()
   local typ   = require('src.lua-cor.typ')
   local wrp   = require('src.lua-cor.wrp')
   local space_board = require('src.model.space.board')
-  local is    = {'board', typ.new_is(board)}
-  local ex    = {'exboard', typ.new_ex(board)}
-  local pos   = {'pos', vec}
-  local id    = {'id', typ.str}
-  local count = {'count', typ.num}
+  local playerid = require('src.model.playerid')
+  local ex    = typ.new_ex(board)
+  local id    = typ.str
+  local count = typ.num
 
-  wrp.fn(log.info, board, 'new',                 is, {'space_board', typ.new_is(space_board)}, {'board_view', typ.tab})
-  wrp.fn(log.trace, board, 'set_ability',        ex, pos, id, count)
-  wrp.fn(log.info, board, 'piece_add_power',     ex, pos, {'name', typ.str}, count)
-  wrp.fn(log.info, board, 'piece_set_color',     ex, pos, {'pid', 'playerid'})
-  wrp.fn(log.info, board, 'add_spot_comp', ex, pos, id, count)
+  wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab)
+  wrp.fn(log.trace, board, 'set_ability',        ex, vec, id, count)
+  wrp.fn(log.info, board, 'piece_add_power',     ex, vec, typ.str, count)
+  wrp.fn(log.info, board, 'piece_set_color',     ex, vec, playerid)
+  wrp.fn(log.info, board, 'add_spot_comp',       ex, vec, typ.str, typ.num)
 end
 
 return board

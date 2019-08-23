@@ -45,12 +45,10 @@ function user:wrap()
   local wrp = require 'src.lua-cor.wrp'
   local typ = require 'src.lua-cor.typ'
   local space_agent = require('src.model.space.agent')
+  local stone = require('src.view.stone.stone')
 
-  local is  = {'user', typ.new_is(user)}
-  local ex  = {'exuser', typ.new_ex(user)}
-
-  wrp.fn(log.trace, user, 'new',            is, {'space_agent', typ.new_is(space_agent)})
-  wrp.fn(log.trace, user, 'on_spawn_stone', ex, {'stone'})
+  wrp.fn(log.trace, user, 'new',            user, space_agent)
+  wrp.fn(log.trace, user, 'on_spawn_stone', typ.new_ex(user), stone)
 end
 
 return user

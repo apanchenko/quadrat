@@ -47,30 +47,30 @@ function net:new()
     end
   end
   wrp.fn(log.trace, client, 'onError',
-    {'client', typ.new_is(client)},
-    {'code', typ.num, function(code) return map.key(Client.PeerErrorCode, code) end},
-    {'msg', typ.str})
+    typ.new_is(client),
+    typ.num:add_tostr(function(code) return map.key(Client.PeerErrorCode, code) end),
+    typ.str)
 
   -- react to state change
   function client:onStateChange(state)
   end
 
-  local is   = {'client', typ.new_is(client)}
+  local is = typ.new_is(client)
 
-  wrp.fn(log.trace, client, 'onStateChange', is, {'state', typ.num, Client.StateToName})
+  wrp.fn(log.trace, client, 'onStateChange', is, typ.num:add_tostr(Client.StateToName))
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
   wrp.fn(log.trace, client, 'onOperationResponse', is,
-    {'errCode', typ.num},
-    {'errMsg', typ.str},
-    {'code', typ.num, function(code) return map.key(const.OperationCode, code) end},
-    {'content', typ.tab, map.tostring})
+    typ.num,
+    typ.str,
+    typ.num:add_tostr(function(code) return map.key(const.OperationCode, code) end),
+    typ.tab:add_tostr(map.tostring))
 
   client.logger:setLevel(photon.common.Logger.Level.WARN)
   client.sent_count = 0
   client.receive_count = 0
- 
+
   this.client = client
   return this
 end
@@ -158,9 +158,7 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function net:wrap()
-  local is   = {'net', typ.new_is(net)}
-
-  wrp.fn(log.trace, net, 'new', is)
+  wrp.fn(log.trace, net, 'new', net)
 end
 
 function net:test()

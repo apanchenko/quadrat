@@ -1,7 +1,4 @@
-local ass     = require 'src.lua-cor.ass'
 local log     = require('src.lua-cor.log').get('mode')
-local typ     = require 'src.lua-cor.typ'
-local wrp     = require 'src.lua-cor.wrp'
 local power   = require 'src.model.power.power'
 
 -- power with counter
@@ -49,10 +46,12 @@ end
 
 --
 function counted:wrap()
-  local is   = {'counted', typ.new_is(counted)}
-  local ex    = {'excounted', typ.new_ex(counted)}
+  local piece = require('src.model.piece.piece')
+  local typ  = require('src.lua-cor.typ')
+  local wrp  = require('src.lua-cor.wrp')
+  local ex   = typ.new_ex(counted)
 
-  wrp.fn(log.trace, counted, 'new',        is, {'piece'}, {'def', typ.tab})
+  wrp.fn(log.trace, counted, 'new',        counted, piece, typ.tab)
   wrp.fn(log.trace, counted, 'increase',   ex)
   wrp.fn(log.trace, counted, 'decrease',   ex)
   wrp.fn(log.info, counted, 'get_count',   ex)

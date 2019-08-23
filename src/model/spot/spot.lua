@@ -2,8 +2,6 @@ local obj       = require 'src.lua-cor.obj'
 local vec       = require 'src.lua-cor.vec'
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
-local typ       = require 'src.lua-cor.typ'
-local wrp       = require 'src.lua-cor.wrp'
 local cnt       = require 'src.lua-cor.cnt'
 local piece     = require 'src.model.piece.piece'
 local jade      = require 'src.model.jade'
@@ -13,26 +11,19 @@ local spot = obj:extend('spot')
 
 -- interface
 function spot:wrap()
-  local is   = {'spot', typ.new_is(spot)}
-  local ex   = {'spot', typ.new_ex(spot)}
-  local x     = {'x', typ.num}
-  local y     = {'y', typ.num}
-  local space = {'space'}
-  local pid   = {'playerid'}
-  local piece = {'piece'}
-  local from  = {'from', spot}
-  local comp  = {'comp', component}
-  local stash = {'stash', typ.tab}
+  local typ       = require 'src.lua-cor.typ'
+  local wrp       = require 'src.lua-cor.wrp'
+  local ex   = typ.new_ex(spot)
 
   -- spot
-  wrp.fn(log.trace, spot, 'new',           is, x,   y,  space)
+  wrp.fn(log.trace, spot, 'new',           spot, typ.num, typ.num, 'space')
 
   -- piece
   wrp.fn(log.info, spot, 'can_set_piece', ex)
-  wrp.fn(log.trace, spot, 'spawn_piece', ex,   pid) -- create a new piece
-  wrp.fn(log.trace, spot, 'move_piece', ex,    from)
-  wrp.fn(log.trace, spot, 'stash_piece', ex,   stash) -- put piece into special hidden place for a short time
-  wrp.fn(log.trace, spot, 'unstash_piece', ex, stash) -- get piece from a stash
+  wrp.fn(log.trace, spot, 'spawn_piece', ex,   'playerid') -- create a new piece
+  wrp.fn(log.trace, spot, 'move_piece', ex,    'spot')
+  wrp.fn(log.trace, spot, 'stash_piece', ex,   typ.tab) -- put piece into special hidden place for a short time
+  wrp.fn(log.trace, spot, 'unstash_piece', ex, typ.tab) -- get piece from a stash
 
   -- jades
   wrp.fn(log.info, spot, 'spawn_jade', ex)
@@ -40,7 +31,7 @@ function spot:wrap()
   wrp.fn(log.info, spot, 'remove_jade', ex)
 
   -- component
-  wrp.fn(log.info, spot, 'add_comp', ex,      comp)
+  wrp.fn(log.info, spot, 'add_comp', ex,      component)
 end
 
 

@@ -1,6 +1,3 @@
-local ass     = require 'src.lua-cor.ass'
-local wrp     = require 'src.lua-cor.wrp'
-local typ     = require 'src.lua-cor.typ'
 local counted = require 'src.model.power.counted'
 local log = require('src.lua-cor.log').get('mode')
 
@@ -26,11 +23,12 @@ end
 
 --
 function multiply:wrap()
-  local ex    = {'exmultiply', typ.new_ex(multiply)}
-  local fspot = {'fr', 'spot'}
-  local tspot = {'to', 'spot'}
+  local wrp  = require('src.lua-cor.wrp')
+  local typ  = require('src.lua-cor.typ')
+  local spot = require('src.model.spot.spot')
+  local ex   = typ.new_ex(multiply)
 
-  wrp.fn(log.trace, multiply, 'move_after', ex, fspot, tspot)
+  wrp.fn(log.trace, multiply, 'move_after', ex, spot, spot)
 end
 
 return multiply

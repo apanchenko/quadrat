@@ -28,8 +28,9 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function kamikadze:wrap()
-  local ex    = {'exkamikadze', typ.new_ex(kamikadze)}
-  wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, {'spot'})
+  local spot = require('src.model.spot.spot')
+  local ex = typ.new_ex(kamikadze)
+  wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, spot)
 end
 
 return kamikadze

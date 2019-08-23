@@ -1,8 +1,5 @@
-local ass     = require 'src.lua-cor.ass'
 local log     = require('src.lua-cor.log').get('mode')
 local obj     = require 'src.lua-cor.obj'
-local wrp     = require 'src.lua-cor.wrp'
-local typ     = require 'src.lua-cor.typ'
 
 -- base non-additive power
 local power = obj:extend('power')
@@ -54,11 +51,13 @@ function power:on_add_jade(jade) end
 
 -- module
 function power:wrap()
-  local is   = {'power', typ.new_is(power)}
-  local ex    = {'expower', typ.new_ex(power)}
-  wrp.fn(log.trace, power, 'new',      is, {'piece'}, {'def', typ.tab})
-  wrp.fn(log.trace, power, 'add_to',   ex, {'powers', typ.tab})
-  wrp.fn(log.info, power, 'can_move', ex, {'from', 'vec'}, {'to', 'vec'})
+  local wrp     = require 'src.lua-cor.wrp'
+  local typ     = require 'src.lua-cor.typ'
+  local vec     = require 'src.lua-cor.vec'
+  local ex    = typ.new_ex(power)
+  wrp.fn(log.trace, power, 'new',      power, 'piece', typ.tab)
+  wrp.fn(log.trace, power, 'add_to',   ex, typ.tab)
+  wrp.fn(log.info, power, 'can_move', ex, vec, vec)
 end
 
 return power

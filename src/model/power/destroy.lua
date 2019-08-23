@@ -27,9 +27,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function destroy:wrap()
-  local ex    = {'exdestroy', typ.new_ex(destroy)}
+  local spot = require('src.model.spot.spot')
+  local ex   = typ.new_ex(destroy)
 
-  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, {'spot'})
+  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, spot)
 end
 
 return destroy

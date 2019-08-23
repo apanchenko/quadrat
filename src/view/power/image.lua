@@ -30,9 +30,9 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function image:wrap()
-  local ex    = {'eximage', typ.new_ex(image)}
-  wrp.fn(log.trace, image, 'new',        {'image', typ.new_is(image)}, {'stone'}, {'name', typ.str}, {'count', typ.num})
-  wrp.fn(log.trace, image, 'set_count',  ex, {'count', typ.num})
+  local ex    = typ.new_ex(image)
+  wrp.fn(log.trace, image, 'new',        image, 'stone', typ.str, typ.num)
+  wrp.fn(log.trace, image, 'set_count',  ex, typ.num)
 end
 
 return image

@@ -371,24 +371,23 @@ function stone:wrap()
   local typ         = require('src.lua-cor.typ')
   local wrp         = require('src.lua-cor.wrp')
   local piece_friend = require('src.model.piece.friend')
+  local playerid    = require('src.model.playerid')
 
-  local event = {'event', typ.tab, map.tostring}
-  local is    = {'stone', typ.new_is(stone)}
-  local ex    = {'self', typ.new_ex(stone)}
-  local pid   = {'pid', 'playerid'}
+  local event = typ.tab:add_tostr(map.tostring)
+  local ex    = typ.new_ex(stone)
 
-  wrp.fn(log.trace, stone,  'new',            is, {'env'}, {'piece_friend', piece_friend})
+  wrp.fn(log.trace, stone,  'new',            stone, 'env', piece_friend)
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
-  wrp.fn(log.trace, stone,  'set_color',      ex, {'playerid'})
+  wrp.fn(log.trace, stone,  'set_color',      ex, playerid)
   wrp.fn(log.info,  stone,  'get_pid',        ex)
-  wrp.fn(log.trace, stone,  'puton',          ex, {'board'}, {'battle_view', typ.tab})
+  wrp.fn(log.trace, stone,  'puton',          ex, 'board', typ.tab)
   wrp.fn(log.trace, stone,  'putoff',         ex)
-  wrp.fn(log.trace, stone,  'set_move',       ex, pid)
+  wrp.fn(log.trace, stone,  'set_move',       ex, playerid)
   wrp.fn(log.trace, stone,  'pos',            ex)
   wrp.fn(log.trace, stone,  'show_aura',      ex)
-  wrp.fn(log.trace, stone,  'set_ability',    ex, {'id', typ.str}, {'count', typ.num})
-  wrp.fn(log.trace, stone,  'add_power',      ex, {'id', typ.str}, {'count', typ.num})
+  wrp.fn(log.trace, stone,  'set_ability',    ex, typ.str, typ.num)
+  wrp.fn(log.trace, stone,  'add_power',      ex, typ.str, typ.num)
   wrp.fn(log.info,  stone,  'touch',          ex, event)
   wrp.fn(log.info,  stone,  'touch_began',    ex, event)
   wrp.fn(log.info,  stone,  'touch_moved',    ex, event)

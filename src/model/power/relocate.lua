@@ -26,10 +26,9 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function relocate:wrap()
-  local is = {'relocate', typ.new_is(relocate)}
-  local ex = {'ex', typ.new_ex(relocate)}
+  local is = typ.new_is(relocate)
 
-  wrp.fn(log.trace, relocate, 'new', is, {'piece'}, {'def', typ.tab})
+  wrp.fn(log.trace, relocate, 'new', is, 'piece', typ.tab)
   wrp.fn(log.info, relocate, 'can_spawn', is)
 end
 

@@ -37,9 +37,9 @@ end
 
 -- module
 function playerid:wrap()
-  wrp.fn(log.info, playerid, 'swap', {'pid', typ.new_ex(playerid)})
-  wrp.fn(log.info, playerid, 'other', {'pid', typ.new_ex(playerid)})
-  wrp.fn(log.info, playerid, 'select', {'is_white', typ.boo})
+  wrp.fn(log.info, playerid, 'swap', typ.new_ex(playerid))
+  wrp.fn(log.info, playerid, 'other', typ.new_ex(playerid))
+  wrp.fn(log.info, playerid, 'select', typ.boo)
 end
 
 return playerid

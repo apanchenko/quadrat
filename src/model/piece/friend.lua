@@ -73,18 +73,17 @@ function piece_friend:wrap()
   local piece_model = require('src.model.piece.piece')
   local space_agent = require('src.model.space.agent')
 
-  local is = {'piece_agent', typ.new_is(piece_friend)}
-  local ex = {'piece_agent', typ.new_ex(piece_friend)}
+  local ex = typ.new_ex(piece_friend)
 
-  wrp.fn(log.info, piece_friend, 'new',         is, {'piece', piece_model}, {'space_agent', space_agent})
+  wrp.fn(log.info, piece_friend, 'new',         piece_friend, piece_model, space_agent)
   wrp.fn(log.info, piece_friend, 'is_friend',   ex)
   wrp.fn(log.info, piece_friend, 'get_jades',   ex)
-  wrp.fn(log.trace, piece_friend, 'use_jade',   ex, {'id', typ.str})
+  wrp.fn(log.trace, piece_friend, 'use_jade',   ex, typ.str)
   wrp.fn(log.info, piece_friend, 'is_invisible', ex)
 
   -- move
-  wrp.fn(log.info, piece_friend, 'can_move',        ex, {'to', vec})
-  wrp.fn(log.info, piece_friend, 'move',            ex, {'to', vec})
+  wrp.fn(log.info, piece_friend, 'can_move',        ex, vec)
+  wrp.fn(log.info, piece_friend, 'move',            ex, vec)
   wrp.fn(log.info, piece_friend, 'get_move_to_arr', ex)
 end
 
