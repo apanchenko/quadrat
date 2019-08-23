@@ -1,4 +1,4 @@
-local obj = require 'src.lua-cor.obj'
+local obj = require('src.lua-cor.obj')
 
 --
 local move = obj:extend('move')

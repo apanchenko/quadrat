@@ -31,8 +31,9 @@ end
 function parasite_host:wrap()
   local wrp   = require('src.lua-cor.wrp')
   local typ   = require('src.lua-cor.typ')
+  local jade  = require('src.model.jade')
   local ex    = typ.new_ex(parasite_host)
-  wrp.fn(log.trace, parasite_host, 'on_add_jade', ex, 'jade')
+  wrp.fn(log.trace, parasite_host, 'on_add_jade', ex, jade)
 end
 
 return parasite_host

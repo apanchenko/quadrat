@@ -22,11 +22,13 @@ end
 
 --
 function parasite:wrap()
-  local wrp       = require 'src.lua-cor.wrp'
-  local typ         = require 'src.lua-cor.typ'
+  local wrp       = require('src.lua-cor.wrp')
+  local typ         = require('src.lua-cor.typ')
+  local spot      = require('src.model.spot.spot')
+
   local ex    = typ.new_ex(parasite)
   wrp.fn(log.trace, parasite, 'apply_to_self', ex)
-  wrp.fn(log.trace, parasite, 'apply_to_enemy', ex, 'spot')
+  wrp.fn(log.trace, parasite, 'apply_to_enemy', ex, spot)
 end
 
 return parasite

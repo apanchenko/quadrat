@@ -1,4 +1,4 @@
-local vec = require 'src.lua-cor.vec'
+local vec = require('src.lua-cor.vec')
 
 local cfg =
 {

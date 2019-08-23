@@ -1,8 +1,8 @@
 local ass     = require 'src.lua-cor.ass'
 local log     = require('src.lua-cor.log').get('mode')
-local obj     = require 'src.lua-cor.obj'
-local wrp     = require 'src.lua-cor.wrp'
-local typ     = require 'src.lua-cor.typ'
+local obj     = require('src.lua-cor.obj')
+local wrp     = require('src.lua-cor.wrp')
+local typ     = require('src.lua-cor.typ')
 local powers  = require 'src.model.power._pack'
 local zones   = require 'src.model.zones._pack'
 

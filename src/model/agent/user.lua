@@ -1,5 +1,5 @@
 local log       = require('src.lua-cor.log').get('mode')
-local obj       = require 'src.lua-cor.obj'
+local obj       = require('src.lua-cor.obj')
 local com       = require 'src.lua-cor.com'
 
 -- controller for user
@@ -42,8 +42,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 --
 function user:wrap()
-  local wrp = require 'src.lua-cor.wrp'
-  local typ = require 'src.lua-cor.typ'
+  local wrp = require('src.lua-cor.wrp')
+  local typ = require('src.lua-cor.typ')
   local space_agent = require('src.model.space.agent')
   local stone = require('src.view.stone.stone')
 

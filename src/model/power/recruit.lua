@@ -1,6 +1,6 @@
 local ass       = require 'src.lua-cor.ass'
-local wrp     = require 'src.lua-cor.wrp'
-local typ         = require 'src.lua-cor.typ'
+local wrp     = require('src.lua-cor.wrp')
+local typ         = require('src.lua-cor.typ')
 local areal     = require 'src.model.power.areal'
 local log = require('src.lua-cor.log').get('mode')
 
@@ -23,8 +23,10 @@ end
 
 --
 function recruit:wrap()
+  local spot      = require('src.model.spot.spot')
+
   local ex    = typ.new_ex(recruit)
-  wrp.fn(log.trace, recruit, 'apply_to_spot', ex, 'spot')
+  wrp.fn(log.trace, recruit, 'apply_to_spot', ex, spot)
 end
 
 return recruit

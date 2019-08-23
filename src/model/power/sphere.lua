@@ -16,9 +16,9 @@ end
 
 --
 function sphere:wrap()
-  local wrp = require 'src.lua-cor.wrp'
-  local typ = require 'src.lua-cor.typ'
-  local vec = require 'src.lua-cor.vec'
+  local wrp = require('src.lua-cor.wrp')
+  local typ = require('src.lua-cor.typ')
+  local vec = require('src.lua-cor.vec')
   local log = require('src.lua-cor.log').get('mode')
 
   local ex    = typ.new_ex(sphere)

@@ -1,7 +1,7 @@
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
-local wrp       = require 'src.lua-cor.wrp'
-local typ         = require 'src.lua-cor.typ'
+local wrp       = require('src.lua-cor.wrp')
+local typ         = require('src.lua-cor.typ')
 local areal     = require 'src.model.power.areal'
 
 local kamikadze = areal:extend('Kamikadze')

@@ -1,5 +1,5 @@
 local ass         = require 'src.lua-cor.ass'
-local obj         = require 'src.lua-cor.obj'
+local obj         = require('src.lua-cor.obj')
 local com         = require 'src.lua-cor.com'
 
 local invisible = obj:extend('view.power.invisible')
@@ -43,15 +43,17 @@ end
 
 --MODULE-----------------------------------------------------------------------
 function invisible:wrap()
-  local typ         = require 'src.lua-cor.typ'
-  local wrp         = require 'src.lua-cor.wrp'
-  local log         = require('src.lua-cor.log').get('view')
+  local typ   = require('src.lua-cor.typ')
+  local wrp   = require('src.lua-cor.wrp')
+  local log   = require('src.lua-cor.log').get('view')
+  local stone = require('src.view.stone.stone')
+  local playerid = require('src.model.playerid')
 
   local ex    = typ.new_ex(invisible)
 
-  wrp.fn(log.trace, invisible, 'new',        invisible, 'stone', typ.str, typ.num)
+  wrp.fn(log.trace, invisible, 'new',        invisible, stone, typ.str, typ.num)
   wrp.fn(log.trace, invisible, 'set_count',  ex, typ.num)
-  wrp.fn(log.trace, invisible, 'set_move',   ex, 'playerid')
+  wrp.fn(log.trace, invisible, 'set_move',   ex, playerid)
 end
 
 return invisible

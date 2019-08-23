@@ -25,9 +25,10 @@ function pilfer:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
   local log = require('src.lua-cor.log').get('mode')
+  local spot      = require('src.model.spot.spot')
 
   local ex    = typ.new_ex(pilfer)
-  wrp.fn(log.trace, pilfer, 'apply_to_spot', ex, 'spot')
+  wrp.fn(log.trace, pilfer, 'apply_to_spot', ex, spot)
 end
 
 return pilfer

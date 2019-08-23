@@ -1,6 +1,6 @@
 local ass       = require 'src.lua-cor.ass'
-local wrp       = require 'src.lua-cor.wrp'
-local typ         = require 'src.lua-cor.typ'
+local wrp       = require('src.lua-cor.wrp')
+local typ         = require('src.lua-cor.typ')
 local areal     = require 'src.model.power.areal'
 local log = require('src.lua-cor.log').get('mode')
 
@@ -33,9 +33,11 @@ end
 
 --
 function purify:wrap()
+  local spot      = require('src.model.spot.spot')
+
   local ex    = typ.new_ex(purify)
-  wrp.fn(log.trace, purify, 'apply_to_friend', ex, 'spot')
-  wrp.fn(log.trace, purify, 'apply_to_enemy', ex, 'spot')
+  wrp.fn(log.trace, purify, 'apply_to_friend', ex, spot)
+  wrp.fn(log.trace, purify, 'apply_to_enemy', ex, spot)
 end
 
 return purify

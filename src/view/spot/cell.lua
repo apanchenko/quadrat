@@ -125,11 +125,12 @@ end
 
 -- MODULE-----------------------------------------------------------------------
 function cell:wrap()
+  local stone = require('src.view.stone.stone')
   local vec = require('src.lua-cor.vec')
   local ex  = typ.new_ex(cell)
 
   wrp.fn(log.trace, cell, 'new',          cell, vec)
-  wrp.fn(log.trace, cell, 'set_stone',    ex, 'stone')
+  wrp.fn(log.trace, cell, 'set_stone',    ex, stone)
   wrp.fn(log.info,  cell, 'stone',        ex)
   wrp.fn(log.trace, cell, 'remove_stone', ex)
 end

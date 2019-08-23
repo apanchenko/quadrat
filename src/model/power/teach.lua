@@ -21,11 +21,13 @@ end
 
 --
 function teach:wrap()
-  local wrp     = require 'src.lua-cor.wrp'
-  local typ     = require 'src.lua-cor.typ'
+  local spot      = require('src.model.spot.spot')
+
+  local wrp     = require('src.lua-cor.wrp')
+  local typ     = require('src.lua-cor.typ')
   local ex   = typ.new_ex(teach)
 
-  wrp.fn(log.trace, teach, 'apply_to_spot', ex, 'spot')
+  wrp.fn(log.trace, teach, 'apply_to_spot', ex, spot)
 end
 
 return teach

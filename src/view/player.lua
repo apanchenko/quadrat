@@ -1,8 +1,8 @@
-local vec = require 'src.lua-cor.vec'
+local vec = require('src.lua-cor.vec')
 local cfg = require 'src.cfg'
 local lay = require 'src.lua-cor.lay'
 local ass = require 'src.lua-cor.ass'
-local obj = require 'src.lua-cor.obj'
+local obj = require('src.lua-cor.obj')
 local log = require('src.lua-cor.log').get('view')
 
 -------------------------------------------------------------------------------

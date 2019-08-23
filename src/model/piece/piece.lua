@@ -1,7 +1,7 @@
-local obj       = require 'src.lua-cor.obj'
+local obj       = require('src.lua-cor.obj')
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
-local vec       = require 'src.lua-cor.vec'
+local vec       = require('src.lua-cor.vec')
 local cnt       = require 'src.lua-cor.cnt'
 
 --
@@ -9,8 +9,8 @@ local piece = obj:extend('piece')
 
 -- interface
 function piece:wrap()
-  local typ       = require 'src.lua-cor.typ'
-  local wrp       = require 'src.lua-cor.wrp'
+  local typ       = require('src.lua-cor.typ')
+  local wrp       = require('src.lua-cor.wrp')
   local space     = require('src.model.space.space')
   local jade      = require('src.model.jade')
   local power     = require('src.model.power.power')

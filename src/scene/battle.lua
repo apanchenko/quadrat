@@ -5,13 +5,13 @@ local player        = require 'src.view.player'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
 local log           = require('src.lua-cor.log').get('scen')
-local wrp           = require 'src.lua-cor.wrp'
+local wrp           = require('src.lua-cor.wrp')
 local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space.space'
 local space_agent   = require 'src.model.space.agent'
 local space_board   = require 'src.model.space.board'
 local agent         = require 'src.model.agent._pack'
-local typ     = require 'src.lua-cor.typ'
+local typ     = require('src.lua-cor.typ')
 local com     = require 'src.lua-cor.com'
 
 -- battle scene

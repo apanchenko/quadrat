@@ -2,8 +2,8 @@ local power = require 'src.model.power.power'
 local ass   = require 'src.lua-cor.ass'
 local arr = require 'src.lua-cor.arr'
 local log = require('src.lua-cor.log').get('mode')
-local wrp   = require 'src.lua-cor.wrp'
-local typ   = require 'src.lua-cor.typ'
+local wrp   = require('src.lua-cor.wrp')
+local typ   = require('src.lua-cor.typ')
 
 local relocate = power:extend('Relocate')
 
@@ -26,9 +26,10 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function relocate:wrap()
+  local piece = require('src.model.piece.piece')
   local is = typ.new_is(relocate)
 
-  wrp.fn(log.trace, relocate, 'new', is, 'piece', typ.tab)
+  wrp.fn(log.trace, relocate, 'new', is, piece, typ.tab)
   wrp.fn(log.info, relocate, 'can_spawn', is)
 end
 

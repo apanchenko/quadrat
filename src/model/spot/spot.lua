@@ -1,5 +1,5 @@
-local obj       = require 'src.lua-cor.obj'
-local vec       = require 'src.lua-cor.vec'
+local obj       = require('src.lua-cor.obj')
+local vec       = require('src.lua-cor.vec')
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local cnt       = require 'src.lua-cor.cnt'
@@ -11,17 +11,19 @@ local spot = obj:extend('spot')
 
 -- interface
 function spot:wrap()
-  local typ       = require 'src.lua-cor.typ'
-  local wrp       = require 'src.lua-cor.wrp'
+  local typ       = require('src.lua-cor.typ')
+  local wrp       = require('src.lua-cor.wrp')
+  local playerid  = require('src.model.playerid')
+  local space     = require('src.model.space.space')
   local ex   = typ.new_ex(spot)
 
   -- spot
-  wrp.fn(log.trace, spot, 'new',           spot, typ.num, typ.num, 'space')
+  wrp.fn(log.trace, spot, 'new',           spot, typ.num, typ.num, space)
 
   -- piece
   wrp.fn(log.info, spot, 'can_set_piece', ex)
-  wrp.fn(log.trace, spot, 'spawn_piece', ex,   'playerid') -- create a new piece
-  wrp.fn(log.trace, spot, 'move_piece', ex,    'spot')
+  wrp.fn(log.trace, spot, 'spawn_piece', ex,   playerid) -- create a new piece
+  wrp.fn(log.trace, spot, 'move_piece', ex,    spot)
   wrp.fn(log.trace, spot, 'stash_piece', ex,   typ.tab) -- put piece into special hidden place for a short time
   wrp.fn(log.trace, spot, 'unstash_piece', ex, typ.tab) -- get piece from a stash
 

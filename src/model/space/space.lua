@@ -2,12 +2,12 @@ local spot      = require 'src.model.spot.spot'
 local playerid  = require 'src.model.playerid'
 local cfg       = require 'src.model.cfg'
 local evt       = require 'src.lua-cor.evt'
-local vec       = require 'src.lua-cor.vec'
+local vec       = require('src.lua-cor.vec')
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
-local obj       = require 'src.lua-cor.obj'
-local typ       = require 'src.lua-cor.typ'
-local wrp       = require 'src.lua-cor.wrp'
+local obj       = require('src.lua-cor.obj')
+local typ       = require('src.lua-cor.typ')
+local wrp       = require('src.lua-cor.wrp')
 local arr       = require 'src.lua-cor.arr'
 local bro       = require('src.lua-cor.bro')
 

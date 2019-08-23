@@ -94,8 +94,8 @@ end
 
 --
 function bot:wrap()
-  local wrp       = require 'src.lua-cor.wrp'
-  local typ       = require 'src.lua-cor.typ'
+  local wrp       = require('src.lua-cor.wrp')
+  local typ       = require('src.lua-cor.typ')
 
   local space_agent = require('src.model.space.agent')
   local is = typ.new_is(bot)

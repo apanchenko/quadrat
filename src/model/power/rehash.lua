@@ -38,7 +38,8 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function rehash:wrap()
-  wrp.fn(log.trace, rehash, 'new',       rehash, 'piece', typ.tab)
+  local piece = require('src.model.piece.piece')
+  wrp.fn(log.trace, rehash, 'new',       rehash, piece, typ.tab)
   wrp.fn(log.info, rehash, 'can_spawn', rehash)
 end
 
