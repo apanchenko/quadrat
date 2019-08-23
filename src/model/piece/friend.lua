@@ -42,11 +42,6 @@ end
 
 -- MOVE ----------------------------------------------------------------------
 --
-function piece_friend:is_my_move()
-  return self[_space]:is_my_move()
-end
-
---
 function piece_friend:can_move(to)
   return self[_space]:can_move(self[_piece]:get_pos(), to)
 end
@@ -88,7 +83,6 @@ function piece_friend:wrap()
   wrp.fn(log.info, piece_friend, 'is_invisible', ex)
 
   -- move
-  wrp.fn(log.info, piece_friend, 'is_my_move',      ex)
   wrp.fn(log.info, piece_friend, 'can_move',        ex, {'to', vec})
   wrp.fn(log.info, piece_friend, 'move',            ex, {'to', vec})
   wrp.fn(log.info, piece_friend, 'get_move_to_arr', ex)

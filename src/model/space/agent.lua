@@ -28,11 +28,6 @@ function space_agent:get_my_pid()
 end
 
 --
-function space_agent:has_jade(pos)
-  return self[_space]:spot(pos):has_jade()
-end
-
---
 function space_agent:get_piece(pos)
   local piece_model = self[_space]:piece(pos)
   if piece_model == nil then
@@ -56,19 +51,6 @@ function space_agent:move(from, to)
   self[_space]:move(from, to)
 end
 
--- number of supporting pieces
-function space_agent:get_support_count(pos, pid)
-  local space = self[_space]
-  local support_count = 0
-  pos:each_neighbour_in_grid(self:get_size(), function(neighbour_pos)
-    local piece_model = space:piece(neighbour_pos)
-    if piece_model and piece_model:get_pid() == pid and piece_model:can_move(neighbour_pos, pos) then
-      support_count = support_count + 1
-    end
-  end)
-  return support_count
-end
-
 -- wrap functions
 function space_agent:wrap()
   local wrp = require('src.lua-cor.wrp')
@@ -84,11 +66,9 @@ function space_agent:wrap()
   local pos = {'pos', typ.new_is(vec)}
 
   wrp.fn(log.info, space_agent, 'new',           is, {'space', typ.meta(space)}, pid)
-  wrp.fn(log.info, space_agent, 'has_jade',      ex, pos)
   wrp.fn(log.info, space_agent, 'get_piece',     ex, pos)
   wrp.fn(log.info, space_agent, 'can_move',      ex, {'from', vec}, {'to', vec})
   wrp.fn(log.trace, space_agent, 'move',          ex, {'from', vec}, {'to', vec})
-  wrp.fn(log.info,  space_agent, 'get_support_count', ex, {'pos', vec}, {'pid', playerid})
 end
 
 return space_agent

@@ -223,8 +223,11 @@ end
 
 -- touch listener function
 function stone:touch(event)
+  local piece = self[_piece]
+  local space = piece:get_space()
+
   -- do not touch opponent stones
-  if not self[_piece]:is_my_move() then
+  if not space:is_my_move() then
     log.trace('not my move')
     return true
   end
@@ -241,7 +244,7 @@ function stone:touch(event)
   if event.phase == "moved" then
     local proj = self:touch_moved(event)
 
-    if self[_piece]:can_move(proj) then
+    if piece:can_move(proj) then
       self:create_project(proj)
     else
       self:remove_project()
@@ -252,7 +255,7 @@ function stone:touch(event)
   if event.phase == "ended" or event.phase == "cancelled" then
     self:set_drag(nil)
     if self.proj then
-      self[_piece]:move(self.proj)
+      piece:move(self.proj)
       self.board:select(nil) -- deselect any
     else
       if self.isSelected then
