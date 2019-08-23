@@ -59,7 +59,6 @@ function battle:create(event)
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
   env.space.own_evt.add(self)
-  env.battle = self
 
   local space_board = space_board:new(env.space)
   self.board = board:new(space_board, self.view)
