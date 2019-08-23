@@ -16,6 +16,11 @@ function piece_foe:new(piece_model, space_agent)
 end
 
 --
+function piece_foe:get_space()
+  return self[_space]
+end
+
+--
 function piece_foe:listen_set_move(listener, subscribe)
   self[_space]:listen_set_move(listener, subscribe)
 end
@@ -44,7 +49,6 @@ end
 function piece_foe:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
-  local vec = require('src.lua-cor.vec')
   local log = require('src.lua-cor.log').get('mode')
   local piece_model = require('src.model.piece.piece')
   local space_agent = require('src.model.space.agent')

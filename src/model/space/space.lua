@@ -147,7 +147,7 @@ end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
-function space:who_move()   return self.pid end
+function space:get_move_pid()   return self.pid end
 
 -- check if piece can move from one position to another
 function space:can_move(fr, to)
@@ -161,7 +161,7 @@ function space:can_move(fr, to)
     log.trace(self, ':can_move from', fr, 'piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= actor.pid then         -- check color who moves now
+  if self:get_move_pid() ~= actor.pid then         -- check color who moves now
     log.trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
@@ -213,7 +213,7 @@ function space:use(pos, ability_name)
     log.trace(self, ':use at ', pos, ' piece is nil')
     return false                            -- can not move
   end
-  if self:who_move() ~= piece.pid then         -- check color who moves now
+  if self:get_move_pid() ~= piece.pid then         -- check color who moves now
     log.trace(self, ":can_move, wrong color")
     return false                            -- can not move
   end
@@ -239,7 +239,7 @@ function space:wrap()
   wrp.fn(log.info, space, 'each_spot',    ex,  {'fn', typ.fun})
   wrp.fn(log.info, space, 'count_pieces', ex)
   wrp.fn(log.info, space, 'piece',        ex,  {'pos', vec})
-  wrp.fn(log.info, space, 'who_move',     ex)
+  wrp.fn(log.info, space, 'get_move_pid',     ex)
   wrp.fn(log.info, space, 'can_move',     ex,  {'from', vec}, {'to', vec})
   wrp.fn(log.trace, space, 'move',        ex,  {'from', vec}, {'to', vec})
   wrp.fn(log.trace, space, 'use',         ex,  {'pos', vec}, {'ability_name', typ.str})

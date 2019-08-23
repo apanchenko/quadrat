@@ -35,7 +35,7 @@ end
 --MODULE-----------------------------------------------------------------------
 function count:wrap()
   local ex    = {'excount', typ.new_ex(count)}
-  wrp.fn(log.trace, count, 'new',        ex, {'stone'}, {'name', typ.str}, {'count', typ.num})
+  wrp.fn(log.trace, count, 'new',        {'count', typ.new_is(count)}, {'stone'}, {'name', typ.str}, {'count', typ.num})
   wrp.fn(log.trace, count, 'set_count',  ex, {'count', typ.num})
 end
 

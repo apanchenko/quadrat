@@ -13,8 +13,9 @@ function invisible:new(stone, id, count)
   self = obj.new(self, com())
   self[_stone] = stone
 
-  self:move(stone:get_piece():who_move())
-  self[_stone]:get_piece():listen_set_move(self, true)
+  local piece = stone:get_piece()
+  self:set_move(piece:get_space():get_move_pid())
+  piece:listen_set_move(self, true)
   return self
 end
 --
@@ -32,12 +33,12 @@ function invisible:set_count(count)
 end
 
 -- space event
-function invisible:move(pid)
+function invisible:set_move(pid)
   local alpha = 0
-  if self.stone:get_pid() == pid then
+  if self[_stone]:get_pid() == pid then
     alpha = 0.5
   end
-  self.stone:view().alpha = alpha
+  self[_stone]:view().alpha = alpha
 end
 
 --MODULE-----------------------------------------------------------------------
@@ -52,7 +53,7 @@ function invisible:wrap()
 
   wrp.fn(log.trace, invisible, 'new',        is, {'stone'}, {'id', typ.str}, count)
   wrp.fn(log.trace, invisible, 'set_count',  ex, count)
-  wrp.fn(log.trace, invisible, 'move',       ex, {'playerid'})
+  wrp.fn(log.trace, invisible, 'set_move',   ex, {'playerid'})
 end
 
 return invisible

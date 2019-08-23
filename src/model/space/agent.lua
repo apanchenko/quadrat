@@ -10,16 +10,16 @@ local _space = {}
 local _pid = {}
 
 -- constructor
-function space_agent:new(space, pid)
-  self = space_board.new(self, space)
-  self[_space] = space
+function space_agent:new(space_model, pid)
+  self = space_board.new(self, space_model)
+  self[_space] = space_model
   self[_pid] = pid
   return self
 end
 
 --
 function space_agent:is_my_move()
-  return self[_space]:who_move() == self[_pid]
+  return self[_space]:get_move_pid() == self[_pid]
 end
 
 --

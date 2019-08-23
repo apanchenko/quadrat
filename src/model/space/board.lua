@@ -7,9 +7,9 @@ local space_board = obj:extend('space_board')
 local _space = {}
 
 -- constructor
-function space_board:new(space)
+function space_board:new(space_model)
   self = obj.new(self)
-  self[_space] = space
+  self[_space] = space_model
   return self
 end
 
@@ -28,6 +28,11 @@ function space_board:listen_set_move(listener, subscribe)
   self[_space]:listen_set_move(listener, subscribe)
 end
 
+--
+function space_board:get_move_pid()
+  return self[_space]:get_move_pid()
+end
+
 -- wrap functions
 function space_board:wrap()
   local wrp = require('src.lua-cor.wrp')
@@ -42,6 +47,7 @@ function space_board:wrap()
   wrp.fn(log.info, space_board, 'get_size',      ex)
   wrp.fn(log.trace, space_board, 'add_listener',  ex, {'listener', typ.tab})
   wrp.fn(log.trace, space_board, 'listen_set_move',  ex, {'listener', typ.tab}, {'subscribe', typ.boo})
+  wrp.fn(log.info, space_board, 'get_move_pid',      ex)
 end
 
 return space_board
