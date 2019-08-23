@@ -223,7 +223,6 @@ end
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
 function space:wrap()
-  --local sis   = {'space', typ.new_is(space)}
   local ex   = typ.new_ex(space)
 
    --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})

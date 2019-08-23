@@ -50,8 +50,7 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function scramble:wrap()
-  local is = typ.new_is(scramble)
-  wrp.fn(log.info, scramble, 'can_spawn', is)
+  wrp.fn(log.info, scramble, 'can_spawn', scramble)
 end
 
 return scramble

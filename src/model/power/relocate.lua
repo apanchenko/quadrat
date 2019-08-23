@@ -27,10 +27,9 @@ end
 -- MODULE ---------------------------------------------------------------------
 function relocate:wrap()
   local piece = require('src.model.piece.piece')
-  local is = typ.new_is(relocate)
 
-  wrp.fn(log.trace, relocate, 'new', is, piece, typ.tab)
-  wrp.fn(log.info, relocate, 'can_spawn', is)
+  wrp.fn(log.trace, relocate, 'new', relocate, piece, typ.tab)
+  wrp.fn(log.info, relocate, 'can_spawn', relocate)
 end
 
 return relocate

@@ -47,7 +47,7 @@ function net:new()
     end
   end
   wrp.fn(log.trace, client, 'onError',
-    typ.new_is(client),
+    client,
     typ.num:add_tostr(function(code) return map.key(Client.PeerErrorCode, code) end),
     typ.str)
 
@@ -55,13 +55,11 @@ function net:new()
   function client:onStateChange(state)
   end
 
-  local is = typ.new_is(client)
-
-  wrp.fn(log.trace, client, 'onStateChange', is, typ.num:add_tostr(Client.StateToName))
+  wrp.fn(log.trace, client, 'onStateChange', client, typ.num:add_tostr(Client.StateToName))
 
   function client:onOperationResponse(errCode, errMsg, code, content)
   end
-  wrp.fn(log.trace, client, 'onOperationResponse', is,
+  wrp.fn(log.trace, client, 'onOperationResponse', client,
     typ.num,
     typ.str,
     typ.num:add_tostr(function(code) return map.key(const.OperationCode, code) end),

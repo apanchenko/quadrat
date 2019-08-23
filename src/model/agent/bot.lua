@@ -96,13 +96,10 @@ end
 function bot:wrap()
   local wrp       = require('src.lua-cor.wrp')
   local typ       = require('src.lua-cor.typ')
-
   local space_agent = require('src.model.space.agent')
-  local is = typ.new_is(bot)
   local ex = typ.new_ex(bot)
-  local sp = typ.new_is(space_agent)
 
-  wrp.fn(log.trace, bot, 'new', is, sp)
+  wrp.fn(log.trace, bot, 'new', bot, space_agent)
   wrp.fn(log.trace, bot, 'move_async', ex)
 end
 

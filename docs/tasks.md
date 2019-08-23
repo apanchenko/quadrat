@@ -44,6 +44,7 @@
 - power Ethereal - can pass through other pieces, not killing them. Cannot be killed eighter. But still can cast abilities.
 - open API, so that people may create bots
 - power Lenta - similar to Scramble but pieces move together in one direction
+- realtime chess - each figure waits after it moves
 
 ## Done
 

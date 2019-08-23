@@ -3,6 +3,7 @@ local vec       = require('src.lua-cor.vec')
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
 local cnt       = require 'src.lua-cor.cnt'
+local typ       = require('src.lua-cor.typ')
 local piece     = require 'src.model.piece.piece'
 local jade      = require 'src.model.jade'
 local component = require 'src.model.spot.component.component'
@@ -11,7 +12,6 @@ local spot = obj:extend('spot')
 
 -- interface
 function spot:wrap()
-  local typ       = require('src.lua-cor.typ')
   local wrp       = require('src.lua-cor.wrp')
   local playerid  = require('src.model.playerid')
   local space     = require('src.model.space.space')
