@@ -4,10 +4,8 @@ local playerid      = require 'src.model.playerid'
 local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
 local log           = require('src.lua-cor.log').get('scen')
-local ass           = require 'src.lua-cor.ass'
 local wrp           = require('src.lua-cor.wrp')
 local typ           = require('src.lua-cor.typ')
-local env           = require 'src.lua-cor.env'
 local net           = require 'src.model.agent.photon.net'
 local agent         = require 'src.model.agent._pack'
 local random_player = require('src.model.agent.random')
@@ -57,7 +55,7 @@ lobby:addEventListener("destroy", lobby)
 
 --
 function lobby.goto_lobby()
-  composer.gotoScene('src.scene.lobby', {effect = 'fade', time = 600, params = {env=env}})
+  composer.gotoScene('src.scene.lobby', {effect = 'fade', time = 600})
   return true
 end
 

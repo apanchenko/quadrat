@@ -19,9 +19,8 @@ local _battle_view = {}
 local _piece = {}
 
 --INIT-------------------------------------------------------------------------
-function stone:new(env, piece_friend)
+function stone:new(piece_friend)
   self = obj.new(self, com())
-  self.env = env
   self[_view] = self.com_add(layout.new_group())
   self.scale = 1
   self.powers = {}
@@ -368,7 +367,6 @@ end
 function stone:wrap()
   local typ         = require('src.lua-cor.typ')
   local wrp         = require('src.lua-cor.wrp')
-  local env         = require('src.lua-cor.env')
   local piece_friend = require('src.model.piece.friend')
   local playerid    = require('src.model.playerid')
   local board       = require('src.view.board')
@@ -376,7 +374,7 @@ function stone:wrap()
   local event = typ.tab:add_tostr(map.tostring)
   local ex    = typ.new_ex(stone)
 
-  wrp.fn(log.trace, stone,  'new',            stone, env, piece_friend)
+  wrp.fn(log.trace, stone,  'new',            stone, piece_friend)
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
   wrp.fn(log.trace, stone,  'set_color',      ex, playerid)

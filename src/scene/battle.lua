@@ -6,7 +6,6 @@ local cfg           = require 'src.scene.cfg'
 local lay           = require 'src.lua-cor.lay'
 local log           = require('src.lua-cor.log').get('scen')
 local wrp           = require('src.lua-cor.wrp')
-local env           = require 'src.lua-cor.env'
 local space         = require 'src.model.space.space'
 local space_agent   = require 'src.model.space.agent'
 local space_board   = require 'src.model.space.board'
@@ -15,6 +14,9 @@ local com     = require 'src.lua-cor.com'
 
 -- battle scene
 local battle = composer.newScene()
+
+-- private
+local _model = {}
 
 --
 function battle.goto_robots()
@@ -43,7 +45,7 @@ function battle:create(event)
 
   lay.new_image(self.view, cfg.bg)
 
-  env.space = space:new(cfg.board.cols, cfg.board.rows, 1)
+  self[_model] = space:new(cfg.board.cols, cfg.board.rows, 1)
 
   self.move_pointer = lay.new_image(self.view, cfg.arrow)
 
@@ -57,11 +59,11 @@ function battle:create(event)
   self.players[black] = player(black, "Gala")
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
-  self.board = board:new(space_board(env.space), self.view)
+  self.board = board(space_board(self[_model]), self.view, self[_model])
   lay.insert(self.view, self.board.view, cfg.board.view)
 
-  local space_white = space_agent:new(env.space, playerid.white)
-  local space_black = space_agent:new(env.space, playerid.black)
+  local space_white = space_agent:new(self[_model], playerid.white)
+  local space_black = space_agent:new(self[_model], playerid.black)
 
   self.player_white = agent:get(event.params.white):new(space_white)
   self.player_black = agent:get(event.params.black):new(space_black)
@@ -72,14 +74,14 @@ function battle:create(event)
   end
   self.board:get_space():listen_set_move(self, true) -- todo unlisten
 
-  env.space:setup() -- start playing
+  self[_model]:setup() -- start playing
 end
 
 --
 function battle:set_move(pid)
   log.trace('-----------------------------------------------')
 
-  local counts = env.space:count_pieces()
+  local counts = self[_model]:count_pieces()
   local white = counts[tostring(playerid.white)]
   local black = counts[tostring(playerid.black)]
 

@@ -6,7 +6,6 @@ local obj      = require('src.lua-cor.obj')
 local lay      = require('src.lua-cor.lay')
 local log      = require('src.lua-cor.log').get('view')
 local bro      = require 'src.lua-cor.bro'
-local env      = require 'src.lua-cor.env'
 local arr      = require 'src.lua-cor.arr'
 local com      = require 'src.lua-cor.com'
 local space_agent = require('src.model.space.agent')
@@ -16,11 +15,13 @@ local board = obj:extend('board')
 -- private
 local _space = {}
 local _battle_view = {}
+local _model = {}
 
-function board:new(space_board, battle_view)
+function board:new(space_board, battle_view, space_model)
   self = obj.new(self, com())
   self[_space] = space_board
   self[_battle_view] = battle_view
+  self[_model] = space_model
 
   self.spawn_stone = bro('spawn_stone') -- delegate
   self.stone_color_changed = bro('stone_color_changed') -- delegate
@@ -103,8 +104,8 @@ end
 -- PIECE -----------------------------------------------------------------------
 --
 function board:spawn_piece(color, pos)
-  local space = space_agent:new(env.space, color)
-  local stone = Stone:new(env, space:get_piece(pos)) -- create a new stone
+  local space = space_agent:new(self[_model], color)
+  local stone = Stone:new(space:get_piece(pos)) -- create a new stone
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.spawn_stone(stone)
@@ -175,7 +176,7 @@ function board:wrap()
   local id    = typ.str
   local count = typ.num
 
-  wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab)
+  wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab, typ.tab)
   wrp.fn(log.trace, board, 'set_ability',        ex, vec, id, count)
   wrp.fn(log.info, board, 'add_power',           ex, vec, typ.str, count)
   wrp.fn(log.info, board, 'set_color',           ex, vec, playerid)
