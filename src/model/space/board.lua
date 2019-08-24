@@ -24,16 +24,6 @@ function space_board:has_jade(pos)
 end
 
 --
-function space_board:add_listener(listener)
-  self[_space].own_evt.add(listener)
-end
-
---
-function space_board:listen_set_move(listener, subscribe)
-  self[_space]:listen_set_move(listener, subscribe)
-end
-
---
 function space_board:get_move_pid()
   return self[_space]:get_move_pid()
 end
@@ -51,6 +41,28 @@ function space_board:get_support_count(pos, pid)
   return support_count
 end
 
+-- EVENTS ----------------------------------------------------------------------
+--
+function space_board:add_listener(listener)
+  self[_space].own_evt.add(listener)
+end
+--
+function space_board:listen_set_move(listener, subscribe)
+  self[_space]:listen(listener, 'set_move', subscribe)
+end
+--
+function space_board:listen_set_ability(listener, subscribe)
+  self[_space]:listen(listener, 'set_ability', subscribe)
+end
+--
+function space_board:listen_set_color(listener, subscribe)
+  self[_space]:listen(listener, 'set_color', subscribe)
+end
+--
+function space_board:listen_remove_piece(listener, subscribe)
+  self[_space]:listen(listener, 'remove_piece', subscribe)
+end
+
 -- wrap functions
 function space_board:wrap()
   local wrp = require('src.lua-cor.wrp')
@@ -62,13 +74,16 @@ function space_board:wrap()
 
   local ex  = typ.new_ex(space_board)
 
-  wrp.fn(log.info, space_board, 'new',           space_board, space)
-  wrp.fn(log.info, space_board, 'get_size',      ex)
-  wrp.fn(log.info, space_board, 'has_jade',      ex, vec)
-  wrp.fn(log.trace, space_board, 'add_listener',  ex, typ.tab)
-  wrp.fn(log.trace, space_board, 'listen_set_move',  ex, typ.tab, typ.boo)
-  wrp.fn(log.info, space_board, 'get_move_pid',      ex)
-  wrp.fn(log.info,  space_board, 'get_support_count', ex, vec, playerid)
+  wrp.fn(log.info,  space_board, 'new',                 space_board, space)
+  wrp.fn(log.info,  space_board, 'get_size',            ex)
+  wrp.fn(log.info,  space_board, 'has_jade',            ex, vec)
+  wrp.fn(log.trace, space_board, 'add_listener',        ex, typ.tab)
+  wrp.fn(log.trace, space_board, 'listen_set_move',     ex, typ.tab, typ.boo)
+  wrp.fn(log.trace, space_board, 'listen_set_ability',  ex, typ.tab, typ.boo)
+  wrp.fn(log.trace, space_board, 'listen_set_color',    ex, typ.tab, typ.boo)
+  wrp.fn(log.trace, space_board, 'listen_remove_piece', ex, typ.tab, typ.boo)
+  wrp.fn(log.info,  space_board, 'get_move_pid',        ex)
+  wrp.fn(log.info,  space_board, 'get_support_count',   ex, vec, playerid)
 end
 
 return space_board

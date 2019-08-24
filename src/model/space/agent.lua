@@ -17,6 +17,11 @@ function space_agent:new(space_model, pid)
   return self
 end
 
+-- forward
+function space_agent:listen(listener, name, subscribe)
+  self[_space]:listen(listener, name, subscribe)
+end
+
 --
 function space_agent:is_my_move()
   return self[_space]:get_move_pid() == self[_pid]
@@ -65,7 +70,8 @@ function space_agent:wrap()
   wrp.fn(log.info, space_agent, 'new',           space_agent, space, playerid)
   wrp.fn(log.info, space_agent, 'get_piece',     ex, vec)
   wrp.fn(log.info, space_agent, 'can_move',      ex, vec, vec)
-  wrp.fn(log.trace, space_agent, 'move',          ex, vec, vec)
+  wrp.fn(log.trace, space_agent, 'move',         ex, vec, vec)
+  wrp.fn(log.trace, space_agent, 'listen',       ex, typ.tab, typ.str, typ.boo)
 end
 
 return space_agent

@@ -28,7 +28,10 @@ function space:new(cols, rows, seed)
     move_count = 0, -- number of moves from start
     own_evt = evt:new(), -- owner events - full information
     opp_evt = evt:new(), -- events from opponent - hidden information
-    set_move = bro:new('set_move')
+    set_move = bro:new('set_move'), -- delegate
+    set_ability = bro:new('set_ability'), -- delegate
+    set_color = bro:new('set_color'), -- delegate
+    remove_piece = bro('remove_piece') -- delegate
   })
 
   -- fill grid
@@ -50,16 +53,8 @@ function space:row(place)   return place % self.cols end
 function space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 -- EVENTS------------------------------------------------------------------------
-function space:listen_set_move(listener, subscribe)
-  self.set_move:listen(listener, subscribe)
-end
-
--- send private event
-function space:whisper(event, ...)
-  ass.is(self, space)
-  ass(typ.str(event))
-  log.info('space:notify_own', event, ...)
-  self.own_evt:call(event, ...)
+function space:listen(listener, name, subscribe)
+  self[name]:listen(listener, subscribe)
 end
 
 -- send public event
@@ -242,6 +237,7 @@ function space:wrap()
   wrp.fn(log.info, space, 'can_move',     ex,  vec, vec)
   wrp.fn(log.trace, space, 'move',        ex,  vec, vec)
   wrp.fn(log.trace, space, 'use',         ex,  vec, typ.str)
+  wrp.fn(log.trace, space, 'listen',      ex,  typ.tab, typ.str, typ.boo)
 end
 
 -- return module

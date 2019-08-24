@@ -14,13 +14,16 @@ function invisible:new(stone, id, count)
   self[_stone] = stone
 
   local piece = stone:get_piece()
-  self:set_move(piece:get_space():get_move_pid())
-  piece:listen_set_move(self, true)
+  local space = piece:get_space()
+  self:set_move(space:get_move_pid())
+  space:listen_set_move(self, true)
   return self
 end
 --
 function invisible:destroy()
-  self[_stone]:get_piece():listen_set_move(self, false)
+  local piece = self[_stone]:get_piece()
+  local space = piece:get_space()
+  space:listen_set_move(self, false)
   self[_stone] = nil
 end
 

@@ -31,7 +31,7 @@ function stone:new(env, piece_friend)
   self[_view].show('stone')
   self[_abilities] = {}
   self[_piece] = piece_friend
-  self[_piece]:listen_set_move(self, true)
+  self[_piece]:get_space():listen_set_move(self, true)
 
   self:set_color(self[_piece]:get_pid())
   return self
@@ -44,12 +44,12 @@ end
 -- remove stone from board
 function stone:putoff()
   ass(self.board)
-  self[_piece]:listen_set_move(self, false)
+  map.invoke_self(self.powers, 'destroy')
+  self[_piece]:get_space():listen_set_move(self, false)
   self[_piece] = nil
   self[_view]:removeSelf()
   self[_view] = nil
   self[_abilities] = nil
-  map.invoke_self(self.powers, 'destroy')
   self.powers = nil
   self.board = nil
   self.com_destroy()
@@ -165,8 +165,6 @@ function stone:hide_abilities()
 end
 
 -- set ability count 
-function stone:set_ability_wrap_before(id, count)
-end
 function stone:set_ability(id, count)
   ass.ge(count, 0)
 

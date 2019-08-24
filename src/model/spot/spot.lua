@@ -117,7 +117,7 @@ function spot:move_piece(from)
   if self.piece then
     self.piece:die()
     self.piece = nil
-    self.space:yell('remove_piece', self.pos) -- notify
+    self.space.remove_piece(self.pos) -- notify
   end
   -- change piece position
   from.piece:move_before(from, self)

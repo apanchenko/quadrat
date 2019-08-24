@@ -25,6 +25,9 @@ function board:new(space_board, battle_view)
   self.on_change = evt:new()
 
   self[_space]:add_listener(self)
+  self[_space]:listen_set_ability(self, true) -- todo: unlisten
+  self[_space]:listen_set_color(self, true) -- todo: unlisten
+  self[_space]:listen_remove_piece(self, true) -- todo: unlisten
 
   self.view = lay.new_layout().new_group()
 
@@ -118,7 +121,7 @@ function board:unstash_piece(pos)
   self:cell(pos):unstash_piece(self.stash)
 end
 --
-function board:piece_set_color(pos, color)
+function board:set_color(pos, color)
   local stone = self:stone(pos)
   stone:set_color(color)
   self.on_change:call('on_stone_color_changed', stone)
@@ -157,7 +160,7 @@ function board:wrap()
   wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab)
   wrp.fn(log.trace, board, 'set_ability',        ex, vec, id, count)
   wrp.fn(log.info, board, 'piece_add_power',     ex, vec, typ.str, count)
-  wrp.fn(log.info, board, 'piece_set_color',     ex, vec, playerid)
+  wrp.fn(log.info, board, 'set_color',           ex, vec, playerid)
   wrp.fn(log.info, board, 'add_spot_comp',       ex, vec, typ.str, typ.num)
 end
 

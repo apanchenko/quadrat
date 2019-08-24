@@ -1,4 +1,4 @@
-local obj   = require('src.lua-cor.obj')
+local obj = require('src.lua-cor.obj')
 
 -- enemy piece interface for player
 local piece_foe = obj:extend('piece_enemy')
@@ -18,11 +18,6 @@ end
 --
 function piece_foe:get_space()
   return self[_space]
-end
-
---
-function piece_foe:listen_set_move(listener, subscribe)
-  self[_space]:listen_set_move(listener, subscribe)
 end
 
 --

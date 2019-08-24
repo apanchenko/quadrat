@@ -40,6 +40,7 @@ function piece_friend:is_invisible()
   return self[_piece]:count_power(invis:get_typename())
 end
 
+
 -- MOVE ----------------------------------------------------------------------
 --
 function piece_friend:can_move(to)
