@@ -1,7 +1,6 @@
 local spot      = require 'src.model.spot.spot'
 local playerid  = require 'src.model.playerid'
 local cfg       = require 'src.model.cfg'
-local evt       = require 'src.lua-cor.evt'
 local vec       = require('src.lua-cor.vec')
 local ass       = require 'src.lua-cor.ass'
 local log       = require('src.lua-cor.log').get('mode')
@@ -25,13 +24,22 @@ function space:new(cols, rows, seed)
     size  = vec(cols, rows),
     grid  = {},      -- cells
     pid   = playerid.white, -- who moves now
-    move_count = 0, -- number of moves from start
-    own_evt = evt:new(), -- owner events - full information
-    opp_evt = evt:new(), -- events from opponent - hidden information
-    set_move = bro:new('set_move'), -- delegate
-    set_ability = bro:new('set_ability'), -- delegate
-    set_color = bro:new('set_color'), -- delegate
-    remove_piece = bro('remove_piece') -- delegate
+    move_count    = 0, -- number of moves from start
+    set_move      = bro('set_move'), -- delegate
+    set_ability   = bro('set_ability'), -- delegate
+    set_color     = bro('set_color'), -- delegate
+    add_power     = bro('add_power'), -- delegate
+    remove_power  = bro('remove_power'), -- delegate
+    spawn_piece   = bro('spawn_piece'), -- delegate
+    move_piece    = bro('move_piece'), -- delegate
+    remove_piece  = bro('remove_piece'), -- delegate
+    stash_piece   = bro('stash_piece'), -- delegate
+    unstash_piece = bro('unstash_piece'), -- delegate
+    spawn_jade    = bro('spawn_jade'), -- delegate
+    stash_jade    = bro('stash_jade'), -- delegate
+    unstash_jade  = bro('unstash_jade'), -- delegate
+    remove_jade   = bro('remove_jade'), -- delegate
+    modify_spot   = bro('modify_spot'), -- delegate
   })
 
   -- fill grid
@@ -57,17 +65,6 @@ function space:listen(listener, name, subscribe)
   self[name]:listen(listener, subscribe)
 end
 
--- send public event
-function space:yell_wrap_before(event, ...)
-  ass.is(self, space)
-  ass.is(typ.str(event))
-end
-function space:yell(event, ...)
-  log.info('space:yell', event, ...)
-  self.own_evt:call(event, ...)
-  self.opp_evt:call(event, ...)
-end
-
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
 function space:setup()
@@ -77,8 +74,7 @@ function space:setup()
     self:spot(vec(x, self.rows - 1)):spawn_piece(playerid.black)
     self:spot(vec(x, self.rows - 2)):spawn_piece(playerid.black)
   end
-  self:yell('move', self.pid) -- notify color to move
-  self.set_move(self.pid)
+  self.set_move(self.pid) -- notify
 end
 -- position vector from grid index
 function space:pos(index)   return vec(self:col(index), self:row(index)) end
@@ -196,8 +192,7 @@ function space:move(fr, to)
         :each(function(spot) spot:spawn_jade() end)
   end
 
-  self:yell('move', self.pid) -- notify color to move
-  self.set_move(self.pid)
+  self.set_move(self.pid) -- notify
 end
 
 -- use ability

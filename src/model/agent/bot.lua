@@ -14,12 +14,12 @@ local _space = {}
 function bot:new(space_agent)
   self = obj.new(self, com())
   self[_space] = space_agent
-  self[_space]:add_listener(self)
+  self[_space]:listen_set_move(self, true) -- todo unlisten
   return self
 end
 
 --
-function bot:move(pid)
+function bot:set_move(pid)
   if self[_space]:is_my_move() then
     timer.performWithDelay(100, function() self:move_async() end)
   end

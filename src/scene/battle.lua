@@ -11,7 +11,6 @@ local space         = require 'src.model.space.space'
 local space_agent   = require 'src.model.space.agent'
 local space_board   = require 'src.model.space.board'
 local agent         = require 'src.model.agent._pack'
-local typ     = require('src.lua-cor.typ')
 local com     = require 'src.lua-cor.com'
 
 -- battle scene
@@ -58,10 +57,7 @@ function battle:create(event)
   self.players[black] = player(black, "Gala")
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
-  env.space.own_evt.add(self)
-
-  local space_board = space_board:new(env.space)
-  self.board = board:new(space_board, self.view)
+  self.board = board:new(space_board(env.space), self.view)
   lay.insert(self.view, self.board.view, cfg.board.view)
 
   local space_white = space_agent:new(env.space, playerid.white)
@@ -71,15 +67,16 @@ function battle:create(event)
   self.player_black = agent:get(event.params.black):new(space_black)
 
   if event.params.black == 'user' then
-    self.board.on_change:listen(self.player_black)
+    self.board:listen_spawn_stone(self.player_black, true)
+    self.board:listen_stone_color_changed(self.player_black, true)
   end
+  self.board:get_space():listen_set_move(self, true) -- todo unlisten
 
   env.space:setup() -- start playing
-
 end
 
 --
-function battle:move(pid)
+function battle:set_move(pid)
   log.trace('-----------------------------------------------')
 
   local counts = env.space:count_pieces()
@@ -134,7 +131,7 @@ Runtime:addEventListener('resize', function(event) battle.resize(event) end)
 -- MODULE-----------------------------------------------------------------------
 -- wrap vec functions
 function battle:wrap()
-  wrp.fn(log.info, battle, 'move', battle, playerid)
+  wrp.fn(log.info, battle, 'set_move', battle, playerid)
 end
 
 return battle

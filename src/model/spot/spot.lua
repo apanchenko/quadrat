@@ -39,10 +39,10 @@ end
 
 
 -- create empty cell
-function spot:new(x, y, space)
+function spot:new(x, y, space_model)
   return obj.new(self,
   {
-    space = space, -- duplicate
+    space = space_model, -- duplicate
     pos = vec(x, y), -- duplicate
     jade = nil, -- store
     comps = cnt:new() -- container for powers
@@ -63,7 +63,7 @@ local function support_stash(name)
   -- put 'name' into special hidden place for a short time
   -- caller is responsible for stash
   -- stash is a FILO stack
-  spot['stash_'..name..'_before'] = function(self)
+  spot['stash_'..name..'_wrap_before'] = function(self)
     ass(self[name])
   end
 
@@ -72,15 +72,15 @@ local function support_stash(name)
     self[name] = nil
     obj:set_pos(nil)
     stash:push(obj)
-    self.space:yell('stash_'..name, self.pos) -- notify
+    self.space['stash_'..name](self.pos)
   end
 
-  spot['stash_'..name..'_after'] = function(self)
+  spot['stash_'..name..'_wrap_after'] = function(self)
     ass.nul(self[name])
   end
 
   -- get 'name' from stash
-  spot['unstash_'..name..'_before'] = function(self)
+  spot['unstash_'..name..'_wrap_before'] = function(self)
     ass.nul(self[name])
     ass(self['can_set_'..name](self))
   end
@@ -88,10 +88,10 @@ local function support_stash(name)
   spot['unstash_'..name] = function(self, stash)
     self[name] = stash:pop()
     self[name]:set_pos(self.pos)
-    self.space:yell('unstash_'..name, self.pos) -- notify
+    self.space['unstash_'..name](self.pos)
   end
 
-  spot['unstash_'..name..'_after'] = function(self)
+  spot['unstash_'..name..'_wrap_after'] = function(self)
     ass(self[name])
   end
 end
@@ -108,7 +108,7 @@ function spot:spawn_piece(color)
   ass.nul(self.piece)
   self.piece = piece:new(self.space, color)
   self.piece:set_pos(self.pos)
-  self.space:yell('spawn_piece', color, self.pos) -- notify
+  self.space.spawn_piece(color, self.pos) -- notify
 end
 
 -- move piece from another spot to this
@@ -129,7 +129,7 @@ function spot:move_piece(from)
   if self.jade then
     self.piece:add_jade(self.jade)
     self.jade = nil 
-    self.space:yell('remove_jade', self.pos) -- notify
+    self.space.remove_jade(self.pos) -- notify
   end
 end
 
@@ -160,13 +160,13 @@ function spot:spawn_jade()
   --  return
   --end
   self.jade = jade:new()
-  self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
+  self.space.spawn_jade(self.pos) -- notify that a new jade set
 end
 
 -- take chance to spawn a new jade if can
 function spot:set_jade()
   self.jade = jade:new()
-  self.space:yell('spawn_jade', self.pos) -- notify that a new jade set
+  self.space.spawn_jade(self.pos) -- notify that a new jade set
 end
 
 -- Remove and return jade
@@ -176,7 +176,7 @@ end
 function spot:remove_jade()
   local jade = self.jade
   self.jade = nil
-  self.space:yell('remove_jade', self.pos) -- notify that a new jade set
+  self.space.remove_jade(self.pos) -- notify that a new jade set
   return jade
 end
 function spot:remove_jade_wrap_after(jade)
@@ -191,7 +191,7 @@ support_stash('jade')
 --
 function spot:add_comp(comp)
   local count = self.comps:push(comp)
-  self.space:yell('add_spot_comp', self.pos, comp.id, count) -- notify
+  self.space.modify_spot(self.pos, comp.id, count) -- notify
 end
 
 -- MODULE ---------------------------------------------------------------------

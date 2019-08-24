@@ -28,7 +28,7 @@ function purify:apply_to_enemy(spot)
     if power:is_positive() then
       piece:remove_power(id)
     end
-  end)    
+  end)
 end
 
 --

@@ -5,7 +5,7 @@ local cfg      = require 'src.cfg'
 local obj      = require('src.lua-cor.obj')
 local lay      = require('src.lua-cor.lay')
 local log      = require('src.lua-cor.log').get('view')
-local evt      = require 'src.lua-cor.evt'
+local bro      = require 'src.lua-cor.bro'
 local env      = require 'src.lua-cor.env'
 local arr      = require 'src.lua-cor.arr'
 local com      = require 'src.lua-cor.com'
@@ -22,12 +22,20 @@ function board:new(space_board, battle_view)
   self[_space] = space_board
   self[_battle_view] = battle_view
 
-  self.on_change = evt:new()
+  self.spawn_stone = bro('spawn_stone') -- delegate
+  self.stone_color_changed = bro('stone_color_changed') -- delegate
 
-  self[_space]:add_listener(self)
   self[_space]:listen_set_ability(self, true) -- todo: unlisten
   self[_space]:listen_set_color(self, true) -- todo: unlisten
+  self[_space]:listen_add_power(self, true) -- todo: unlisten
+  self[_space]:listen_move_piece(self, true) -- todo: unlisten
   self[_space]:listen_remove_piece(self, true) -- todo: unlisten
+  self[_space]:listen_stash_piece(self, true) -- todo: unlisten
+  self[_space]:listen_unstash_piece(self, true) -- todo: unlisten
+  self[_space]:listen_spawn_piece(self, true) -- todo: unlisten
+  self[_space]:listen_spawn_jade(self, true) -- todo: unlisten
+  self[_space]:listen_remove_jade(self, true) -- todo: unlisten
+  self[_space]:listen_modify_spot(self, true) -- todo: unlisten
 
   self.view = lay.new_layout().new_group()
 
@@ -49,6 +57,15 @@ function board:new(space_board, battle_view)
 
   self.view.anchorChildren = true -- center on screen
   return self
+end
+
+--
+function board:listen_spawn_stone(listener, subscribe)        self.spawn_stone:listen(listener, subscribe) end
+function board:listen_stone_color_changed(listener, subscribe)self.stone_color_changed:listen(listener, subscribe) end
+
+--
+function board:get_space()
+  return self[_space]
 end
 
 -- POSITION--------------------------------------------------------------------
@@ -84,12 +101,13 @@ function board:unstash_jade(pos)
 end
 
 -- PIECE -----------------------------------------------------------------------
+--
 function board:spawn_piece(color, pos)
   local space = space_agent:new(env.space, color)
   local stone = Stone:new(env, space:get_piece(pos)) -- create a new stone
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
-  self.on_change:call('on_spawn_stone', stone)
+  self.spawn_stone(stone)
 end
 --
 function board:move_piece(to, from)
@@ -106,7 +124,7 @@ function board:set_ability(pos, id, count)
   self:stone(pos):set_ability(id, count)
 end
 --
-function board:piece_add_power(pos, name, count)
+function board:add_power(pos, name, count)
   self:stone(pos):add_power(name, count)
 end
 --
@@ -124,10 +142,10 @@ end
 function board:set_color(pos, color)
   local stone = self:stone(pos)
   stone:set_color(color)
-  self.on_change:call('on_stone_color_changed', stone)
+  self.stone_color_changed(stone) -- notify
 end
 --
-function board:add_spot_comp(pos, id, count)
+function board:modify_spot(pos, id, count)
   local cel = self:cell(pos)
   cel:add_comp(id, count)
 end
@@ -159,9 +177,11 @@ function board:wrap()
 
   wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab)
   wrp.fn(log.trace, board, 'set_ability',        ex, vec, id, count)
-  wrp.fn(log.info, board, 'piece_add_power',     ex, vec, typ.str, count)
+  wrp.fn(log.info, board, 'add_power',           ex, vec, typ.str, count)
   wrp.fn(log.info, board, 'set_color',           ex, vec, playerid)
-  wrp.fn(log.info, board, 'add_spot_comp',       ex, vec, typ.str, typ.num)
+  wrp.fn(log.info, board, 'modify_spot',         ex, vec, typ.str, typ.num)
+  wrp.fn(log.trace, board, 'listen_spawn_stone',     ex, typ.tab, typ.boo)
+  wrp.fn(log.trace, board, 'listen_stone_color_changed',  ex, typ.tab, typ.boo)
 end
 
 return board

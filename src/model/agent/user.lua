@@ -21,7 +21,7 @@ function user:__tostring()
 end
 
 -- event from board
-function user:on_spawn_stone(stone)
+function user:spawn_stone(stone)
   if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
@@ -29,7 +29,7 @@ function user:on_spawn_stone(stone)
 end
 
 -- event from board
-function user:on_stone_color_changed(stone)
+function user:stone_color_changed(stone)
   if stone.pid == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
@@ -48,7 +48,8 @@ function user:wrap()
   local stone = require('src.view.stone.stone')
 
   wrp.fn(log.trace, user, 'new',            user, space_agent)
-  wrp.fn(log.trace, user, 'on_spawn_stone', typ.new_ex(user), stone)
+  wrp.fn(log.trace, user, 'spawn_stone',        typ.new_ex(user), stone)
+  wrp.fn(log.trace, user, 'stone_color_changed', typ.new_ex(user), stone)
 end
 
 return user

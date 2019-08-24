@@ -13,7 +13,7 @@ local _space = {}
 function random:new(space_agent)
   self = obj.new(self, com())
   self[_space] = space_agent
-  self[_space]:add_listener(self)
+  self[_space]:listen_set_move(self, true) -- todo unlisten
   return self
 end
 
@@ -23,7 +23,7 @@ function random:__tostring()
 end
 
 --
-function random:move(pid)
+function random:set_move(pid)
   if self[_space]:is_my_move() then
     timer.performWithDelay(100, function() self:move_async() end)
   end
@@ -71,7 +71,7 @@ function random:wrap()
   local ex    = typ.new_ex(random)
 
   wrp.fn(log.trace, random, 'new',        random, space_agent)
-  wrp.fn(log.info, random, 'move',        ex, playerid)
+  wrp.fn(log.info, random, 'set_move',        ex, playerid)
   wrp.fn(log.trace, random, 'move_async', ex)
 end
 

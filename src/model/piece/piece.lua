@@ -109,7 +109,7 @@ function piece:move(fr, to)
 end
 --
 function piece:move_after(fr, to)
-  self.space:yell('move_piece', to.pos, fr.pos) -- notify
+  self.space.move_piece(to.pos, fr.pos) -- notify
   self.powers:each(function(p) return p:move_after(fr, to) end)
 end
 
@@ -120,7 +120,6 @@ function piece:add_jade(jade)
   local res_count = self.jades_cnt:push(jade)
   -- TODO: change event name to 'add_jade'
   self.space.set_ability(self.pos, jade.id, res_count)
-  self.space:yell('piece_has_jade', self.pos, true)
   -- TODO: optimize - make listening powers
   self.powers:each(function(p) p:on_add_jade(jade) end)
 end
@@ -130,10 +129,6 @@ function piece:remove_jade(id, count)
   local jade = self.jades_cnt:pull(id, count)
   ass(jade) -- TODO: to wrap prereq
   self.space.set_ability(self.pos, id, self.jades_cnt:count(id))
-  -- yell piece has no jades
-  if self.jades_cnt:is_empty() then
-    self.space:yell('piece_has_jade', self.pos, false)
-  end
   return jade
 end
 
@@ -159,7 +154,6 @@ function piece:clear_jades()
   self:each_jade(function(jade)
     self.space.set_ability(self.pos, jade.id, 0)
   end)
-  self.space:yell('piece_has_jade', self.pos, false)
   self.jades_cnt:clear()
 end
 
@@ -171,19 +165,19 @@ end
 --
 function piece:add_power(power)
   local count = self.powers:push(power)
-  self.space:yell('piece_add_power', self.pos, power.id, count) -- notify
+  self.space.add_power(self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
   self.powers:pull(id, 1)
-  self.space:yell('piece_add_power', self.pos, id, self.powers:count(id)) -- notify
+  self.space.add_power(self.pos, id, self.powers:count(id)) -- notify
 end
 
 -- Completely remove power by id
 function piece:remove_power(id)
   self.powers:remove(id)
-  self.space:yell('remove_power', self.pos, id) -- notify
+  self.space.remove_power(self.pos, id) -- notify
 end
 
 --
