@@ -9,3 +9,8 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 - VSCode with sumneko.lua plugin
 - Inkscape
 - Corona SDK
+
+## Export images
+
+- Add inkscape to path
+- See https://inkscape.org/doc/inkscape-man.html
