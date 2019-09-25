@@ -10,6 +10,7 @@ powers['Jumpproof'] = image
 powers['Sphere'] = image
 powers['Parasite'] = image
 powers['Parasite_host'] = image
+powers['Scavenger'] = image
 powers['Invisible'] = invisible
 
 return powers

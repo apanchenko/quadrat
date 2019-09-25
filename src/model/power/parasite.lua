@@ -1,6 +1,6 @@
-local areal     = require 'src.model.power.areal'
-local host      = require 'src.model.power.parasite_host'
-local log = require('src.lua-cor.log').get('mode')
+local areal     = require('src.model.power.areal')
+local host      = require('src.model.power.parasite_host')
+local log       = require('src.lua-cor.log').get('mode')
 
 -- Leeches onto any surrounding enemy pieces. Any new powers they acquire your piece will also acquire.
 local parasite = areal:extend('Parasite')
@@ -23,7 +23,7 @@ end
 --
 function parasite:wrap()
   local wrp       = require('src.lua-cor.wrp')
-  local typ         = require('src.lua-cor.typ')
+  local typ       = require('src.lua-cor.typ')
   local spot      = require('src.model.spot.spot')
 
   local ex    = typ.new_ex(parasite)

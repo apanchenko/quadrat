@@ -27,7 +27,8 @@ function piece:wrap()
   -- position
   wrp.fn(log.info,  piece, 'get_pos',        ex)
   --wrp.fn(piece, 'set_pos',        { {'to', type={name='vec', is=isvec}} }      )
-  wrp.fn(log.info, piece, 'can_move',        ex, vec, vec)
+  wrp.fn(log.info,  piece, 'kill',           ex, typ.new_is(piece))
+  wrp.fn(log.info,  piece, 'can_move',       ex, vec, vec)
   wrp.fn(log.trace, piece, 'move_before',    ex, spot, spot)
   wrp.fn(log.trace, piece, 'move',           ex, spot, spot)
   wrp.fn(log.trace, piece, 'move_after',     ex, spot, spot)
@@ -89,6 +90,15 @@ end
 --
 function piece:get_pos()
   return self.pos
+end
+
+-- kill another piece
+function piece:kill(victim_piece)
+  self.powers:each(function(p)
+    if p.kill then
+      return p:kill(victim_piece)
+    end
+  end)
 end
 
 --

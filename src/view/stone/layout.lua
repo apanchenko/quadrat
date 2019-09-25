@@ -41,5 +41,6 @@ layout:add_image('Movediagonal',  cell,   6, 'movediagonal')
 layout:add_image('Parasite',      cell,   7, 'parasite')
 layout:add_image('Parasite_host', cell,   8, 'parasite_host')
 layout:add_image('Sphere',        cell,   9, 'sphere')
+layout:add_image('Scavenger',     cell,   10, 'scavenger')
 
 return layout
