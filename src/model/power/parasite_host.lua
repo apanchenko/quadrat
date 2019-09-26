@@ -14,7 +14,7 @@ function parasite_host:on_add_jade(jade)
   local space = self.piece.space
   -- find enemy pieces with parasite
   local enemy_pid = self.piece.pid:swap()
-  -- TODO: optimize - cach pieces with parasites (in player?)
+  -- TODO: optimize - cache pieces with parasites (in player?)
   space:each_piece(function(piece)
     -- consider enemies only
     if piece.pid == enemy_pid then

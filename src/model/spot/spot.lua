@@ -115,7 +115,7 @@ end
 function spot:move_piece(from)
   -- kill target piece
   if self.piece then
-    from.piece:kill(self.piece)
+    from.piece:on_kill(self.piece)
     self.piece:die()
     self.piece = nil
     self.space.remove_piece(self.pos) -- notify

@@ -100,15 +100,6 @@ function space:each_spot(fn)
     fn(self.grid[i])
   end
 end
---
-function space:each_piece(fn)
-  self:each_spot(function(spot)
-    local piece = spot.piece
-    if piece then
-      fn(piece)
-    end
-  end)
-end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
@@ -135,6 +126,15 @@ function space:count_pieces()
   return res
 end
 
+--
+function space:each_piece(fn)
+  self:each_spot(function(spot)
+    local piece = spot.piece
+    if piece then
+      fn(piece)
+    end
+  end)
+end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
