@@ -36,11 +36,11 @@
      inkscape:window-height="1147"
      inkscape:window-width="1600"
      showgrid="false"
-     inkscape:current-layer="svg8"
+     inkscape:current-layer="parasite_host"
      inkscape:document-units="px"
      inkscape:cy="-29.162853"
-     inkscape:cx="-74.690577"
-     inkscape:zoom="1.866066"
+     inkscape:cx="-6.5189981"
+     inkscape:zoom="3.7190539"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -926,11 +926,10 @@
   </g>
   <g
      sodipodi:insensitive="true"
-     inkscape:groupmode="layer"
-     style="display:none"
+     style="display:inline"
      transform="translate(8.0393096,78.021316)"
-     id="g890"
-     inkscape:label="impeccable">
+     id="jumpproof"
+     inkscape:label="jumpproof">
     <rect
        sodipodi:insensitive="true"
        y="-44.154648"
@@ -986,18 +985,17 @@
        style="opacity:0.4;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none" />
   </g>
   <g
-     inkscape:groupmode="layer"
      inkscape:label="parasite_host"
-     id="g6430"
+     id="parasite_host"
      transform="translate(8.0393096,78.021316)"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <path
        sodipodi:nodetypes="cccccccccccccccccccccccccccccccccsssss"
        inkscape:connector-curvature="0"
        id="path7686"
        d="m -4.1782131,-34.304088 -7.9067869,0.02505 0.08419,3.504302 c -2.793245,0.536436 -5.448018,1.634092 -7.802968,3.226257 l -2.560873,-2.436059 -5.457997,5.712829 2.411084,2.293794 c -1.596632,2.352568 -2.696752,5.004829 -3.233374,7.795283 l -3.532435,0.08917 0.0017,7.8678313 3.534845,-0.060692 c 0.537377,2.7875038 1.637102,5.43685338 3.232341,7.7870369 l -2.441559,2.555644 5.725035,5.4473703 2.298484,-2.4061625 c 2.357229,1.5933072 5.014733,2.6911801 7.810716,3.226771 l 0.08936,3.52574 7.8956167,-0.0013 -0.072504,-3.527626 C -1.309936,9.7849172 1.3450162,8.6874349 3.7001626,7.0953892 L 6.261036,9.5319626 11.718516,3.8196481 9.3079484,1.5258552 c 1.5970616,-2.35264053 2.6975376,-5.0050885 3.2344066,-7.7957988 1.143712,-0.021826 2.288051,-0.010266 3.431974,-0.010873 0.0034,-2.6303847 0.0025,-5.2607724 0.0018,-7.8911594 -1.147079,-0.01106 -2.294683,0.01581 -3.441529,-0.01288 -0.538165,-2.781225 -1.636214,-5.424559 -3.2276923,-7.770022 l 2.4415583,-2.560798 -5.7296826,-5.441184 -2.293836,2.405646 c -2.3579054,-1.593841 -5.0163249,-2.692078 -7.8132851,-3.227651 z m -3.8728173,9.957634 c 7.81390975,0 14.148335,6.321494 14.1483348,14.119449 2e-7,7.7979552 -6.33442505,14.1194487 -14.1483348,14.1194487 -7.8139096,0 -14.1483346,-6.3214935 -14.1483346,-14.1194487 0,-7.797955 6.334425,-14.119449 14.1483346,-14.119449 z"
-       style="display:none;opacity:1;fill:#000000;fill-opacity:0.39215686;stroke:none;stroke-width:0.24804431;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:0.39215686;stroke:none;stroke-width:0.24804431;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
   <g
      inkscape:label="parasite"
@@ -1008,6 +1006,27 @@
        d="M 0.11359285,43.662404 -3.59641,49.829348 c -2.3946913,0.481615 -4.6685701,1.438284 -6.687307,2.813488 l -6.65682,-2.010519 1.734607,6.973011 c -1.340537,2.011244 -2.268894,4.268369 -2.731347,6.640766 l -2.660558,1.511895 -3.473348,1.975385 3.470248,1.974353 2.673992,1.518611 c 0.475293,2.432404 1.440257,4.742755 2.836241,6.790613 l -2.010533,6.656785 6.973049,-1.734598 c 2.0380973,1.35683 4.3280027,2.290392 6.733811,2.745286 l 3.2806139,6.119922 3.7100029,-6.166944 c 2.3946905,-0.481616 4.6685706,-1.438285 6.6873062,-2.813489 l 6.65682,2.01052 -1.734607,-6.973012 c 1.356835,-2.038083 2.290404,-4.327978 2.745298,-6.733773 l 6.119955,-3.280597 -6.166976,-3.709983 C 17.422419,61.74239 16.465746,59.468521 15.090533,57.449799 l 2.010533,-6.656785 -6.973049,1.734597 C 8.0899212,51.170783 5.8000145,50.237219 3.3942068,49.782326 Z M -8.4130644e-5,53.447356 A 14.286094,14.286018 0 0 1 14.28601,67.733374 14.286094,14.286018 0 0 1 -8.4130644e-5,82.019394 14.286094,14.286018 0 0 1 -14.286179,67.733374 14.286094,14.286018 0 0 1 -8.4130644e-5,53.447356 Z"
        id="path22708"
        inkscape:connector-curvature="0" />
+  </g>
+  <g
+     id="movediagonal"
+     transform="rotate(45,3.8146973e-6,67.733337)"
+     style="display:inline"
+     inkscape:label="movediagonal">
+    <rect
+       y="65.181175"
+       x="-28.640907"
+       height="5.104321"
+       width="57.281822"
+       id="rect2259"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332" />
+    <rect
+       transform="rotate(90)"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       id="rect2297"
+       width="57.281822"
+       height="5.104321"
+       x="39.092426"
+       y="-2.5521643" />
   </g>
   <g
      sodipodi:insensitive="true"

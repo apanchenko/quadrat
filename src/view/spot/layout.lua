@@ -12,9 +12,11 @@ layout.add('floor',
   y = 0,
   w = 64,
   h = 64,
-  sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", sheet_opt),
-  frame = math.random(1, sheet_opt.numFrames),
-  fn = lay.new_sheet
+  --sheet = graphics.newImageSheet("src/view/spot/cell_1_s.png", sheet_opt),
+  path='images/spot/cell.png',
+  --frame = math.random(1, sheet_opt.numFrames),
+  --fn = lay.new_sheet
+  fn = lay.new_image
 })
 
 return layout

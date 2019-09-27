@@ -28,6 +28,12 @@ function layout:add_image(id, shape, z, file)
     z=z, path='src/view/stone/'.. file.. '.png'
   }))
 end
+function layout:add_power(id, shape, z, file)
+  self.add(id, map.merge(shape,
+  {
+    z=z, path='images/power/'.. file.. '.png'
+  }))
+end
 
 layout:add_image('aura_white',    cell,   1, 'aura_white')
 layout:add_image('aura_black',    cell,   1, 'aura_black')
@@ -36,11 +42,11 @@ layout:add_image('white',         pimp,   3, 'pimp_green')
 layout:add_image('black',         pimp,   3, 'pimp_red')
 layout:add_image('active_white',  active, 4, 'active_green')
 layout:add_image('active_black',  active, 4, 'active_red')
-layout:add_image('Jumpproof',     cell,   5, 'jumpproof')
-layout:add_image('Movediagonal',  cell,   6, 'movediagonal')
-layout:add_image('Parasite',      cell,   7, 'parasite')
-layout:add_image('Parasite_host', cell,   8, 'parasite_host')
-layout:add_image('Sphere',        cell,   9, 'sphere')
-layout:add_image('Scavenger',     cell,   10, 'scavenger')
+layout:add_power('Jumpproof',     cell,   5, 'jumpproof')
+layout:add_power('Movediagonal',  cell,   6, 'movediagonal')
+layout:add_power('Parasite',      cell,   7, 'parasite')
+layout:add_power('Parasite_host', cell,   8, 'parasite_host')
+layout:add_power('Sphere',        cell,   9, 'sphere')
+layout:add_power('Scavenger',     cell,   10, 'scavenger')
 
 return layout
