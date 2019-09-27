@@ -89,17 +89,6 @@ end
 function board:remove_jade(pos)
   self:cell(pos):remove_jade()
 end
---
-function board:stash_jade(pos)
-  if self.jade_stash == nil then
-    self.jade_stash = arr()
-  end
-  self:cell(pos):stash_jade(self.jade_stash)
-end
---
-function board:unstash_jade(pos)
-  self:cell(pos):unstash_jade(self.jade_stash)
-end
 
 -- PIECE -----------------------------------------------------------------------
 --

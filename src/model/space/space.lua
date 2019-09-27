@@ -36,8 +36,6 @@ function space:new(cols, rows, seed)
     stash_piece   = bro('stash_piece'), -- delegate
     unstash_piece = bro('unstash_piece'), -- delegate
     spawn_jade    = bro('spawn_jade'), -- delegate
-    stash_jade    = bro('stash_jade'), -- delegate
-    unstash_jade  = bro('unstash_jade'), -- delegate
     remove_jade   = bro('remove_jade'), -- delegate
     modify_spot   = bro('modify_spot'), -- delegate
   })

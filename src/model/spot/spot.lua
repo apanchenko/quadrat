@@ -129,7 +129,7 @@ function spot:move_piece(from)
   -- consume jade
   if self.jade then
     self.piece:add_jade(self.jade)
-    self.jade = nil 
+    self.jade = nil
     self.space.remove_jade(self.pos) -- notify
   end
 end
@@ -186,7 +186,32 @@ function spot:remove_jade_wrap_after(jade)
 end
 
 -- add stash_jade/unstash_jade functions
-support_stash('jade')
+spot.stash_jade_wrap_before = function(self)
+  ass(self.jade)
+end
+spot.stash_jade = function(self, stash)
+  local j = self.jade
+  self.jade = nil
+  j:set_pos(nil)
+  stash:push(j)
+  self.space.remove_jade(self.pos)
+end
+spot.stash_jade_wrap_after = function(self)
+  ass.nul(self.jade)
+end
+
+spot.unstash_jade_wrap_before = function(self)
+  ass.nul(self.jade)
+  ass(self:can_set_jade())
+end
+spot.unstash_jade = function(self, stash)
+  self.jade = stash:pop()
+  self.jade:set_pos(self.pos)
+  self.space.spawn_jade(self.pos)
+end
+spot.unstash_jade_wrap_after = function(self)
+  ass(self.jade)
+end
 
 -- COMPONENTS -----------------------------------------------------------------
 --
