@@ -34,14 +34,20 @@ function layout:add_power(id, shape, z, file)
     z=z, path='images/power/'.. file.. '.png'
   }))
 end
+function layout:add_piece(id, shape, z, file)
+  self.add(id, map.merge(shape,
+  {
+    z=z, path='images/piece/'.. file.. '.png'
+  }))
+end
 
-layout:add_image('aura_white',    cell,   1, 'aura_white')
-layout:add_image('aura_black',    cell,   1, 'aura_black')
-layout:add_image('stone',         cell,   2, 'stone')
-layout:add_image('white',         pimp,   3, 'pimp_green')
-layout:add_image('black',         pimp,   3, 'pimp_red')
-layout:add_image('active_white',  active, 4, 'active_green')
-layout:add_image('active_black',  active, 4, 'active_red')
+layout:add_piece('aura_white',    cell,   1, 'ability_white')
+layout:add_piece('aura_black',    cell,   1, 'ability_black')
+layout:add_piece('stone',         cell,   2, 'body')
+layout:add_piece('white',         cell,   3, 'pimp_white')
+layout:add_piece('black',         cell,   3, 'pimp_black')
+layout:add_piece('active_white',  active, 4, 'active_white')
+layout:add_piece('active_black',  active, 4, 'active_black')
 layout:add_power('Jumpproof',     cell,   5, 'jumpproof')
 layout:add_power('Movediagonal',  cell,   6, 'movediagonal')
 layout:add_power('Parasite',      cell,   7, 'parasite')

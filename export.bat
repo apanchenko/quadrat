@@ -2,7 +2,7 @@
 
 :: clean target folder
 if exist images (
-  del /Q images\*
+  del /S /Q images\*
 ) else (
   mkdir images
 )
@@ -15,9 +15,19 @@ call :img power parasite
 call :img power parasite_host
 call :img power scavenger
 call :img power sphere
+call :img piece body
+call :colors piece active
+call :colors piece ability
+call :colors piece pimp
 exit /B %ERRORLEVEL%
 
-:: export single image from vector
+:: export piece-color images (folder, object)
+:colors
+  call :img %~1 %~2_white
+  call :img %~1 %~2_black
+exit /B 0
+
+:: export single image from vector (folder, object)
 :img
   set target=images\%~1
   if not exist %target% md %target%
