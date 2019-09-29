@@ -40,7 +40,7 @@ local cfg = {
     vy = 4,
     vw = 12,
     ratio = 2,
-    path="src/view/arrow.png"
+    path="images/board/arrow.png"
   },
 
   player = {

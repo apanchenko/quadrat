@@ -28,7 +28,7 @@ end
 --
 function cell:add_comp(id, count)
   if id == 'spot_acidic' then
-    lay.new_image(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='src/view/stone/jumpproof.png'})
+    lay.new_image(self.view, {z=1, x=0, y=0, w=cfg.view.cell.w, h=cfg.view.cell.h, path='images/power/jumpproof.png'})
   end
 end
 
