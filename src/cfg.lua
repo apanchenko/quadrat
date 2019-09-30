@@ -23,7 +23,7 @@ cfg.view.battle = {
     vy = 0,
     vw = 100,
     vh = 100,
-    path="src/background.png"
+    path="images/board/back.png"
   },
 }
 

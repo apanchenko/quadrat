@@ -7,8 +7,12 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 ## Tools
 
 - VSCode with sumneko.lua plugin
-- Inkscape
+- Inkscape x64 0.92.4
 - Corona SDK
+
+## Issues
+
+- Inaccurate colors of exported back image
 
 ## Export images
 

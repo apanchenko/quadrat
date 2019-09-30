@@ -10,7 +10,7 @@ local cfg = {
     y = 0,
     vw = 100,
     vh = 100,
-    path = "src/background.png",
+    path = "images/board/back.png",
     fn = lay.new_image
   },
 
