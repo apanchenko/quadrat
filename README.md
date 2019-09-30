@@ -12,9 +12,9 @@ Two players are at opposite ends of the board. One player has dark pieces, and o
 
 ## Issues
 
-- Inaccurate colors of exported back image
+- Inaccurate colors of exported back image - try inkscape 32bit
 
 ## Export images
 
 - Add inkscape to path
-- See https://inkscape.org/doc/inkscape-man.html
+- See <https://inkscape.org/doc/inkscape-man.html>

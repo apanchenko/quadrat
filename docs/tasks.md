@@ -11,7 +11,6 @@
 - ground mods:       refurb, power plant
 - piece mods:        bankrupt, network, spyware, rat tail, inhibit
 - move powers:       hotspot, switcheroo, centerpult, tripwire
-- ability powers:    scavenger
 - attack powers:     bombs
 - orb mods:          orbspy
 - overall visual style
@@ -48,6 +47,8 @@
 
 ## Done
 
+- auto export all images from SVG
+- scavenger power
 - check everything tested - use pack.get
 - spawn fixed number of jades on random fields
 - beneficiary
