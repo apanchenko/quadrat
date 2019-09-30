@@ -24,6 +24,8 @@ call :raster_bw piece_qr  piece   active          %cell%
 call :raster_bw piece_qr  piece   ability         %cell%
 call :raster_bw piece_qr  piece   pimp            %cell%
 call :raster    arrow     board   arrow           0:0:128:64
+call :raster    jade      board   jade            0:0:256:256
+call :raster_bw piece_qr  board   project         %cell%
 exit /B %ERRORLEVEL%
 
 :: export image from vector (svg, folder, object, size)

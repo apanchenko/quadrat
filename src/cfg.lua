@@ -53,7 +53,7 @@ cfg.view.jade =
   vy = 0,
   w = cfg.view.cell.w,
   h = cfg.view.cell.h,
-  path = "src/view/jade.png", 
+  path = "images/board/jade.png",
 }
 
 cfg.view.stone = {

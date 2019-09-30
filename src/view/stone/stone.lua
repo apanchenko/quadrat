@@ -311,7 +311,7 @@ end
 --
 function stone:create_project(proj)
   if not self.project then
-    cfg.view.cell.path = "src/view/stone_"..tostring(self.pid).."_project.png"
+    cfg.view.cell.path = "images/board/project_"..tostring(self.pid)..".png"
     self.project = lay.new_image(self.board.view, cfg.view.cell)
   end
   self.proj = proj
