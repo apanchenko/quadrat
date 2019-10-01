@@ -17,6 +17,10 @@
 - smarter bot
 - single owner
 
+### Design
+
+- Difficulty curve <https://youtu.be/Jbn8IRmSq8M?t=277>
+
 ### Meta
 
 - jade shop
