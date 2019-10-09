@@ -4,7 +4,6 @@
 
 ### Core
 
-- move images to separate resource folder
 - local player side always bottom
 - pieces visually advise who moves now
 - ground level mods: snake, rise, lower, climb, plato, moat, trench, wall, invert, dredge
@@ -20,6 +19,7 @@
 ### Design
 
 - Difficulty curve <https://youtu.be/Jbn8IRmSq8M?t=277>
+- Communal playing <https://www.gamerefinery.com/casual-games-guilding-up/>
 
 ### Meta
 
@@ -51,6 +51,7 @@
 
 ## Done
 
+- move images to separate resource folder
 - auto export all images from SVG
 - scavenger power
 - check everything tested - use pack.get
