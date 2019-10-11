@@ -1,5 +1,7 @@
 local obj = require('src.lua-cor.obj')
 
+-- TODO rename file to foe
+
 -- enemy piece interface for player
 local piece_foe = obj:extend('piece_enemy')
 

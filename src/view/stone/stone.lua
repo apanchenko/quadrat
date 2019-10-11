@@ -17,6 +17,7 @@ local _ability_view = {}
 local _view = {}
 local _battle_view = {}
 local _piece = {}
+local _move_pid = {} -- moving side
 
 --INIT-------------------------------------------------------------------------
 function stone:new(piece_friend)
@@ -32,7 +33,7 @@ function stone:new(piece_friend)
   self[_piece] = piece_friend
   self[_piece]:get_space():listen_set_move(self, true)
 
-  self:set_color(self[_piece]:get_pid())
+  self:set_color(self:get_pid())
   return self
 end
 
@@ -54,15 +55,18 @@ function stone:putoff()
   self.com_destroy()
 end
 
+-- public 
+function stone:get_pid()
+  return self[_piece]:get_pid()
+end
+
 --
 function stone:__tostring()
   local s = "stone["
   if self._pos then
     s = s.. self._pos.x.. ','.. self._pos.y.. ','
   end
-  if self.pid ~= nil then
-    s = s.. tostring(self.pid)
-  end
+  s = s.. tostring(self:get_pid())
   if self.powers then
     for k in pairs(self.powers) do
       s = s.. " ".. k
@@ -72,21 +76,20 @@ function stone:__tostring()
 end
 
 --
-function stone:set_color(pid)
-  -- nothing to change
-  if pid ~= self.pid then
-    self.pid = pid
-    self[_view].show(tostring(pid))
-
-    if not self:is_abilities_empty() then
-      self:show_aura()
-    end
+local update_aura = function(self)
+  if self:is_abilities_empty() then
+    self[_view].hide('aura_white')
+    self[_view].hide('aura_black')
+  else
+    self[_view].show('aura_'..tostring(self:get_pid()))
   end
 end
 
---
-function stone:get_pid()
-  return self.pid
+-- event from board
+function stone:set_pid(pid)
+  self[_view].show(tostring(pid))
+  update_aura(self)
+  active_changed(self)
 end
 
 --
@@ -102,14 +105,21 @@ function stone:puton(board, battle_view)
   self[_battle_view] = battle_view
 end
 
--- space event
-function stone:set_move(pid)
+-- private
+local active_changed = function(self)
+  local pid = self:get_pid()
   local my_active_view = 'active_'..tostring(pid)
-  if self:get_pid() == pid then
+  if pid == self[_move_pid] then
     self[_view].show(my_active_view)
   else
     self[_view].hide(my_active_view)
   end
+end
+
+-- space event
+function stone:set_move(pid)
+  self[_move_pid] = pid
+  active_changed(self)
 end
 
 -- POSITION -------------------------------------------------------------------
@@ -127,10 +137,6 @@ function stone:pos()
 end
 
 -- ABILITY --------------------------------------------------------------------
---
-function stone:show_aura()
-  self[_view].show('aura_'..tostring(self.pid))
-end
 
 -- show on board
 function stone:show_abilities()
@@ -173,19 +179,14 @@ function stone:set_ability(id, count)
     self[_abilities][id] = count
   end
 
-  if count > 0 then
-    self:show_aura()
-  end
+  update_aura(self)
 
   local reshow = self[_ability_view] ~= nil
   if reshow then
     self:hide_abilities()
   end
 
-  if self:is_abilities_empty() then
-    self[_view].hide('aura_white')
-    self[_view].hide('aura_black')
-  else
+  if not self:is_abilities_empty() then
     if reshow then
       self:show_abilities()
     end
@@ -311,7 +312,7 @@ end
 --
 function stone:create_project(proj)
   if not self.project then
-    cfg.view.cell.path = "images/board/project_"..tostring(self.pid)..".png"
+    cfg.view.cell.path = "images/board/project_"..tostring(self:get_pid())..".png"
     self.project = lay.new_image(self.board.view, cfg.view.cell)
   end
   self.proj = proj
@@ -377,13 +378,11 @@ function stone:wrap()
   wrp.fn(log.trace, stone,  'new',            stone, piece_friend)
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
-  wrp.fn(log.trace, stone,  'set_color',      ex, playerid)
-  wrp.fn(log.info,  stone,  'get_pid',        ex)
+  wrp.fn(log.trace, stone,  'set_pid',        ex, playerid)
   wrp.fn(log.trace, stone,  'puton',          ex, board, typ.tab)
   wrp.fn(log.trace, stone,  'putoff',         ex)
   wrp.fn(log.trace, stone,  'set_move',       ex, playerid)
   wrp.fn(log.trace, stone,  'pos',            ex)
-  wrp.fn(log.trace, stone,  'show_aura',      ex)
   wrp.fn(log.trace, stone,  'set_ability',    ex, typ.str, typ.num)
   wrp.fn(log.trace, stone,  'add_power',      ex, typ.str, typ.num)
   wrp.fn(log.info,  stone,  'touch',          ex, event)

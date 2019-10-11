@@ -97,7 +97,7 @@ function board:spawn_piece(color, pos)
   local stone = Stone:new(space:get_piece(pos)) -- create a new stone
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
-  self.spawn_stone(stone)
+  self.spawn_stone(stone) -- notify
 end
 --
 function board:move_piece(to, from)
@@ -131,7 +131,7 @@ end
 --
 function board:set_color(pos, color)
   local stone = self:stone(pos)
-  stone:set_color(color)
+  stone:set_pid(color)
   self.stone_color_changed(stone) -- notify
 end
 --

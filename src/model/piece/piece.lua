@@ -1,8 +1,8 @@
 local obj       = require('src.lua-cor.obj')
-local ass       = require 'src.lua-cor.ass'
+local ass       = require('src.lua-cor.ass')
 local log       = require('src.lua-cor.log').get('mode')
 local vec       = require('src.lua-cor.vec')
-local cnt       = require 'src.lua-cor.cnt'
+local cnt       = require('src.lua-cor.cnt')
 local typ       = require('src.lua-cor.typ')
 
 --

@@ -22,7 +22,7 @@ end
 
 -- event from board
 function user:spawn_stone(stone)
-  if stone.pid == self[space]:get_my_pid() then
+  if stone:get_pid() == self[space]:get_my_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
   end
@@ -30,11 +30,11 @@ end
 
 -- event from board
 function user:stone_color_changed(stone)
-  if stone.pid == self[space]:get_my_pid() then
-    log.info('register ', stone, ' to listen itself')
+  if stone:get_pid() == self[space]:get_my_pid() then
+    log.trace('register ', stone, ' to listen itself')
     stone:activate_touch()
   else
-    log.info('unregister ', stone, ' listen touch')
+    log.trace('unregister ', stone, ' listen touch')
     stone:deactivate_touch()
   end
 end
