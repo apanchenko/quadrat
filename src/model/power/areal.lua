@@ -8,12 +8,15 @@ areal.is_areal = true
 function areal:wrap()
   local log   = require('src.lua-cor.log').get('mode')
   local typ   = require('src.lua-cor.typ')
+  local map   = require('src.lua-cor.map')
   local wrp   = require('src.lua-cor.wrp')
   local spot = require('src.model.spot.spot')
   local piece = require('src.model.piece.piece')
   local ex = typ.new_ex(areal)
 
-  wrp.fn(log.trace, areal, 'new',             areal, piece, typ.tab, typ.tab)
+  local tab = typ.tab:add_tostr(map.tostring)
+
+  wrp.fn(log.trace, areal, 'new',             areal, piece, tab, tab)
   wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot            )
   wrp.fn(log.trace, areal, 'apply_to_self',   ex                )
   wrp.fn(log.trace, areal, 'apply_to_friend', ex, spot            )

@@ -9,20 +9,20 @@ local user = obj:extend('user')
 local space = {}
 
 -- create
-function user:new(space_agent)
+function user:new(Controller)
   local this = obj.new(self, com())
-  this[space] = space_agent
+  this[space] = Controller
   return this
 end
 
 --
 function user:__tostring()
-  return 'player.user['..tostring(self[space]:get_my_pid())..']'
+  return 'player.user['..tostring(self[space]:get_pid())..']'
 end
 
 -- event from board
 function user:spawn_stone(stone)
-  if stone:get_pid() == self[space]:get_my_pid() then
+  if stone:get_pid() == self[space]:get_pid() then
     log.info('register ', stone, ' to listen itself')
     stone:activate_touch()
   end
@@ -30,7 +30,7 @@ end
 
 -- event from board
 function user:stone_color_changed(stone)
-  if stone:get_pid() == self[space]:get_my_pid() then
+  if stone:get_pid() == self[space]:get_pid() then
     log.trace('register ', stone, ' to listen itself')
     stone:activate_touch()
   else
@@ -44,10 +44,10 @@ end
 function user:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
-  local space_agent = require('src.model.space.agent')
+  local Controller = require('src.model.space.Controller')
   local stone = require('src.view.stone.stone')
 
-  wrp.fn(log.trace, user, 'new',            user, space_agent)
+  wrp.fn(log.trace, user, 'new',            user, Controller)
   wrp.fn(log.trace, user, 'spawn_stone',        typ.new_ex(user), stone)
   wrp.fn(log.trace, user, 'stone_color_changed', typ.new_ex(user), stone)
 end

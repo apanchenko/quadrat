@@ -25,7 +25,7 @@ function swap:wrap()
   local spot      = require('src.model.spot.spot')
 
   local ex    = typ.new_ex(swap)
-  wrp.fn(log.trace, swap, 'apply_to_spot', ex, spot)
+  wrp.fn(log.info, swap, 'apply_to_spot', ex, spot)
 end
 
 return swap

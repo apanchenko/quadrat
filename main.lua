@@ -4,7 +4,7 @@ local log = require('src.lua-cor.log')
 
 log.set_dev() -- select 'debug', 'dev', 'release'
 log.get(' lay').disable()
-log.get('view').disable()
+--log.get('view').disable()
 log.get('scen').disable()
 --log.get('view').disable()
 

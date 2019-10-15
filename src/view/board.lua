@@ -8,20 +8,25 @@ local log      = require('src.lua-cor.log').get('view')
 local bro      = require 'src.lua-cor.bro'
 local arr      = require 'src.lua-cor.arr'
 local com      = require 'src.lua-cor.com'
-local space_agent = require('src.model.space.agent')
+local Controller = require('src.model.space.Controller')
+local Pid      = require('src.model.playerid')
 
 local board = obj:extend('board')
 
 -- private
 local _space = {}
 local _battle_view = {}
-local _model = {}
+local _controller = {}
 
-function board:new(space_board, battle_view, space_model)
+function board:new(space_board, battle_view, controller_white, controller_black)
   self = obj.new(self, com())
   self[_space] = space_board
   self[_battle_view] = battle_view
-  self[_model] = space_model
+  self[_controller] =
+  {
+    [Pid.white] = controller_white,
+    [Pid.black] = controller_black
+  }
 
   self.spawn_stone = bro('spawn_stone') -- delegate
   self.stone_color_changed = bro('stone_color_changed') -- delegate
@@ -92,9 +97,10 @@ end
 
 -- PIECE -----------------------------------------------------------------------
 --
-function board:spawn_piece(color, pos)
-  local space = space_agent:new(self[_model], color)
-  local stone = Stone:new(space:get_piece(pos)) -- create a new stone
+function board:spawn_piece(pid, pos)
+  local controller = self[_controller][pid]
+  local stone = Stone:new(controller:get_piece(pos)) -- create a new stone
+  stone:set_controller(controller)
   stone:puton(self, self[_battle_view]) -- put piece on board
   self:cell(pos):set_stone(stone) -- cell that actor is going to move to
   self.spawn_stone(stone) -- notify
@@ -129,9 +135,9 @@ function board:unstash_piece(pos)
   self:cell(pos):unstash_piece(self.stash)
 end
 --
-function board:set_color(pos, color)
+function board:set_color(pos, pid)
   local stone = self:stone(pos)
-  stone:set_pid(color)
+  stone:set_controller(self[_controller][pid])
   self.stone_color_changed(stone) -- notify
 end
 --
@@ -164,8 +170,9 @@ function board:wrap()
   local ex    = typ.new_ex(board)
   local id    = typ.str
   local count = typ.num
+  local controller = typ.new_ex(Controller)
 
-  wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab, typ.tab)
+  wrp.fn(log.info, board, 'new',                 board, space_board, typ.tab, controller, controller)
   wrp.fn(log.trace, board, 'set_ability',        ex, vec, id, count)
   wrp.fn(log.info, board, 'add_power',           ex, vec, typ.str, count)
   wrp.fn(log.info, board, 'set_color',           ex, vec, playerid)

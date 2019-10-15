@@ -7,7 +7,7 @@ local lay           = require 'src.lua-cor.lay'
 local log           = require('src.lua-cor.log').get('scen')
 local wrp           = require('src.lua-cor.wrp')
 local space         = require 'src.model.space.space'
-local space_agent   = require 'src.model.space.agent'
+local Controller    = require 'src.model.space.Controller'
 local space_board   = require 'src.model.space.board'
 local agent         = require 'src.model.agent._pack'
 local com     = require 'src.lua-cor.com'
@@ -59,14 +59,14 @@ function battle:create(event)
   self.players[black] = player(black, "Gala")
   lay.insert(self.view, self.players[black].view, cfg.player.black)
 
-  self.board = board(space_board(self[_model]), self.view, self[_model])
+  local controller_white = Controller:new(self[_model], playerid.white)
+  local controller_black = Controller:new(self[_model], playerid.black)
+
+  self.board = board(space_board(self[_model]), self.view, controller_white, controller_black)
   lay.insert(self.view, self.board.view, cfg.board.view)
 
-  local space_white = space_agent:new(self[_model], playerid.white)
-  local space_black = space_agent:new(self[_model], playerid.black)
-
-  self.player_white = agent:get(event.params.white):new(space_white)
-  self.player_black = agent:get(event.params.black):new(space_black)
+  self.player_white = agent:get(event.params.white):new(controller_white)
+  self.player_black = agent:get(event.params.black):new(controller_black)
 
   if event.params.black == 'user' then
     self.board:listen_spawn_stone(self.player_black, true)

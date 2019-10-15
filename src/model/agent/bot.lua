@@ -11,9 +11,9 @@ local bot = obj:extend('bot')
 local _space = {}
 
 -- create
-function bot:new(space_agent)
+function bot:new(Controller)
   self = obj.new(self, com())
-  self[_space] = space_agent
+  self[_space] = Controller
   self[_space]:listen_set_move(self, true) -- todo unlisten
   return self
 end
@@ -28,7 +28,7 @@ end
 --
 function bot:move_async()
   local space = self[_space]
-  local pid = space:get_my_pid()
+  local pid = space:get_pid()
   local best_move_arr = arr()
   local best_value = -1
 
@@ -96,10 +96,10 @@ end
 function bot:wrap()
   local wrp       = require('src.lua-cor.wrp')
   local typ       = require('src.lua-cor.typ')
-  local space_agent = require('src.model.space.agent')
+  local Controller = require('src.model.space.Controller')
   local ex = typ.new_ex(bot)
 
-  wrp.fn(log.trace, bot, 'new', bot, space_agent)
+  wrp.fn(log.trace, bot, 'new', bot, Controller)
   wrp.fn(log.trace, bot, 'move_async', ex)
 end
 

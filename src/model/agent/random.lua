@@ -10,16 +10,16 @@ local random = obj:extend('random')
 local _space = {}
 
 -- constructor
-function random:new(space_agent)
+function random:new(Controller)
   self = obj.new(self, com())
-  self[_space] = space_agent
+  self[_space] = Controller
   self[_space]:listen_set_move(self, true) -- todo unlisten
   return self
 end
 
 --
 function random:__tostring()
-  return 'agent_random{'..tostring(self[_space]:get_my_pid())..'}'
+  return 'agent_random{'..tostring(self[_space]:get_pid())..'}'
 end
 
 --
@@ -66,11 +66,11 @@ function random:wrap()
   local wrp       = require('src.lua-cor.wrp')
   local typ       = require('src.lua-cor.typ')
 
-  local space_agent = require('src.model.space.agent')
+  local Controller = require('src.model.space.Controller')
   local playerid = require('src.model.playerid')
   local ex    = typ.new_ex(random)
 
-  wrp.fn(log.trace, random, 'new',        random, space_agent)
+  wrp.fn(log.trace, random, 'new',        random, Controller)
   wrp.fn(log.info, random, 'set_move',        ex, playerid)
   wrp.fn(log.trace, random, 'move_async', ex)
 end

@@ -16,11 +16,65 @@ local _abilities = {}
 local _ability_view = {}
 local _view = {}
 local _battle_view = {}
-local _piece = {}
+local _asset = {}
 local _move_pid = {} -- moving side
 
+-- private
+local update_aura = function(self)
+  if self:is_abilities_empty() then
+    self[_view].hide('aura_white')
+    self[_view].hide('aura_black')
+  else
+    self[_view].show('aura_'..tostring(self:get_pid()))
+  end
+end
+
+-- private
+local active_changed = function(self)
+  local pid = self:get_pid()
+  local my_active_view = 'active_'..tostring(pid)
+  if pid == self[_move_pid] then
+    self[_view].show(my_active_view)
+  else
+    self[_view].hide(my_active_view)
+  end
+end
+
+-- private
+local update_pid = function(self, pid)
+  self[_view].show(tostring(pid))
+  update_aura(self)
+  active_changed(self)
+end
+
+-- private
+local update_group_pos = function(self, pos)
+  -- remove from board
+  if pos == nil then
+    self._pos = nil
+    self[_view].x = 0
+    self[_view].y = 0
+    return
+  end
+
+  -- calculate new view position
+  local view_pos = pos * cfg.view.cell.size
+  if self.isSelected then
+    view_pos.y = view_pos.y - 10
+  end
+
+  if self._pos then
+    log.info('animate to view position', view_pos)
+    lay.to(self[_view], view_pos, cfg.view.stone.move)
+  else
+    log.info('instant set view position', view_pos)
+    view_pos:to(self[_view])
+  end
+  self._pos = pos
+end
+
 --INIT-------------------------------------------------------------------------
-function stone:new(piece_friend)
+function stone:new(asset)
   self = obj.new(self, com())
   self[_view] = self.com_add(layout.new_group())
   self.scale = 1
@@ -30,10 +84,10 @@ function stone:new(piece_friend)
 
   self[_view].show('stone')
   self[_abilities] = {}
-  self[_piece] = piece_friend
-  self[_piece]:get_space():listen_set_move(self, true)
+  self[_asset] = asset
+  self[_asset]:get_space():listen_set_move(self, true)
 
-  self:set_color(self:get_pid())
+  update_pid(self, asset:get_pid())
   return self
 end
 
@@ -45,8 +99,8 @@ end
 function stone:putoff()
   ass(self.board)
   map.invoke_self(self.powers, 'destroy')
-  self[_piece]:get_space():listen_set_move(self, false)
-  self[_piece] = nil
+  self[_asset]:get_space():listen_set_move(self, false)
+  self[_asset] = nil
   self[_view]:removeSelf()
   self[_view] = nil
   self[_abilities] = nil
@@ -57,7 +111,7 @@ end
 
 -- public 
 function stone:get_pid()
-  return self[_piece]:get_pid()
+  return self[_asset]:get_pid()
 end
 
 --
@@ -75,26 +129,16 @@ function stone:__tostring()
   return s.. "]"
 end
 
---
-local update_aura = function(self)
-  if self:is_abilities_empty() then
-    self[_view].hide('aura_white')
-    self[_view].hide('aura_black')
-  else
-    self[_view].show('aura_'..tostring(self:get_pid()))
-  end
-end
-
 -- event from board
-function stone:set_pid(pid)
-  self[_view].show(tostring(pid))
-  update_aura(self)
-  active_changed(self)
+function stone:set_controller(controller)
+  self[_asset]:set_controller(controller)
+  update_pid(self, controller:get_pid())
+  self:deselect()
 end
 
 --
 function stone:get_piece()
-  return self[_piece]
+  return self[_asset]
 end
 
 -- insert stone into group, with scale for dragging
@@ -103,17 +147,6 @@ function stone:puton(board, battle_view)
   lay.insert(board.view, self[_view], {vx=0, vy=0, z=50})
   self.board = board
   self[_battle_view] = battle_view
-end
-
--- private
-local active_changed = function(self)
-  local pid = self:get_pid()
-  local my_active_view = 'active_'..tostring(pid)
-  if pid == self[_move_pid] then
-    self[_view].show(my_active_view)
-  else
-    self[_view].hide(my_active_view)
-  end
 end
 
 -- space event
@@ -128,7 +161,7 @@ function stone:set_pos(pos)
   if pos ~= nil then
     ass.is(pos, vec)
   end
-  self:update_group_pos(pos)
+  update_group_pos(self, pos)
 end
 
 --
@@ -151,7 +184,7 @@ function stone:show_abilities()
       opts.label = opts.label.. ' '.. count
     end
     opts.onRelease = function(event)
-      self[_piece]:use_jade(event.target.id)
+      self[_asset]:use_jade(event.target.id)
       return true
     end
     --log.trace(opts.label)
@@ -221,12 +254,12 @@ end
 
 -- touch listener function
 function stone:touch(event)
-  local piece = self[_piece]
+  local piece = self[_asset]
   local space = piece:get_space()
 
   -- do not touch opponent stones
   if not space:is_my_move() then
-    log.trace('not my move')
+    log.trace(self, 'not my move')
     return true
   end
   -- take stone
@@ -293,7 +326,7 @@ end
 function stone:select()
   assert(self.isSelected == false)
   self.isSelected = true                    -- set selected
-  self:update_group_pos(self._pos)          -- adjust group position
+  update_group_pos(self, self._pos)          -- adjust group position
   self:show_abilities()
 end
 
@@ -303,7 +336,7 @@ function stone:deselect()
     local indent = log.trace(self, ":deselect")
     indent.enter()
       self.isSelected = false                   -- set not selected
-      self:update_group_pos(self._pos)          -- adgjust group position
+      update_group_pos(self, self._pos)          -- adgjust group position
       self:hide_abilities()
     indent.exit()
   end
@@ -339,46 +372,19 @@ function stone:set_drag(eventId)
 end
 
 --
-function stone:update_group_pos(pos)
-  -- remove from board
-  if pos == nil then
-    self._pos = nil
-    self[_view].x = 0
-    self[_view].y = 0
-    return
-  end
-
-  -- calculate new view position
-  local view_pos = pos * cfg.view.cell.size
-  if self.isSelected then
-    view_pos.y = view_pos.y - 10
-  end
-
-  if self._pos then
-    log.info('animate to view position', view_pos)
-    lay.to(self[_view], view_pos, cfg.view.stone.move)
-  else
-    log.info('instant set view position', view_pos)
-    view_pos:to(self[_view])
-  end
-  self._pos = pos
-end
-
---
 function stone:wrap()
   local typ         = require('src.lua-cor.typ')
   local wrp         = require('src.lua-cor.wrp')
-  local piece_friend = require('src.model.piece.friend')
+  local asset       = require('src.model.piece.asset')
   local playerid    = require('src.model.playerid')
   local board       = require('src.view.board')
 
   local event = typ.tab:add_tostr(map.tostring)
   local ex    = typ.new_ex(stone)
 
-  wrp.fn(log.trace, stone,  'new',            stone, piece_friend)
+  wrp.fn(log.trace, stone,  'new',            stone, asset)
   wrp.fn(log.trace, stone,  'select',         ex)
   wrp.fn(log.info,  stone,  'deselect',       ex)
-  wrp.fn(log.trace, stone,  'set_pid',        ex, playerid)
   wrp.fn(log.trace, stone,  'puton',          ex, board, typ.tab)
   wrp.fn(log.trace, stone,  'putoff',         ex)
   wrp.fn(log.trace, stone,  'set_move',       ex, playerid)
@@ -386,7 +392,7 @@ function stone:wrap()
   wrp.fn(log.trace, stone,  'set_ability',    ex, typ.str, typ.num)
   wrp.fn(log.trace, stone,  'add_power',      ex, typ.str, typ.num)
   wrp.fn(log.info,  stone,  'touch',          ex, event)
-  wrp.fn(log.info,  stone,  'touch_began',    ex, event)
+  wrp.fn(log.trace, stone,  'touch_began',    ex, event)
   wrp.fn(log.info,  stone,  'touch_moved',    ex, event)
   wrp.fn(log.info,  stone,  'is_abilities_empty', ex)
 end
