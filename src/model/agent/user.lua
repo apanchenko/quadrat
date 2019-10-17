@@ -44,7 +44,7 @@ end
 function user:wrap()
   local wrp = require('src.lua-cor.wrp')
   local typ = require('src.lua-cor.typ')
-  local Controller = require('src.model.space.Controller')
+  local Controller = require('src.model.space.controller')
   local stone = require('src.view.stone.stone')
 
   wrp.fn(log.trace, user, 'new',            user, Controller)

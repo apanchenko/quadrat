@@ -9,9 +9,9 @@ local _space = {}
 local _pid = {}
 
 -- constructor
-function Controller:new(space_model, pid)
-  self = space_board.new(self, space_model)
-  self[_space] = space_model
+function Controller:new(space, pid)
+  self = space_board.new(self, space)
+  self[_space] = space
   self[_pid] = pid
   return self
 end

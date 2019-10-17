@@ -30,7 +30,7 @@ end
 _.active_changed = function(self)
   local pid = self:get_pid()
   local my_active_view = 'active_'..tostring(pid)
-  if pid == self[_move_pid] then
+  if pid == self[_.move_pid] then
     self[_.view].show(my_active_view)
   else
     self[_.view].hide(my_active_view)

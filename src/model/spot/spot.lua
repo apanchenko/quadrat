@@ -1,12 +1,12 @@
 local obj       = require('src.lua-cor.obj')
 local vec       = require('src.lua-cor.vec')
-local ass       = require 'src.lua-cor.ass'
+local ass       = require('src.lua-cor.ass')
 local log       = require('src.lua-cor.log').get('mode')
-local cnt       = require 'src.lua-cor.cnt'
+local cnt       = require('src.lua-cor.cnt')
 local typ       = require('src.lua-cor.typ')
-local piece     = require 'src.model.piece.piece'
-local jade      = require 'src.model.jade'
-local component = require 'src.model.spot.component.component'
+local piece     = require('src.model.piece.piece')
+local jade      = require('src.model.jade')
+local component = require('src.model.spot.component.component')
 
 local spot = obj:extend('spot')
 
@@ -58,44 +58,6 @@ function spot:__tostring()
   return res.. '}'
 end
 
--- Add stash/unstash methods for 'name'
-local function support_stash(name)
-  -- put 'name' into special hidden place for a short time
-  -- caller is responsible for stash
-  -- stash is a FILO stack
-  spot['stash_'..name..'_wrap_before'] = function(self)
-    ass(self[name])
-  end
-
-  spot['stash_'..name] = function(self, stash)
-    local obj = self[name]
-    self[name] = nil
-    obj:set_pos(nil)
-    stash:push(obj)
-    self.space['stash_'..name](self.pos)
-  end
-
-  spot['stash_'..name..'_wrap_after'] = function(self)
-    ass.nul(self[name])
-  end
-
-  -- get 'name' from stash
-  spot['unstash_'..name..'_wrap_before'] = function(self)
-    ass.nul(self[name])
-    ass(self['can_set_'..name](self))
-  end
-
-  spot['unstash_'..name] = function(self, stash)
-    self[name] = stash:pop()
-    self[name]:set_pos(self.pos)
-    self.space['unstash_'..name](self.pos)
-  end
-
-  spot['unstash_'..name..'_wrap_after'] = function(self)
-    ass(self[name])
-  end
-end
-
 -- PIECE ----------------------------------------------------------------------
 
 -- return true if cell is able to receive (spawn or move) piece
@@ -135,7 +97,18 @@ function spot:move_piece(from)
 end
 
 -- add stash_piece/unstash_piece functions
-support_stash('piece')
+spot.stash_piece = function(self, stash)
+  local p = self.piece
+  self.piece = nil
+  p:set_pos(nil)
+  stash:push(p)
+  self.space.stash_piece(self.pos)
+end
+spot.unstash_piece = function(self, stash)
+  self.piece = stash:pop()
+  self.piece:set_pos(self.pos)
+  self.space.unstash_piece(self.pos)
+end
 
 -- JADE -----------------------------------------------------------------------
 function spot:has_jade()
@@ -171,24 +144,14 @@ function spot:set_jade()
 end
 
 -- Remove and return jade
-function spot:remove_jade_wrap_before()
-  ass(self.jade)
-end
 function spot:remove_jade()
   local jade = self.jade
   self.jade = nil
   self.space.remove_jade(self.pos) -- notify that a new jade set
   return jade
 end
-function spot:remove_jade_wrap_after(jade)
-  ass.nul(self.jade)
-  ass(typ.isname(jade, 'jade'))
-end
 
 -- add stash_jade/unstash_jade functions
-spot.stash_jade_wrap_before = function(self)
-  ass(self.jade)
-end
 spot.stash_jade = function(self, stash)
   local j = self.jade
   self.jade = nil
@@ -196,21 +159,10 @@ spot.stash_jade = function(self, stash)
   stash:push(j)
   self.space.remove_jade(self.pos)
 end
-spot.stash_jade_wrap_after = function(self)
-  ass.nul(self.jade)
-end
-
-spot.unstash_jade_wrap_before = function(self)
-  ass.nul(self.jade)
-  ass(self:can_set_jade())
-end
 spot.unstash_jade = function(self, stash)
   self.jade = stash:pop()
   self.jade:set_pos(self.pos)
   self.space.spawn_jade(self.pos)
-end
-spot.unstash_jade_wrap_after = function(self)
-  ass(self.jade)
 end
 
 -- COMPONENTS -----------------------------------------------------------------

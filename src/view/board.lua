@@ -8,7 +8,7 @@ local log      = require('src.lua-cor.log').get('view')
 local bro      = require 'src.lua-cor.bro'
 local arr      = require 'src.lua-cor.arr'
 local com      = require 'src.lua-cor.com'
-local Controller = require('src.model.space.Controller')
+local Controller = require('src.model.space.controller')
 local Pid      = require('src.model.playerid')
 
 local board = obj:extend('board')

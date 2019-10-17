@@ -66,7 +66,7 @@ function random:wrap()
   local wrp       = require('src.lua-cor.wrp')
   local typ       = require('src.lua-cor.typ')
 
-  local Controller = require('src.model.space.Controller')
+  local Controller = require('src.model.space.controller')
   local playerid = require('src.model.playerid')
   local ex    = typ.new_ex(random)
 
