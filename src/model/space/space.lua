@@ -1,45 +1,28 @@
-local spot      = require 'src.model.spot.spot'
-local playerid  = require 'src.model.playerid'
-local cfg       = require 'src.model.cfg'
+local spot      = require('src.model.spot.spot')
+local playerid  = require('src.model.playerid')
+local cfg       = require('src.model.cfg')
 local vec       = require('src.lua-cor.vec')
-local ass       = require 'src.lua-cor.ass'
+local ass       = require('src.lua-cor.ass')
 local log       = require('src.lua-cor.log').get('mode')
-local obj       = require('src.lua-cor.obj')
 local typ       = require('src.lua-cor.typ')
 local wrp       = require('src.lua-cor.wrp')
-local arr       = require 'src.lua-cor.arr'
-local bro       = require('src.lua-cor.bro')
+local arr       = require('src.lua-cor.arr')
+local Wind      = require('src.model.space.wind')
 
-local space = obj:extend('space')
+local Space = Wind:extend('Space')
 
 -------------------------------------------------------------------------------
 -- create model ready to play
-function space:new(cols, rows, seed)
+function Space:new(cols, rows, seed)
   ass.nat(cols)
   ass.nat(rows)
-  self = obj.new(self,
-  {
-    cols  = cols,    -- width
-    rows  = rows,    -- height
-    size  = vec(cols, rows),
-    grid  = {},      -- cells
-    pid   = playerid.white, -- who moves now
-    move_count    = 0, -- number of moves from start
-
-    on_set_move      = bro('set_move'), -- delegate
-    on_set_ability   = bro('set_ability'), -- delegate
-    on_set_color     = bro('set_color'), -- delegate
-    on_add_power     = bro('add_power'), -- delegate
-    on_remove_power  = bro('remove_power'), -- delegate
-    on_spawn_piece   = bro('spawn_piece'), -- delegate
-    on_move_piece    = bro('move_piece'), -- delegate
-    on_remove_piece  = bro('remove_piece'), -- delegate
-    on_stash_piece   = bro('stash_piece'), -- delegate
-    on_unstash_piece = bro('unstash_piece'), -- delegate
-    on_spawn_jade    = bro('spawn_jade'), -- delegate
-    on_remove_jade   = bro('remove_jade'), -- delegate
-    on_modify_spot   = bro('modify_spot'), -- delegate
-  })
+  self = Wind.new(self)
+  self.cols  = cols    -- width
+  self.rows  = rows    -- height
+  self.size  = vec(cols, rows)
+  self.grid  = {}      -- cells
+  self.pid   = playerid.white -- who moves now
+  self.move_count = 0 -- number of moves from start
 
   -- fill grid
   for x = 0, cols - 1 do
@@ -51,22 +34,17 @@ function space:new(cols, rows, seed)
   return self
 end
 --
-function space:width()      return self.cols end
+function Space:width()      return self.cols end
 --
-function space:height()     return self.rows end
+function Space:height()     return self.rows end
 --
-function space:row(place)   return place % self.cols end
+function Space:row(place)   return place % self.cols end
 -- place // self.cols
-function space:col(place)   return (place - (place % self.cols)) / self.cols end
-
--- EVENTS------------------------------------------------------------------------
-function space:listen(listener, name, subscribe)
-  self[name]:listen(listener, subscribe)
-end
+function Space:col(place)   return (place - (place % self.cols)) / self.cols end
 
 -- GRID------------------------------------------------------------------------
 -- initial pieces placement
-function space:setup()
+function Space:setup()
   for x = 0, self.cols - 1 do
     self:spot(vec(x, 0            )):spawn_piece(playerid.white)
     self:spot(vec(x, 1            )):spawn_piece(playerid.white)
@@ -76,15 +54,15 @@ function space:setup()
   self.on_set_move(self.pid) -- notify
 end
 -- position vector from grid index
-function space:pos(index)   return vec(self:col(index), self:row(index)) end
+function Space:pos(index)   return vec(self:col(index), self:row(index)) end
 -- index of cell and piece, private
-function space:index(vec)   return vec.x * self.cols + vec.y end
+function Space:index(vec)   return vec.x * self.cols + vec.y end
 -- iterate cells
-function space:spots()      return pairs(self.grid) end
+function Space:spots()      return pairs(self.grid) end
 -- get spot by position vector
-function space:spot(vec)    return self.grid[self:index(vec)] end
+function Space:spot(vec)    return self.grid[self:index(vec)] end
 -- select spots array
-function space:select_spots(filter)
+function Space:select_spots(filter)
   local selected = arr()
   self:each_spot(function(spot)
     if filter(spot) then
@@ -94,7 +72,7 @@ function space:select_spots(filter)
   return selected
 end
 --
-function space:each_spot(fn)
+function Space:each_spot(fn)
   for i = 0, #self.grid do
     fn(self.grid[i])
   end
@@ -102,7 +80,7 @@ end
 
 -- PIECES----------------------------------------------------------------------
 -- get piece by position vector
-function space:piece(vec)
+function Space:piece(vec)
   local spot = self:spot(vec)
   if spot then
     return spot.piece
@@ -110,7 +88,7 @@ function space:piece(vec)
   return nil
 end
 -- number of red pieces, number of black pieces
-function space:count_pieces()
+function Space:count_pieces()
   local res = {}
   res[tostring(playerid.white)] = 0
   res[tostring(playerid.black)] = 0
@@ -126,7 +104,7 @@ function space:count_pieces()
 end
 
 --
-function space:each_piece(fn)
+function Space:each_piece(fn)
   self:each_spot(function(spot)
     local piece = spot.piece
     if piece then
@@ -137,10 +115,10 @@ end
 
 -- MOVE------------------------------------------------------------------------
 -- get color to move
-function space:get_move_pid()   return self.pid end
+function Space:get_move_pid()   return self.pid end
 
 -- check if piece can move from one position to another
-function space:can_move(fr, to)
+function Space:can_move(fr, to)
   if not (fr < self.size and to < self.size and vec.zero <= fr and vec.zero <= to) then
     return false;
   end
@@ -174,7 +152,7 @@ function space:can_move(fr, to)
 end
 
 -- do move
-function space:move(fr, to)
+function Space:move(fr, to)
   ass(self:can_move(fr, to))
 
   -- change piece position
@@ -195,7 +173,7 @@ function space:move(fr, to)
 end
 
 -- use ability
-function space:use(pos, ability_name)
+function Space:use(pos, ability_name)
   -- check rights
   local piece = self:piece(pos)        -- peek piece at from position
   if piece == nil then                      -- check if it exists
@@ -211,28 +189,28 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
-function space:wrap()
-  local ex   = typ.new_ex(space)
+function Space:wrap()
+  local ex   = typ.new_ex(Space)
 
-   --wrp.fn(space, 'notify',   {{'method', typ.str}, {}})
-  wrp.fn(log.trace, space, 'setup',       space)
-  wrp.fn(log.info, space, 'width',        ex)
-  wrp.fn(log.info, space, 'height',       ex)
-  wrp.fn(log.trace, space, 'row',         ex,  typ.num)
-  wrp.fn(log.info, space, 'col',          ex,  typ.num)
-  wrp.fn(log.info, space, 'pos',          ex,  typ.num)
-  wrp.fn(log.info, space, 'index',        ex,  vec)
-  wrp.fn(log.info, space, 'spot',         ex,  vec)
-  wrp.fn(log.info, space, 'each_piece',   ex,  typ.fun)
-  wrp.fn(log.info, space, 'each_spot',    ex,  typ.fun)
-  wrp.fn(log.info, space, 'count_pieces', ex)
-  wrp.fn(log.info, space, 'piece',        ex,  vec)
-  wrp.fn(log.info, space, 'get_move_pid', ex)
-  wrp.fn(log.info, space, 'can_move',     ex,  vec, vec)
-  wrp.fn(log.trace, space, 'move',        ex,  vec, vec)
-  wrp.fn(log.trace, space, 'use',         ex,  vec, typ.str)
-  wrp.fn(log.trace, space, 'listen',      ex,  typ.tab, typ.str, typ.boo)
+   --wrp.fn(Space, 'notify',   {{'method', typ.str}, {}})
+  wrp.fn(log.trace, Space, 'setup',       Space)
+  wrp.fn(log.info, Space, 'width',        ex)
+  wrp.fn(log.info, Space, 'height',       ex)
+  wrp.fn(log.trace, Space, 'row',         ex,  typ.num)
+  wrp.fn(log.info, Space, 'col',          ex,  typ.num)
+  wrp.fn(log.info, Space, 'pos',          ex,  typ.num)
+  wrp.fn(log.info, Space, 'index',        ex,  vec)
+  wrp.fn(log.info, Space, 'spot',         ex,  vec)
+  wrp.fn(log.info, Space, 'each_piece',   ex,  typ.fun)
+  wrp.fn(log.info, Space, 'each_spot',    ex,  typ.fun)
+  wrp.fn(log.info, Space, 'count_pieces', ex)
+  wrp.fn(log.info, Space, 'piece',        ex,  vec)
+  wrp.fn(log.info, Space, 'get_move_pid', ex)
+  wrp.fn(log.info, Space, 'can_move',     ex,  vec, vec)
+  wrp.fn(log.trace, Space, 'move',        ex,  vec, vec)
+  wrp.fn(log.trace, Space, 'use',         ex,  vec, typ.str)
+  wrp.fn(log.trace, Space, 'listen',      ex,  typ.tab, typ.str, typ.boo)
 end
 
 -- return module
-return space
+return Space
