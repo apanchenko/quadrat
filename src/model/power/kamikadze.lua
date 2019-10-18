@@ -18,7 +18,7 @@ function kamikadze:apply_to_spot(spot)
   if spot.piece then
     spot.piece:die()
     spot.piece = nil
-    self.piece.space.remove_piece(spot.pos) -- notify
+    self.piece.space.on_remove_piece(spot.pos) -- notify
   end
 end
 --

@@ -71,7 +71,7 @@ end
 --
 function piece:set_color(color)
   self.pid = color
-  self.space.set_color(self.pos, color) -- notify
+  self.space.on_set_color(self.pos, color) -- notify
 end
 --
 function piece:get_pid()
@@ -119,7 +119,7 @@ function piece:move(fr, to)
 end
 --
 function piece:move_after(fr, to)
-  self.space.move_piece(to.pos, fr.pos) -- notify
+  self.space.on_move_piece(to.pos, fr.pos) -- notify
   self.powers:each(function(p) return p:move_after(fr, to) end)
 end
 
@@ -129,7 +129,7 @@ end
 function piece:add_jade(jade)
   local res_count = self.jades_cnt:push(jade)
   -- TODO: change event name to 'add_jade'
-  self.space.set_ability(self.pos, jade.id, res_count)
+  self.space.on_set_ability(self.pos, jade.id, res_count)
   -- TODO: optimize - make listening powers
   self.powers:each(function(p) p:on_add_jade(jade) end)
 end
@@ -138,7 +138,7 @@ end
 function piece:remove_jade(id, count)
   local jade = self.jades_cnt:pull(id, count)
   ass(jade) -- TODO: to wrap prereq
-  self.space.set_ability(self.pos, id, self.jades_cnt:count(id))
+  self.space.on_set_ability(self.pos, id, self.jades_cnt:count(id))
   return jade
 end
 
@@ -175,19 +175,19 @@ end
 --
 function piece:add_power(power)
   local count = self.powers:push(power)
-  self.space.add_power(self.pos, power.id, count) -- notify
+  self.space.on_add_power(self.pos, power.id, count) -- notify
 end
 
 --
 function piece:decrease_power(id)
   self.powers:pull(id, 1)
-  self.space.add_power(self.pos, id, self.powers:count(id)) -- notify
+  self.space.on_add_power(self.pos, id, self.powers:count(id)) -- notify
 end
 
 -- Completely remove power by id
 function piece:remove_power(id)
   self.powers:remove(id)
-  self.space.remove_power(self.pos, id) -- notify
+  self.space.on_remove_power(self.pos, id) -- notify
 end
 
 --

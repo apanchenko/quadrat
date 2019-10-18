@@ -43,18 +43,18 @@ end
 
 -- EVENTS ----------------------------------------------------------------------
 --
-function space_board:listen_set_move      (listener, subscribe) self[_space]:listen(listener, 'set_move', subscribe) end
-function space_board:listen_set_ability   (listener, subscribe) self[_space]:listen(listener, 'set_ability', subscribe) end
-function space_board:listen_set_color     (listener, subscribe) self[_space]:listen(listener, 'set_color', subscribe) end
-function space_board:listen_add_power     (listener, subscribe) self[_space]:listen(listener, 'add_power', subscribe) end
-function space_board:listen_spawn_piece   (listener, subscribe) self[_space]:listen(listener, 'spawn_piece', subscribe) end
-function space_board:listen_move_piece    (listener, subscribe) self[_space]:listen(listener, 'move_piece', subscribe) end
-function space_board:listen_remove_piece  (listener, subscribe) self[_space]:listen(listener, 'remove_piece', subscribe) end
-function space_board:listen_stash_piece   (listener, subscribe) self[_space]:listen(listener, 'stash_piece', subscribe) end
-function space_board:listen_unstash_piece (listener, subscribe) self[_space]:listen(listener, 'unstash_piece', subscribe) end
-function space_board:listen_spawn_jade    (listener, subscribe) self[_space]:listen(listener, 'spawn_jade', subscribe) end
-function space_board:listen_remove_jade   (listener, subscribe) self[_space]:listen(listener, 'remove_jade', subscribe) end
-function space_board:listen_modify_spot   (listener, subscribe) self[_space]:listen(listener, 'modify_spot', subscribe) end
+function space_board:listen_set_move      (listener, subscribe) self[_space]:listen(listener, 'on_set_move', subscribe) end
+function space_board:listen_set_ability   (listener, subscribe) self[_space]:listen(listener, 'on_set_ability', subscribe) end
+function space_board:listen_set_color     (listener, subscribe) self[_space]:listen(listener, 'on_set_color', subscribe) end
+function space_board:listen_add_power     (listener, subscribe) self[_space]:listen(listener, 'on_add_power', subscribe) end
+function space_board:listen_spawn_piece   (listener, subscribe) self[_space]:listen(listener, 'on_spawn_piece', subscribe) end
+function space_board:listen_move_piece    (listener, subscribe) self[_space]:listen(listener, 'on_move_piece', subscribe) end
+function space_board:listen_remove_piece  (listener, subscribe) self[_space]:listen(listener, 'on_remove_piece', subscribe) end
+function space_board:listen_stash_piece   (listener, subscribe) self[_space]:listen(listener, 'on_stash_piece', subscribe) end
+function space_board:listen_unstash_piece (listener, subscribe) self[_space]:listen(listener, 'on_unstash_piece', subscribe) end
+function space_board:listen_spawn_jade    (listener, subscribe) self[_space]:listen(listener, 'on_spawn_jade', subscribe) end
+function space_board:listen_remove_jade   (listener, subscribe) self[_space]:listen(listener, 'on_remove_jade', subscribe) end
+function space_board:listen_modify_spot   (listener, subscribe) self[_space]:listen(listener, 'on_modify_spot', subscribe) end
 
 -- wrap functions
 function space_board:wrap()

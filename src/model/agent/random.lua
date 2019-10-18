@@ -1,7 +1,7 @@
 local log       = require('src.lua-cor.log').get('mode')
 local vec       = require('src.lua-cor.vec')
 local obj       = require('src.lua-cor.obj')
-local com       = require 'src.lua-cor.com'
+local com       = require('src.lua-cor.com')
 
 --
 local random = obj:extend('random')
@@ -10,9 +10,9 @@ local random = obj:extend('random')
 local _space = {}
 
 -- constructor
-function random:new(Controller)
+function random:new(controller)
   self = obj.new(self, com())
-  self[_space] = Controller
+  self[_space] = controller
   self[_space]:listen_set_move(self, true) -- todo unlisten
   return self
 end
