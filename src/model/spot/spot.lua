@@ -4,7 +4,7 @@ local ass       = require('src.lua-cor.ass')
 local log       = require('src.lua-cor.log').get('mode')
 local cnt       = require('src.lua-cor.cnt')
 local typ       = require('src.lua-cor.typ')
-local piece     = require('src.model.piece.piece')
+local Piece     = require('src.model.piece.piece')
 local jade      = require('src.model.jade')
 local component = require('src.model.spot.component.component')
 
@@ -68,7 +68,7 @@ end
 -- create a new piece on this Spot
 function Spot:spawn_piece(color)
   ass.nul(self.piece)
-  self.piece = piece:new(self.space, color)
+  self.piece = Piece:new(self.space, color)
   self.piece:set_pos(self.pos)
   self.space.on_spawn_piece(color, self.pos) -- notify
 end

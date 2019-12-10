@@ -72,18 +72,19 @@ end
 
 -- produce power from this jade
 -- normally jade shoud be destroyed after this
-function jade:use(piece)
-  return self.power:new(piece, {}, self.zone)
+function jade:use(piece, world)
+  return self.power:new(piece, world, {}, self.zone)
 end
 
 -- module
 function jade:wrap()
-  local piece = require('src.model.piece.piece')
+  local Piece = require('src.model.piece.piece')
+  local World = require('src.model.space.space')
   local ex = typ.new_ex(jade)
 
   wrp.fn(log.info, jade, 'new',     jade)
   wrp.fn(log.trace, jade, 'add_to', ex, typ.tab)
-  wrp.fn(log.trace, jade, 'use',    ex, piece)
+  wrp.fn(log.trace, jade, 'use',    ex, typ.ext(Piece), typ.ext(World))
   --wrp.fn(jade, 'set_pos', {{'pos', vec}})
 end
 

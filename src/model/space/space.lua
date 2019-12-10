@@ -172,7 +172,7 @@ function Space:move(fr, to)
   self.on_set_move(self.pid) -- notify
 end
 
--- use ability
+--[[ use ability
 function Space:use(pos, ability_name)
   -- check rights
   local piece = self:piece(pos)        -- peek piece at from position
@@ -186,6 +186,7 @@ function Space:use(pos, ability_name)
   end
   return piece:use_jade(ability_name)
 end
+--]]
 
 -- MODULE ---------------------------------------------------------------------
 -- wrap functions
@@ -208,7 +209,7 @@ function Space:wrap()
   wrp.fn(log.info, Space, 'get_move_pid', ex)
   wrp.fn(log.info, Space, 'can_move',     ex,  vec, vec)
   wrp.fn(log.trace, Space, 'move',        ex,  vec, vec)
-  wrp.fn(log.trace, Space, 'use',         ex,  vec, typ.str)
+  --wrp.fn(log.trace, Space, 'use',         ex,  vec, typ.str)
   wrp.fn(log.trace, Space, 'listen',      ex,  typ.tab, typ.str, typ.boo)
 end
 

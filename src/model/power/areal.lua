@@ -11,12 +11,13 @@ function areal:wrap()
   local map   = require('src.lua-cor.map')
   local wrp   = require('src.lua-cor.wrp')
   local spot = require('src.model.spot.spot')
-  local piece = require('src.model.piece.piece')
+  local Piece = require('src.model.piece.piece')
+  local World = require('src.model.space.space')
   local ex = typ.new_ex(areal)
 
   local tab = typ.tab:add_tostr(map.tostring)
 
-  wrp.fn(log.trace, areal, 'new',             areal, piece, tab, tab)
+  wrp.fn(log.trace, areal, 'new',             areal, Piece, typ.ext(World), tab, tab)
   wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot            )
   wrp.fn(log.trace, areal, 'apply_to_self',   ex                )
   wrp.fn(log.trace, areal, 'apply_to_friend', ex, spot            )
@@ -27,18 +28,18 @@ end
 -- create an areal power that sits on onwer piece and acts once or more times
 -- @param piece - apply power to this piece
 -- @param zone - area power applyed to
-function areal:new(piece, def, zone)
+function areal:new(piece, world, def, zone)
   def.zone = zone
   self = power.new(self, piece, def)
 
   -- specify spell area rooted from piece
   local area = zone:new(self.piece.pos)
   -- select spots in area
-  local spots = self.piece.space:select_spots(function(spot) return area:filter(spot.pos) end)
+  local spots = world:select_spots(function(spot) return area:filter(spot.pos) end)
   -- apply to each selected spot
   for i = 1, #spots do
     local spot = spots[i]
-    self:apply_to_spot(spot)
+    self:apply_to_spot(spot, world)
 
     local spot_piece = spot.piece
     if spot_piece then
@@ -59,7 +60,7 @@ function areal:new(piece, def, zone)
 end
 
 --
-function areal:apply_to_spot(spot) end
+function areal:apply_to_spot(spot, world) end
 function areal:apply_to_self() end
 function areal:apply_to_friend(spot) end
 function areal:apply_to_enemy(spot) end

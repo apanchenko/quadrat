@@ -1,7 +1,4 @@
-local ass     = require 'src.lua-cor.ass'
 local log     = require('src.lua-cor.log').get('mode')
-local wrp     = require('src.lua-cor.wrp')
-local typ         = require('src.lua-cor.typ')
 local areal   = require 'src.model.power.areal'
 
 local destroy = areal:extend('Destroy')
@@ -13,11 +10,11 @@ end
 
 -- POWER ----------------------------------------------------------------------
 --
-function destroy:apply_to_spot(spot)
+function destroy:apply_to_spot(spot, world)
   if spot.piece and spot.piece.pid ~= self.piece.pid then
     spot.piece:die() -- enemy piece
     spot.piece = nil
-    self.piece.space.remove_piece(spot.pos) -- notify
+    world.remove_piece(spot.pos) -- notify
   end
 end
 --
@@ -27,10 +24,13 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function destroy:wrap()
+  local wrp  = require('src.lua-cor.wrp')
+  local typ  = require('src.lua-cor.typ')
   local spot = require('src.model.spot.spot')
+  local World = require('src.model.space.space')
   local ex   = typ.new_ex(destroy)
 
-  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, spot)
+  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, spot, typ.ext(World))
 end
 
 return destroy
