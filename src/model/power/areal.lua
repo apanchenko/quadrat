@@ -18,7 +18,7 @@ function areal:wrap()
   local tab = typ.tab:add_tostr(map.tostring)
 
   wrp.fn(log.trace, areal, 'new',             areal, Piece, typ.ext(World), tab, tab)
-  wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot            )
+  wrp.fn(log.trace, areal, 'apply_to_spot',   ex, spot)
   wrp.fn(log.trace, areal, 'apply_to_self',   ex                )
   wrp.fn(log.trace, areal, 'apply_to_friend', ex, spot            )
   wrp.fn(log.trace, areal, 'apply_to_enemy',  ex, spot            )
@@ -30,7 +30,7 @@ end
 -- @param zone - area power applyed to
 function areal:new(piece, world, def, zone)
   def.zone = zone
-  self = power.new(self, piece, def)
+  self = power.new(self, piece, world, def)
 
   -- specify spell area rooted from piece
   local area = zone:new(self.piece.pos)
@@ -39,7 +39,7 @@ function areal:new(piece, world, def, zone)
   -- apply to each selected spot
   for i = 1, #spots do
     local spot = spots[i]
-    self:apply_to_spot(spot, world)
+    self:apply_to_spot(spot)
 
     local spot_piece = spot.piece
     if spot_piece then
@@ -60,7 +60,7 @@ function areal:new(piece, world, def, zone)
 end
 
 --
-function areal:apply_to_spot(spot, world) end
+function areal:apply_to_spot(spot) end
 function areal:apply_to_self() end
 function areal:apply_to_friend(spot) end
 function areal:apply_to_enemy(spot) end

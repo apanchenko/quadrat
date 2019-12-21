@@ -6,8 +6,9 @@ local power = obj:extend('power')
 
 -- constructor
 -- @param piece - apply power to this piece
-function power:new(piece, def)
+function power:new(piece, world, def)
   def.piece = piece
+  def.world = world
   def.id = self:get_typename()
   self = obj.new(self, def)
   return self
@@ -55,8 +56,10 @@ function power:wrap()
   local typ     = require('src.lua-cor.typ')
   local vec     = require('src.lua-cor.vec')
   local piece   = require('src.model.piece.piece')
+  local World = require('src.model.space.space')
+
   local ex    = typ.new_ex(power)
-  wrp.fn(log.trace, power, 'new',      power, piece, typ.tab)
+  wrp.fn(log.trace, power, 'new',      power, piece, typ.ext(World), typ.tab)
   wrp.fn(log.trace, power, 'add_to',   ex, typ.tab)
   wrp.fn(log.info, power, 'can_move', ex, vec, vec)
 end

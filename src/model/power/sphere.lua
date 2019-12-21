@@ -8,8 +8,8 @@ function sphere:can_spawn()
 end
 
 function sphere:can_move(from, to)
-  local w = self.piece.space:width()
-  local h = self.piece.space:height()
+  local w = self.world:width()
+  local h = self.world:height()
   local vec = (from - to):abs()
   return (vec.x==0 and vec.y==w-1) or (vec.x==h-1 and vec.y==0)
 end

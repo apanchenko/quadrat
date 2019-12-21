@@ -1,8 +1,4 @@
-local ass       = require 'src.lua-cor.ass'
-local wrp       = require('src.lua-cor.wrp')
-local typ         = require('src.lua-cor.typ')
 local areal     = require 'src.model.power.areal'
-local log = require('src.lua-cor.log').get('mode')
 
 local learn = areal:extend('Learn')
 
@@ -24,6 +20,9 @@ end
 
 --
 function learn:wrap()
+  local wrp = require('src.lua-cor.wrp')
+  local typ = require('src.lua-cor.typ')
+  local log = require('src.lua-cor.log').get('mode')
   local spot = require('src.model.spot.spot')
   local ex = typ.new_ex(learn)
   wrp.fn(log.trace, learn, 'apply_to_spot', ex, spot)

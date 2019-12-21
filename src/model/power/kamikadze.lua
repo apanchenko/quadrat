@@ -12,12 +12,12 @@ end
 
 -- POWER ----------------------------------------------------------------------
 --
-function kamikadze:apply_to_spot(spot, world)
+function kamikadze:apply_to_spot(spot)
   -- kill any piece
   if spot.piece then
     spot.piece:die()
     spot.piece = nil
-    world.on_remove_piece(spot.pos) -- notify
+    self.world.on_remove_piece(spot.pos) -- notify
   end
 end
 --
@@ -28,9 +28,8 @@ end
 -- MODULE ---------------------------------------------------------------------
 function kamikadze:wrap()
   local spot = require('src.model.spot.spot')
-  local World = require('src.model.space.space')
   local ex = typ.new_ex(kamikadze)
-  wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, spot, typ.ext(World))
+  wrp.fn(log.trace, kamikadze, 'apply_to_spot', ex, spot)
 end
 
 return kamikadze

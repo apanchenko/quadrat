@@ -17,7 +17,7 @@ end
 
 --
 function parasite:apply_to_enemy(spot)
-  spot.piece:add_power(host:new(spot.piece, {}))
+  spot.piece:add_power(host:new(spot.piece, self.world, {}))
 end
 
 --

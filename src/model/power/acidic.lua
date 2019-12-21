@@ -18,7 +18,7 @@ function acidic:apply_to_enemy(spot)
   -- kill enemy piece
   spot.piece:die()
   spot.piece = nil
-  self.piece.space.on_remove_piece(spot.pos) -- notify
+  self.world.on_remove_piece(spot.pos) -- notify
   -- mark spot as acidic
   spot:add_comp(spot_acidic:new())
 end

@@ -6,9 +6,9 @@ local counted = power:extend('counted')
 
 -- constructor
 -- @param piece - apply power to this piece
-function counted:new(piece, def)
+function counted:new(piece, world, def)
   def.count = 1
-  return power.new(self, piece, def)
+  return power.new(self, piece, world, def)
 end
 
 -- add to powers map
@@ -49,9 +49,10 @@ function counted:wrap()
   local piece = require('src.model.piece.piece')
   local typ  = require('src.lua-cor.typ')
   local wrp  = require('src.lua-cor.wrp')
+  local World = require('src.model.space.space')
   local ex   = typ.new_ex(counted)
 
-  wrp.fn(log.trace, counted, 'new',        counted, piece, typ.tab)
+  wrp.fn(log.trace, counted, 'new',        counted, piece, typ.ext(World), typ.tab)
   wrp.fn(log.trace, counted, 'increase',   ex)
   wrp.fn(log.trace, counted, 'decrease',   ex)
   wrp.fn(log.info, counted, 'get_count',   ex)

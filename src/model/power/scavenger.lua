@@ -11,9 +11,8 @@ end
 
 --
 function scavenger:on_kill(victim_piece)
-  local space = self.piece.space
   local pid = self.piece.pid
-  space:each_piece(function(piece)
+  self.world:each_piece(function(piece)
     -- consider friends
     if piece.pid == pid then
       -- see if piece is scavenger

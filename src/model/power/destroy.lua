@@ -10,11 +10,11 @@ end
 
 -- POWER ----------------------------------------------------------------------
 --
-function destroy:apply_to_spot(spot, world)
+function destroy:apply_to_spot(spot)
   if spot.piece and spot.piece.pid ~= self.piece.pid then
     spot.piece:die() -- enemy piece
     spot.piece = nil
-    world.remove_piece(spot.pos) -- notify
+    self.world.on_remove_piece(spot.pos) -- notify
   end
 end
 --
@@ -30,7 +30,7 @@ function destroy:wrap()
   local World = require('src.model.space.space')
   local ex   = typ.new_ex(destroy)
 
-  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, spot, typ.ext(World))
+  wrp.fn(log.trace, destroy, 'apply_to_spot', ex, spot)
 end
 
 return destroy

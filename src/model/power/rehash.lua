@@ -1,9 +1,6 @@
 local power = require('src.model.power.power')
 local ass   = require('src.lua-cor.ass')
 local arr   = require('src.lua-cor.arr')
-local wrp   = require('src.lua-cor.wrp')
-local typ   = require('src.lua-cor.typ')
-local log   = require('src.lua-cor.log').get('mode')
 
 local rehash = power:extend('Rehash')
 
@@ -13,12 +10,12 @@ function rehash:can_spawn()
 end
 
 -- use
-function rehash:new(piece)
+function rehash:new(piece, world)
   local jades = arr()
   local spots = arr()
 
   -- gather jades and free spots
-  piece.space:each_spot(function(spot)
+  world:each_spot(function(spot)
     if spot.jade then
       spot:stash_jade(jades)
       ass(spot:can_set_jade()) -- jade just removed, should be able to set it back
@@ -38,8 +35,12 @@ end
 
 -- MODULE ---------------------------------------------------------------------
 function rehash:wrap()
+  local wrp   = require('src.lua-cor.wrp')
+  local typ   = require('src.lua-cor.typ')
+  local log   = require('src.lua-cor.log').get('mode')
   local piece = require('src.model.piece.piece')
-  wrp.fn(log.trace, rehash, 'new',       rehash, piece, typ.tab)
+  local World = require('src.model.space.space')
+  wrp.fn(log.trace, rehash, 'new',       rehash, piece, typ.ext(World), typ.tab)
   wrp.fn(log.info, rehash, 'can_spawn', rehash)
 end
 

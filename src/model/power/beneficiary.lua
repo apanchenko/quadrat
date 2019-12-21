@@ -13,10 +13,10 @@ function beneficiary:can_spawn()
 end
 
 --
-function beneficiary:new(piece, def)
+function beneficiary:new(piece, world, def)
   -- select friend spots in area
   local pid = piece:get_pid()
-  local spots = piece.space:select_spots(function(spot)
+  local spots = world:select_spots(function(spot)
     local spot_piece = spot.piece
     return spot_piece and spot_piece ~= piece and spot_piece:get_pid() == pid
   end)
@@ -34,7 +34,8 @@ end
 --
 function beneficiary:wrap()
   local piece = require('src.model.piece.piece')
-  wrp.fn(log.trace, beneficiary, 'new', beneficiary, piece, typ.tab)
+  local World = require('src.model.space.space')
+  wrp.fn(log.trace, beneficiary, 'new', beneficiary, piece, typ.ext(World), typ.tab)
 end
 
 return beneficiary

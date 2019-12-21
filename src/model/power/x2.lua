@@ -19,9 +19,10 @@ function x2:wrap()
   local wrp       = require('src.lua-cor.wrp')
   local typ       = require('src.lua-cor.typ')
   local piece = require('src.model.piece.piece')
+  local World = require('src.model.space.space')
   local log = require('src.lua-cor.log').get('mode')
 
-  wrp.fn(log.trace, x2, 'new', x2, piece, typ.tab)
+  wrp.fn(log.trace, x2, 'new', x2, piece, typ.ext(World), typ.tab)
 end
 
 return x2

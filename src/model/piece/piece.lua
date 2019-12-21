@@ -170,7 +170,7 @@ function Piece:clear_jades()
     return -- nothing to do
   end
   self:each_jade(function(jade)
-    self[_world].set_ability(self.pos, jade.id, 0)
+    self[_world].on_set_ability(self.pos, jade.id, 0)
   end)
   self.jades_cnt:clear()
 end

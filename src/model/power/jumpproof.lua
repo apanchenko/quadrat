@@ -1,8 +1,6 @@
-local ass     = require 'src.lua-cor.ass'
 local log     = require('src.lua-cor.log').get('mode')
 local power   = require 'src.model.power.power'
 local wrp     = require('src.lua-cor.wrp')
-local typ     = require('src.lua-cor.typ')
 
 local jumpproof = power:extend('Jumpproof')
 
