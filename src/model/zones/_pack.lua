@@ -1,4 +1,4 @@
-local pkg = require 'src.lua-cor.pck'
+local pkg = require 'src.lua-cor.pack'
 
 local zones = pkg:new('src.model.zones')
 
